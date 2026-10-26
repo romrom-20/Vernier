@@ -1,0 +1,51 @@
+# Native interactions and mouse checks
+
+The app observes mouse entry/exit and dragging only for its own floating control. It does not log mouse activity elsewhere on the Mac or use clicks to score comprehension.
+
+## Intended behavior
+
+### Floating pill
+
+- It is optional, defaults off and never becomes the key/main window.
+- At rest it is a 58×26 point handle; hover reveals a 232×48 point panel.
+- A single native tracking area survives layout changes. A 200 ms exit delay is canceled by re-entry; a resize-related exit does not dismiss a panel that still contains the pointer.
+- Play/pause is a separate 28-point native button. It changes capture and its own action label in place, without opening Studio or taking keyboard focus. While paused, the action is Resume.
+- Clicking the remaining body opens Studio. Dragging repositions the pill; drag completion does not open Studio. Control-click opens the native capture/hide/quit menu.
+- The pill hides during system rest, while Studio is focused, and while quick view is open. It follows ordinary desktop Spaces and excludes full-screen Spaces.
+
+### Menu bar and Studio
+
+Quick view has a 356-point content width and screen-aware bounded height, with pinned header/footer actions and a scrolling center. The actual AppKit window frame, including chrome, is constrained to the visible display. Pause changes its content without resizing the window.
+
+Closing Studio leaves the status item running. Reopening restores the current page. Unminimizing is requested only for an actually minimized window; requesting it for ordinary windows can schedule a delayed show and interfere with a floating control.
+
+## Automated native regression
+
+Run `./Scripts/verify.sh --ui` in a logged-in graphical Mac session, with other Vernier copies quit. Tests use isolated preferences, synthetic data and no personal store.
+
+The native host/window checks cover:
+
+- Compact/expanded widths, host identity and four resize-like exits under a stationary injected pointer.
+- Re-entry canceling dismissal, followed by an outside pointer contracting the panel.
+- Hit testing returning the native capture button; button actions toggling persisted Pause in both directions while Studio remains closed.
+- Nonactivation, hide/show conditions, full-screen/Spaces configuration and rest preserving Pause.
+- Bounded quick-view size/frame and no resize on Pause.
+
+These tests call native handlers/actions with a controlled own-panel pointer location. They do **not** automate a physical mouse or establish real multi-display, full-screen, sleep/wake, accessibility or long-duration performance behavior. Pure layout/policy tests also exercise a display with a negative origin.
+
+## Manual mouse checklist
+
+Use `./Scripts/showcase.sh` for synthetic-only reproduction. These are acceptance steps, not claims of a completed hardware test matrix. Record the OS, scale factor, display arrangement and revision with any result.
+
+- [ ] Enter the compact pill from each edge. Hold still, then move across the text/button/chevron. No repeated collapse/expansion.
+- [ ] Leave the expanded pill, quickly return, then leave fully. No flicker or stuck-open state.
+- [ ] Click play/pause repeatedly. Status/action update once per click; Studio stays closed; the previously focused app keeps keyboard focus.
+- [ ] Click the body/chevron. Studio opens and the pill hides.
+- [ ] Drag compact and expanded forms. Placement follows the pointer and release does not open Studio.
+- [ ] Control-click both forms; use Resume/Pause, Hide and Open. Escape dismisses the menu.
+- [ ] Open quick view on every attached display. Its close/footer controls remain reachable; Pause does not move it.
+- [ ] Minimize, restore and close Studio. Presence follows focus without duplicate panels or delayed window reappearance.
+- [ ] Test ordinary/full-screen Spaces, unplug a display, and change scale/arrangement. The panel remains recoverable.
+- [ ] Enable Reduce Motion and test VoiceOver/keyboard access. Capture has a named action and status is not color-only.
+
+Actual sleep/login testing uses a normal consenting installation, not showcase: preserve user Pause across rest and confirm actual OS login approval. See [validation](VALIDATION.md).

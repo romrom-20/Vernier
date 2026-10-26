@@ -1,0 +1,27 @@
+# Resident app, incremental storage, conversation memory
+
+SwiftUI views live inside an AppKit coordinator owning the native status item, anchored popover, Studio and optional nonactivating panel. The panel follows ordinary desktop Spaces and excludes full-screen Spaces. Native semantic text, adaptive colors and source-triggered motion preserve accessibility. The app icon is generated from the same vector caliper mark with AppKit, not a remote asset.
+
+SMAppService.mainApp provides opt-in login registration. Its actual enabled/approval/unavailable state is displayed; no helper/daemon or user-Quit override exists. Login launch detection checks the documented open-application Apple-event property. NSWorkspace's notification center handles sleep/wake and active/inactive user sessions independently so waking a still-inactive session does not reopen capture. Interactive activation coalesces refresh requests. User Pause survives system wake. Real reboot/full-screen/multi-monitor QA remains pending.
+
+SyncCadence schedules foreground/background/quiet/low-power/retry intervals. The private stdio Codex client uses bounded pages, responses and a 20-second budget; it never starts, resumes or controls a thread. Metadata reads use useStateDbOnly and notLoaded items. Conversation reads are issued only with separate consent, using thread/items/list and, for unsupported older storage, full thread/turns/list. No model request is issued.
+
+Metadata normalization is allowlisted. Conversation normalization accepts only user text and visible assistant phases, redacts credential patterns before storage, excludes tool bodies and annotates clipping/attachment omission. Agent tool signals retain only safe kind/outcome/count fields. A prompt is provider-recorded text, not evidence of the human's keystrokes or understanding.
+
+Newest conversation pages and older ascending backfill have separate durable cursors. Recent pages stop at known records; old history advances independently. A bounded number of sessions advance per refresh. Unsupported/truncated histories remain partial. Source timestamps can be item milliseconds or older turn-boundary seconds; missing timestamps and approximate order are disclosed.
+
+SessionStore is an actor over system SQLite3, with transactional v1→v2→v3 migrations, WAL, foreign keys, parameter binding, secure_delete and restrictive file permissions. Sessions/turns are snapshots; change_log records actual metadata changes only. sync_state holds successful check/reconciliation times. messages, agent_signals and memory_progress form a separately consented content layer. Unchanged upserts have predicates excluding observation time, avoiding full-history rewrites. The UI reads a bounded 300-message preview; local search queries the full archive; explicit export loads all stored messages.
+
+ObservationGate holds a synchronous generation and separate content permission through the storage transaction. Pause, disconnect, system rest and content revocation invalidate in-flight results. UI projection rechecks the generation after actor suspensions. Pause suspends synchronization, and a later resume can import provider history created while paused; per-session exclusions are not implemented.
+
+The product's WHOOP-like ambition is evidence-linked reflection on AI work. Observable conversation/tool events, deterministic wording flags, user-authored takeaways and future independently measured capabilities must remain separate. There is no numerical cognitive-health/readiness score and no inference that tab switches prove reading. Automatic semantic summaries, cross-tool memory, review/comprehension measurements and validated probes are future work.
+
+## Native interaction update — 0.4.0
+
+Quick view uses a 356-point fixed width and a screen-aware height capped at 414 points. An explicit hosting size prevents content changes from resizing the popover; AppKit's final window frame, including its chrome, is constrained to the status item's display visible frame after presentation. Header/footer actions remain pinned around a scrolling center.
+
+PillPresentation separates hidden, compact (58×26), and hover-expanded (232×48) states. Studio focus, an open quick view, and system rest suppress the panel. Expanded-anchor coordinates preserve the center during resizing and dragging; user placement remains bounded across display changes. The panel remains nonactivating, with a native context menu. CapturePhase gives all surfaces explicit paused/checking/current/error/disconnected semantics. A spinner appears only during an actual check, with reduced-motion/low-power alternatives.
+
+Session digests query exact per-session archive counts and a bounded excerpt of the earliest saved user message. Notes take title precedence; known injected context is removed; date fallback avoids exposing hashed IDs. No generated summary or new source read is required. The schema remains v3; an idempotent signal-session index supports these counts. Memory navigation carries an optional session filter; raw activity is collapsed behind conversation access and a user-authored reflection.
+
+Pill hover ownership lives on the persistent native hosting view, outside SwiftUI layout branches. A 200 ms cancelable exit checks the current own-window hit region; a resize-related exit cannot dismiss a panel that still contains the pointer. Dragging holds hover until mouse-up. Target-frame caching avoids restarting a resize on unrelated model updates.
