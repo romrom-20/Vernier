@@ -1,15 +1,17 @@
 # Vernier
 
-**Keep the context. Make your own call.**
+**A WHOOP-inspired companion for how you work with AI.**
 
 [![Build and core checks](https://github.com/romrom-20/Vernier/actions/workflows/ci.yml/badge.svg)](https://github.com/romrom-20/Vernier/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Native macOS](https://img.shields.io/badge/native-macOS%2014%2B-black)
 ![Swift 6](https://img.shields.io/badge/Swift-6-orange)
 
-Vernier is an experimental, local-first Mac app for understanding work done with AI agents. It lives in the menu bar, keeps a searchable memory of explicitly connected sessions, and gives you a place to record what you actually checked.
+Vernier is an experimental, local-first Mac app focused on **your side of AI interaction**: how you prompt, steer, question, understand and take over work as a task unfolds.
 
-**The ambition is to make human judgment visible as agents do more of the work.** The current release provides capture, memory and reflection. It does not yet determine whether you understood a change or independently verified an outcome.
+The WHOOP inspiration is a quiet everyday presence and useful personal feedback over time. Vernier aims to help you notice where you set the direction, where the agent reframed the task, and what you learned or left unresolved. It is an independent project, unaffiliated with WHOOP.
+
+**The ambition is to help you get better at working with AI.** The current release provides consented capture, searchable memory, a prompt trail and a user-authored interaction review. Automatic assessment of steering, goal drift, understanding and personal trends is still to be built and validated.
 
 ![Vernier Studio showing explicitly labeled synthetic session data](Docs/images/overview.png)
 
@@ -19,21 +21,23 @@ Vernier is an experimental, local-first Mac app for understanding work done with
 
 An agent can finish responding while the important questions remain open: What changed? Why was that approach chosen? What did a person challenge? Which result still needs checking?
 
-Most usage dashboards count activity. Those counts cannot distinguish effective delegation from uncritical acceptance. A short “build this” prompt might be followed by careful product testing; a long conversation might still leave a consequential assumption unchecked.
+A long task can gradually change who is setting the direction. Did you clarify the goal, challenge an assumption, understand a tradeoff, or mostly accept the next path the model proposed? When you repeatedly said “fix it,” were you evaluating specific failures or continuing without a clear view of the problem? The words alone cannot answer those questions.
 
-Vernier explores a more useful record: **intent → agent work → evidence → your decision → what happened next**. Today, the session history and user-authored reflection are implemented. Automatic decision/outcome linking and evidence-backed reviews are research and engineering work ahead.
+Vernier should help reconstruct that trajectory across prompts, agent replies, human corrections and outcomes. Efficient delegation and brief instructions can be excellent steering; a lengthy conversation can still leave an important decision unexplained.
+
+Vernier explores a more useful record: **your intent → the agent’s proposed direction → your intervention → evidence → what you understood → what happened next**. Today, session history, a bounded recent prompt trail and user-authored reflection are implemented. Automatic trajectory/outcome linking and evidence-backed feedback are research and engineering work ahead.
 
 [Read the product thesis](Docs/PRODUCT.md) · [Roadmap](Docs/ROADMAP.md) · [Architecture](Docs/ARCHITECTURE.md)
 
 ## What works today
 
 - **Native presence:** SwiftUI inside AppKit, a bounded menu-bar quick view, and an optional draggable, nonactivating pill.
-- **Direct capture controls:** hover to expand; play/pause changes capture in place; click elsewhere to open Studio. The pill hides while Studio is focused or quick view is open.
+- **Direct capture controls:** a quiet circle expands on hover or click; play/pause changes capture in place; only the dashboard arrow opens Studio. Quick view and Studio replace one another instead of stacking.
 - **Codex in Conductor:** read-only local history access, scoped to Conductor workspaces. No agent is started, resumed or controlled.
 - **Separate permissions:** session metadata and conversation text are distinct opt-ins, both off for new installations.
 - **Local conversation memory:** available prompts, visible assistant replies, and allowlisted agent activity metadata. Search and export include the retained archive; incomplete histories stay labeled.
 - **User-owned storage:** SQLite, incremental backfill, retention, export, conversation erasure and full local deletion.
-- **Reflection:** readable session labels, direct conversation navigation, and a separate note for your expectation, checked evidence and assumptions.
+- **Interaction review:** a dashboard focused on intent, steering and understanding; readable session labels; a recent prompt trail; and your own account of what you directed, challenged, learned and checked.
 - **Resident lifecycle:** optional native login registration, adaptive sync cadence, rest during sleep/inactive sessions, and preserved Pause across wake.
 
 ## What it cannot tell you
@@ -86,8 +90,6 @@ Default retention is 30 days by session update time. Pause suspends synchronizat
 The shared checks also run through `swift test` with full Xcode. GitHub Actions runs core checks, XCTest and the bundle build on macOS; it does not claim physical mouse or sleep/wake testing.
 
 Native regressions cover stationary hover during resizing, canceled exit on re-entry, direct play/pause without opening Studio, nonactivation, bounded popover placement and pause preservation. Storage/protocol checks cover deduplication, migration, consent revocation, redaction, search, export, retention and read-only requests.
-
-![Synthetic session library](Docs/images/sessions.png)
 
 [Interaction specification and manual mouse checklist](Docs/INTERACTIONS.md) · [Executed validation and remaining gaps](Docs/VALIDATION.md)
 

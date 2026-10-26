@@ -21,7 +21,7 @@ public enum CapturePhase: String, Sendable {
         case .resting: "moon.fill"
         case .disconnected: "link"
         case .checking: "arrow.down.circle"
-        case .current: "checkmark"
+        case .current: "circle.fill"
         case .waiting: "clock"
         case .issue: "exclamationmark.triangle.fill"
         case .demo: "square.dashed"
@@ -37,7 +37,7 @@ public enum PillPresentation: String, Sendable {
     }
     public var size: CGSize {
         switch self {
-        case .hidden, .compact: CGSize(width: 58, height: 26)
+        case .hidden, .compact: CGSize(width: 28, height: 28)
         case .expanded: CGSize(width: 232, height: 48)
         }
     }

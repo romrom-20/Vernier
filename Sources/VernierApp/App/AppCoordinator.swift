@@ -16,7 +16,8 @@ import VernierCore
     private var inactiveSession = false
     private let smokeTest: Bool
     private let pillAnchorSize = PillPresentation.expanded.size
-    private var quickPanelOpen = false
+    enum Surface { case ambient, quickView, studio, welcome }
+    private(set) var surface: Surface = .ambient
     private(set) var pillPresentation: PillPresentation = .hidden
     private var lastPillTarget: NSRect?
 
@@ -37,7 +38,7 @@ import VernierCore
         NSApp.setActivationPolicy(.accessory)
         configureMainMenu()
         model.openStudio = { [weak self] page in self?.openStudio(page) }
-        model.closeQuickPanel = { [weak self] in self?.popover.performClose(nil) }
+        model.closeQuickPanel = { [weak self] in self?.closeQuickView() }
         model.showWelcome = { [weak self] in self?.openWelcome() }
         model.resetPill = { [weak self] in
             self?.model.preferences.pillOrigin = nil
@@ -87,6 +88,8 @@ import VernierCore
         else if !launchedAtLogin { openStudio(.overview) }
     }
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        // Activating a menu-bar surface must not also summon a dashboard behind it.
+        guard surface != .quickView && !popover.isShown else { return false }
         openStudio(model.page); return true
     }
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
@@ -115,10 +118,26 @@ import VernierCore
     }
     func applicationDidResignActive(_ notification: Notification) { refreshPresence() }
     func windowWillClose(_ notification: Notification) {
-        if notification.object as? NSWindow === studio { model.studioVisible = false; refreshPresence() }
+        if notification.object as? NSWindow === studio {
+            model.studioVisible = false
+            if surface == .studio { surface = .ambient }
+            refreshPresence()
+        } else if notification.object as? NSWindow === welcome {
+            if surface == .welcome { surface = .ambient }
+            refreshPresence()
+        }
     }
     func windowDidBecomeKey(_ notification: Notification) {
-        if notification.object as? NSWindow === studio { model.pillHovered = false; refreshPresence() }
+        if notification.object as? NSWindow === studio {
+            guard surface == .studio else {
+                studio?.orderOut(nil)
+                model.studioVisible = false
+                refreshPresence()
+                return
+            }
+            model.pillHovered = false
+            refreshPresence()
+        }
     }
     func windowDidResignKey(_ notification: Notification) { refreshPresence() }
     func windowDidMiniaturize(_ notification: Notification) {
@@ -126,17 +145,31 @@ import VernierCore
         refreshPresence()
     }
     func windowDidDeminiaturize(_ notification: Notification) {
-        if notification.object as? NSWindow === studio { model.studioVisible = true }
+        if notification.object as? NSWindow === studio {
+            if surface == .quickView { studio?.orderOut(nil); model.studioVisible = false }
+            else { surface = .studio; model.studioVisible = true }
+        }
         refreshPresence()
     }
-    func popoverDidShow(_ notification: Notification) { constrainQuickPanel() }
+    func popoverDidShow(_ notification: Notification) {
+        guard surface == .quickView else { popover.performClose(nil); return }
+        constrainQuickPanel()
+    }
     private func constrainQuickPanel() {
-        guard popover.isShown, let window = popover.contentViewController?.view.window,
+        guard surface == .quickView, popover.isShown, let window = popover.contentViewController?.view.window,
               let screen = statusItem?.button?.window?.screen ?? window.screen else { return }
         let frame = QuickPanelLayout.constrain(window.frame, to: screen.visibleFrame)
         if frame != window.frame { window.setFrame(frame, display: true) }
     }
-    func popoverDidClose(_ notification: Notification) { quickPanelOpen = false; refreshPresence() }
+    func popoverDidClose(_ notification: Notification) {
+        if surface == .quickView && !popover.isShown { surface = .ambient }
+        refreshPresence()
+    }
+    func closeQuickView() {
+        if surface == .quickView { surface = .ambient }
+        popover.performClose(nil)
+        refreshPresence()
+    }
     private func prepareQuickPanel() {
         let size = QuickPanelLayout.size(screenHeight: statusItem?.button?.window?.screen?.visibleFrame.height ?? NSScreen.main?.visibleFrame.height ?? 800)
         let host = NSHostingController(rootView: MenuBarView(model: model, height: size.height))
@@ -151,7 +184,7 @@ import VernierCore
         let menu = NSMenu()
         let appItem = NSMenuItem()
         let appMenu = NSMenu()
-        let open = NSMenuItem(title: "Open Studio", action: #selector(openStudioAction), keyEquivalent: "o")
+        let open = NSMenuItem(title: "Open dashboard", action: #selector(openStudioAction), keyEquivalent: "o")
         open.target = self
         appMenu.addItem(open)
         let quick = NSMenuItem(title: "Quick View", action: #selector(togglePopover), keyEquivalent: "")
@@ -175,11 +208,15 @@ import VernierCore
     @objc private func openStudioAction() { openStudio(.overview) }
     @objc func togglePopover() {
         guard let button = statusItem?.button else { return }
-        if popover.isShown { popover.performClose(nil) } else {
-            prepareQuickPanel()
-            quickPanelOpen = true
+        if surface == .quickView && popover.isShown { closeQuickView() } else {
+            surface = .quickView
+            studio?.orderOut(nil)
+            welcome?.orderOut(nil)
+            model.studioVisible = false
             model.pillHovered = false
+            model.pillPinned = false
             refreshPresence()
+            prepareQuickPanel()
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
             constrainQuickPanel()
             Task { @MainActor [weak self] in
@@ -189,8 +226,10 @@ import VernierCore
         }
     }
     func openStudio(_ page: StudioPage) {
+        surface = .studio
         model.page = page
         popover.performClose(nil)
+        welcome?.orderOut(nil)
         if studio == nil {
             let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1080, height: 740), styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false)
             window.title = "\(Brand.name) Studio"
@@ -202,6 +241,7 @@ import VernierCore
             studio = window
         }
         model.pillHovered = false
+        model.pillPinned = false
         model.studioVisible = true
         studio?.delegate = self
         if !smokeTest { model.requestInteractiveCheck() }
@@ -210,7 +250,10 @@ import VernierCore
         NSApp.activate(ignoringOtherApps: true)
     }
     func openWelcome() {
+        surface = .welcome
         popover.performClose(nil)
+        studio?.orderOut(nil)
+        model.studioVisible = false
         if welcome == nil {
             let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 540, height: 510), styleMask: [.titled, .closable], backing: .buffered, defer: false)
             window.title = "Welcome to \(Brand.name)"
@@ -219,6 +262,7 @@ import VernierCore
             window.center()
             welcome = window
         }
+        welcome?.delegate = self
         welcome?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
     }
@@ -226,9 +270,10 @@ import VernierCore
         statusItem?.button?.image = makeStatusImage()
         statusItem?.button?.toolTip = "\(Brand.name) · \(model.capturePhase.title) · \(model.captureModeTitle)"
         statusItem?.button?.setAccessibilityLabel("\(Brand.name), \(model.capturePhase.title)")
-        let studioFocused = NSApp.isActive && studio?.isVisible == true && studio?.isMiniaturized != true && studio?.isKeyWindow == true
+        let studioFocused = surface == .studio && NSApp.isActive && studio?.isVisible == true && studio?.isMiniaturized != true && studio?.isKeyWindow == true
         let presentation = PillPresentation.resolve(enabled: model.pillEnabled, resting: model.systemSuspended,
-            studioFocused: studioFocused, quickPanelVisible: quickPanelOpen, hovered: model.pillHovered, alwaysExpanded: model.pillAlwaysExpanded)
+            studioFocused: studioFocused, quickPanelVisible: surface == .quickView || surface == .welcome,
+            hovered: model.pillHovered || model.pillPinned, alwaysExpanded: model.pillAlwaysExpanded)
         guard presentation != .hidden else {
             pillPresentation = .hidden
             pill?.orderOut(nil)
@@ -266,7 +311,8 @@ import VernierCore
             self.model.pillHovered = hovered
         }
         host.captureToggled = { [weak self] in self?.model.toggleCapture() }
-        host.clicked = { [weak self] in self?.openStudio(.overview) }
+        host.dashboardOpened = { [weak self] in self?.openStudio(.overview) }
+        host.clicked = { [weak self] in self?.model.togglePillControls() }
         host.moved = { [weak self] in self?.restoreAndSavePillPosition() }
         panel.contentView = host
         pill = panel
@@ -293,7 +339,7 @@ import VernierCore
     }
     private func makePillMenu() -> NSMenu {
         let menu = NSMenu()
-        let open = NSMenuItem(title: "Open Vernier", action: #selector(openStudioAction), keyEquivalent: "")
+        let open = NSMenuItem(title: "Open dashboard", action: #selector(openStudioAction), keyEquivalent: "")
         open.target = self; menu.addItem(open)
         let pause = NSMenuItem(title: model.paused ? "Resume capture" : "Pause capture", action: #selector(toggleCaptureAction), keyEquivalent: "")
         pause.target = self; menu.addItem(pause)

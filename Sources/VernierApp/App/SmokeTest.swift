@@ -32,14 +32,36 @@ extension AppCoordinator {
         popover.contentViewController?.view.layoutSubtreeIfNeeded()
         try check(popover.contentSize == panelSize && model.capturePhase == .paused, "Pause changes meaning without moving the quick-view frame")
         model.paused = false
+        _ = applicationShouldHandleReopen(NSApp, hasVisibleWindows: false)
+        try check(surface == .quickView && popover.isShown && studio?.isVisible != true, "App activation does not open a dashboard behind quick view")
+        model.openStudio(.overview)
+        try await waitUntil("Open dashboard replaces quick view with one dashboard") {
+            surface == .studio && !popover.isShown && studio?.isVisible == true
+        }
         togglePopover()
-        try check(!popover.isShown, "Popover closes")
+        try await waitUntil("Menu-bar quick view replaces the dashboard without stacking windows") {
+            surface == .quickView && popover.isShown && studio?.isVisible != true && !model.studioVisible
+        }
+        closeQuickView()
+        try check(!popover.isShown && surface == .ambient, "Popover closes")
         openStudio(.overview)
         try check(studio?.isVisible == true, "Studio opens")
         studio?.close()
         try check(studio?.isVisible == false, "Studio closes")
         try check(!model.studioVisible, "Closing Studio switches to background cadence")
         try check(statusItem?.button != nil, "Status item survives closing Studio")
+        for _ in 0..<4 {
+            togglePopover()
+            model.openStudio(.overview)
+            togglePopover()
+            await Task.yield()
+            try await Task.sleep(for: .milliseconds(40))
+            guard surface == .quickView && popover.isShown && studio?.isVisible != true else {
+                throw SmokeFailure.failed("Rapid surface changes stacked or reopened a window")
+            }
+            closeQuickView()
+        }
+        try check(!popover.isShown && studio?.isVisible != true, "Repeated quick-view/dashboard transitions leave no stale surface")
         openStudio(.connections)
         try check(studio?.isVisible == true && model.page == .connections, "Studio reopens to Connections")
         for page in StudioPage.allCases {
@@ -56,7 +78,7 @@ extension AppCoordinator {
         studio?.orderOut(nil)
         model.pillHovered = false
         refreshPresence()
-        try check(pill?.isVisible == true && pillPresentation == .compact, "Quiet pill appears as a small handle")
+        try check(pill?.isVisible == true && pillPresentation == .compact, "Quiet pill appears as a small circle")
         guard let hoverHost = pill?.contentView as? PillHostingView else { throw SmokeFailure.failed("Native hover host exists") }
         hoverHost.pointerLocation = { [weak hoverHost] in
             guard let frame = hoverHost?.window?.frame else { return .zero }
@@ -73,6 +95,14 @@ extension AppCoordinator {
         print("Hover regression state: hovered=\(model.pillHovered), presentation=\(pillPresentation), visible=\(pill?.isVisible == true), sameHost=\(pill?.contentView === hoverHost), studioVisible=\(studio?.isVisible == true), studioKey=\(studio?.isKeyWindow == true)")
         try check(model.pillHovered && pillPresentation == .expanded && pill?.contentView === hoverHost,
                   "Stationary hover survives repeated resize exits without replacing the host")
+        hoverHost.clicked?()
+        model.pillHovered = false
+        refreshPresence()
+        try check(model.pillPinned && pillPresentation == .expanded && studio?.isVisible != true,
+                  "Circle body pins controls without opening the dashboard")
+        hoverHost.clicked?()
+        hoverHost.handleHoverEntry()
+        refreshPresence()
         let captureButton = hoverHost.captureButton
         let capturePoint = hoverHost.convert(NSPoint(x: captureButton.frame.midX, y: captureButton.frame.midY), to: hoverHost.superview)
         try check(!captureButton.isHidden && hoverHost.hitTest(capturePoint) === captureButton && !captureButton.needsPanelToBecomeKey,
@@ -86,6 +116,17 @@ extension AppCoordinator {
         try await waitUntil("Pill capture button toggles back without opening Studio") {
             model.paused == priorPause && model.preferences.paused == priorPause && studio?.isVisible != true && pill?.isVisible == true
         }
+        let dashboardButton = hoverHost.dashboardButton
+        let dashboardPoint = hoverHost.convert(NSPoint(x: dashboardButton.frame.midX, y: dashboardButton.frame.midY), to: hoverHost.superview)
+        try check(!dashboardButton.isHidden && hoverHost.hitTest(dashboardPoint) === dashboardButton && dashboardButton !== captureButton,
+                  "Dashboard arrow has its own distinct native hit target")
+        dashboardButton.performClick(nil)
+        try await waitUntil("Only the dashboard arrow opens Studio and clears pinned controls") {
+            surface == .studio && studio?.isVisible == true && !popover.isShown && !model.pillPinned && pill?.isVisible != true
+        }
+        studio?.close()
+        hoverHost.handleHoverEntry()
+        refreshPresence()
         hoverHost.pointerLocation = { NSPoint(x: -100_000, y: -100_000) }
         hoverHost.handleHoverExit()
         hoverHost.handleHoverEntry()

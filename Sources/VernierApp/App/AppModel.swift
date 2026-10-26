@@ -42,6 +42,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
     }
     @Published var pillEnabled: Bool { didSet { preferences.pillEnabled = pillEnabled } }
     @Published var pillHovered = false
+    @Published var pillPinned = false
     @Published var pillAlwaysExpanded: Bool { didSet { preferences.pillAlwaysExpanded = pillAlwaysExpanded } }
     @Published var resumePending = false
     @Published var previewState: InstrumentState = .observing
@@ -123,6 +124,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
         paused.toggle()
         if !isolated { NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .now) }
     }
+    func togglePillControls() { pillPinned.toggle() }
     var residentTitle: String {
         if paused { return "Taking a pause." }
         if systemSuspended { return "Resting with your Mac." }

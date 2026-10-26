@@ -34,3 +34,13 @@ Full Xcode is not installed on the local validation machine, so local XCTest is 
 - Validity or usefulness of automated session reviews, comprehension measures or cognitive scores. These are not implemented results.
 
 Live connector verification during development confirmed read-only local Codex history access. Reproducing it is optional and consented: `swift run VernierCoreChecks --codex-live` prints metadata counts only. Never attach real archives or personal provider data to a public issue.
+
+## Exclusive surfaces and interaction focus — 0.5.0
+
+Three supplied screenshots showed quick view layered over Studio, the menu surface opening independently, and an idle compact checkmark. All were inspected before editing. The capture status is now a quiet circular presence rather than a success/review mark. Body click pins controls; dedicated native capture and dashboard buttons have independent hit targets. Dashboard and quick view are mutually exclusive requested surfaces, including activation/reopen and late native callbacks.
+
+`./Scripts/verify.sh --ui` passed **17 shared groups and 47 native checks**. New checks cover activation while quick view is open, dashboard replacing quick view, quick view hiding dashboard, four rapid transition cycles, body pinning without a dashboard, distinct dashboard hit testing, and only the dashboard arrow opening Studio. Existing hover, pause, source and storage checks remain green. No new ingestion permission or database schema was added.
+
+The updated synthetic Overview was inspected through the native accessibility tree and visually captured for the README. It puts intent, steering and understanding before collapsed archive details. A later attempt to inspect quick view through the computer-use tool returned native timeout errors; reconnecting also timed out. That manual transition is not claimed as verified by the tool. The native in-process window checks above did verify the actual resulting window visibility and popover state. Manual physical mouse/full-screen/multi-monitor checks remain pending.
+
+The prompt trail reuses the bounded session-scoped archive search, displays at most six user-side excerpts from the latest 100 saved messages, and labels approximate ordering and app-added context. It makes no automatic quality judgment. The WHOOP-inspired interaction-feedback vision is now explicit in the product thesis/roadmap, with automated trajectory assessment and personal trends still unimplemented research/engineering work.

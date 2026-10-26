@@ -25,7 +25,7 @@ struct PresenceHero: View {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Your work with AI.")
                     .font(.system(size: 32, weight: .medium)).tracking(-0.7)
-                Text("Keep the context. Make your own call.")
+                Text("See how you prompt, steer and understand the work.")
                     .font(.callout).foregroundStyle(Palette.secondary).fixedSize(horizontal: false, vertical: true)
             }
             HStack(alignment: .center, spacing: 14) {

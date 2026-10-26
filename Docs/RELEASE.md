@@ -1,4 +1,4 @@
-# Source release — 0.4.3
+# Source release — 0.5.0
 
 Vernier is an experimental native Mac app and working project name. This repository publishes source, synthetic showcase data, tests and documentation under MIT. There is no production, notarized binary release yet.
 
@@ -24,3 +24,5 @@ Development launch flags `--connect-codex`, `--enable-conversation-memory`, `--e
 SQLite schema v3 separates session/turn metadata, notes, change log, sync state, messages, safe agent signals and conversation progress. UI changes preserve records and existing consent. See [validation and pending acceptance work](VALIDATION.md).
 
 A DMG, Developer ID signature, notarization, secure updater, clean-Mac distribution, universal binary and crash-relaunch service are not implemented.
+
+- **0.5.0:** WHOOP-inspired interaction-quality direction made explicit; intent/steering/understanding review and a bounded prompt trail; capture inventory folded into details. One requested UI surface prevents quick-view/dashboard stacking. A quiet 28-point circle replaces the idle checkmark; body click pins controls, capture toggles in place, and only the separate arrow opens the dashboard. No new source or macOS observation permission.

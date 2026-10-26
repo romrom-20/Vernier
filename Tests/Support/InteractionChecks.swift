@@ -4,6 +4,8 @@ import VernierCore
 
 extension SessionChecks {
     static func interaction() async throws {
+        try expect(PillPresentation.compact.size.width == PillPresentation.compact.size.height && PillPresentation.compact.size.width == 28, "Idle presence must be one quiet circle")
+        try expect(CapturePhase.current.symbol == "circle.fill", "Capture state must not imply successful or reviewed work")
         for height: CGFloat in [480, 600, 768, 1080, 1440] {
             let size = QuickPanelLayout.size(screenHeight: height)
             try expect(size.width == 356 && size.height <= height - 100 && size.height <= 414, "Quick view can exceed the available display")

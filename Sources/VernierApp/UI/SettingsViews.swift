@@ -62,7 +62,7 @@ struct PrivacyView: View {
                     Divider()
                     Toggle("Show floating pill", isOn: $model.pillEnabled)
                     Toggle("Keep pill expanded", isOn: $model.pillAlwaysExpanded).disabled(!model.pillEnabled)
-                    Text("By default the pill rests as a small handle. Hover to expand, use play/pause to control capture, click elsewhere to open Vernier, or Control-click for more controls. It hides while Vernier’s window or quick view is in use. Drag to reposition.").font(.caption).foregroundStyle(Palette.secondary)
+                    Text("The circle rests quietly. Hover for controls; click its body to keep them open. Play/pause changes capture in place. Only the dashboard arrow opens the full window. Control-click for more actions, or drag to reposition.").font(.caption).foregroundStyle(Palette.secondary)
                     Button("Reset pill position") { model.resetPill() }.buttonStyle(.borderless)
                     Divider()
                     ResidencySettings(model: model)

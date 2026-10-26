@@ -10,12 +10,17 @@ This is a direction, not a release schedule. Contribution proposals should ident
 - [x] Separate metadata/content consent and in-flight revocation gate.
 - [x] SQLite migrations, incremental backfill, retention, search, export and deletion.
 - [x] Explicit source coverage, readable session labels and personal reflection.
+- [x] Intent/steering/understanding focus, bounded recent prompt trail and separate archive details.
+- [x] Quiet circle, explicit dashboard action and exclusive quick-view/dashboard routing.
 - [x] Isolated synthetic showcase, shared core tests and native interaction checks.
 
 ## Next: prove the review is useful
 
 - [ ] Test evidence-linked session reviews with consenting users before introducing a score.
-- [ ] Link intent, decision, correction, artifact and follow-up across sessions.
+- [ ] Reconstruct interaction trajectories: initial intent, agent proposals, human corrections, scope changes, evidence and follow-up across sessions.
+- [ ] Establish context for repeated repair/continuation prompts before interpreting them.
+- [ ] Build correctable, source-linked feedback on steering and unresolved decisions.
+- [ ] Explore within-person trends across comparable task goals and user-reported understanding.
 - [ ] Represent agent claims, human reports and execution evidence separately.
 - [ ] Give users a way to correct attribution and mark unresolved decisions.
 - [ ] Compare the review with a human reconstruction; document false positives and missing evidence.

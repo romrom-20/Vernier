@@ -18,8 +18,24 @@ final class PillActionButton: NSButton {
 final class PillHostingView: NSHostingView<PillView> {
     private var mouseDownPoint: NSPoint?
     private var initialCenter: NSPoint?
+    private var didDrag = false
     var clicked: (() -> Void)?
     var captureToggled: (() -> Void)?
+    var dashboardOpened: (() -> Void)?
+    private(set) lazy var dashboardButton: PillActionButton = {
+        let button = PillActionButton(frame: .zero)
+        button.isBordered = false
+        button.imagePosition = .imageOnly
+        button.focusRingType = .none
+        button.image = NSImage(systemSymbolName: "arrow.up.forward.square", accessibilityDescription: nil)?
+            .withSymbolConfiguration(NSImage.SymbolConfiguration(pointSize: 12, weight: .medium))
+        button.contentTintColor = .secondaryLabelColor
+        button.setAccessibilityLabel("Open dashboard")
+        button.toolTip = "Open dashboard"
+        button.target = self
+        button.action = #selector(openDashboard)
+        return button
+    }()
     private(set) lazy var captureButton: PillActionButton = {
         let button = PillActionButton(frame: .zero)
         button.isBordered = false
@@ -40,8 +56,11 @@ final class PillHostingView: NSHostingView<PillView> {
     }
     private func layoutCaptureButton() {
         if captureButton.superview == nil { addSubview(captureButton) }
+        if dashboardButton.superview == nil { addSubview(dashboardButton) }
         captureButton.isHidden = bounds.width < 110
+        dashboardButton.isHidden = captureButton.isHidden
         captureButton.frame = NSRect(x: bounds.width - 64, y: (bounds.height - 28) / 2, width: 28, height: 28)
+        dashboardButton.frame = NSRect(x: bounds.width - 36, y: (bounds.height - 28) / 2, width: 28, height: 28)
     }
     override func layout() {
         super.layout()
@@ -51,14 +70,17 @@ final class PillHostingView: NSHostingView<PillView> {
         let local = convert(point, from: superview)
         guard bounds.contains(local) else { return nil }
         if !captureButton.isHidden && captureButton.frame.contains(local) { return captureButton }
-        return self // The rest of the pill retains click-to-open and native dragging.
+        if !dashboardButton.isHidden && dashboardButton.frame.contains(local) { return dashboardButton }
+        return self // The body pins/unpins controls; opening the dashboard is always explicit.
     }
     override func accessibilityChildren() -> [Any]? {
         var children = super.accessibilityChildren() ?? []
         if !captureButton.isHidden && !children.contains(where: { ($0 as? NSView) === captureButton }) { children.append(captureButton) }
+        if !dashboardButton.isHidden && !children.contains(where: { ($0 as? NSView) === dashboardButton }) { children.append(dashboardButton) }
         return children
     }
     @objc private func toggleCapture() { captureToggled?() }
+    @objc private func openDashboard() { dashboardOpened?() }
 
     var moved: (() -> Void)?
     var pillMenu: NSMenu?
@@ -97,20 +119,23 @@ final class PillHostingView: NSHostingView<PillView> {
     override var mouseDownCanMoveWindow: Bool { false }
     override func mouseDown(with event: NSEvent) {
         mouseDownPoint = NSEvent.mouseLocation
+        didDrag = false
         if let frame = window?.frame { initialCenter = NSPoint(x: frame.midX, y: frame.midY) }
     }
     override func mouseDragged(with event: NSEvent) {
         guard let mouseDownPoint, let initialCenter, let frame = window?.frame else { return }
         let now = NSEvent.mouseLocation
+        if hypot(now.x - mouseDownPoint.x, now.y - mouseDownPoint.y) >= 4 { didDrag = true }
+        guard didDrag else { return }
         window?.setFrameOrigin(NSPoint(x: initialCenter.x + now.x - mouseDownPoint.x - frame.width / 2,
                                       y: initialCenter.y + now.y - mouseDownPoint.y - frame.height / 2))
     }
     override func mouseUp(with event: NSEvent) {
-        guard let mouseDownPoint else { return }
-        let now = NSEvent.mouseLocation
-        if hypot(now.x - mouseDownPoint.x, now.y - mouseDownPoint.y) < 4 { clicked?() } else { moved?() }
+        guard mouseDownPoint != nil else { return }
+        if didDrag { moved?() } else { clicked?() }
         self.mouseDownPoint = nil
         initialCenter = nil
+        didDrag = false
         handleHoverExit()
     }
 }
@@ -122,10 +147,7 @@ struct PillView: View {
         GeometryReader { geometry in
             Group {
                 if geometry.size.width < 110 {
-                    HStack(spacing: 8) {
-                        InstrumentMark(size: 16)
-                        indicator
-                    }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                    indicator.frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     HStack(spacing: 11) {
                         InstrumentMark(size: 23)
@@ -136,7 +158,7 @@ struct PillView: View {
                         }
                         Spacer(minLength: 0)
                         Color.clear.frame(width: 28, height: 28) // Native capture button owns this hit target.
-                        Image(systemName: "chevron.up").font(.system(size: 9, weight: .semibold)).foregroundStyle(Palette.secondary)
+                        Color.clear.frame(width: 9, height: 28) // Native dashboard button owns this target.
                     }.padding(.horizontal, 16).frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }.background(.ultraThinMaterial, in: Capsule())
@@ -144,14 +166,18 @@ struct PillView: View {
                 .overlay(Capsule().strokeBorder(Palette.line.opacity(0.75), lineWidth: 0.5))
                 .foregroundStyle(Palette.text).contentShape(Capsule())
         }.accessibilityElement(children: .ignore)
-            .accessibilityLabel("\(Brand.name), \(model.capturePhase.title). Open Vernier.")
+            .accessibilityLabel("\(Brand.name), \(model.capturePhase.title). \(model.pillPinned ? "Release" : "Keep open") capture controls.")
             .accessibilityAddTraits(.isButton)
-            .accessibilityAction { model.openStudio(.overview) }
-            .help("Hover to expand. Use play or pause to control capture. Click elsewhere to open Vernier.")
+            .accessibilityAction { model.togglePillControls() }
+            .help("Hover for controls. Click to keep them open. Play/pause controls capture; the arrow opens the dashboard.")
     }
     @ViewBuilder private var indicator: some View {
         if model.capturePhase == .checking && !reduceMotion && !ProcessInfo.processInfo.isLowPowerModeEnabled {
             ProgressView().controlSize(.mini).frame(width: 12, height: 12)
+        } else if model.capturePhase == .current {
+            Circle().strokeBorder(Palette.mint.opacity(0.65), lineWidth: 1)
+                .overlay(Circle().fill(Palette.mint).frame(width: 4, height: 4))
+                .frame(width: 14, height: 14)
         } else {
             Image(systemName: model.capturePhase.symbol).font(.system(size: 10, weight: .semibold))
                 .foregroundStyle(CaptureStyle.color(model.capturePhase)).frame(width: 12, height: 12)

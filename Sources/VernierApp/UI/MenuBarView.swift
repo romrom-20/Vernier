@@ -47,7 +47,7 @@ struct MenuBarView: View {
             }.frame(maxHeight: .infinity)
             Divider().overlay(Palette.line.opacity(0.5))
             HStack {
-                Button("Open Vernier") { model.openStudio(.overview) }.buttonStyle(QuietButtonStyle()).keyboardShortcut("o")
+                Button("Open dashboard") { model.openStudio(.overview) }.buttonStyle(QuietButtonStyle()).keyboardShortcut("o")
                 Spacer()
                 Button("Memory →") { model.showMemory() }.buttonStyle(.plain).font(.callout).foregroundStyle(Palette.mint)
             }.padding(.horizontal, 18).padding(.top, 12)

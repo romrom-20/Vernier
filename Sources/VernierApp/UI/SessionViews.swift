@@ -6,7 +6,12 @@ struct LiveOverviewView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
             PresenceHero(model: model)
-            InstrumentCard { CaptureInventory(model: model) }
+            InteractionFocusView(model: model)
+            InstrumentCard {
+                DisclosureGroup("Saved memory and capture details") {
+                    CaptureInventory(model: model).padding(.top, 14)
+                }.font(.callout.weight(.medium))
+            }
             if model.library.sessions.isEmpty {
                 InstrumentCard {
                     EmptyState(title: model.codexEnabled ? "Ready for session metadata." : "Connect your Codex sessions.", detail: model.codexEnabled ? "Refresh reads available session history for local Conductor workspaces. No conversation is resumed." : "Open Connections to enable read-only metadata from Conductor’s installed Codex.")
@@ -14,7 +19,7 @@ struct LiveOverviewView: View {
                 Button("Connections") { model.openStudio(.connections) }.buttonStyle(QuietButtonStyle())
             } else {
                 HStack {
-                    Eyebrow(text: "Recent conversations")
+                    Eyebrow(text: "Return to your work")
                     Spacer()
                     Button("All sessions →") { model.page = .sessions }.buttonStyle(.plain).foregroundStyle(Palette.mint)
                 }
@@ -79,8 +84,8 @@ struct SessionsView: View {
     private var sessions: [SessionMetadata] { model.library.sessions.filter { workspace == nil || $0.workspaceID == workspace } }
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
-            Text("From session to takeaway.").font(.system(size: 32, weight: .light))
-            Text("See what was recorded. Add what the work meant to you.").foregroundStyle(Palette.secondary)
+            Text("How did you steer the work?").font(.system(size: 32, weight: .light))
+            Text("Revisit your intent, the direction you gave, and what you now understand.").foregroundStyle(Palette.secondary)
             SessionCoverageView(model: model)
             HStack {
                 Eyebrow(text: model.conversationMemoryEnabled ? "Saved conversations" : "Recorded activity")
@@ -145,6 +150,7 @@ struct SessionDetailView: View {
                 Spacer()
                 Text("\(model.library.digest(for: session)?.messageCount ?? 0) saved messages").font(.caption).foregroundStyle(Palette.secondary)
             }
+            PromptTrailView(model: model, session: session)
             InstrumentCard {
                 DisclosureGroup("Recorded session activity") {
                 VStack(alignment: .leading, spacing: 16) {
@@ -174,8 +180,8 @@ struct SessionDetailView: View {
             InstrumentCard {
                 VStack(alignment: .leading, spacing: 13) {
                     Eyebrow(text: "Your own view · user reported")
-                    Text("What do you think—and what did you check?").font(.title3.weight(.medium))
-                    Text("Write the result you expected, the evidence you checked yourself, and one assumption you would revisit. Your words stay separate from the agent’s report.")
+                    Text("Your intent. Your steering. Your understanding.").font(.title3.weight(.medium))
+                    Text("What did you want at the start? Where did you challenge or redirect the agent? What can you explain now, and what still needs checking? Record what happened in your own words; a repeated “fix it” alone does not tell us whether you steered well.")
                         .font(.callout).foregroundStyle(Palette.secondary)
                     TextEditor(text: $note).font(.body).frame(minHeight: 110).scrollContentBackground(.hidden)
                         .padding(10).background(Palette.inset, in: RoundedRectangle(cornerRadius: 9))
@@ -196,5 +202,72 @@ struct SessionDetailView: View {
             Text("Reading, comprehension, browser/tab interactions and cognitive performance are not observed. Conversation capture is separately controlled in Memory.")
                 .font(.caption).foregroundStyle(Palette.secondary).fixedSize(horizontal: false, vertical: true)
         }.onAppear { note = model.library.notes[session.id] ?? "" }.onChange(of: note) { _, _ in saved = false }
+    }
+}
+
+
+struct InteractionFocusView: View {
+    @ObservedObject var model: AppModel
+    var body: some View {
+        InstrumentCard {
+            VStack(alignment: .leading, spacing: 14) {
+                Eyebrow(text: "Your side of the interaction")
+                Text("How did you steer the work?").font(.title3.weight(.medium))
+                Text("Follow the intent you set, the course you changed, and what you understood along the way.")
+                    .font(.callout).foregroundStyle(Palette.secondary)
+                HStack(alignment: .top, spacing: 18) {
+                    focus("Intent", "What were you trying to achieve?")
+                    focus("Steering", "Where did you question or redirect?")
+                    focus("Understanding", "What can you explain or verify?")
+                }
+                Button("Review a session →") { model.openStudio(.sessions) }
+                    .buttonStyle(.plain).font(.callout.weight(.medium)).foregroundStyle(Palette.mint)
+                Text("Session reviews are yours to assess. Prompt counts and repeated requests do not establish how well you thought.")
+                    .font(.caption).foregroundStyle(Palette.secondary)
+            }
+        }
+    }
+    private func focus(_ title: String, _ question: String) -> some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(title).font(.caption.weight(.semibold))
+            Text(question).font(.caption).foregroundStyle(Palette.secondary)
+        }.frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+struct PromptTrailView: View {
+    @ObservedObject var model: AppModel
+    let session: SessionMetadata
+    @State private var prompts: [ConversationMessage] = []
+    var body: some View {
+        InstrumentCard {
+            VStack(alignment: .leading, spacing: 12) {
+                Eyebrow(text: "Your interaction trail")
+                Text("Revisit the direction you gave.").font(.title3.weight(.medium))
+                Text("Read your prompts alongside the agent’s replies, then decide where you set the course or followed it.")
+                    .font(.callout).foregroundStyle(Palette.secondary)
+                if !prompts.isEmpty {
+                    DisclosureGroup("Recent saved prompts · \(prompts.count) shown") {
+                        VStack(alignment: .leading, spacing: 12) {
+                            ForEach(prompts) { message in
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(message.sourceAt?.formatted(date: .abbreviated, time: .shortened) ?? "Source time unknown")
+                                        .font(.caption2).foregroundStyle(Palette.secondary)
+                                    Text(SessionDisplay.excerpt(message.text) ?? "App-added context · open the conversation for detail")
+                                        .font(.callout).textSelection(.enabled)
+                                }
+                            }
+                        }.padding(.top, 10)
+                    }.font(.caption)
+                }
+                Text("A bounded glimpse of the latest 100 saved messages, showing up to 6 user-side prompts in approximate time order. Provider text can include app-added context; this is not a quality assessment.")
+                    .font(.caption).foregroundStyle(Palette.secondary)
+                Button("Read prompts with replies →") { model.showMemory(sessionID: session.id) }
+                    .buttonStyle(.plain).font(.caption.weight(.medium)).foregroundStyle(Palette.mint)
+            }
+        }.task(id: session.id + String(model.library.totalMessageCount)) {
+            let messages = await model.searchMemory("", sessionID: session.id)
+            if !Task.isCancelled { prompts = Array(messages.filter { $0.speaker == "user" }.prefix(6).reversed()) }
+        }
     }
 }
