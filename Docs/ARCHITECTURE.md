@@ -14,7 +14,7 @@ SessionStore is an actor over system SQLite3, with transactional v1→v2→v3 mi
 
 ObservationGate holds a synchronous generation and separate content permission through the storage transaction. Pause, disconnect, system rest and content revocation invalidate in-flight results. UI projection rechecks the generation after actor suspensions. Pause suspends synchronization, and a later resume can import provider history created while paused; per-session exclusions are not implemented.
 
-The product's WHOOP-like ambition is evidence-linked reflection on AI work. Observable conversation/tool events, deterministic wording flags, user-authored takeaways and future independently measured capabilities must remain separate. There is no numerical cognitive-health/readiness score and no inference that tab switches prove reading. Automatic semantic summaries, cross-tool memory, review/comprehension measurements and validated probes are future work.
+The product’s ambition is an instrument for understanding human agency in AI-mediated work. Observable conversation/tool events, deterministic wording flags, user-authored takeaways and future independently measured capabilities must remain separate. There is no numerical cognitive-health/readiness score and no inference that tab switches prove reading. Automatic semantic summaries, cross-tool memory, review/comprehension measurements and validated probes are future work.
 
 ## Native interaction update — 0.4.0
 
@@ -33,3 +33,11 @@ The coordinator tracks ambient, quick view, Studio and welcome as mutually exclu
 The circle body pins/unpins capture controls, and separate native capture/dashboard buttons own distinct hit regions. A latched drag threshold prevents mouse jitter or a drag returned to its origin from invoking click behavior. Pinning is transient; opening a primary surface clears it.
 
 The dashboard emphasizes intent, steering and understanding. Session review reuses the local session-scoped search (latest 100 saved messages) and displays at most six recent user-side prompt excerpts in approximate time order, with no semantic quality classification. User reflection remains separately labeled. This is a review scaffold, not an automatic measurement of interaction quality or cognitive condition.
+
+## Measurement-layer boundaries — proposed design
+
+Current schema v3 stores observation records and user-authored notes. It contains no probe attempts, study enrollment, randomization, intervention assignments or validated capability scores.
+
+Future designs should preserve separate contracts for source observations, user reports, probe attempts/assessments and study assignments/outcomes. Each needs provenance, time/coverage context and its own applicable consent and retention rules. A task/decision contract must be defined before cross-session interpretation is implemented; a provider turn is not automatically a human task boundary.
+
+A future probe record needs task/version, domain/difficulty, prior familiarity, allowed assistance, response and rubric/evaluator provenance. A future experiment additionally needs enrollment, assignment, exposure and outcome timing. Do not silently reuse content consent as permission to run an exercise, alter a prompt or enroll a person in a study. These are design requirements, not implemented tables or APIs. See [the research framework](RESEARCH.md).

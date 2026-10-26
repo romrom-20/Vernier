@@ -1,6 +1,6 @@
 # Contributing to Vernier
 
-Vernier is an early native macOS project. Start with the [product thesis](Docs/PRODUCT.md), [architecture](Docs/ARCHITECTURE.md) and [coverage contract](Docs/CONNECTOR_COVERAGE.md).
+Vernier is an early native macOS project. Start with the [product thesis](Docs/PRODUCT.md), [measurement framework](Docs/RESEARCH.md), [architecture](Docs/ARCHITECTURE.md) and [coverage contract](Docs/CONNECTOR_COVERAGE.md).
 
 ## Run locally
 
@@ -28,6 +28,12 @@ Use invented prompts, paths and outcomes. Do not attach conversation exports, pr
 ## Evidence and product claims
 
 Do not equate a short prompt with disengagement, time with attention, a file-open with understanding, or an agent's completion with verified success. Proposed insights need source evidence, visible uncertainty and a correction path. Use MIT-compatible original contributions; respect the source and licensing of any new assets.
+
+## Measurement boundaries
+
+Classify a proposal as passive observation, an active probe or a longitudinal experiment. Do not promote a transcript feature to a capability measure, or a predictive association to a causal effect. Separate what the person could do before, what AI enabled during the task, what they could do afterward unaided and what an intervention changed.
+
+Future probes/studies need separate consent, conditions, provenance and evaluation criteria. More verification language may reflect wording or better AI output; compare the actual independent outcome. A primary-source citation is required for empirical research claims; a broad publisher link or design essay does not establish a study’s result. Negative and inconclusive findings should constrain product claims.
 
 ## Pull requests
 

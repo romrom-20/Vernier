@@ -1,33 +1,49 @@
 # Vernier
 
-**A WHOOP-inspired companion for how you work with AI.**
+**An instrument for understanding human agency in AI-mediated work.**
 
 [![Build and core checks](https://github.com/romrom-20/Vernier/actions/workflows/ci.yml/badge.svg)](https://github.com/romrom-20/Vernier/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Native macOS](https://img.shields.io/badge/native-macOS%2014%2B-black)
 ![Swift 6](https://img.shields.io/badge/Swift-6-orange)
 
-Vernier is an experimental, local-first Mac app focused on **your side of AI interaction**: how you prompt, steer, question, understand and take over work as a task unfolds.
+Vernier asks a question that becomes more important as agents do more of our work:
 
-The WHOOP inspiration is a quiet everyday presence and useful personal feedback over time. Vernier aims to help you notice where you set the direction, where the agent reframed the task, and what you learned or left unresolved. It is an independent project, unaffiliated with WHOOP.
+> When does delegation expand a person’s effective capabilities, and when does it leave them less able to understand, redirect or recover the work?
 
-**The ambition is to help you get better at working with AI.** The current release provides consented capture, searchable memory, a prompt trail and a user-authored interaction review. Automatic assessment of steering, goal drift, understanding and personal trends is still to be built and validated.
+The project brings together a quiet, native Mac utility, a local record of human–AI interaction, and a research direction for measuring independent capability. It aims to help people understand what they delegated, what AI enabled, and what remains within their own ability to explain, change and recover.
+
+**The current app implements part of the observation foundation:** consented Codex history, searchable local memory, a recent prompt trail and user-authored review. Capability probes, longitudinal experiments and validated agency assessments are not implemented.
 
 ![Vernier Studio showing explicitly labeled synthetic session data](Docs/images/overview.png)
 
 *Actual native app, using the isolated showcase mode. Every session, message and count in this image is synthetic.*
 
-## Why build this?
+## The measurement framework
 
-An agent can finish responding while the important questions remain open: What changed? Why was that approach chosen? What did a person challenge? Which result still needs checking?
+Vernier separates three layers with different kinds of evidence:
 
-A long task can gradually change who is setting the direction. Did you clarify the goal, challenge an assumption, understand a tradeoff, or mostly accept the next path the model proposed? When you repeatedly said “fix it,” were you evaluating specific failures or continuing without a clear view of the problem? The words alone cannot answer those questions.
+1. **Passive interaction signals:** records of delegation, revision and other supported actions can describe what happened. They cannot establish understanding. Today’s connector provides only a subset: recorded Codex conversations, safe agent activity metadata and personal notes; it does not observe human inspection or approval across the Mac.
+2. **Active probes — proposed:** occasional, separately consented sandbox tasks could test whether a person can predict, explain, verify, challenge or independently perform a narrow task. A successful attempt would not establish a permanent change in capability.
+3. **Longitudinal experiments — proposed:** controlled studies could test whether patterns of AI use or Vernier’s own interventions affect later independent performance. A causal claim would require an appropriate design; it would not establish universal cognitive decline.
 
-Vernier should help reconstruct that trajectory across prompts, agent replies, human corrections and outcomes. Efficient delegation and brief instructions can be excellent steering; a lengthy conversation can still leave an important decision unexplained.
+The framework keeps four questions separate: **what a person could do before, what AI enabled during the task, what they could do afterward without AI, and what Vernier itself changed.**
 
-Vernier explores a more useful record: **your intent → the agent’s proposed direction → your intervention → evidence → what you understood → what happened next**. Today, session history, a bounded recent prompt trail and user-authored reflection are implemented. Automatic trajectory/outcome linking and evidence-backed feedback are research and engineering work ahead.
+Prompt wording can change the interaction we observe without changing underlying ability. Asking for an explanation may elicit more verification language; it does not by itself establish better judgment. A reminder may improve the AI’s answer rather than the person’s reasoning. Both possibilities matter to the design.
 
-[Read the product thesis](Docs/PRODUCT.md) · [Roadmap](Docs/ROADMAP.md) · [Architecture](Docs/ARCHITECTURE.md)
+## Independent recoverability
+
+If AI became unavailable, could you identify a failing subsystem, explain the tradeoffs, modify the implementation, recover the project from its artifacts, or hand it to someone else?
+
+That is a promising direction to validate through narrow, voluntary sandbox exercises. Vernier would not need to interrupt real AI access. Good delegation can include accepting sound advice as well as rejecting bad advice; indiscriminate refusal is not the goal.
+
+## The critical experiment
+
+**Does interaction history predict independent understanding or recoverability better than a baseline using task difficulty, prior skill and AI-usage counts?**
+
+If richer signals add no useful predictive value, that challenges the measurement thesis. A useful project-recovery and oversight utility would still be a worthwhile outcome. If prediction improves, the next question is whether targeted interventions cause better independent performance.
+
+[Product thesis](Docs/PRODUCT.md) · [Measurement framework and proposed experiments](Docs/RESEARCH.md) · [Roadmap](Docs/ROADMAP.md) · [Architecture](Docs/ARCHITECTURE.md)
 
 ## What works today
 
@@ -37,7 +53,7 @@ Vernier explores a more useful record: **your intent → the agent’s proposed 
 - **Separate permissions:** session metadata and conversation text are distinct opt-ins, both off for new installations.
 - **Local conversation memory:** available prompts, visible assistant replies, and allowlisted agent activity metadata. Search and export include the retained archive; incomplete histories stay labeled.
 - **User-owned storage:** SQLite, incremental backfill, retention, export, conversation erasure and full local deletion.
-- **Interaction review:** a dashboard focused on intent, steering and understanding; readable session labels; a recent prompt trail; and your own account of what you directed, challenged, learned and checked.
+- **Interaction review:** readable session labels, a bounded prompt trail, and your own account of intent, steering, understanding and checked evidence. These are records and self-reports, not capability measurements.
 - **Resident lifecycle:** optional native login registration, adaptive sync cadence, rest during sleep/inactive sessions, and preserved Pause across wake.
 
 ## What it cannot tell you
@@ -95,7 +111,7 @@ Native regressions cover stationary hover during resizing, canceled exit on re-e
 
 ## Contribute
 
-Useful contributions include reproducing native interaction issues, improving source adapters, testing lifecycle/accessibility, and helping validate whether a session review is actually useful. Use synthetic reproductions in public issues.
+Useful contributions include native interaction testing, source adapters, privacy/accessibility work, and research designs that distinguish visible behavior, assisted performance and independent capability. Use synthetic reproductions in public issues.
 
 [Contributing](CONTRIBUTING.md) · [Report a bug](https://github.com/romrom-20/Vernier/issues/new/choose) · [Security reporting](SECURITY.md)
 

@@ -1,58 +1,75 @@
-# A WHOOP-inspired companion for AI interaction
+# Understanding human agency in AI-mediated work
 
-## The problem
+## The central question
 
-AI agents make producing work easier. They also make it easier to lose the history of decisions: the original goal, the alternative that was rejected, what a person questioned, and which result was actually checked. Shipping output and retaining an understanding of it are different outcomes.
+> When does delegation expand a person’s effective capabilities, and when does it leave them less able to understand, redirect or recover the work?
 
-Vernier's north star is **helping people get better at working with AI as agents grow more autonomous**. The WHOOP analogy describes an ambient daily companion, longitudinal feedback and personal context. The subject is how a person prompts, steers, understands and evaluates work. It is not simply an account of what the agents executed.
+Vernier is an instrument for investigating that question. Its ambition extends from a quiet Mac utility to an evidence-grounded personal agency ledger, and eventually to an experimental system for understanding how people and agents work together.
 
-Across a long task, Vernier should help reconstruct who set the goal, how it evolved, where the person pushed back, which proposals they followed, and what they understood at the end. It should support efficient delegation and thoughtful learning, with the user choosing what they wanted from the session.
+The value of delegation depends on the task, the person’s goals, their prior capability and what they can do when circumstances change. Efficient delegation is legitimate. Accepting useful advice and rejecting misleading advice can both demonstrate good judgment.
 
-[Addy Osmani's cognitive-surrender essay](https://addyosmani.com/blog/cognitive-surrender/) motivates the distinction between delegating execution and relinquishing judgment. We treat the essay as a design argument, not a validated measurement model or a license to infer cognitive condition from activity logs.
+## Three measurement layers
 
-## A grounded example
+### 1. Passive interaction signals
 
-A builder asks an agent to implement a floating control, tries the app, notices that hovering flickers, and points out that the apparent pause button opens the dashboard instead of pausing.
+This layer describes supported observations: what was delegated, revised, approved, rejected, inspected or abandoned, where a source actually exposes those actions with consent. It helps reconstruct the trajectory of a task and identify evidence worth revisiting.
 
-The builder's prompts may be brief. Their product testing and corrections are nevertheless evidence of independent judgment. A score based on prompt length, repeated “continue,” or elapsed time could characterize this work incorrectly. Conversely, a detailed conversation would not prove a careful review.
+The current app captures only part of this layer: local Codex conversation history, allowlisted agent activity metadata and user-authored notes. It does not establish human approval, inspection, comprehension or activity across other apps. A provider’s user-side message can contain app-added context; it is not a keystroke log.
 
-A useful future review might connect those reports to the implementation and regression checks, then suggest preserving the interactions as acceptance criteria. It should cite the underlying evidence and allow correction.
+Even complete interaction logs would not establish understanding. A person who writes “ship it” may have carefully reviewed the result elsewhere. Another who requests an explanation may simply receive a longer answer. Wording affects observability as well as behavior.
 
-## The current product
+### 2. Active probes — proposed
 
-The implemented app keeps local Codex session history, separately consented conversation text, safe agent activity metadata and personal notes. It exposes source coverage and gives the user direct capture controls. The dashboard now puts intent, steering and understanding first. A session exposes a bounded recent prompt trail alongside full conversation access. Its user-authored review asks what the person wanted, where they challenged or redirected the model, what they can explain, and what still needs checking. Archive totals remain available as collection details.
+A separately consented exercise could ask someone to predict an outcome, explain a tradeoff, verify a claim, challenge a recommendation or perform a small task independently. The result would describe a particular attempt under recorded conditions.
 
-This is infrastructure for useful reflection. The current dashboard has not demonstrated that it can identify cognitive surrender, improve understanding or reliably link sessions to shipped outcomes. Message totals and activity charts should never be presented as that evidence.
+Independent recoverability is a promising construct: could someone locate a failure, revise a design, modify an implementation, recover useful artifacts or transfer the project without relying on the original agent? Exercises should use a sandbox rather than disrupt real work or disable AI access.
 
-## The interaction trajectory
+Probe results need domain, task difficulty, prior familiarity, available assistance, timing and rubric context. One attempt cannot establish permanent capability change or general cognitive condition. No probes are implemented yet.
 
-A useful unit is a task across time, even when it spans multiple sessions. Keep the initial user goal, agent proposals, human interventions, changes in scope, verification evidence and user reflection connected. A later instruction to “fix it” can represent a precise correction, a recurring unresolved failure, a changed requirement, or an unexamined continuation. Establish the context before interpreting it.
+### 3. Longitudinal experiments — proposed
 
-Potential future feedback includes where a goal drifted, which tradeoff remained unexplained, where a correction changed the outcome, and which habits helped a user steer a similar task more effectively. These are proposed capabilities, not implemented detections. Any assessment should cite its evidence, state uncertainty, accept corrections, and distinguish an efficient choice to delegate from losing the thread.
+A controlled study could test whether a pattern of AI use or a Vernier intervention affects later independent performance. Observation alone cannot establish that an intervention caused learning or loss of capability.
 
-Personal trends need comparable goals and tasks, explicit user context and enough reliable evidence. Counts of prompts, mouse events or elapsed time cannot supply a validated strain/readiness measure on their own.
+The design must separate a change in the human from a change in the AI’s output. Improved assisted task performance may be valuable while leaving independent performance unchanged. The two outcomes should be reported separately. No study assignment, randomization or intervention infrastructure is implemented.
 
-## What a useful review should help answer
+## Four distinct outcomes
 
-- Which decision changed the project, and what was its original purpose?
-- What did the person challenge, correct or independently verify?
-- What evidence supports the result, and who supplied it?
-- Which important assumptions remain unresolved?
-- When did the same question reappear across sessions?
+1. What the person could do before interacting with AI.
+2. What AI made possible during the task.
+3. What the person could do afterward without AI.
+4. Whether Vernier’s own intervention changed any of those outcomes.
 
-Context matters. Delegating implementation while evaluating a product can be appropriate. Learning an unfamiliar system may call for a different kind of engagement. The user chooses the goal; Vernier should not judge every delegation against a single ideal workflow.
+A ledger should retain the provenance of each kind of evidence. Agent claims, observed artifacts, user reports and measured task performance must remain distinguishable.
 
-## Evidence boundaries
+## Appropriate delegation and recoverability
 
-Keep observed events, agent claims, user reports, and independently checked artifacts distinct. An agent's test-passed statement is a claim until tied to trustworthy execution evidence. A file-open event, if ever separately consented, would establish an opportunity to inspect rather than comprehension. Missing review evidence means unknown, not unreviewed.
+An appropriate delegation decision uses what was known at the time. A separate question is whether the person could revise or recover that decision when new evidence arrived. Approval frequency alone cannot answer either question.
 
-The first validation milestone is small: produce a review of a few consented sessions, ask whether the user recognizes it as accurate and useful, inspect its errors, and measure whether it helps them resolve a concrete open question. More connectors and a polished score cannot substitute for that work.
+For example, a builder repeatedly reports specific failures in a floating control after an agent claims completion. Brief repair prompts can represent active evaluation. Interpreting the same wording as dependence would require evidence that the interaction log does not contain.
+
+In tasks with a defensible correctness criterion, a future study can examine accepting correct advice and rejecting incorrect advice separately. Open-ended design work may instead need contextual expert adjudication and explicit uncertainty; an answer from another model is not automatically ground truth.
+
+## The critical experiment and its failure condition
+
+Test whether interaction history predicts independent understanding or recovery better than a simple baseline using task difficulty, prior skill and AI-usage counts. The evaluation must use held-out outcomes and account for repeated observations of the same person or project.
+
+If the richer signals add no practically useful predictive value, that challenges Vernier’s measurement thesis. The project may remain valuable for memory, recovery and oversight, with narrower claims. If useful prediction is established, test whether carefully targeted interventions actually improve later independent performance.
+
+The measurement system should be able to produce an informative negative result. Attractive numbers, higher message counts and successful agent output are not substitutes for that test.
+
+## What exists today
+
+The native app provides an optional circle/pill, menu-bar quick view, Studio, read-only Codex history, separately consented conversation memory, local storage controls and user-authored interaction review. The dashboard emphasizes intent, steering and understanding, with a bounded recent prompt trail and clear capture coverage.
+
+It is a foundation for observation and reflection. It does not yet predict independent capability, validate understanding, measure permanent change, run experiments or calculate an agency/strain/readiness score.
 
 ## Product principles
 
-1. Quiet by default, with occasional useful context rather than constant interruptions.
-2. Local ownership, source-specific consent and simple pause/export/delete.
-3. Evidence-linked observations with visible gaps and a correction path.
-4. Efficient delegation is legitimate; no moral judgment from prompt style.
-5. No employee surveillance, hidden monitoring, rankings or cognitive-health diagnosis.
-6. No numeric agency, strain or readiness score without a defined construct and credible validation.
+- Quiet presence, user ownership and source-specific consent.
+- Explicit separation between observation, user report, task performance and causal evidence.
+- Visible missing data, correctable attribution and evidence-linked claims.
+- Support for rational delegation, learning and recovery without moral judgments from prompt style.
+- Separate consent for any future probe, intervention or study; passive capture is not research enrollment.
+- No employee surveillance, hidden recording, medical diagnosis or unsupported universal cognitive claims.
+
+See the [research framework](RESEARCH.md) for proposed study designs and the [roadmap](ROADMAP.md) for implementation gates.

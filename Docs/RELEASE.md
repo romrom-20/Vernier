@@ -25,4 +25,4 @@ SQLite schema v3 separates session/turn metadata, notes, change log, sync state,
 
 A DMG, Developer ID signature, notarization, secure updater, clean-Mac distribution, universal binary and crash-relaunch service are not implemented.
 
-- **0.5.0:** WHOOP-inspired interaction-quality direction made explicit; intent/steering/understanding review and a bounded prompt trail; capture inventory folded into details. One requested UI surface prevents quick-view/dashboard stacking. A quiet 28-point circle replaces the idle checkmark; body click pins controls, capture toggles in place, and only the separate arrow opens the dashboard. No new source or macOS observation permission.
+- **0.5.0:** Human-agency direction made explicit; intent/steering/understanding review and a bounded prompt trail; capture inventory folded into details. One requested UI surface prevents quick-view/dashboard stacking. A quiet 28-point circle replaces the idle checkmark; body click pins controls, capture toggles in place, and only the separate arrow opens the dashboard. No new source or macOS observation permission.
