@@ -3,7 +3,12 @@ import VernierCore
 
 extension AppModel {
     var workOverviewKey: String {
-        library.sessions.map { session in session.id + ":" + String(session.updatedAt.timeIntervalSince1970) + ":" + String(library.digest(for: session)?.messageCount ?? 0) + ":" + String(library.memoryCoverage.first { $0.sessionID == session.id }?.complete ?? false) }.joined(separator: "|") + ":" + String(lastSync?.timeIntervalSince1970 ?? 0) + ":" + String(library.totalMessageCount)
+        let sessionKeys: [String] = library.sessions.map { session in
+            let count = library.digest(for: session)?.messageCount ?? 0
+            let complete = library.memoryCoverage.first { $0.sessionID == session.id }?.complete ?? false
+            return [session.id, String(session.updatedAt.timeIntervalSince1970), String(count), String(complete)].joined(separator: ":")
+        }
+        return sessionKeys.joined(separator: "|") + ":" + String(lastSync?.timeIntervalSince1970 ?? 0) + ":" + String(library.totalMessageCount)
     }
     func clearWorkOverview() {
         workOverviewGeneration += 1; workOverview = nil; workOverviewLoadedKey = nil; workOverviewLoading = false; workOverviewError = nil

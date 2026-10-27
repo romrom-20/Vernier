@@ -71,8 +71,13 @@ public struct WorkOverview: Sendable {
         var seen = Set<String>()
         let representatives = eligible.filter { seen.insert($0.workspaceID).inserted }
         let representativeIDs = Set(representatives.map(\.id))
-        let selected = Array((representatives + eligible.filter { !representativeIDs.contains($0.id) }).prefix(max(0, limit)))
-            .sorted { $0.updatedAt == $1.updatedAt ? $0.id < $1.id : $0.updatedAt > $1.updatedAt }
+        let remaining: [SessionMetadata] = eligible.filter { !representativeIDs.contains($0.id) }
+        let prioritized: [SessionMetadata] = representatives + remaining
+        var selected: [SessionMetadata] = Array(prioritized.prefix(max(0, limit)))
+        selected.sort { left, right in
+            if left.updatedAt == right.updatedAt { return left.id < right.id }
+            return left.updatedAt > right.updatedAt
+        }
         let sessions = selected.map { session in
             let values = grouped[session.id] ?? []
             let story = SessionStory.make(sessionID: session.id, messages: values, storedMessages: library.digest(for: session)?.messageCount ?? values.count)
