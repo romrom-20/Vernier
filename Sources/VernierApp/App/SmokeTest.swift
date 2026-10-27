@@ -197,11 +197,23 @@ extension AppCoordinator {
         let showcase = AppModel(preferences: Preferences(defaults: showcaseDefaults), showcase: true)
         await showcase.startSessionSync()
         showcase.setLaunchAtLogin(true)
-        try check(showcase.isShowcase && showcase.isolatedEnvironment && showcase.library.totalMessageCount == 16 && showcase.loginStatus == .off,
+        try check(showcase.isShowcase && showcase.isolatedEnvironment && showcase.library.totalMessageCount == 18 && showcase.loginStatus == .off,
                   "Showcase remains isolated from store, connector and login service")
         await showcase.loadSessionStory()
         try check(showcase.currentStory?.followUps == 4 && showcase.currentStory?.runs.count == 9,
                   "Visual showcase loads real fixture exchanges rather than decorative data")
+        await showcase.loadWorkOverview()
+        try check(showcase.workOverview?.workspaces == 3 && showcase.workOverview?.count(.goAhead) == 1 && showcase.workOverview?.failureCount == 1,
+                  "Work overview spans workspaces with source-linked wording cues and failure status")
+        let overviewGeneration = showcase.workOverviewGeneration
+        await showcase.loadWorkOverview()
+        try check(showcase.workOverviewGeneration == overviewGeneration, "Quick view and dashboard reuse an unchanged bounded work overview")
+        if let work = showcase.workOverview?.sessions.last {
+            showcase.inspectWork(work, messageID: work.agentLast?.id)
+            try check(showcase.briefSessionID == work.id && showcase.workDetailExpanded && showcase.storyFocusID == work.agentLast?.id,
+                      "A work thread routes to its own conversation and source, not the latest session")
+            showcase.briefSessionID = nil
+        }
         let loadedGeneration = showcase.storyGeneration
         await showcase.loadSessionStory()
         try check(showcase.storyGeneration == loadedGeneration, "Reopening an unchanged story reuses its bounded in-memory projection")
@@ -226,7 +238,7 @@ extension AppCoordinator {
                   "Changed source coverage reloads the map rather than keeping an old projection")
         let beforeErase = showcase.storyGeneration
         await showcase.eraseConversationMemory()
-        try check(showcase.sessionStory == nil && showcase.storyLoadedKey == nil && !showcase.storyLoading && showcase.storyGeneration > beforeErase,
+        try check(showcase.workOverview == nil && showcase.workOverviewLoadedKey == nil && showcase.sessionStory == nil && showcase.storyLoadedKey == nil && !showcase.storyLoading && showcase.storyGeneration > beforeErase,
                   "Memory erasure clears map text and invalidates pending projection results")
     }
 }

@@ -9,7 +9,8 @@ public enum MemoryChecks {
         ("Local brief source grounding, coverage and judgment boundaries", briefValidation),
         ("Separate local-analysis consent, correction, export and erasure", briefStorage),
         ("Schema v3 upgrade preserves memory and adds derived-content deletion", briefMigration),
-        ("Conversation map counts, scope, ordering, citations and synthetic provenance", StoryChecks.projection)
+        ("Conversation map counts, scope, ordering, citations and synthetic provenance", StoryChecks.projection),
+        ("Cross-workspace cues, source evidence, dates and bounded coverage", WorkOverviewChecks.projection)
     ]
     private static func expect(_ value: @autoclosure () -> Bool, _ message: String) throws {
         if !value() { throw CoreCheckFailure(description: message) }
@@ -76,8 +77,10 @@ public enum MemoryChecks {
         try expect((fullExport?["messages"] as? [Any])?.count == 401, "Export silently omitted archived messages")
         let archivedSearch = try await store.memoryMessages(query: "ARCHIVE_SEARCH_MARKER_399")
         try expect(archivedSearch.count == 1, "Search did not reach older stored messages")
+        let bounded = try await store.memoryMessages(query: "synthetic_project_memory", characterLimit: 9)
+        try expect(bounded.count == 1 && bounded[0].text == "SYNTHETIC" && bounded[0].textTruncated, "Overview text cap must mark truncation without changing stored memory")
         let search = try await store.memoryMessages(query: "synthetic_project_memory")
-        try expect(search.count == 1, "Private local search failed")
+        try expect(search.count == 1 && search[0].text.contains("PROJECT_MEMORY") && !search[0].textTruncated, "Overview excerpt cap changed the original searchable memory")
         let export = String(decoding: try await store.exportJSON(), as: UTF8.self)
         try expect(export.contains("SYNTHETIC_PROJECT_MEMORY") && !export.contains("must-redact") && !export.contains("SECRET_OUTPUT"), "Memory export/redaction boundary")
         let stale = token; token = gate.configure(enabled: true, contentEnabled: false)

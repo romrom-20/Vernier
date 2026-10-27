@@ -11,7 +11,7 @@ struct SessionStoryView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Eyebrow(text: leadMoment == nil ? "Codex in Conductor / session perspective" : "Session perspective / AI interpretation")
                     Text(leadMoment?.title ?? "How the work moved.").font(.system(size: 32, weight: .medium, design: .rounded)).tracking(-0.9)
-                    Text(leadMoment?.detail ?? "Your directions. The agent’s replies. The moments you came back.")
+                    Text(leadMoment?.detail ?? "Your messages. The agent’s replies. The moments you came back.")
                         .font(.callout).foregroundStyle(Palette.secondary).lineSpacing(3).lineLimit(3)
                     if let brief = model.currentBrief, leadMoment != nil {
                         Text("AI reviewed \(brief.reviewedMessages) of \(brief.storedMessages) saved messages · inspect the sources below")
@@ -166,13 +166,13 @@ struct ConversationMap: View {
                             }.scaleEffect(run.id == selected?.id ? 1.08 : 1)
                         }.buttonStyle(.plain).position(points[index])
                             .help(run.isUser ? "Your message: \(String(run.excerpt.prefix(130)))" : "\(run.messages.count) recorded agent messages")
-                            .accessibilityLabel("\(run.isUser ? "Your direction" : "Agent replies"), group \(first + index + 1), \(run.messages.count) messages")
+                            .accessibilityLabel("\(run.isUser ? "Your message" : "Agent replies"), group \(first + index + 1), \(run.messages.count) messages")
                             .accessibilityAddTraits(run.id == selected?.id ? .isSelected : [])
                     }
                 }
             }.frame(height: 158)
             HStack {
-                Label("Your directions", systemImage: "circle.fill").foregroundStyle(Palette.mint)
+                Label("Your messages", systemImage: "circle.fill").foregroundStyle(Palette.mint)
                 Label("Agent reply stretches", systemImage: "circle.fill").foregroundStyle(Palette.lavender)
                 Spacer()
                 Text("\(first + 1)–\(first + shown.count) of \(story.runs.count) groups")
@@ -185,7 +185,7 @@ struct ConversationMap: View {
                 Divider().overlay(Palette.line.opacity(0.5))
                 HStack(spacing: 8) {
                     Image(systemName: selected.isUser ? "arrow.turn.up.left" : "sparkle").foregroundStyle(selected.isUser ? Palette.mint : Palette.lavender)
-                    Text(selected.isUser && selected.priorAgentMessages > 0 ? "You came back after \(selected.priorAgentMessages) agent \(selected.priorAgentMessages == 1 ? "message" : "messages")" : selected.isUser ? "You gave the work direction" : "The agent replied \(selected.messages.count) \(selected.messages.count == 1 ? "time" : "times")")
+                    Text(selected.isUser && selected.priorAgentMessages > 0 ? "You came back after \(selected.priorAgentMessages) agent \(selected.priorAgentMessages == 1 ? "message" : "messages")" : selected.isUser ? "You sent a message" : "The agent replied \(selected.messages.count) \(selected.messages.count == 1 ? "time" : "times")")
                         .font(.callout.weight(.semibold))
                     Spacer()
                     if let time = selected.sourceAt { Text(time.formatted(date: .omitted, time: .shortened)).font(.caption).foregroundStyle(Palette.secondary) }
@@ -199,13 +199,13 @@ struct ConversationMap: View {
                 .font(.caption2).foregroundStyle(Palette.secondary)
         }.padding(24).background(Palette.surface, in: RoundedRectangle(cornerRadius: 20))
             .overlay(RoundedRectangle(cornerRadius: 20).strokeBorder(Palette.line.opacity(0.5), lineWidth: 0.5))
-            .onAppear { reveal(); focus(model.storyFocusID ?? defaultRun?.messages.last?.id) }
+            .onAppear { reveal(); focus(model.storyFocusID ?? defaultRun?.messages.last?.id); model.storyMapReadyRevision += 1 }
             .onChange(of: model.storyFocusRevision) { _, _ in focus(model.storyFocusID) }
             .onChange(of: story.sessionID) { _, _ in selectedID = nil; start = nil; reveal() }
     }
     private var headline: String {
         if story.followUps == 0 { return "The first part of the exchange." }
-        return "You returned with direction \(story.followUps) \(story.followUps == 1 ? "time" : "times")."
+        return "You followed up \(story.followUps) \(story.followUps == 1 ? "time" : "times")."
     }
     private func select(_ id: String) {
         withAnimation(reduceMotion ? nil : .smooth(duration: 0.22)) { selectedID = id }
@@ -372,47 +372,5 @@ private struct PatternGlyph: View {
                 Circle().strokeBorder(tint, lineWidth: 1).frame(width: 6, height: 6).offset(x: 16, y: 9)
             }
         }
-    }
-}
-
-struct QuickStoryView: View {
-    @ObservedObject var model: AppModel
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Eyebrow(text: "Your work / at a glance")
-            if let story = model.currentStory, !story.runs.isEmpty {
-                Text(story.followUps > 0 ? "You came back \(story.followUps) \(story.followUps == 1 ? "time" : "times")." : "A conversation is taking shape.")
-                    .font(.system(size: 21, weight: .medium, design: .rounded)).tracking(-0.5)
-                MiniStoryMap(runs: Array(story.runs.suffix(9))).frame(height: 57)
-                if let last = story.latestFollowUp {
-                    Text("LATEST FOLLOW-UP").font(.system(size: 9, weight: .semibold)).tracking(1).foregroundStyle(Palette.secondary)
-                    Text(String(last.excerpt.prefix(170))).font(.callout).lineLimit(3)
-                }
-                Text("Follow the exchanges in the dashboard to see what changed between replies.")
-                    .font(.caption).foregroundStyle(Palette.secondary)
-                Text("\(story.loadedMessages) of \(story.storedMessages) saved messages · selected session")
-                    .font(.caption2).foregroundStyle(Palette.secondary)
-            } else {
-                Text("See the shape of your work.").font(.headline)
-                Text(model.storyLoading ? "Opening saved conversation…" : "Choose a saved conversation in the dashboard to trace your directions and the agent’s replies.")
-                    .font(.caption).foregroundStyle(Palette.secondary)
-            }
-        }.task(id: model.storyKey) { await model.loadSessionStory() }
-    }
-}
-private struct MiniStoryMap: View {
-    let runs: [StoryRun]
-    var body: some View {
-        GeometryReader { geometry in
-            let points = runs.enumerated().map { index, run in
-                CGPoint(x: 12 + (geometry.size.width - 24) * CGFloat(index) / CGFloat(max(1, runs.count - 1)), y: run.isUser ? 15 : 43)
-            }
-            ZStack(alignment: .topLeading) {
-                FlowPath(points: points).stroke(Palette.line.opacity(0.8), style: StrokeStyle(lineWidth: 1.4, lineCap: .round))
-                ForEach(Array(runs.enumerated()), id: \.element.id) { index, run in
-                    Circle().fill(run.isUser ? Palette.mint : Palette.lavender).frame(width: run.isUser ? 9 : 6, height: run.isUser ? 9 : 6).position(points[index])
-                }
-            }
-        }.accessibilityElement(children: .ignore).accessibilityLabel("Conversation sequence: green points are your directions; purple points are agent reply stretches")
     }
 }

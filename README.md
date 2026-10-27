@@ -11,15 +11,15 @@ A coding session can produce a working feature and a long conversation. Reconstr
 
 Vernier is being built as a **personal instrument for understanding and directing your work with AI over time**. The intended experience connects your goals, delegation, questions, corrections and available outcomes, helping you notice a pattern and find a useful way back into the work.
 
-Today, the experimental Mac app turns consented **Codex history from Conductor workspaces** into an interactive conversation map, source comparisons and optional on-device AI interpretations. Codex in Conductor is the first integration and verification boundary. Cross-session understanding and personal recaps are the next product work.
+Today, the experimental Mac app gathers consented **Codex history from Conductor workspaces** into a recent-work overview: source-linked wording cues, threads where the agent replied last, and recorded turn failures. An interactive conversation map and optional on-device AI help inspect an individual session. Contextual cross-session understanding and personal recaps remain the next product work.
 
 The broader question is **human agency in AI-mediated work**: when does delegation expand what you can do, and what remains within your ability to understand, redirect and recover?
 
-**Current version: 0.7.0.** Visual session review works today. AI interpretations are experimental. Connected task histories, daily patterns across sessions, personal baselines and validated capability assessments are not implemented.
+**Current version: 0.8.0.** Recent work across workspaces and visual session review work today. The overview uses transparent wording rules, not a measure of engagement or review. AI interpretations remain experimental and session-scoped. Connected task histories, contextual daily patterns, personal baselines and validated capability assessments are not implemented.
 
-![Vernier's native session perspective using an invented coding conversation](Docs/images/overview.png)
+![Vernier’s recent-work overview using three invented Conductor workspaces](Docs/images/overview.png)
 
-*Current session-review foundation, shown in the actual app’s isolated showcase mode. The conversation, counts and fixed example interpretations are synthetic. This image demonstrates the interface, not measured AI accuracy or the planned cross-session experience.*
+*Actual native app in isolated showcase mode, using three invented workspaces. Counts and example conversations are synthetic. This overview demonstrates bounded wording cues and thread navigation, not measured understanding, AI accuracy or the planned contextual personal recap.*
 
 ## The product we are working toward
 
@@ -34,7 +34,7 @@ The aim is to recognize useful patterns and support better decisions. A long age
 
 ```mermaid
 flowchart LR
-    A["Today: visual session review<br/>Saved Codex messages and source comparisons"] --> B["Planned: connected work history<br/>Tasks, outcomes, personal patterns and recaps"]
+    A["Today: recent-work overview and session maps<br/>Sampled wording cues and source comparisons"] --> B["Planned: connected work history<br/>Tasks, outcomes, personal patterns and recaps"]
     B --> C["Proposed: voluntary capability probes<br/>Evidence about a narrow independent attempt"]
 ```
 
@@ -58,6 +58,7 @@ Vernier helps reconstruct that sequence. A possible repair loop links back to it
 
 ## How to read it
 
+- **Across your work:** the past-24-hour overview samples up to 24 recently updated sessions, with up to 100 messages per session and 4,096 characters per message. It distinguishes go-ahead wording, opening task requests, questions/checks and constraints/corrections. Every example opens its own session. Agent-last and failed-turn flags are invitations to inspect, not proof of absent review or a broken project. [Read the exact rules and coverage](Docs/WORK_OVERVIEW.md).
 - **The record:** the map shows saved messages from one session. Select a point, compare neighboring exchanges, and open the exact source. Counts apply to the loaded window, capped at the latest 500 saved messages. They describe recorded activity.
 - **The interpretation:** optional on-device AI suggests a working goal, possible loops, steering and alternatives. Each pattern has source messages and can be dismissed. Its reviewed excerpt may be smaller than the map; both show their coverage. Sources can be valid while the interpretation is wrong.
 - **The next check:** a review suggestion helps turn an unresolved requirement into an observable test. It does not establish that the work passed, that you reviewed it, or that a mistake was yours.
@@ -68,8 +69,9 @@ The diagram's height identifies the speaker. It does not encode attention, elaps
 
 ## What works today
 
+- **Recent-work overview:** workspace-spanning wording cues, literal prompt examples and inspectable agent-last/failed-turn threads, with explicit sample coverage. No model calls or new source permissions.
 - **Visual review:** interactive speaker lanes, before-and-after comparisons, source-linked AI markers, illustrated pattern cards and a suggested next check.
-- **Quiet Mac presence:** native SwiftUI/AppKit, menu-bar quick view, optional draggable circle/pill and short, reduced-motion-aware transitions. Pause works in place; Explore full story opens Studio.
+- **Quiet Mac presence:** native SwiftUI/AppKit, menu-bar quick view, optional draggable circle/pill and short, reduced-motion-aware transitions. Pause works in place; Explore all work opens Studio.
 - **Codex in Conductor:** read-only local history access. Vernier never starts, resumes or controls an agent.
 - **Local memory:** available prompts, visible replies, allowlisted agent activity metadata, your notes, archive search and export. Coverage and missing history stay visible.
 - **Separate choices:** metadata, conversation capture and local AI interpretation are distinct opt-ins, off on a fresh install.
@@ -85,7 +87,7 @@ cd Vernier
 ./Scripts/showcase.sh
 ```
 
-The showcase uses invented, in-memory records and separate preferences. It opens no personal archive, starts no connector or model, and cannot register a login item. Select map points, inspect sources, and try the pill's hover, drag and pause controls. Quit from the menu bar when finished.
+The showcase uses invented, in-memory records and separate preferences. It opens no personal archive, starts no connector or model, and cannot register a login item. Select wording categories and threads, explore map points and sources, and try the pill's hover, drag and pause controls. Quit from the menu bar when finished.
 
 ## Install on your Mac
 
@@ -107,7 +109,7 @@ Personal records stay in a private Application Support directory on your Mac. Th
 
 Only Codex history under `~/conductor/workspaces/<repository>/<workspace>` is currently connected. Claude Code, Cursor, ordinary ChatGPT chats, Perplexity and other agents are not connected. Vernier does not collect global mouse movements, screens, keystrokes, browser tabs or reading behavior.
 
-Default retention is 30 days by session update time. Pause suspends synchronization; resuming can import provider history created while paused. Turning capture or analysis off retains existing records until erased or removed by retention. Memory erasure also clears derived briefs and the in-memory map.
+Default retention is 30 days by session update time. Pause suspends synchronization; resuming can import provider history created while paused. Turning capture or analysis off retains existing records until erased or removed by retention. Memory erasure also clears derived briefs and the in-memory overview and map.
 
 **This repository contains source, tests, documentation and reviewed synthetic images. Personal conversations, databases, exports, local settings and workspace attachments are excluded.** Publication checks reject private artifact paths and unreviewed or changed image bytes; human review remains necessary.
 

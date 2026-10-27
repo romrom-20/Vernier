@@ -43,11 +43,18 @@ enum StudioPage: String, CaseIterable, Identifiable {
     @Published var briefError: String?
     @Published var briefSessionID: String?
     @Published var memoryQuery = ""
+    @Published var workOverview: WorkOverview?
+    @Published var workOverviewLoading = false
+    @Published var workOverviewError: String?
+    @Published var workDetailExpanded = false
+    var workOverviewGeneration = 0
+    var workOverviewLoadedKey: String?
     @Published var sessionStory: SessionStory?
     @Published var storyLoading = false
     @Published var storyError: String?
     @Published var storyFocusID: String?
     @Published var storyFocusRevision = 0
+    @Published var storyMapReadyRevision = 0
     var storyGeneration = 0
     var storyLoadedKey: String?
     var briefTask: Task<Void, Never>?
@@ -215,7 +222,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
             conversationMemoryEnabled = true
             pillEnabled = true
             preferences.onboardingComplete = true
-            library = ShowcaseFixtures.visualLibrary()
+            library = ShowcaseFixtures.workLibrary()
             lastSync = Date()
         }
     }
@@ -315,6 +322,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
     }
     func eraseConversationMemory() async {
         conversationMemoryEnabled = false
+        clearWorkOverview()
         storyGeneration += 1; sessionStory = nil; storyFocusID = nil; storyLoadedKey = nil; storyLoading = false
         do {
             try await store?.eraseConversationMemory()
@@ -324,6 +332,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
     }
     func deleteLocalRecords() async {
         conversationMemoryEnabled = false
+        clearWorkOverview()
         storyGeneration += 1; sessionStory = nil; storyFocusID = nil; storyLoadedKey = nil; storyLoading = false
         codexEnabled = false
         connectionError = nil

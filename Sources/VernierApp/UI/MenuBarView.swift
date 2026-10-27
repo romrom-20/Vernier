@@ -23,7 +23,7 @@ struct MenuBarView: View {
             Divider().overlay(Palette.line.opacity(0.5))
             ScrollView {
                 VStack(alignment: .leading, spacing: 15) {
-                    QuickStoryView(model: model)
+                    QuickWorkOverviewView(model: model)
                     Divider().overlay(Palette.line.opacity(0.5))
                     DisclosureGroup("Capture details") {
                         VStack(alignment: .leading, spacing: 10) {
@@ -37,8 +37,8 @@ struct MenuBarView: View {
             Divider().overlay(Palette.line.opacity(0.5))
             HStack {
                 Button { model.openStudio(.overview) } label: {
-                    Label("Explore full story", systemImage: "arrow.up.left.and.arrow.down.right").frame(maxWidth: .infinity)
-                }.buttonStyle(QuietButtonStyle()).keyboardShortcut("o").accessibilityLabel("Open dashboard and explore the full conversation story")
+                    Label("Explore all work", systemImage: "arrow.up.left.and.arrow.down.right").frame(maxWidth: .infinity)
+                }.buttonStyle(QuietButtonStyle()).keyboardShortcut("o").accessibilityLabel("Open dashboard and explore all recent work")
                 Spacer()
                 Button("Memory →") { model.showMemory() }.buttonStyle(.plain).font(.callout).foregroundStyle(Palette.mint)
             }.padding(.horizontal, 18).padding(.top, 12)

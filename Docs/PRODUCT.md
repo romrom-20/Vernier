@@ -87,3 +87,8 @@ It is a foundation for observation and reflection. It does not yet predict indep
 - No employee surveillance, hidden recording, medical diagnosis or unsupported universal cognitive claims.
 
 See the [research framework](RESEARCH.md) for proposed study designs and the [roadmap](ROADMAP.md) for implementation gates.
+
+
+### Recent-work foundation — 0.8.0
+
+The menu-bar view and dashboard now span recent Codex sessions across Conductor workspaces, using bounded, source-linked wording cues and thread navigation. Agent-last replies and provider-reported failures help choose an exchange to inspect. These are transparent observations and rules, not semantic daily recaps or evidence of missing review. Task histories, outcome-linked reasoning and personal baselines remain planned. See [what the overview can and cannot say](WORK_OVERVIEW.md).

@@ -64,3 +64,12 @@ Native additions cover visual fixture loading, repeated focus of the same source
 The synthetic Overview and map comparison were inspected visually and through native accessibility. Selecting a node updated its before/after comparison. An interpretation action selected the cited instruction and scrolled the map into view. Read source opened Memory with the exact session and matching query. Quick View was opened through the app menu; its accessibility inspection timed out in the computer-use tool. Command-O then successfully restored the full dashboard. Full manual pointer testing of the new quick view is therefore not claimed; the native geometry/routing checks remain the evidence for that surface.
 
 The two published screenshots use only the invented CSV-import showcase. The fixed synthetic interpretations demonstrate layout and interaction, not the local model's measured accuracy. No personal screenshot, transcript or derived interpretation was published. This is not a user study, usefulness benchmark, cognitive assessment or full-day trend implementation. See [visual review semantics and rationale](VISUAL_REVIEW.md).
+
+
+## Work overview — 0.8.0
+
+The shared suite now has 22 passing groups. The new group checks cross-workspace coverage, a quieter workspace surviving a busy neighbor, deterministic request ordering, mutually exclusive wording categories, exact source provenance, session/time caps, missing source times, partial memory and a newer undated turn superseding an older failure. Storage checks also verify SQL excerpt clipping marks truncation without changing searchable/exported originals.
+
+The 60-check isolated native suite passes and adds overview fixture coverage, bounded projection reuse, source/session routing and erasure invalidation. Synthetic desktop inspection verified category selection exposes literal requests, request navigation selects its own session and map source, and the comparison scrolls visibly into view after loading. The current overview image uses three invented workspaces. No personal archive was used for these captures.
+
+The native popover geometry/routing checks pass. The external UI tool still times out inspecting the quick-view popover, including screenshot capture; a manual visual sign-off for that surface is not claimed. Command-O successfully returned to Studio. Real-world comprehension, task outcomes, absent review and daily semantic patterns remain unvalidated.

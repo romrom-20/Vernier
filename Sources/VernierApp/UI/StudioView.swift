@@ -52,6 +52,10 @@ struct StudioView: View {
             }.id(model.page).background(Palette.canvas)
                 .onChange(of: model.storyFocusRevision) { _, _ in
                     guard model.page == .overview else { return }
+                    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.3)) { proxy.scrollTo(model.currentStory?.runs.isEmpty == false ? "conversation-map" : "session-inspector", anchor: .top) }
+                }
+                .onChange(of: model.storyMapReadyRevision) { _, _ in
+                    guard model.page == .overview, model.workDetailExpanded, model.storyFocusID != nil else { return }
                     withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.3)) { proxy.scrollTo("conversation-map", anchor: .top) }
                 }
             }

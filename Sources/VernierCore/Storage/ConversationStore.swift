@@ -44,9 +44,12 @@ extension SessionStore {
     public func knownMemoryIDs() throws -> Set<String> {
         Set(try rows("SELECT id FROM messages UNION SELECT id FROM agent_signals") { string($0, 0) })
     }
-    public func memoryMessages(query: String = "", sessionID: String? = nil, limit: Int? = 100, newestFirst: Bool = true, speaker: String? = nil) throws -> [ConversationMessage] {
+    public func memoryMessages(query: String = "", sessionID: String? = nil, limit: Int? = 100, newestFirst: Bool = true, speaker: String? = nil, characterLimit: Int? = nil) throws -> [ConversationMessage] {
         // Bind values manually here to keep user search text out of SQL source.
-        let sql = "SELECT id,session_id,turn_id,speaker,phase,body,source_at,observed_at,redactions,truncated,attachments_omitted FROM messages WHERE (?='' OR INSTR(LOWER(body),LOWER(?))>0) AND (? IS NULL OR session_id=?) AND (? IS NULL OR speaker=?) ORDER BY COALESCE(source_at,observed_at) " + (newestFirst ? "DESC,id DESC" : "ASC,id ASC") + (limit == nil ? "" : " LIMIT \(min(500, max(1, limit!)))")
+        let cap = characterLimit.map { min(262144, max(1, $0)) }
+        let bodyColumn = cap.map { "SUBSTR(body,1,\($0))" } ?? "body"
+        let truncatedColumn = cap.map { "CASE WHEN LENGTH(body)>\($0) THEN 1 ELSE truncated END" } ?? "truncated"
+        let sql = "SELECT id,session_id,turn_id,speaker,phase,\(bodyColumn),source_at,observed_at,redactions,\(truncatedColumn),attachments_omitted FROM messages WHERE (?='' OR INSTR(LOWER(body),LOWER(?))>0) AND (? IS NULL OR session_id=?) AND (? IS NULL OR speaker=?) ORDER BY COALESCE(source_at,observed_at) " + (newestFirst ? "DESC,id DESC" : "ASC,id ASC") + (limit == nil ? "" : " LIMIT \(min(500, max(1, limit!)))")
         var statement: OpaquePointer?
         guard sqlite3_prepare_v2(connection.handle, sql, -1, &statement, nil) == SQLITE_OK, let statement else { throw StoreFailure.corrupt }
         defer { sqlite3_finalize(statement) }

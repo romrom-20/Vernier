@@ -16,6 +16,7 @@ Reliability work remains: manual accessibility and mouse testing, real multi-dis
 
 ## 2. An evidence-grounded personal agency ledger — initial interpretation implemented
 
+- [x] Recent-work overview across workspaces: transparent wording cues, exact examples, agent-last and failed-turn threads with bounded coverage.
 - [x] Bounded, on-device session interpretation with exact source references, visible coverage and user dismissal.
 - [ ] Define shared task/decision boundaries and provenance contracts before cross-session detection.
 - [ ] Link initial intent, agent proposals, human interventions, available outcome evidence and follow-up across sessions.

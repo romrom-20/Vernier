@@ -57,3 +57,10 @@ Generation is opt-in, debounced to five minutes automatically and cancelable wit
 `SessionStory` projects at most 500 existing saved messages for a selected session into user groups and contiguous assistant reply stretches. `SessionStoryModel` checks source identity/count/update and a read generation before updating its in-memory projection. Completed projections are reused. Erasure invalidates pending projection results and clears cached text. No model or new source request is needed for the map.
 
 `ConversationMap` lays out speaker lanes in reading order, supports bounded group pagination, and links selections to neighboring source quotations. AI interpretations retain independent provenance and coverage; markers only attach to source IDs present in the window. `ScrollViewReader` connects pattern actions back to the relevant map point, including repeated selection of the same source. Custom motion runs on presentation/selection only and respects Reduce Motion. The snapshot quick view loads the same projection and retains pinned capture/navigation controls. See [visual semantics](VISUAL_REVIEW.md).
+
+
+## Cross-workspace overview — 0.8.0
+
+`WorkOverview` projects existing sessions, turn outcomes and a bounded message sample into source-linked wording cues. `WorkOverviewModel` gives each workspace a slot before filling remaining slots by recency (24 sessions maximum), reads at most 100 messages per session with a 4,096-character SQL excerpt cap, and guards actor-resumed updates with generation, source key and cancellation checks. The full archive is unchanged. No model runs or new consent, schema or storage is introduced. Completed projections are reused; erasure clears and invalidates them.
+
+`WorkOverviewView` is the Studio entry point; `QuickWorkOverviewView` replaces the selected-session mini-map in the menu bar. A request or thread selection expands the session-map drill-down with the correct source ID, and map appearance completes scroll navigation after asynchronous loading. Wording cues, provider failures and agent-last flags do not establish review, comprehension or task outcomes. See [exact rules and scope](WORK_OVERVIEW.md).

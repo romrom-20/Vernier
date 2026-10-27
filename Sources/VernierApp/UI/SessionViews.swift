@@ -5,7 +5,10 @@ struct LiveOverviewView: View {
     @ObservedObject var model: AppModel
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
-            SessionStoryView(model: model)
+            WorkOverviewView(model: model)
+            DisclosureGroup("Inspect a conversation", isExpanded: $model.workDetailExpanded) {
+                SessionStoryView(model: model).padding(.top, 18)
+            }.font(.headline).id("session-inspector")
             InstrumentCard {
                 DisclosureGroup("Saved memory and capture details") {
                     CaptureInventory(model: model).padding(.top, 14)
@@ -17,14 +20,7 @@ struct LiveOverviewView: View {
                 }
                 Button("Connections") { model.openStudio(.connections) }.buttonStyle(QuietButtonStyle())
             } else {
-                HStack {
-                    Eyebrow(text: "Return to your work")
-                    Spacer()
-                    Button("All sessions →") { model.page = .sessions }.buttonStyle(.plain).foregroundStyle(Palette.mint)
-                }
-                ForEach(model.library.sessions.prefix(3)) { session in
-                    Button { model.inspectSession(session) } label: { SessionRow(session: session, library: model.library) }.buttonStyle(.plain)
-                }
+                Button("Browse all saved sessions →") { model.page = .sessions }.buttonStyle(.plain).foregroundStyle(Palette.mint)
             }
         }
     }

@@ -99,3 +99,37 @@ extension ShowcaseFixtures {
                               digests: digests, workBriefs: [brief])
     }
 }
+
+extension ShowcaseFixtures {
+    /// Three invented workspaces for the cross-session overview. Does not reuse any local history.
+    public static func workLibrary(now: Date = Date()) -> SessionLibrary {
+        let base = visualLibrary(now: now)
+        let sessions = base.sessions.enumerated().map { index, session in
+            SessionMetadata(id: session.id, workspaceID: "showcase-workspace-\(index)", createdAt: session.createdAt,
+                updatedAt: session.updatedAt, observedAt: now, sourceKind: session.sourceKind, turnsComplete: session.turnsComplete)
+        }
+        let id = sessions[1].id
+        let time = sessions[1].updatedAt
+        let extra = [("user", "Please proceed."), ("assistant", "The interaction change is ready for a manual check. A build does not establish that the pointer behavior is correct.")].enumerated().map { index, entry in
+            ConversationMessage(id: "showcase-work-\(index)", sessionID: id, turnID: "showcase-work-turn", speaker: entry.0,
+                phase: entry.0 == "user" ? "unspecified" : "final_answer", text: entry.1,
+                sourceAt: time.addingTimeInterval(Double(index + 1) * 10), observedAt: now, redactions: 0, textTruncated: false, attachmentsOmitted: false)
+        }
+        let turns = base.turns.map { turn in
+            TurnMetadata(id: turn.id, sessionID: turn.sessionID, outcome: turn.sessionID == sessions[2].id ? .failed : turn.outcome,
+                startedAt: turn.startedAt, completedAt: turn.completedAt, observedAt: turn.observedAt)
+        }
+        let digests = base.digests.map { digest in
+            SessionDigest(sessionID: digest.sessionID, promptExcerpt: digest.sessionID == sessions[2].id ? "Add an export preview." : digest.promptExcerpt, messageCount: digest.messageCount + (digest.sessionID == id ? 2 : 0), signalCount: digest.signalCount)
+        }
+        let messages = base.messages.map { message in
+            guard message.id == "showcase-2-user" else { return message }
+            return ConversationMessage(id: message.id, sessionID: message.sessionID, turnID: message.turnID, speaker: message.speaker,
+                phase: message.phase, text: "Add an export preview.", sourceAt: message.sourceAt, observedAt: message.observedAt,
+                redactions: 0, textTruncated: false, attachmentsOmitted: false)
+        }
+        return SessionLibrary(sessions: sessions, turns: turns, notes: base.notes, messages: messages + extra,
+            signals: base.signals, memoryCoverage: base.memoryCoverage, totalMessageCount: base.totalMessageCount + 2,
+            totalSignalCount: base.totalSignalCount, digests: digests, workBriefs: base.workBriefs)
+    }
+}
