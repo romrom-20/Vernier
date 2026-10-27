@@ -3,7 +3,7 @@ import VernierCore
 
 extension AppModel {
     var briefSession: SessionMetadata? {
-        if let briefSessionID { return library.sessions.first { $0.id == briefSessionID } }
+        if let briefSessionID, let session = library.sessions.first(where: { $0.id == briefSessionID }) { return session }
         return library.sessions.first
     }
     var currentBrief: WorkBrief? {

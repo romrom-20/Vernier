@@ -1,4 +1,4 @@
-# Source release — 0.6.0
+# Source release — 0.7.0
 
 Vernier is an experimental native Mac app and working project name. This repository publishes source, synthetic showcase data, tests and documentation under MIT. There is no production, notarized binary release yet.
 
@@ -30,3 +30,5 @@ A DMG, Developer ID signature, notarization, secure updater, clean-Mac distribut
 - **0.6.0:** Optional Apple on-device session briefs replace capture counts as the primary Overview/quick-view content. Working goal, possible interaction patterns, exact source links and a small next step; visible excerpt coverage and correctable interpretations. Schema v4 preserves existing records and adds derived-content erasure/retention/export. Fresh installations keep analysis off. Requires macOS 26.4+, Apple Intelligence ready, and a Foundation Models SDK build for generation; the history reader retains its older deployment target. No cloud inference or extra API account.
 
 The additional development flag `--enable-local-insights` enables this local analysis setting only. Normal launches honor saved consent. `--brief-model-probe` runs an isolated hardware-dependent model check on invented conversations; it is not part of normal CI or showcase.
+
+- **0.7.0:** Interactive native conversation map, compact recorded-activity data points, before/after source comparison, AI loop markers, illustrated interpretation cards and a review suggestion. Quick view is a visual entry point with pinned pause and Explore full story. The display-bounded Studio opens larger. No new capture source or schema change. [Map semantics and design rationale](VISUAL_REVIEW.md).

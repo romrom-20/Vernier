@@ -8,7 +8,8 @@ public enum MemoryChecks {
         ("Conversation backfill advances independently of metadata", protocolBackfill),
         ("Local brief source grounding, coverage and judgment boundaries", briefValidation),
         ("Separate local-analysis consent, correction, export and erasure", briefStorage),
-        ("Schema v3 upgrade preserves memory and adds derived-content deletion", briefMigration)
+        ("Schema v3 upgrade preserves memory and adds derived-content deletion", briefMigration),
+        ("Conversation map counts, scope, ordering, citations and synthetic provenance", StoryChecks.projection)
     ]
     private static func expect(_ value: @autoclosure () -> Bool, _ message: String) throws {
         if !value() { throw CoreCheckFailure(description: message) }

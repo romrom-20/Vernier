@@ -243,12 +243,13 @@ import VernierCore
         popover.performClose(nil)
         welcome?.orderOut(nil)
         if studio == nil {
-            let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1080, height: 740), styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false)
+            let visible = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1280, height: 900)
+            let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: min(1180, visible.width - 50), height: min(820, visible.height - 70)), styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false)
             window.title = "\(Brand.name) Studio"
             window.minSize = NSSize(width: 860, height: 608)
             window.contentView = NSHostingView(rootView: StudioView(model: model))
             window.isReleasedWhenClosed = false
-            window.setFrameAutosaveName(model.isShowcase ? "ShowcaseStudio" : smokeTest ? "SmokeStudio" : "Studio")
+            window.setFrameAutosaveName(model.isShowcase ? "ShowcaseStudio" : smokeTest ? "SmokeStudio" : "StudioStory")
             window.center()
             studio = window
         }

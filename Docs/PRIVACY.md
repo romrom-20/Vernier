@@ -31,3 +31,7 @@ The model returns a working goal, candidate patterns, source references and a su
 One derived brief per session is cached in the same private SQLite database, including short source quotes, engine version, generation time and excerpt coverage. Export includes it. Dismissal of the same observation persists across refreshes. Turning analysis off cancels pending results and retains existing briefs; memory erasure/full deletion removes them, and session retention cascades to them.
 
 Automatic generation applies only to the selected/latest session, only after a source update or stored-message-count change, at most once per five minutes. Manual refresh bypasses that interval. Pause, source/content/analysis revocation, sleep and user-session inactivity invalidate in-flight persistence. Cancellation may not instantly stop underlying on-device computation, but no stale result can be saved. A 90-second deadline bounds the waiting interface. No active probes, prompt edits, provider control or research enrollment are introduced.
+
+## Visual projection — 0.7.0
+
+The conversation map reads at most 500 already saved messages for one session into an in-memory projection. It does not observe additional activity. Role/sequence counts apply to the loaded window; AI interpretations retain their separate reviewed-message coverage. Erase conversation memory and full deletion clear the projection and invalidate pending reads. No new table or consent is introduced.

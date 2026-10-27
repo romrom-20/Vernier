@@ -5,8 +5,7 @@ struct LiveOverviewView: View {
     @ObservedObject var model: AppModel
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
-            PresenceHero(model: model)
-            InstrumentCard { WorkBriefView(model: model) }
+            SessionStoryView(model: model)
             InstrumentCard {
                 DisclosureGroup("Saved memory and capture details") {
                     CaptureInventory(model: model).padding(.top, 14)
@@ -27,7 +26,6 @@ struct LiveOverviewView: View {
                     Button { model.inspectSession(session) } label: { SessionRow(session: session, library: model.library) }.buttonStyle(.plain)
                 }
             }
-            DayRhythmView(model: model)
         }
     }
 }

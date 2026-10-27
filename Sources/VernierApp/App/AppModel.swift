@@ -43,6 +43,13 @@ enum StudioPage: String, CaseIterable, Identifiable {
     @Published var briefError: String?
     @Published var briefSessionID: String?
     @Published var memoryQuery = ""
+    @Published var sessionStory: SessionStory?
+    @Published var storyLoading = false
+    @Published var storyError: String?
+    @Published var storyFocusID: String?
+    @Published var storyFocusRevision = 0
+    var storyGeneration = 0
+    var storyLoadedKey: String?
     var briefTask: Task<Void, Never>?
     var briefDeadline: Task<Void, Never>?
     var briefGeneration = 0
@@ -208,7 +215,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
             conversationMemoryEnabled = true
             pillEnabled = true
             preferences.onboardingComplete = true
-            library = ShowcaseFixtures.library()
+            library = ShowcaseFixtures.visualLibrary()
             lastSync = Date()
         }
     }
@@ -308,6 +315,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
     }
     func eraseConversationMemory() async {
         conversationMemoryEnabled = false
+        storyGeneration += 1; sessionStory = nil; storyFocusID = nil; storyLoadedKey = nil; storyLoading = false
         do {
             try await store?.eraseConversationMemory()
             memoryStates = [:]; knownMemoryIDs = []
@@ -316,6 +324,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
     }
     func deleteLocalRecords() async {
         conversationMemoryEnabled = false
+        storyGeneration += 1; sessionStory = nil; storyFocusID = nil; storyLoadedKey = nil; storyLoading = false
         codexEnabled = false
         connectionError = nil
         lastSync = nil

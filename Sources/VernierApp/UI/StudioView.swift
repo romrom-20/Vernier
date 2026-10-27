@@ -3,6 +3,7 @@ import VernierCore
 
 struct StudioView: View {
     @ObservedObject var model: AppModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     var body: some View {
         HStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 30) {
@@ -26,28 +27,34 @@ struct StudioView: View {
                 }
             }.padding(20).frame(width: 200).background(Palette.surface)
             Rectangle().fill(Palette.line.opacity(0.5)).frame(width: 0.5)
-            ScrollView {
-                VStack(alignment: .leading, spacing: 26) {
-                    HStack {
-                        Eyebrow(text: "Your perspective / \(model.page.rawValue)")
-                        Spacer()
-                        if model.isShowcase { Text("SHOWCASE · SYNTHETIC DATA").font(.caption.weight(.semibold)).foregroundStyle(Palette.amber) }
-                        if model.demoEnabled { DemoBadge() }
-                        if model.page != .overview { CaptureToggle(model: model, compact: true) }
-                    }
-                    Group {
-                        switch model.page {
-                        case .overview:
-                            if model.demoEnabled { OverviewView(model: model) } else { LiveOverviewView(model: model) }
-                        case .sessions: SessionsView(model: model)
-                        case .memory: MemoryView(model: model)
-                        case .decisions: DecisionsView(model: model)
-                        case .connections: ConnectionsView(model: model)
-                        case .privacy: PrivacyView(model: model)
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 26) {
+                        HStack {
+                            Eyebrow(text: "Your perspective / \(model.page.rawValue)")
+                            Spacer()
+                            if model.isShowcase { Text("SHOWCASE · SYNTHETIC DATA").font(.caption.weight(.semibold)).foregroundStyle(Palette.amber) }
+                            if model.demoEnabled { DemoBadge() }
+                            if model.page != .overview { CaptureToggle(model: model, compact: true) }
                         }
-                    }
-                }.padding(30).frame(maxWidth: 1080, alignment: .leading).frame(maxWidth: .infinity)
+                        Group {
+                            switch model.page {
+                            case .overview:
+                                if model.demoEnabled { OverviewView(model: model) } else { LiveOverviewView(model: model) }
+                            case .sessions: SessionsView(model: model)
+                            case .memory: MemoryView(model: model)
+                            case .decisions: DecisionsView(model: model)
+                            case .connections: ConnectionsView(model: model)
+                            case .privacy: PrivacyView(model: model)
+                            }
+                        }
+                    }.padding(30).frame(maxWidth: 1080, alignment: .leading).frame(maxWidth: .infinity)
             }.id(model.page).background(Palette.canvas)
+                .onChange(of: model.storyFocusRevision) { _, _ in
+                    guard model.page == .overview else { return }
+                    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.3)) { proxy.scrollTo("conversation-map", anchor: .top) }
+                }
+            }
         }.foregroundStyle(Palette.text).frame(minWidth: 860, minHeight: 580)
     }
 }

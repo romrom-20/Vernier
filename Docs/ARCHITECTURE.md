@@ -51,3 +51,9 @@ The app copies quotes from selected source records, resolves references and chec
 Schema v4 adds `work_briefs`, one JSON payload per session with an ON DELETE CASCADE foreign key. Derived-cache decoding failures do not prevent canonical history from loading. Source/content/analysis consent and generation are checked atomically through `ObservationGate.captureBrief`; actor-resumed UI changes recheck cancellation/generation. Erasure removes the cache. The previous source schema and notes survive migration.
 
 Generation is opt-in, debounced to five minutes automatically and cancelable with a 90-second UI deadline. Only the selected/latest session is scheduled; it is not a full-day or all-session batch assessment. No model calls run in showcase or normal CI; a separate explicit `--brief-model-probe` uses invented data on compatible hardware.
+
+## Visual session review — 0.7.0
+
+`SessionStory` projects at most 500 existing saved messages for a selected session into user groups and contiguous assistant reply stretches. `SessionStoryModel` checks source identity/count/update and a read generation before updating its in-memory projection. Completed projections are reused. Erasure invalidates pending projection results and clears cached text. No model or new source request is needed for the map.
+
+`ConversationMap` lays out speaker lanes in reading order, supports bounded group pagination, and links selections to neighboring source quotations. AI interpretations retain independent provenance and coverage; markers only attach to source IDs present in the window. `ScrollViewReader` connects pattern actions back to the relevant map point, including repeated selection of the same source. Custom motion runs on presentation/selection only and respects Reduce Motion. The snapshot quick view loads the same projection and retains pinned capture/navigation controls. See [visual semantics](VISUAL_REVIEW.md).

@@ -15,7 +15,7 @@ The project brings together a quiet, native Mac utility, a local record of human
 
 **The current app implements part of the observation foundation:** consented Codex history, searchable local memory, user-authored review, and optional on-device AI session briefs. A brief suggests the working goal, source-linked interaction patterns and a concrete next step; it is an interpretation of an excerpt. Capability probes, longitudinal experiments and validated agency assessments are not implemented.
 
-![Vernier Studio showing explicitly labeled synthetic session data](Docs/images/overview.png)
+![Vernier Studio showing a source-linked session perspective with synthetic coding data](Docs/images/overview.png)
 
 *Actual native app, using the isolated showcase mode. Every session, message and count in this image is synthetic.*
 
@@ -53,9 +53,14 @@ If richer signals add no useful predictive value, that challenges the measuremen
 - **Separate permissions:** session metadata and conversation text are distinct opt-ins, both off for new installations.
 - **Local conversation memory:** available prompts, visible assistant replies, and allowlisted agent activity metadata. Search and export include the retained archive; incomplete histories stay labeled.
 - **User-owned storage:** SQLite, incremental backfill, retention, export, conversation erasure and full local deletion.
+- **Visual session review:** follow your directions and agent reply stretches on an interactive map, compare neighboring exchanges, inspect source-linked AI loop markers and choose a concrete next check. Counts and interpretations have separate visible coverage.
 - **Local AI session briefs:** Apple’s on-device model suggests a working goal, possible handoff stretches, recurring repair, clear steering and explicit alternatives. Inspect the actual source messages, dismiss an interpretation that does not fit, and use a small next step to settle the task. Coverage is shown; observations are not measurements of capability.
 - **Interaction review:** readable session labels, a bounded prompt trail, and your own account of intent, steering, understanding and checked evidence.
 - **Resident lifecycle:** optional native login registration, adaptive sync cadence, rest during sleep/inactive sessions, and preserved Pause across wake.
+
+![Interactive conversation map comparing an invented agent reply with the next user instruction](Docs/images/session-map.png)
+
+*Select a point to inspect the exchange. This coding example and its interpretations are synthetic; the map does not measure attention or strain.*
 
 ## What it cannot tell you
 
@@ -108,7 +113,7 @@ The shared checks also run through `swift test` with full Xcode. GitHub Actions 
 
 Native regressions cover stationary hover during resizing, canceled exit on re-entry, direct play/pause without opening Studio, nonactivation, bounded popover placement and pause preservation. Storage/protocol checks cover deduplication, migration, consent revocation, redaction, search, export, retention and read-only requests.
 
-[Interaction specification and manual mouse checklist](Docs/INTERACTIONS.md) · [Executed validation and remaining gaps](Docs/VALIDATION.md)
+[Visual review and design rationale](Docs/VISUAL_REVIEW.md) · [Interaction specification and manual mouse checklist](Docs/INTERACTIONS.md) · [Executed validation and remaining gaps](Docs/VALIDATION.md)
 
 ## Contribute
 

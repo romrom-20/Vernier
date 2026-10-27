@@ -197,8 +197,19 @@ extension AppCoordinator {
         let showcase = AppModel(preferences: Preferences(defaults: showcaseDefaults), showcase: true)
         await showcase.startSessionSync()
         showcase.setLaunchAtLogin(true)
-        try check(showcase.isShowcase && showcase.isolatedEnvironment && showcase.library.totalMessageCount == 6 && showcase.loginStatus == .off,
+        try check(showcase.isShowcase && showcase.isolatedEnvironment && showcase.library.totalMessageCount == 16 && showcase.loginStatus == .off,
                   "Showcase remains isolated from store, connector and login service")
+        await showcase.loadSessionStory()
+        try check(showcase.currentStory?.followUps == 4 && showcase.currentStory?.runs.count == 9,
+                  "Visual showcase loads real fixture exchanges rather than decorative data")
+        let loadedGeneration = showcase.storyGeneration
+        await showcase.loadSessionStory()
+        try check(showcase.storyGeneration == loadedGeneration, "Reopening an unchanged story reuses its bounded in-memory projection")
+        let beforeFocus = showcase.storyFocusRevision
+        showcase.focusStory("showcase-story-message-3")
+        showcase.focusStory("showcase-story-message-3")
+        try check(showcase.storyFocusRevision == beforeFocus + 2 && showcase.currentStory?.run(containing: showcase.storyFocusID ?? "") != nil,
+                  "Repeated evidence navigation can focus the same map point again")
         let showcaseSearch = await showcase.searchMemory("hover")
         try check(showcaseSearch.count == 2 && showcaseSearch.allSatisfy { $0.id.hasPrefix("showcase-") },
                   "Showcase search reads only in-memory synthetic messages")
@@ -209,5 +220,13 @@ extension AppCoordinator {
             try check(model.page == .memory && model.memorySessionID == "synthetic-source" && model.memoryQuery == evidence.quote,
                       "Brief citations route to session-scoped conversation search")
         }
+        showcase.library = ShowcaseFixtures.library()
+        await showcase.loadSessionStory()
+        try check(showcase.currentStory?.loadedMessages == 2 && showcase.storyGeneration > loadedGeneration,
+                  "Changed source coverage reloads the map rather than keeping an old projection")
+        let beforeErase = showcase.storyGeneration
+        await showcase.eraseConversationMemory()
+        try check(showcase.sessionStory == nil && showcase.storyLoadedKey == nil && !showcase.storyLoading && showcase.storyGeneration > beforeErase,
+                  "Memory erasure clears map text and invalidates pending projection results")
     }
 }
