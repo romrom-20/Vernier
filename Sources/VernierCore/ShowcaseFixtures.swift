@@ -36,8 +36,16 @@ public enum ShowcaseFixtures {
                 outcome: "completed", count: 1, sourceAt: created.addingTimeInterval(500), observedAt: now))
             digests.append(SessionDigest(sessionID: id, promptExcerpt: SessionDisplay.excerpt(prompts[index]), messageCount: 2, signalCount: 1))
         }
+        let window = BriefWindow.make(session: sessions[0], messages: messages.filter { $0.sessionID == sessions[0].id }, storedMessages: 2)
+        let brief = window.validate(goal: "Keep capture quiet and predictable across sleep and wake.",
+            goalCitation: BriefEvidence(messageID: "M0", quote: prompts[0]),
+            moments: [BriefMomentDraft(kind: .steering, title: "You set a concrete lifecycle requirement",
+                detail: "The example request names sleep and explicit resume behavior, giving the implementation a testable boundary.",
+                evidence: [BriefEvidence(messageID: "M0", quote: prompts[0])])],
+            nextStep: "Check that Pause survives sleep, then explicitly resume and inspect the result.", generatedAt: now,
+            engine: "Synthetic showcase · no model ran")
         return SessionLibrary(sessions: sessions, turns: turns, notes: [:], messages: messages, signals: signals,
             memoryCoverage: sessions.map { MemoryCoverage(sessionID: $0.id, complete: true, issue: false) },
-            totalMessageCount: messages.count, totalSignalCount: signals.count, digests: digests)
+            totalMessageCount: messages.count, totalSignalCount: signals.count, digests: digests, workBriefs: [brief])
     }
 }

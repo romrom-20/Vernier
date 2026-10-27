@@ -21,28 +21,14 @@ struct RhythmStrip: View {
 struct PresenceHero: View {
     @ObservedObject var model: AppModel
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Your work with AI.")
-                    .font(.system(size: 32, weight: .medium)).tracking(-0.7)
-                Text("See how you prompt, steer and understand the work.")
-                    .font(.callout).foregroundStyle(Palette.secondary).fixedSize(horizontal: false, vertical: true)
+        HStack(alignment: .center, spacing: 14) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Your work, in perspective.").font(.system(size: 27, weight: .medium)).tracking(-0.5)
+                Label("Codex in Conductor · \(model.capturePhase.title.lowercased())", systemImage: model.capturePhase.symbol)
+                    .font(.caption).foregroundStyle(Palette.secondary)
             }
-            HStack(alignment: .center, spacing: 14) {
-                CaptureGlyph(phase: model.capturePhase)
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(model.capturePhase.title).font(.headline)
-                    Text(model.captureDescription).font(.callout).foregroundStyle(Palette.secondary).fixedSize(horizontal: false, vertical: true)
-                }.frame(maxWidth: .infinity, alignment: .leading)
-                CaptureToggle(model: model)
-            }.padding(17).background(CaptureStyle.color(model.capturePhase).opacity(0.04), in: RoundedRectangle(cornerRadius: 14))
-                .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(CaptureStyle.color(model.capturePhase).opacity(0.2), lineWidth: 0.5))
-            HStack {
-                Label("Local storage · you control capture", systemImage: "lock.shield")
-                Spacer()
-                Text(model.lastSync.map { "Last checked \($0.formatted(date: .omitted, time: .standard))" } ?? "Waiting for a verified check")
-                    .monospacedDigit()
-            }.font(.caption).foregroundStyle(Palette.secondary)
+            Spacer()
+            CaptureToggle(model: model, compact: true)
         }.padding(24).background(Palette.surface, in: RoundedRectangle(cornerRadius: 20))
             .overlay(RoundedRectangle(cornerRadius: 20).strokeBorder(Palette.line.opacity(0.6), lineWidth: 0.5))
     }

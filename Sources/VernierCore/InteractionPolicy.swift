@@ -59,18 +59,22 @@ public enum QuickPanelLayout {
 public enum SessionDisplay {
     /// A literal excerpt from already-consented local text. Never a generated assessment or provider title.
     public static func excerpt(_ text: String) -> String? {
-        var cleaned = text
-        for tag in ["system_instruction", "environment_context", "user_instructions", "instructions"] {
-            if let regex = try? NSRegularExpression(pattern: "<\(tag)\\b[^>]*>[\\s\\S]*?(?:</\(tag)>|$)", options: .caseInsensitive) {
-                cleaned = regex.stringByReplacingMatches(in: cleaned, range: NSRange(cleaned.startIndex..., in: cleaned), withTemplate: "")
-            }
-        }
+        let cleaned = visibleText(text)
         let lines = cleaned.components(separatedBy: .newlines).map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
         guard let line = lines.first(where: { line in
             line.count >= 5 && !["<", "```", "#", ".context/", "---", "cwd:", "Working directory:"].contains(where: { line.hasPrefix($0) })
         }) else { return nil }
         let compact = line.split(whereSeparator: \.isWhitespace).joined(separator: " ")
         return String(compact.prefix(86)) + (compact.count > 86 ? "…" : "")
+    }
+    public static func visibleText(_ text: String) -> String {
+        var cleaned = text
+        for tag in ["system_instruction", "environment_context", "user_instructions", "instructions"] {
+            if let regex = try? NSRegularExpression(pattern: "<\(tag)\\b[^>]*>[\\s\\S]*?(?:</\(tag)>|$)", options: .caseInsensitive) {
+                cleaned = regex.stringByReplacingMatches(in: cleaned, range: NSRange(cleaned.startIndex..., in: cleaned), withTemplate: "")
+            }
+        }
+        return cleaned.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     public static func fallback(createdAt: Date, now: Date = Date(), calendar: Calendar = .current) -> String {
         if calendar.isDate(createdAt, inSameDayAs: now) { return "Today’s Codex session · \(createdAt.formatted(date: .omitted, time: .shortened))" }

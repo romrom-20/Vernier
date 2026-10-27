@@ -14,12 +14,13 @@ This is a direction with evidence gates, not a release schedule. The three measu
 
 Reliability work remains: manual accessibility and mouse testing, real multi-display/full-screen/sleep/login checks, energy measurements and notarized distribution. See [validation](VALIDATION.md).
 
-## 2. An evidence-grounded personal agency ledger — next
+## 2. An evidence-grounded personal agency ledger — initial interpretation implemented
 
-- [ ] Define shared task/decision boundaries and provenance contracts before adding detectors.
+- [x] Bounded, on-device session interpretation with exact source references, visible coverage and user dismissal.
+- [ ] Define shared task/decision boundaries and provenance contracts before cross-session detection.
 - [ ] Link initial intent, agent proposals, human interventions, evidence and follow-up across sessions.
 - [ ] Keep agent claims, observed artifacts and user reports distinct and correctable.
-- [ ] Explain where observation is missing; do not label missing evidence as absent review.
+- [x] Label excerpt limits, clipping and missing source times; never infer absent review from missing evidence.
 - [ ] Evaluate whether a review helps users reconstruct or recover a concrete piece of work.
 - [ ] Establish context before interpreting repeated repair/continuation requests.
 

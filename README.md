@@ -13,7 +13,7 @@ Vernier asks a question that becomes more important as agents do more of our wor
 
 The project brings together a quiet, native Mac utility, a local record of human–AI interaction, and a research direction for measuring independent capability. It aims to help people understand what they delegated, what AI enabled, and what remains within their own ability to explain, change and recover.
 
-**The current app implements part of the observation foundation:** consented Codex history, searchable local memory, a recent prompt trail and user-authored review. Capability probes, longitudinal experiments and validated agency assessments are not implemented.
+**The current app implements part of the observation foundation:** consented Codex history, searchable local memory, user-authored review, and optional on-device AI session briefs. A brief suggests the working goal, source-linked interaction patterns and a concrete next step; it is an interpretation of an excerpt. Capability probes, longitudinal experiments and validated agency assessments are not implemented.
 
 ![Vernier Studio showing explicitly labeled synthetic session data](Docs/images/overview.png)
 
@@ -53,7 +53,8 @@ If richer signals add no useful predictive value, that challenges the measuremen
 - **Separate permissions:** session metadata and conversation text are distinct opt-ins, both off for new installations.
 - **Local conversation memory:** available prompts, visible assistant replies, and allowlisted agent activity metadata. Search and export include the retained archive; incomplete histories stay labeled.
 - **User-owned storage:** SQLite, incremental backfill, retention, export, conversation erasure and full local deletion.
-- **Interaction review:** readable session labels, a bounded prompt trail, and your own account of intent, steering, understanding and checked evidence. These are records and self-reports, not capability measurements.
+- **Local AI session briefs:** Apple’s on-device model suggests a working goal, possible handoff stretches, recurring repair, clear steering and explicit alternatives. Inspect the actual source messages, dismiss an interpretation that does not fit, and use a small next step to settle the task. Coverage is shown; observations are not measurements of capability.
+- **Interaction review:** readable session labels, a bounded prompt trail, and your own account of intent, steering, understanding and checked evidence.
 - **Resident lifecycle:** optional native login registration, adaptive sync cadence, rest during sleep/inactive sessions, and preserved Pause across wake.
 
 ## What it cannot tell you
@@ -86,13 +87,13 @@ open "$HOME/Applications/Vernier.app"
 
 The installer creates `~/Applications/Vernier.app` and preserves previous local app bundles. Closing Studio leaves the menu-bar app running. Enable sources in Connections, text capture separately in Memory, and optional login/pill behavior in Privacy. Quit is always available.
 
-This is a source release with an ad-hoc local build. A notarized download, DMG and automatic updater are not available yet. No Vernier cloud account, backend, separate API key or model inference is required. A live connector requires Conductor's installed Codex binary and available local history.
+This is a source release with an ad-hoc local build. A notarized download, DMG and automatic updater are not available yet. No Vernier cloud account, backend or separate API key is required. Optional AI briefs run on this Mac using Apple Intelligence; they require macOS 26.4+, an eligible Mac with the model ready, and a build with the Foundation Models SDK. The history reader works without local AI. Enable briefs from Overview or Privacy; they are off for new installations. A live connector requires Conductor's installed Codex binary and available local history.
 
 ## Privacy and data boundaries
 
 The app stores records at `~/Library/Application Support/local.vernier.instrument.dev/sessions.sqlite` with private directory/file permissions; it does not encrypt the database. Metadata uses salted identifiers. Conversation capture excludes private reasoning, attachments and raw tool/file output; credential redaction is best effort and private details may remain.
 
-Default retention is 30 days by session update time. Pause suspends synchronization; resuming can import provider history created while paused. Turning text capture off keeps the existing archive until erased or removed by retention. Exported conversations are sensitive.
+Default retention is 30 days by session update time. Pause suspends synchronization; resuming can import provider history created while paused. Turning text capture or local analysis off keeps the existing archive and briefs until erased or removed by retention. Erase conversation memory clears derived briefs too. No captured conversation is sent to a cloud model. Exported conversations are sensitive.
 
 [Privacy details](Docs/PRIVACY.md) · [Connector coverage and bounds](Docs/CONNECTOR_COVERAGE.md)
 

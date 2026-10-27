@@ -50,7 +50,8 @@ struct MemoryView: View {
                     if let session = model.library.sessions.first(where: { $0.id == message.sessionID }) { model.inspectSession(session) }
                 }
             }
-        }.onAppear { sessionID = model.memorySessionID }
+        }.onAppear { sessionID = model.memorySessionID; query = model.memoryQuery }
+            .onChange(of: model.memoryQuery) { _, value in query = value }
             .onChange(of: model.memorySessionID) { _, value in sessionID = value }
             .task(id: searchKey) {
             do { try await Task.sleep(for: .milliseconds(200)) } catch { return }
@@ -76,7 +77,7 @@ struct ConversationConsentView: View {
                     .toggleStyle(.switch).disabled(!model.codexEnabled && !model.conversationMemoryEnabled)
                 Text("Reads available prompts and visible agent replies from connected Conductor workspaces. Also saves file-change and command-outcome metadata, excluding tool bodies. Existing history within your retention window is included. Provider user-side messages can include app-added context; this is not a keystroke log.")
                     .font(.callout).foregroundStyle(Palette.secondary)
-                Text("Conversation text is sensitive. Credential redaction is best-effort; private details can remain. Stored locally as readable text, included in exports, and never sent to another model by Vernier. Images, attachments, private reasoning and raw command/file output are excluded.")
+                Text("Conversation text is sensitive. Credential redaction is best-effort; private details can remain. Stored locally as readable text and included in exports. Optional on-device AI briefs use this text with a separate setting; no conversation is sent to a cloud model. Images, attachments, private reasoning and raw command/file output are excluded.")
                     .font(.caption).foregroundStyle(Palette.secondary)
                 Text(model.retentionDays == 0 ? "Retention: until you delete it." : "Retention: sessions updated within \(model.retentionDays) days. Change this in Privacy.")
                     .font(.caption).foregroundStyle(Palette.secondary)

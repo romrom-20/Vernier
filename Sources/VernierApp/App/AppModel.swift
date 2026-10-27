@@ -31,10 +31,27 @@ enum StudioPage: String, CaseIterable, Identifiable {
 @MainActor final class AppModel: ObservableObject {
     let preferences: Preferences
     let isShowcase: Bool
+    @Published var localInsightsEnabled: Bool {
+        didSet {
+            preferences.localInsightsEnabled = localInsightsEnabled
+            cancelWorkBrief()
+            updateCaptureGate()
+            if localInsightsEnabled { scheduleWorkBrief() }
+        }
+    }
+    @Published var generatingBrief = false
+    @Published var briefError: String?
+    @Published var briefSessionID: String?
+    @Published var memoryQuery = ""
+    var briefTask: Task<Void, Never>?
+    var briefDeadline: Task<Void, Never>?
+    var briefGeneration = 0
+    var lastAutomaticBrief = Date.distantPast
     @Published var demoEnabled: Bool { didSet { preferences.demoEnabled = demoEnabled } }
     @Published var paused: Bool {
         didSet {
             preferences.paused = paused
+            if paused { cancelWorkBrief() }
             updateCaptureGate()
             resumePending = !paused && codexEnabled && !isolated && store != nil && !systemSuspended
             if !paused { Task { await syncSessions() } }
@@ -52,6 +69,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
     @Published var codexEnabled: Bool {
         didSet {
             preferences.codexEnabled = codexEnabled
+            if !codexEnabled { cancelWorkBrief() }
             updateCaptureGate()
             if codexEnabled { demoEnabled = false; Task { await syncSessions() } }
             else { connectionError = nil }
@@ -60,6 +78,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
     @Published var conversationMemoryEnabled: Bool {
         didSet {
             preferences.conversationMemoryEnabled = conversationMemoryEnabled
+            if !conversationMemoryEnabled { cancelWorkBrief() }
             updateCaptureGate()
             if conversationMemoryEnabled { checkpoint = .init(); Task { await syncSessions(reconcile: true) } }
         }
@@ -86,9 +105,9 @@ enum StudioPage: String, CaseIterable, Identifiable {
     @Published var selectedSessionID: String?
     @Published var memorySessionID: String?
     @Published var retentionDays: Int { didSet { preferences.retentionDays = retentionDays } }
-    private let captureGate = ObservationGate()
+    let captureGate = ObservationGate()
     private let connector = CodexMetadataConnector()
-    private var store: SessionStore?
+    var store: SessionStore?
     private var started = false
     private var pendingSync = false
     private var pendingReconcile = false
@@ -143,10 +162,11 @@ enum StudioPage: String, CaseIterable, Identifiable {
         if !codexEnabled { return "Not connected" }
         return lastSync == nil ? "Waiting for metadata" : "Quietly connected"
     }
-    private func updateCaptureGate() { captureGate.configure(enabled: codexEnabled && !paused && !systemSuspended, contentEnabled: conversationMemoryEnabled) }
+    private func updateCaptureGate() { captureGate.configure(enabled: codexEnabled && !paused && !systemSuspended, contentEnabled: conversationMemoryEnabled, analysisEnabled: localInsightsEnabled) }
     func setSystemSuspended(_ value: Bool) {
         guard value != systemSuspended else { return }
         systemSuspended = value
+        if value { cancelWorkBrief() }
         updateCaptureGate()
         if !value { Task { await syncSessions() } }
     }
@@ -172,6 +192,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
         self.isolated = isolated || showcase
         self.isShowcase = showcase
         self.preferences = preferences
+        localInsightsEnabled = preferences.localInsightsEnabled
         demoEnabled = preferences.demoEnabled
         paused = preferences.paused
         pillEnabled = preferences.pillEnabled
@@ -179,7 +200,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
         codexEnabled = preferences.codexEnabled
         conversationMemoryEnabled = preferences.conversationMemoryEnabled
         retentionDays = preferences.retentionDays
-        captureGate.configure(enabled: preferences.codexEnabled && !preferences.paused, contentEnabled: preferences.conversationMemoryEnabled)
+        captureGate.configure(enabled: preferences.codexEnabled && !preferences.paused, contentEnabled: preferences.conversationMemoryEnabled, analysisEnabled: preferences.localInsightsEnabled)
         if showcase {
             demoEnabled = false
             paused = false
@@ -209,6 +230,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
             knownMemoryIDs = try await store?.knownMemoryIDs() ?? []
         } catch { storageError = error.localizedDescription }
         await syncSessions()
+        scheduleWorkBrief()
         while !Task.isCancelled {
             let delay = SyncCadence.delay(visible: studioVisible && NSApp.isActive, quietChecks: quietChecks, failures: consecutiveFailures,
                                           lowPower: ProcessInfo.processInfo.isLowPowerModeEnabled, suspended: systemSuspended || paused || !codexEnabled)
@@ -253,6 +275,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
             coverageLimited = snapshot.truncated || snapshot.sessions.contains { !$0.turnsComplete }
             connectionError = nil
             storageError = nil
+            scheduleWorkBrief()
         } catch {
             guard captureGate.token() == token else { return }
             consecutiveFailures += 1
@@ -260,7 +283,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
             else { connectionError = error.localizedDescription }
         }
     }
-    func showMemory(sessionID: String? = nil) { memorySessionID = sessionID; openStudio(.memory) }
+    func showMemory(sessionID: String? = nil, query: String = "") { memorySessionID = sessionID; memoryQuery = query; openStudio(.memory) }
     func inspectSession(_ session: SessionMetadata) { selectedSessionID = session.id; openStudio(.decisions) }
     func saveNote(_ text: String, session: SessionMetadata) async {
         guard !isShowcase else { storageError = "Showcase records are read-only."; return }
@@ -303,7 +326,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
         guard let store else { return }
         let panel = NSSavePanel()
         panel.nameFieldStringValue = "Vernier-session-metadata.json"
-        panel.message = "This export contains captured conversations, activity metadata, and any notes you wrote. Choose a location you trust."
+        panel.message = "This export contains captured conversations, activity metadata, local AI briefs and any notes you wrote. Choose a location you trust."
         guard panel.runModal() == .OK, let url = panel.url else { return }
         do { let data = try await store.exportJSON(); try data.write(to: url, options: [.atomic]); try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: url.path) }
         catch { storageError = "Could not export local records to the chosen location." }

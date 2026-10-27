@@ -44,9 +44,9 @@ extension SessionStore {
     public func knownMemoryIDs() throws -> Set<String> {
         Set(try rows("SELECT id FROM messages UNION SELECT id FROM agent_signals") { string($0, 0) })
     }
-    public func memoryMessages(query: String = "", sessionID: String? = nil, limit: Int? = 100) throws -> [ConversationMessage] {
+    public func memoryMessages(query: String = "", sessionID: String? = nil, limit: Int? = 100, newestFirst: Bool = true, speaker: String? = nil) throws -> [ConversationMessage] {
         // Bind values manually here to keep user search text out of SQL source.
-        let sql = "SELECT id,session_id,turn_id,speaker,phase,body,source_at,observed_at,redactions,truncated,attachments_omitted FROM messages WHERE (?='' OR INSTR(LOWER(body),LOWER(?))>0) AND (? IS NULL OR session_id=?) ORDER BY COALESCE(source_at,observed_at) DESC,id DESC" + (limit == nil ? "" : " LIMIT \(min(500, max(1, limit!)))")
+        let sql = "SELECT id,session_id,turn_id,speaker,phase,body,source_at,observed_at,redactions,truncated,attachments_omitted FROM messages WHERE (?='' OR INSTR(LOWER(body),LOWER(?))>0) AND (? IS NULL OR session_id=?) AND (? IS NULL OR speaker=?) ORDER BY COALESCE(source_at,observed_at) " + (newestFirst ? "DESC,id DESC" : "ASC,id ASC") + (limit == nil ? "" : " LIMIT \(min(500, max(1, limit!)))")
         var statement: OpaquePointer?
         guard sqlite3_prepare_v2(connection.handle, sql, -1, &statement, nil) == SQLITE_OK, let statement else { throw StoreFailure.corrupt }
         defer { sqlite3_finalize(statement) }
@@ -54,6 +54,8 @@ extension SessionStore {
         sqlite3_bind_text(statement, 1, query, -1, copy); sqlite3_bind_text(statement, 2, query, -1, copy)
         if let sessionID { sqlite3_bind_text(statement, 3, sessionID, -1, copy); sqlite3_bind_text(statement, 4, sessionID, -1, copy) }
         else { sqlite3_bind_null(statement, 3); sqlite3_bind_null(statement, 4) }
+        if let speaker { sqlite3_bind_text(statement, 5, speaker, -1, copy); sqlite3_bind_text(statement, 6, speaker, -1, copy) }
+        else { sqlite3_bind_null(statement, 5); sqlite3_bind_null(statement, 6) }
         var values: [ConversationMessage] = []
         while true {
             let status = sqlite3_step(statement)
@@ -63,6 +65,6 @@ extension SessionStore {
         }
     }
     public func eraseConversationMemory() throws {
-        try execute("DELETE FROM messages; DELETE FROM agent_signals; DELETE FROM memory_progress; PRAGMA wal_checkpoint(TRUNCATE); VACUUM;")
+        try execute("DELETE FROM work_briefs; DELETE FROM messages; DELETE FROM agent_signals; DELETE FROM memory_progress; PRAGMA wal_checkpoint(TRUNCATE); VACUUM;")
     }
 }

@@ -59,7 +59,7 @@ The measurement system should be able to produce an informative negative result.
 
 ## What exists today
 
-The native app provides an optional circle/pill, menu-bar quick view, Studio, read-only Codex history, separately consented conversation memory, local storage controls and user-authored interaction review. The dashboard emphasizes intent, steering and understanding, with a bounded recent prompt trail and clear capture coverage.
+The native app provides an optional circle/pill, menu-bar quick view, Studio, read-only Codex history, separately consented conversation memory, local storage controls and user-authored interaction review. The dashboard emphasizes intent, steering and understanding, with a bounded recent prompt trail and clear capture coverage. Optional on-device AI briefs now suggest the working goal, source-linked patterns and a next step from a bounded session excerpt. These are fallible interpretations, not validated agency assessments.
 
 It is a foundation for observation and reflection. It does not yet predict independent capability, validate understanding, measure permanent change, run experiments or calculate an agency/strain/readiness score.
 

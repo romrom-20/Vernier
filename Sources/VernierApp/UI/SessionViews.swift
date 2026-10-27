@@ -6,7 +6,7 @@ struct LiveOverviewView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
             PresenceHero(model: model)
-            InteractionFocusView(model: model)
+            InstrumentCard { WorkBriefView(model: model) }
             InstrumentCard {
                 DisclosureGroup("Saved memory and capture details") {
                     CaptureInventory(model: model).padding(.top, 14)
@@ -147,6 +147,14 @@ struct SessionDetailView: View {
             Text("Codex in Conductor · \(model.library.workspaceName(session.workspaceID))").font(.callout).foregroundStyle(Palette.secondary)
             HStack {
                 Button("Read this conversation →") { model.showMemory(sessionID: session.id) }.buttonStyle(QuietButtonStyle())
+                Button("Make a local brief") {
+                    model.cancelWorkBrief()
+                    model.briefSessionID = session.id
+                    if !model.localInsightsEnabled { model.localInsightsEnabled = true }
+                    else { model.generateWorkBrief() }
+                    model.openStudio(.overview)
+                }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.mint)
+                    .disabled(model.isShowcase || model.paused || !model.conversationMemoryEnabled)
                 Spacer()
                 Text("\(model.library.digest(for: session)?.messageCount ?? 0) saved messages").font(.caption).foregroundStyle(Palette.secondary)
             }

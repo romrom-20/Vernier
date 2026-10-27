@@ -1,4 +1,4 @@
-# Source release — 0.5.0
+# Source release — 0.6.0
 
 Vernier is an experimental native Mac app and working project name. This repository publishes source, synthetic showcase data, tests and documentation under MIT. There is no production, notarized binary release yet.
 
@@ -21,8 +21,12 @@ Development launch flags `--connect-codex`, `--enable-conversation-memory`, `--e
 - **0.4.2:** native in-place play/pause, separate from click-to-open.
 - **0.4.3:** public documentation, MIT license, isolated synthetic showcase and reproducible CI/checks.
 
-SQLite schema v3 separates session/turn metadata, notes, change log, sync state, messages, safe agent signals and conversation progress. UI changes preserve records and existing consent. See [validation and pending acceptance work](VALIDATION.md).
+SQLite schema v4 separates session/turn metadata, notes, change log, sync state, messages, safe agent signals conversation progress and cached derived briefs. UI changes preserve records and existing consent. See [validation and pending acceptance work](VALIDATION.md).
 
 A DMG, Developer ID signature, notarization, secure updater, clean-Mac distribution, universal binary and crash-relaunch service are not implemented.
 
 - **0.5.0:** Human-agency direction made explicit; intent/steering/understanding review and a bounded prompt trail; capture inventory folded into details. One requested UI surface prevents quick-view/dashboard stacking. A quiet 28-point circle replaces the idle checkmark; body click pins controls, capture toggles in place, and only the separate arrow opens the dashboard. No new source or macOS observation permission.
+
+- **0.6.0:** Optional Apple on-device session briefs replace capture counts as the primary Overview/quick-view content. Working goal, possible interaction patterns, exact source links and a small next step; visible excerpt coverage and correctable interpretations. Schema v4 preserves existing records and adds derived-content erasure/retention/export. Fresh installations keep analysis off. Requires macOS 26.4+, Apple Intelligence ready, and a Foundation Models SDK build for generation; the history reader retains its older deployment target. No cloud inference or extra API account.
+
+The additional development flag `--enable-local-insights` enables this local analysis setting only. Normal launches honor saved consent. `--brief-model-probe` runs an isolated hardware-dependent model check on invented conversations; it is not part of normal CI or showcase.

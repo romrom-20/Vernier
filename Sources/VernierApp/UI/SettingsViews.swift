@@ -53,7 +53,7 @@ struct PrivacyView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
             Text("Your work stays yours.").font(.system(size: 32, weight: .light))
-            Text("Local records. No Vernier account or model calls. No expanded macOS permissions.").foregroundStyle(Palette.secondary)
+            Text("Local records and optional on-device interpretation. No Vernier account or cloud model calls.").foregroundStyle(Palette.secondary)
             InstrumentCard {
                 VStack(alignment: .leading, spacing: 19) {
                     Eyebrow(text: "Presence")
@@ -82,6 +82,17 @@ struct PrivacyView: View {
                 }
             }
             ConversationConsentView(model: model)
+            InstrumentCard {
+                VStack(alignment: .leading, spacing: 12) {
+                    Eyebrow(text: "Local interpretation")
+                    Toggle("Generate on-device work briefs", isOn: $model.localInsightsEnabled).toggleStyle(.switch)
+                    Text("Apple’s on-device model reviews bounded excerpts of saved Codex conversations. It suggests a working goal, source-linked observations and a next step. No conversation is sent to a cloud model. Automatic reviews are limited to one every five minutes for the selected session; manual refresh is available. Pause and content revocation stop in-flight results from being saved.")
+                        .font(.caption).foregroundStyle(Palette.secondary)
+                    Text("Turning this off keeps existing briefs. Erase conversation memory clears them with the saved messages; retention removes them with their session. Briefs are included in your private export.")
+                        .font(.caption).foregroundStyle(Palette.secondary)
+                    if let reason = model.briefUnavailable { Text(reason).font(.caption).foregroundStyle(Palette.secondary) }
+                }
+            }
             Button("Erase conversation memory…", role: .destructive) { confirmEraseMemory = true }
                 .buttonStyle(QuietButtonStyle())
             InstrumentCard {

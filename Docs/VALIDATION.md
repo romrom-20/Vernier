@@ -31,7 +31,7 @@ Full Xcode is not installed on the local validation machine, so local XCTest is 
 - macOS 14/15 compatibility across supported hardware.
 - Sustained CPU/memory/energy measurements and responsiveness targets.
 - Developer ID signing, notarization, DMG and updater.
-- Validity or usefulness of automated session reviews, comprehension measures or cognitive scores. These are not implemented results.
+- Systematic validity/usefulness of AI session interpretations, comprehension measures or cognitive scores. An implemented local brief is not a validated assessment.
 
 Live connector verification during development confirmed read-only local Codex history access. Reproducing it is optional and consented: `swift run VernierCoreChecks --codex-live` prints metadata counts only. Never attach real archives or personal provider data to a public issue.
 
@@ -44,3 +44,13 @@ Three supplied screenshots showed quick view layered over Studio, the menu surfa
 The updated synthetic Overview was inspected through the native accessibility tree and visually captured for the README. It puts intent, steering and understanding before collapsed archive details. A later attempt to inspect quick view through the computer-use tool returned native timeout errors; reconnecting also timed out. That manual transition is not claimed as verified by the tool. The native in-process window checks above did verify the actual resulting window visibility and popover state. Manual physical mouse/full-screen/multi-monitor checks remain pending.
 
 The prompt trail reuses the bounded session-scoped archive search, displays at most six user-side excerpts from the latest 100 saved messages, and labels approximate ordering and app-added context. It makes no automatic quality judgment. The human-agency research vision is now explicit in the product thesis/roadmap, with automated trajectory assessment and personal trends still unimplemented research/engineering work.
+
+## On-device session briefs — 0.6.0
+
+`./Scripts/verify.sh --ui` passed **20 shared groups and 52 native checks** on the local Mac. The new shared groups exercise source-reference integrity, fabricated-quote rejection, minimum distinct user evidence for loops, judgment filtering, excerpt coverage, token-budget narrowing with user-role preservation, contiguous source quotes after context removal, analysis consent/revocation, correction persistence, export/erasure, schema v3→v4 preservation and recovery from corrupt derived-cache payloads. Native additions verify opt-out defaults, isolation from model calls, cancellation generation, synthetic brief provenance and citation navigation. Full local XCTest remains unavailable without Xcode.
+
+The optional `--brief-model-probe` successfully ran Apple’s actual on-device model on an invented seven-message interaction. It identified a recurring symptom after completion claims and an evidence request before acceptance; selected citations resolved to the synthetic source. This is a hardware integration/sanity check, not an accuracy benchmark or validated detector. Normal CI and showcase do not invoke the model.
+
+The installed development app also generated a local brief from consented saved history; structural checks confirmed persistence and literal citation integrity, and the brief was inspected locally in the app. No personal transcript, model output or screenshot was published. Live checks exposed weak generic recommendations as well as agent progress replies crowding user intent; the prompt now asks for a concrete user action and does not recommend fewer questions, while excerpt selection now preserves the latest two user messages, allows longer user requests, and constrains generated references to the selected source IDs. Longer excerpts can still be narrowed to fit the on-device context, and interpretation can be wrong.
+
+The synthetic Overview was inspected visually and through the native accessibility surface. “Why this appeared” revealed its literal quote; “Open source message” opened Memory with the matching session and query. The README image contains only the isolated synthetic showcase. Physical mouse, cross-version availability, energy, full-day pattern counts, longitudinal baselines and controlled usefulness/accuracy evaluations remain pending.

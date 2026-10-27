@@ -17,6 +17,13 @@ extension AppCoordinator {
     /// Exercises real native windows on a logged-in Mac, with isolated preferences. No screenshots or other apps inspected.
     func runSmokeTest() async throws {
         try check(statusItem?.button != nil, "Native status item exists")
+        try check(!model.localInsightsEnabled, "Local analysis is off for a fresh installation")
+        model.localInsightsEnabled = true
+        model.generateWorkBrief()
+        try check(!model.generatingBrief, "Isolated UI checks cannot invoke the local model")
+        let priorGeneration = model.briefGeneration
+        model.localInsightsEnabled = false
+        try check(model.briefGeneration > priorGeneration && !model.generatingBrief, "Local analysis opt-out cancels and invalidates pending results")
         try check(!model.pillEnabled && pill == nil, "Pill is off on first launch")
         // Status bar attachment completes after didFinishLaunching returns to AppKit.
         try await Task.sleep(for: .milliseconds(200))
@@ -195,5 +202,12 @@ extension AppCoordinator {
         let showcaseSearch = await showcase.searchMemory("hover")
         try check(showcaseSearch.count == 2 && showcaseSearch.allSatisfy { $0.id.hasPrefix("showcase-") },
                   "Showcase search reads only in-memory synthetic messages")
+        try check(showcase.currentBrief?.engine == "Synthetic showcase · no model ran" && showcase.currentBrief?.visibleMoments.isEmpty == false,
+                  "Showcase brief is labeled synthetic and resolves to its selected session")
+        if let evidence = showcase.currentBrief?.moments.first?.evidence.first {
+            model.showMemory(sessionID: "synthetic-source", query: evidence.quote)
+            try check(model.page == .memory && model.memorySessionID == "synthetic-source" && model.memoryQuery == evidence.quote,
+                      "Brief citations route to session-scoped conversation search")
+        }
     }
 }

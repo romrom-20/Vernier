@@ -19,30 +19,16 @@ struct MenuBarView: View {
             Divider().overlay(Palette.line.opacity(0.5))
             ScrollView {
                 VStack(alignment: .leading, spacing: 15) {
-                    HStack(alignment: .top, spacing: 11) {
-                        CaptureGlyph(phase: model.capturePhase, size: 36)
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text(model.capturePhase.title).font(.callout.weight(.semibold))
-                            Text(model.captureDescription).font(.caption).foregroundStyle(Palette.secondary).fixedSize(horizontal: false, vertical: true)
-                        }
-                    }
-                    HStack {
-                        CaptureToggle(model: model, compact: true)
-                        Spacer()
-                        if let date = model.lastSync {
-                            Text("Checked \(date.formatted(date: .omitted, time: .shortened))")
-                                .font(.caption2).foregroundStyle(Palette.secondary)
-                        }
-                    }
+                    WorkBriefView(model: model, compact: true)
                     Divider().overlay(Palette.line.opacity(0.5))
-                    if model.demoEnabled { DemoBadge() }
-                    else { CaptureInventory(model: model, compact: true) }
-                    if !model.demoEnabled {
-                        HStack(alignment: .firstTextBaseline, spacing: 20) {
-                            count(model.library.totalMessageCount, "messages saved")
-                            count(model.library.sessions.count, "sessions")
-                        }
-                    }
+                    DisclosureGroup("Capture details") {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(model.captureDescription).font(.caption).foregroundStyle(Palette.secondary)
+                            CaptureInventory(model: model, compact: true)
+                            Text("\(model.library.totalMessageCount.formatted()) messages saved · \(model.library.sessions.count) sessions").font(.caption2).foregroundStyle(Palette.secondary)
+                        }.padding(.top, 8)
+                    }.font(.caption).foregroundStyle(Palette.secondary)
+                    CaptureToggle(model: model, compact: true)
                 }.padding(18)
             }.frame(maxHeight: .infinity)
             Divider().overlay(Palette.line.opacity(0.5))
@@ -60,10 +46,5 @@ struct MenuBarView: View {
             .background(Palette.surface).foregroundStyle(Palette.text)
             .onExitCommand { model.closeQuickPanel() }
     }
-    private func count(_ value: Int, _ label: String) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: 6) {
-            Text(model.storedAt == nil && model.lastSync == nil ? "—" : value.formatted()).font(.system(size: 22, weight: .medium, design: .rounded)).monospacedDigit()
-            Text(label).font(.caption2).foregroundStyle(Palette.secondary)
-        }
-    }
+
 }

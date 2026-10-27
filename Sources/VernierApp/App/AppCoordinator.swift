@@ -35,6 +35,13 @@ import VernierCore
         super.init()
     }
     func applicationDidFinishLaunching(_ notification: Notification) {
+        if CommandLine.arguments.contains("--brief-model-probe") {
+            Task { @MainActor in
+                do { try await runLocalModelProbe(); NSApp.terminate(nil) }
+                catch { fputs("LOCAL MODEL PROBE FAILED: \(error)\n", stderr); exit(1) }
+            }
+            return
+        }
         NSApp.setActivationPolicy(.accessory)
         configureMainMenu()
         model.openStudio = { [weak self] page in self?.openStudio(page) }
@@ -69,6 +76,7 @@ import VernierCore
             model.refreshLoginStatus()
             if CommandLine.arguments.contains("--enable-login") { model.setLaunchAtLogin(true) }
             if CommandLine.arguments.contains("--enable-conversation-memory") { model.conversationMemoryEnabled = true }
+            if CommandLine.arguments.contains("--enable-local-insights") { model.localInsightsEnabled = true }
             if CommandLine.arguments.contains("--show-pill") { model.pillEnabled = true }
             syncTask = Task { await model.startSessionSync() }
             let workspace = NSWorkspace.shared.notificationCenter
@@ -81,7 +89,10 @@ import VernierCore
         }
         if smokeTest {
             Task { @MainActor in
-                do { try await runSmokeTest(); print("NATIVE UI SMOKE PASSED"); NSApp.terminate(nil) }
+                do {
+                    try await runSmokeTest(); print("NATIVE UI SMOKE PASSED")
+                    NSApp.terminate(nil)
+                }
                 catch { fputs("NATIVE UI SMOKE FAILED: \(error)\n", stderr); exit(1) }
             }
         } else if !model.preferences.onboardingComplete { openWelcome() }
@@ -95,6 +106,7 @@ import VernierCore
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
     func applicationWillTerminate(_ notification: Notification) {
         syncTask?.cancel()
+        model.cancelWorkBrief()
         model.setSystemSuspended(true)
         savePillPosition()
     }

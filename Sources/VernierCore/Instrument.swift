@@ -157,6 +157,10 @@ public struct Preferences {
         get { defaults.bool(forKey: "conversationMemoryEnabled") }
         nonmutating set { defaults.set(newValue, forKey: "conversationMemoryEnabled") }
     }
+    public var localInsightsEnabled: Bool {
+        get { defaults.bool(forKey: "localInsightsEnabled") }
+        nonmutating set { defaults.set(newValue, forKey: "localInsightsEnabled") }
+    }
     public var codexEnabled: Bool {
         get { defaults.bool(forKey: "codexEnabled") }
         nonmutating set { defaults.set(newValue, forKey: "codexEnabled") }

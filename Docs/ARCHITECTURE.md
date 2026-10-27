@@ -10,11 +10,11 @@ Metadata normalization is allowlisted. Conversation normalization accepts only u
 
 Newest conversation pages and older ascending backfill have separate durable cursors. Recent pages stop at known records; old history advances independently. A bounded number of sessions advance per refresh. Unsupported/truncated histories remain partial. Source timestamps can be item milliseconds or older turn-boundary seconds; missing timestamps and approximate order are disclosed.
 
-SessionStore is an actor over system SQLite3, with transactional v1→v2→v3 migrations, WAL, foreign keys, parameter binding, secure_delete and restrictive file permissions. Sessions/turns are snapshots; change_log records actual metadata changes only. sync_state holds successful check/reconciliation times. messages, agent_signals and memory_progress form a separately consented content layer. Unchanged upserts have predicates excluding observation time, avoiding full-history rewrites. The UI reads a bounded 300-message preview; local search queries the full archive; explicit export loads all stored messages.
+SessionStore is an actor over system SQLite3, with transactional v1→v2→v3→v4 migrations, WAL, foreign keys, parameter binding, secure_delete and restrictive file permissions. Sessions/turns are snapshots; change_log records actual metadata changes only. sync_state holds successful check/reconciliation times. messages, agent_signals and memory_progress form a separately consented content layer. Unchanged upserts have predicates excluding observation time, avoiding full-history rewrites. The UI reads a bounded 300-message preview; local search queries the full archive; explicit export loads all stored messages.
 
 ObservationGate holds a synchronous generation and separate content permission through the storage transaction. Pause, disconnect, system rest and content revocation invalidate in-flight results. UI projection rechecks the generation after actor suspensions. Pause suspends synchronization, and a later resume can import provider history created while paused; per-session exclusions are not implemented.
 
-The product’s ambition is an instrument for understanding human agency in AI-mediated work. Observable conversation/tool events, deterministic wording flags, user-authored takeaways and future independently measured capabilities must remain separate. There is no numerical cognitive-health/readiness score and no inference that tab switches prove reading. Automatic semantic summaries, cross-tool memory, review/comprehension measurements and validated probes are future work.
+The product’s ambition is an instrument for understanding human agency in AI-mediated work. Observable conversation/tool events, deterministic wording flags, user-authored takeaways and future independently measured capabilities must remain separate. There is no numerical cognitive-health/readiness score and no inference that tab switches prove reading. Optional local semantic briefs are interpretations with source references; cross-tool memory, review/comprehension measurements and validated probes remain future work.
 
 ## Native interaction update — 0.4.0
 
@@ -36,8 +36,18 @@ The dashboard emphasizes intent, steering and understanding. Session review reus
 
 ## Measurement-layer boundaries — proposed design
 
-Current schema v3 stores observation records and user-authored notes. It contains no probe attempts, study enrollment, randomization, intervention assignments or validated capability scores.
+Current schema v4 stores observation records, user-authored notes and derived session briefs. It contains no probe attempts, study enrollment, randomization, intervention assignments or validated capability scores.
 
 Future designs should preserve separate contracts for source observations, user reports, probe attempts/assessments and study assignments/outcomes. Each needs provenance, time/coverage context and its own applicable consent and retention rules. A task/decision contract must be defined before cross-session interpretation is implemented; a provider turn is not automatically a human task boundary.
 
 A future probe record needs task/version, domain/difficulty, prior familiarity, allowed assistance, response and rubric/evaluator provenance. A future experiment additionally needs enrollment, assignment, exposure and outcome timing. Do not silently reuse content consent as permission to run an exercise, alter a prompt or enroll a person in a study. These are design requirements, not implemented tables or APIs. See [the research framework](RESEARCH.md).
+
+## On-device session interpretation — 0.6.0
+
+`BriefWindow` constructs an ordered, bounded opening/recent excerpt from canonical saved messages. Transient M-labels keep raw identifiers out of the model prompt. `LocalBriefGenerator` serializes generation with Apple Foundation Models, a dynamic output schema and exact token counting. The default on-device model has no tools or cloud fallback; availability is gated to macOS 26.4+ and a compatible SDK. Builds on older SDKs retain the reader and show an unavailable reason.
+
+The app copies quotes from selected source records, resolves references and checks minimum evidence structure before projection. This does not validate the interpretation itself. `WorkBrief` separates model prose from literal evidence, coverage, clipping, unknown source times and engine provenance. UI supports source-scoped search and dismissal; it never claims daily rates or cognitive scores.
+
+Schema v4 adds `work_briefs`, one JSON payload per session with an ON DELETE CASCADE foreign key. Derived-cache decoding failures do not prevent canonical history from loading. Source/content/analysis consent and generation are checked atomically through `ObservationGate.captureBrief`; actor-resumed UI changes recheck cancellation/generation. Erasure removes the cache. The previous source schema and notes survive migration.
+
+Generation is opt-in, debounced to five minutes automatically and cancelable with a 90-second UI deadline. Only the selected/latest session is scheduled; it is not a full-day or all-session batch assessment. No model calls run in showcase or normal CI; a separate explicit `--brief-model-probe` uses invented data on compatible hardware.

@@ -5,7 +5,10 @@ public enum MemoryChecks {
     public static let cases: [(String, @Sendable () async throws -> Void)] = [
         ("Conversation normalization, best-effort redaction and honest wording flags", boundary),
         ("Separate content consent, local search, export and memory deletion", storage),
-        ("Conversation backfill advances independently of metadata", protocolBackfill)
+        ("Conversation backfill advances independently of metadata", protocolBackfill),
+        ("Local brief source grounding, coverage and judgment boundaries", briefValidation),
+        ("Separate local-analysis consent, correction, export and erasure", briefStorage),
+        ("Schema v3 upgrade preserves memory and adds derived-content deletion", briefMigration)
     ]
     private static func expect(_ value: @autoclosure () -> Bool, _ message: String) throws {
         if !value() { throw CoreCheckFailure(description: message) }

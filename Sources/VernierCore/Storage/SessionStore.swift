@@ -7,12 +7,18 @@ public final class ObservationGate: @unchecked Sendable {
     private var allowed = false
     private var generation = 0
     private var contentAllowed = false
+    private var analysisAllowed = false
     public init() {}
-    @discardableResult public func configure(enabled: Bool, contentEnabled: Bool = false) -> Int {
+    @discardableResult public func configure(enabled: Bool, contentEnabled: Bool = false, analysisEnabled: Bool = false) -> Int {
         lock.lock(); defer { lock.unlock() }
-        allowed = enabled; contentAllowed = contentEnabled; generation += 1; return generation
+        allowed = enabled; contentAllowed = contentEnabled; analysisAllowed = analysisEnabled; generation += 1; return generation
     }
     public func token() -> Int? { lock.lock(); defer { lock.unlock() }; return allowed ? generation : nil }
+    func captureBrief(_ token: Int, _ body: () throws -> Void) rethrows -> Bool {
+        lock.lock(); defer { lock.unlock() }
+        guard allowed && contentAllowed && analysisAllowed && token == generation else { return false }
+        try body(); return true
+    }
     func capture(_ token: Int, _ body: (Bool) throws -> Void) rethrows -> Bool {
         lock.lock(); defer { lock.unlock() }
         guard allowed && token == generation else { return false }
@@ -45,6 +51,7 @@ public struct SessionLibrary: Codable, Sendable {
     public let totalMessageCount: Int
     public let totalSignalCount: Int
     public let digests: [SessionDigest]
+    public let workBriefs: [WorkBrief]
     public static let empty = SessionLibrary(sessions: [], turns: [], notes: [:])
     public func title(for session: SessionMetadata) -> String {
         if let note = notes[session.id], let excerpt = SessionDisplay.excerpt(note) { return excerpt }
@@ -56,8 +63,8 @@ public struct SessionLibrary: Codable, Sendable {
         return "Workspace \((ids.firstIndex(of: id) ?? 0) + 1)"
     }
     public func turns(for session: SessionMetadata) -> [TurnMetadata] { turns.filter { $0.sessionID == session.id } }
-    public init(sessions: [SessionMetadata], turns: [TurnMetadata], notes: [String: String], changes: [RecordedChange] = [], messages: [ConversationMessage] = [], signals: [AgentToolSignal] = [], memoryCoverage: [MemoryCoverage] = [], totalMessageCount: Int = 0, totalSignalCount: Int = 0, digests: [SessionDigest] = []) {
-        self.sessions = sessions; self.turns = turns; self.notes = notes; self.changes = changes; self.messages = messages; self.signals = signals; self.memoryCoverage = memoryCoverage; self.totalMessageCount = totalMessageCount; self.totalSignalCount = totalSignalCount; self.digests = digests
+    public init(sessions: [SessionMetadata], turns: [TurnMetadata], notes: [String: String], changes: [RecordedChange] = [], messages: [ConversationMessage] = [], signals: [AgentToolSignal] = [], memoryCoverage: [MemoryCoverage] = [], totalMessageCount: Int = 0, totalSignalCount: Int = 0, digests: [SessionDigest] = [], workBriefs: [WorkBrief] = []) {
+        self.sessions = sessions; self.turns = turns; self.notes = notes; self.changes = changes; self.messages = messages; self.signals = signals; self.memoryCoverage = memoryCoverage; self.totalMessageCount = totalMessageCount; self.totalSignalCount = totalSignalCount; self.digests = digests; self.workBriefs = workBriefs
     }
 }
 
@@ -81,7 +88,7 @@ final class SQLiteConnection: @unchecked Sendable {
 public actor SessionStore {
     public let directory: URL
     let connection: SQLiteConnection
-    private let gate: ObservationGate
+    let gate: ObservationGate
     public private(set) var lastWriteSummary = StoreWriteSummary()
     private let transient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
     public init(directory: URL, gate: ObservationGate) throws {
@@ -98,7 +105,7 @@ public actor SessionStore {
         guard sqlite3_prepare_v2(db, "PRAGMA user_version", -1, &statement, nil) == SQLITE_OK, let statement else { throw StoreFailure.corrupt }
         let version = sqlite3_step(statement) == SQLITE_ROW ? sqlite3_column_int(statement, 0) : -1
         sqlite3_finalize(statement)
-        guard version >= 0 && version <= 3 else { throw StoreFailure.corrupt }
+        guard version >= 0 && version <= 4 else { throw StoreFailure.corrupt }
         if version == 0 {
             try execute("""
             BEGIN IMMEDIATE;
@@ -134,6 +141,15 @@ public actor SessionStore {
             CREATE TABLE memory_progress(session_id TEXT PRIMARY KEY REFERENCES sessions(id) ON DELETE CASCADE,mode TEXT NOT NULL,checked_updated_at REAL,head_target REAL,head_cursor TEXT,backfill_cursor TEXT,backfill_complete INTEGER NOT NULL,issue INTEGER NOT NULL);
             INSERT INTO schema_migrations VALUES(3,unixepoch());
             PRAGMA user_version=3;
+            COMMIT;
+            """)
+        }
+        if version < 4 {
+            try execute("""
+            BEGIN IMMEDIATE;
+            CREATE TABLE work_briefs(session_id TEXT PRIMARY KEY REFERENCES sessions(id) ON DELETE CASCADE,payload TEXT NOT NULL);
+            INSERT INTO schema_migrations VALUES(4,unixepoch());
+            PRAGMA user_version=4;
             COMMIT;
             """)
         }
@@ -215,7 +231,7 @@ public actor SessionStore {
         """) { row in
             SessionDigest(sessionID: string(row, 0), promptExcerpt: sqlite3_column_type(row, 1) == SQLITE_NULL ? nil : SessionDisplay.excerpt(string(row, 1)), messageCount: Int(sqlite3_column_int64(row, 2)), signalCount: Int(sqlite3_column_int64(row, 3)))
         }
-        return SessionLibrary(sessions: sessions, turns: turns, notes: Dictionary(uniqueKeysWithValues: notes), changes: changes, messages: messages, signals: signals, memoryCoverage: coverage, totalMessageCount: totalMessages, totalSignalCount: totalSignals, digests: digests)
+        return SessionLibrary(sessions: sessions, turns: turns, notes: Dictionary(uniqueKeysWithValues: notes), changes: changes, messages: messages, signals: signals, memoryCoverage: coverage, totalMessageCount: totalMessages, totalSignalCount: totalSignals, digests: digests, workBriefs: try loadWorkBriefs())
     }
     public func saveNote(sessionID: String, text: String) throws {
         guard text.utf8.count <= 16_000 else { throw StoreFailure.unavailable }
