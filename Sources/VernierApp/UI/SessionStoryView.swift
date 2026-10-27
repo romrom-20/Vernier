@@ -34,6 +34,10 @@ struct SessionStoryView: View {
                 }
             }
             if let story = model.currentStory, !story.runs.isEmpty {
+                if story.loadedMessages < story.storedMessages {
+                    Text("Recent window · \(story.loadedMessages) of \(story.storedMessages) saved messages. Counts below apply to this window.")
+                        .font(.caption).foregroundStyle(Palette.secondary)
+                }
                 StoryNumbers(story: story)
                 ConversationMap(model: model, story: story).id("conversation-map")
                 StoryInterpretations(model: model, story: story)
@@ -95,7 +99,7 @@ struct ConversationMap: View {
     @State private var start: Int?
     @State private var revealed = false
     private let pageSize = 10
-    private var first: Int { min(max(0, start ?? (story.runs.count - pageSize)), max(0, story.runs.count - 1)) }
+    private var first: Int { min(max(0, start ?? (story.runs.count - pageSize)), max(0, story.runs.count - pageSize)) }
     private var shown: [StoryRun] { Array(story.runs.dropFirst(first).prefix(pageSize)) }
     private var defaultRun: StoryRun? {
         if let evidence = model.currentBrief?.visibleMoments.first?.evidence.last(where: { $0.speaker == "user" }),
