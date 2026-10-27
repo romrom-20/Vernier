@@ -18,13 +18,22 @@ Reliability work remains: manual accessibility and mouse testing, real multi-dis
 
 - [x] Bounded, on-device session interpretation with exact source references, visible coverage and user dismissal.
 - [ ] Define shared task/decision boundaries and provenance contracts before cross-session detection.
-- [ ] Link initial intent, agent proposals, human interventions, evidence and follow-up across sessions.
+- [ ] Link initial intent, agent proposals, human interventions, available outcome evidence and follow-up across sessions.
+- [ ] Build personal recaps of supported changes in delegation, repair, scope and verification, with explicit task and coverage context.
+- [ ] Establish a person-specific observational baseline before describing a pattern as unusual for them.
+- [ ] Evaluate context-aware guidance that helps resolve one concrete uncertainty without routinely interrupting work.
 - [ ] Keep agent claims, observed artifacts and user reports distinct and correctable.
 - [x] Label excerpt limits, clipping and missing source times; never infer absent review from missing evidence.
 - [ ] Evaluate whether a review helps users reconstruct or recover a concrete piece of work.
 - [ ] Establish context before interpreting repeated repair/continuation requests.
 
 **Gate:** users recognize the record as accurate and can resolve a concrete open question; attribution errors and false positives are documented.
+
+### Next product milestone: a useful personal recap
+
+The next substantial step is to connect a feature or decision across sessions. A person should be able to see the original goal, a returned requirement, the evidence offered since then and one unresolved check. A daily or weekly view could then describe supported interaction patterns in that context.
+
+This is not a daily cognitive score. Before it can be useful, task boundaries, source coverage, attribution, timing and ambiguous follow-ups need to be handled explicitly. Personal recaps and adaptive guidance remain planned. Their first acceptance test is whether a builder recognizes the account as accurate and can use it to settle a concrete question; capability claims require the separate work below.
 
 ## 3. Narrow independent-capability probes — proposed
 

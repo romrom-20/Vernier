@@ -8,6 +8,18 @@ Vernier is an instrument for investigating that question. Its ambition extends f
 
 The value of delegation depends on the task, the person’s goals, their prior capability and what they can do when circumstances change. Efficient delegation is legitimate. Accepting useful advice and rejecting misleading advice can both demonstrate good judgment.
 
+## The intended everyday experience
+
+A person doing substantial work with AI should be able to open Vernier and recover the thread: what they intended, how they delegated, what the agent proposed, where they redirected it, what evidence was offered and what remains unresolved. Over time, the intended product would connect those threads across sessions and show changes in the person's recorded interaction patterns.
+
+A useful recap might locate recurring requirements, stretches of simple continuation, additional verification or changes of scope. It would explain those observations in context and offer a small way to regain direction. Repeated repair may reflect a persistent agent failure; extra questions may be necessary review; a long delegated stretch may be an efficient choice. The product must keep those possibilities open rather than grade prompt style.
+
+The intended feedback has three parts: **what happened, what it might mean for this task, and what could settle the uncertainty next**. Personal baselines and task context matter more than comparing users by approval or message counts. A behavioral recap can describe a change in the record without diagnosing a change in the person.
+
+This everyday product direction and the longer-term measurement program have different evidence requirements. Useful memory and review can be evaluated before any capability or causal claim is made. Separately consented probes could later add evidence about narrow independent performance; longitudinal experiments would be needed to assess lasting change or intervention effects.
+
+Codex in Conductor is the first source to make dependable. The larger ambition includes other explicitly connected tools and downstream outcomes where sources expose them with consent. It does not imply access to every interaction on a Mac.
+
 ## Three measurement layers
 
 ### 1. Passive interaction signals
@@ -59,7 +71,9 @@ The measurement system should be able to produce an informative negative result.
 
 ## What exists today
 
-The native app provides an optional circle/pill, menu-bar quick view, Studio, read-only Codex history, separately consented conversation memory, local storage controls and user-authored interaction review. The dashboard emphasizes intent, steering and understanding, with a bounded recent prompt trail and clear capture coverage. Optional on-device AI briefs now suggest the working goal, source-linked patterns and a next step from a bounded session excerpt. These are fallible interpretations, not validated agency assessments.
+Version 0.7.0 provides an optional circle/pill, menu-bar quick view, Studio, read-only Codex history, separately consented conversation memory, local storage controls and user-authored interaction review. The dashboard maps up to 500 saved messages from one session into user directions and agent reply stretches, with source comparisons and visible coverage. Optional on-device AI briefs suggest the working goal, source-linked patterns and a next step from a smaller bounded excerpt. These are fallible interpretations, not validated agency assessments.
+
+Connected task histories, cross-session recaps, personal baselines and adaptive guidance are not implemented. The screenshots show the session-review foundation using invented records and fixed interpretations. They do not demonstrate the intended longitudinal experience or establish the local model’s accuracy.
 
 It is a foundation for observation and reflection. It does not yet predict independent capability, validate understanding, measure permanent change, run experiments or calculate an agency/strain/readiness score.
 

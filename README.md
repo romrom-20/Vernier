@@ -9,15 +9,36 @@
 
 A coding session can produce a working feature and a long conversation. Reconstructing how you got there is harder: which requirement kept returning, where you changed direction, what evidence the agent offered, and what still needs checking.
 
-Vernier is an experimental Mac app for making that process visible. It turns consented **Codex history from Conductor workspaces** into an interactive conversation map, source comparisons and optional on-device AI interpretations. The aim is to help you recover the intent and reasoning behind the work, then choose a useful next check.
+Vernier is being built as a **personal instrument for understanding and directing your work with AI over time**. The intended experience connects your goals, delegation, questions, corrections and available outcomes, helping you notice a pattern and find a useful way back into the work.
+
+Today, the experimental Mac app turns consented **Codex history from Conductor workspaces** into an interactive conversation map, source comparisons and optional on-device AI interpretations. Codex in Conductor is the first integration and verification boundary. Cross-session understanding and personal recaps are the next product work.
 
 The broader question is **human agency in AI-mediated work**: when does delegation expand what you can do, and what remains within your ability to understand, redirect and recover?
 
-**Current version: 0.7.0.** Visual session review works today. AI interpretations are experimental. Daily cognitive scores, personal baselines and validated capability assessments are not implemented.
+**Current version: 0.7.0.** Visual session review works today. AI interpretations are experimental. Connected task histories, daily patterns across sessions, personal baselines and validated capability assessments are not implemented.
 
 ![Vernier's native session perspective using an invented coding conversation](Docs/images/overview.png)
 
-*Actual app, isolated showcase mode. The conversation, counts and fixed example interpretations are synthetic. This image demonstrates the interface, not measured AI accuracy.*
+*Current session-review foundation, shown in the actual app’s isolated showcase mode. The conversation, counts and fixed example interpretations are synthetic. This image demonstrates the interface, not measured AI accuracy or the planned cross-session experience.*
+
+## The product we are working toward
+
+A useful personal recap would help you understand:
+
+- **How the work developed:** what you wanted, what you delegated, which decisions you revisited, and what the available evidence says happened across sessions.
+- **How your interaction changed:** stretches of simple continuation, recurring repair requests, new constraints and verification questions, interpreted in the context of the task and your own history.
+- **How to regain direction:** an explanation of a consequential unresolved question and one small check that could settle it. More questions can be good oversight; efficient delegation can be good judgment.
+- **What you could recover independently:** later, voluntary sandbox exercises could test whether you can explain, modify or take over a narrow piece of work without the original agent.
+
+The aim is to recognize useful patterns and support better decisions. A long agent run does not establish that you stopped paying attention; repeated questions do not establish excessive checking or fatigue. Those explanations need context and, for capability claims, evidence beyond conversation logs.
+
+```mermaid
+flowchart LR
+    A["Today: visual session review<br/>Saved Codex messages and source comparisons"] --> B["Planned: connected work history<br/>Tasks, outcomes, personal patterns and recaps"]
+    B --> C["Proposed: voluntary capability probes<br/>Evidence about a narrow independent attempt"]
+```
+
+*Product direction. The later stages are not demonstrated by the current screenshots. Broader source adapters and context-aware guidance need their own implementation and evaluation; causal claims additionally require the longitudinal experiments described in the research framework.*
 
 ## A concrete example
 
