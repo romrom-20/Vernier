@@ -1,0 +1,12 @@
+{
+  "images": {
+    "Docs/images/overview.png": {
+      "sha256": "25e5bce687b7acb6076942ad9d9ca4d015ae27be7be168a9b8a4087b338ecd67",
+      "provenance": "Visually reviewed native showcase capture. Invented records from ShowcaseFixtures.visualLibrary(); fixed example interpretations; no personal archive or model used."
+    },
+    "Docs/images/session-map.png": {
+      "sha256": "89b1b18cecd55710194c7b04de33661a52749810cba1e4c284a254205234f856",
+      "provenance": "Visually reviewed native showcase capture. Invented records from ShowcaseFixtures.visualLibrary(); fixed example interpretations; no personal archive or model used."
+    }
+  }
+}

@@ -25,6 +25,8 @@ Preserve the nonactivating pill, reduced-motion behavior, clear capture feedback
 
 Use invented prompts, paths and outcomes. Do not attach conversation exports, provider databases, private projects, credentials, local account paths, or screenshots showing personal sessions. Inspect logs and images before posting. Report security vulnerabilities through the [security process](SECURITY.md), not a public issue with a payload.
 
+Run `python3 Scripts/test-public-content.py` and `python3 Scripts/check-public-content.py` before publication. Public images must use isolated synthetic records, be visually reviewed, and match `.github/public-images.json`. A new or changed image fails the check until its exact hash and reviewed provenance are recorded. Do not automatically approve an image because its filename says “showcase.” Never copy a screenshot of a personal session into documentation. See [publication boundaries](Docs/PUBLICATION.md).
+
 ## Evidence and product claims
 
 Do not equate a short prompt with disengagement, time with attention, a file-open with understanding, or an agent's completion with verified success. Proposed insights need source evidence, visible uncertainty and a correction path. Use MIT-compatible original contributions; respect the source and licensing of any new assets.

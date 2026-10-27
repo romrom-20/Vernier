@@ -22,6 +22,8 @@ jobs:
       - name: Verify core, XCTest and native bundle
         run: ./Scripts/verify.sh
       - name: Publication boundaries
-        run: python3 Scripts/check-public-content.py
+        run: |
+          python3 Scripts/test-public-content.py
+          python3 Scripts/check-public-content.py
       - name: Whitespace
         run: git diff --check
