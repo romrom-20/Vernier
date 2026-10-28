@@ -77,12 +77,6 @@ extension AppCoordinator {
             await Task.yield()
         }
         model.pillEnabled = true
-        openStudio(model.page)
-        refreshPresence()
-        print("Focus wait: active=\(NSApp.isActive), key=\(studio?.isKeyWindow == true), surface=\(surface), pill=\(pillPresentation)")
-        try await waitUntil("Pill hides while Studio is focused") {
-            NSApp.isActive && studio?.isKeyWindow == true && pill?.isVisible != true && pillPresentation == .hidden
-        }
         studio?.orderOut(nil)
         model.pillHovered = false
         refreshPresence()
@@ -124,6 +118,16 @@ extension AppCoordinator {
         try await waitUntil("Pill capture button toggles back without opening Studio") {
             model.paused == priorPause && model.preferences.paused == priorPause && studio?.isVisible != true && pill?.isVisible == true
         }
+        // Exercise the capture/hover controls before the assertion that requires an active desktop.
+        openStudio(model.page)
+        refreshPresence()
+        print("Focus wait: active=\(NSApp.isActive), key=\(studio?.isKeyWindow == true), surface=\(surface), pill=\(pillPresentation)")
+        try await waitUntil("Pill hides while Studio is focused") {
+            NSApp.isActive && studio?.isKeyWindow == true && pill?.isVisible != true && pillPresentation == .hidden
+        }
+        studio?.orderOut(nil)
+        hoverHost.handleHoverEntry()
+        refreshPresence()
         let dashboardButton = hoverHost.dashboardButton
         let dashboardPoint = hoverHost.convert(NSPoint(x: dashboardButton.frame.midX, y: dashboardButton.frame.midY), to: hoverHost.superview)
         try check(!dashboardButton.isHidden && hoverHost.hitTest(dashboardPoint) === dashboardButton && dashboardButton !== captureButton,
@@ -272,6 +276,11 @@ extension AppCoordinator {
         let perspectiveSaved = await model.saveDecisionPerspective("I asked for the blank-email test after checking the normal import myself.")
         try check(perspectiveSaved && model.currentPerspectives.count == 1 && !model.reviewingDecision,
                   "Save perspective persists separately and respects isolated inference")
+        model.selectDecisionSession(fixture.sessions[1].id)
+        model.decisionRevisions = []
+        let draftTargetSaved = await model.saveDecisionPerspective("This draft was about the previous request, not the newly selected conversation.", about: storedDecision)
+        try check(draftTargetSaved && model.decisionPerspectives.count == 2 && model.decisionPerspectives.allSatisfy { $0.revisionID == storedDecision.id && $0.anchorMessageID == storedDecision.anchorMessageID },
+                  "A perspective draft keeps its original request after selection or background history changes")
         model.store = nil; model.clearDecisionMemory()
         try check(model.decisionRevisions.isEmpty && model.decisionPerspectives.isEmpty, "Erasure clears the displayed reasoning and personal perspectives")
         showcase.showMemorySource(sessionID: latestDecision.sessionID, messageID: latestDecision.anchorMessageID)

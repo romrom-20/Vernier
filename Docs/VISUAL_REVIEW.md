@@ -1,17 +1,15 @@
 # A visual story of the work
 
-The session map introduced in 0.7 remains the conversation drill-down. Version 0.9 starts with [the person’s participation in an exchange](PARTICIPATION.md), selected from the bounded recent-work projection. One human action, its source sequence and its possible significance lead the screen. Inventory counts and internal workspace labels stay out of the primary experience.
+The session map introduced in 0.7 remains the source drill-down. Version 0.10 starts with a [revisable local reading](REASONING.md), its literal evidence, another possible account and the unresolved fact. The map shows the exchange rather than competing with a second set of older interpretation cards. Inventory counts stay in coverage details.
 
-The small session brief could repeat a person's request instead of explaining an interaction. The dashboard now starts with a suggested finding, an explorable conversation map and the source exchanges. Its design hypothesis is that a builder can reconstruct a concrete point of friction more easily when the record, its possible meaning and a next check stay connected.
+## Overview, evidence, correction
 
-## Overview, comparison, explanation
+1. **Orient:** select a saved conversation and read the tentative account of its latest human request. The saved request is copied from the record, not presented as a verified task definition.
+2. **Inspect:** compare literal speaker-labeled excerpts. Read original retrieves the canonical message by ID; See the surrounding exchange focuses the request in the map.
+3. **Explore:** user groups occupy the upper lane and agent reply stretches the lower lane. Select a point to compare neighboring exchanges. Counts explain coverage and grouping, not human performance.
+4. **Correct:** add a separately labeled perspective about that exact request, revisit changed evidence and compare revision history. A correction is a user report rather than proof of independent capability.
 
-1. **Orient:** choose a Codex conversation. See a possible finding with its AI-review coverage, plus recorded message and follow-up counts.
-2. **Explore:** the upper lane contains user-side message groups; the lower lane contains contiguous agent replies, including progress messages. Follow the reading sequence. Select a point to compare it with the previous group.
-3. **Interpret:** possible repair loops have separately labeled AI markers. Interpretation cards explain the hypothesis, show literal supporting messages and let the person dismiss it. A source outside the loaded map still opens in Memory.
-4. **Act:** a review suggestion asks for a concrete expected-versus-observed check. It is guidance, not evidence that the person made a mistake. The generated brief and archive inventory remain available in details.
-
-This applies the overview-to-details approach described in [Shneiderman's visualization taxonomy](https://www.cs.umd.edu/users/ben/papers/Shneiderman1996eyes.pdf). It is a design rationale, not a claim that this particular interface has passed user research. A first useful evaluation would ask builders to find a returned requirement, explain the prior agent claim, and choose what evidence could settle it.
+This uses an overview-to-details approach, as described in [Shneiderman's visualization taxonomy](https://www.cs.umd.edu/users/ben/papers/Shneiderman1996eyes.pdf). It is a design rationale rather than a completed user-research result. A useful evaluation would ask builders to find a returned requirement, explain the preceding agent claim and identify what evidence could settle it. The current model results do not establish those benefits.
 
 ## What the diagram means
 
@@ -21,16 +19,16 @@ Adjacent assistant messages are grouped into a reply stretch; consecutive user i
 
 The vertical positions identify speakers. The horizontal positions identify reading order, not elapsed time. Neither curve height nor color represents attention, strain, success or comprehension. Missing source times make order approximate. Pagination exposes earlier groups in the loaded window; older archive text remains in Memory.
 
-AI markers come from cached source-referenced brief interpretations. They have their own bounded review coverage, which can be smaller than the map's window. Citation integrity does not prove the classification or explanation is correct. Repeated checking can be appropriate verification.
+A recurring-issue marker can come from the selected source-referenced decision revision. It attaches only where cited messages appear in the loaded map. Its reasoning packet can be smaller than the map window. Citation integrity does not prove the classification or explanation is correct. Repeated checking can be appropriate verification.
 
 ## Motion and controls
 
 The connector line reveals once, then stays still. Selecting a point briefly transitions the comparison. Reduce Motion disables these animations; Low Power Mode disables the introductory reveal. There is no perpetual animation or extra observation loop. This follows [Apple's motion guidance](https://developer.apple.com/design/human-interface-guidelines/motion).
 
-Quick view now contains one reading, the person’s actual words, a Why this matters action and an Open dashboard action. The statistics-first headline, go-ahead counters and opaque workspace/session labels were removed. Method and coverage live in Studio details. Pause/resume stays pinned in its header. Studio and quick view retain exclusive routing. Opening the full story uses a larger, display-bounded native window. The pill's hover, in-place capture controls and nonactivation remain unchanged.
+Quick view contains the selected reading, a saved-message excerpt, the unresolved fact, Read the evidence and Open dashboard actions. The statistics-first headline, go-ahead counters and opaque workspace/session labels were removed. Method and coverage live in Studio details. Pause/resume stays pinned in its header. Studio and quick view retain exclusive routing. Opening the full story uses a larger, display-bounded native window. The pill's hover, in-place capture controls and nonactivation remain unchanged.
 
 ## Boundaries
 
-The map is an in-memory projection of existing, consented local data. It adds no screen, mouse, browser or keyboard capture, no cloud request and no database migration. Completed projections are reused until source identity/update/count changes. Erasure clears them and invalidates pending reads. All public presentation images and the coding example are invented showcase records; no personal transcript is published.
+The map is an in-memory projection of existing, consented local data. It adds no screen, mouse, browser or keyboard capture, no cloud request. The 0.10 reasoning history adds its own schema v5 storage, separate from the transient map. Completed projections are reused until source identity/update/count changes. Erasure clears them and invalidates pending reads. All public presentation images and the coding example are invented showcase records; no personal transcript is published.
 
 This release does not implement daily cognitive spikes, personal baselines, independent-capability assessment or verified task outcomes. The local model can still misread context. Better layout helps inspect that reasoning; it does not validate it.

@@ -32,3 +32,7 @@ This records a point-in-time review, not a guarantee about future contributions 
 5. Confirm the resulting public revision and CI. A source release is separate from a signed/notarized application distribution.
 
 Do not attach real sessions to issues or pull requests. Use invented reproductions. See [contributing](../CONTRIBUTING.md), [privacy](PRIVACY.md) and [security reporting](../SECURITY.md).
+
+## Reasoning source update — 29 October 2026
+
+The 0.10 update was checked as an exact staged source export with Gitleaks, publication-policy tests, tracked-content/image hashes and documentation links. The secret scanner detected no secrets in that source snapshot. The three replacement images are visually reviewed offscreen renders of real native views with invented records and hand-authored readings; their precise provenance is in the image manifest. Private model reports, personal archive backups, attachments and installed bundles remain outside the tracked tree. This snapshot check does not re-audit unrelated refs or promise that arbitrary future content is safe.

@@ -6,6 +6,7 @@ struct DecisionOverviewView: View {
     @State private var perspective = ""
     @State private var addingPerspective = false
     @State private var saving = false
+    @State private var perspectiveTarget: DecisionRevision?
     var body: some View {
         VStack(alignment: .leading, spacing: 23) {
             HStack(alignment: .top) {
@@ -50,21 +51,28 @@ struct DecisionOverviewView: View {
                     }.padding(18).frame(maxWidth: .infinity, alignment: .leading).background(Palette.inset.opacity(0.55), in: RoundedRectangle(cornerRadius: 15))
                 }
                 HStack(spacing: 18) {
-                    Button(addingPerspective ? "Close perspective" : "Add my perspective") { addingPerspective.toggle() }.buttonStyle(QuietButtonStyle())
+                    Button(addingPerspective ? "Close perspective" : "Add my perspective") {
+                        if !addingPerspective {
+                            if perspectiveTarget?.id != revision.id { perspective = "" }
+                            perspectiveTarget = revision
+                        }
+                        addingPerspective.toggle()
+                    }.buttonStyle(QuietButtonStyle())
                     Button(model.reviewingDecision ? "Reviewing…" : "Revisit with latest evidence") { model.reviewDecision() }
                         .buttonStyle(.plain).foregroundStyle(Palette.mint).disabled(!canReview)
                 }
                 if addingPerspective {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("What does this account miss?").font(.callout.weight(.medium))
+                        if let target = perspectiveTarget { Text("About this saved request: " + target.goal).font(.caption).foregroundStyle(Palette.secondary) }
                         TextField("For example: I chose this deliberately because…", text: $perspective, axis: .vertical).lineLimit(3...6).textFieldStyle(.roundedBorder)
                         HStack {
                             Text("Saved on this Mac · \(perspective.count)/1,500 characters. A later review can consider it.").font(.caption).foregroundStyle(Palette.secondary)
                             Spacer()
                             Button(saving ? "Saving…" : "Save my perspective") {
                                 saving = true
-                                Task { if await model.saveDecisionPerspective(perspective) { perspective = ""; addingPerspective = false }; saving = false }
-                            }.buttonStyle(QuietButtonStyle()).disabled(perspective.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || perspective.count > 1500 || saving || model.isShowcase)
+                                Task { if await model.saveDecisionPerspective(perspective, about: perspectiveTarget) { perspective = ""; addingPerspective = false; perspectiveTarget = nil }; saving = false }
+                            }.buttonStyle(QuietButtonStyle()).disabled(perspective.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || perspective.count > 1500 || saving || model.isShowcase || perspectiveTarget == nil)
                         }
                     }.padding(18).background(Palette.surface, in: RoundedRectangle(cornerRadius: 15))
                     if model.isShowcase { Text("The showcase is read-only; personal perspectives are saved only in the live app.").font(.caption).foregroundStyle(Palette.secondary) }
@@ -100,6 +108,9 @@ struct DecisionOverviewView: View {
             if let notice = model.decisionNotice { Text(notice).font(.caption).foregroundStyle(Palette.secondary) }
             DecisionEngineSettings(model: model)
             PresenceExplanation(model: model)
+        }
+        .onChange(of: model.memoryEraseRevision) {
+            perspective = ""; addingPerspective = false; perspectiveTarget = nil
         }
     }
     private var canReview: Bool { model.localInsightsEnabled && model.conversationMemoryEnabled && model.codexEnabled && !model.paused && !model.systemSuspended && !model.reviewingDecision && !model.isShowcase }

@@ -130,8 +130,8 @@ extension AppModel {
             }
         }
     }
-    func saveDecisionPerspective(_ text: String) async -> Bool {
-        guard let revision = currentDecision, let store, !isShowcase else { return false }
+    func saveDecisionPerspective(_ text: String, about target: DecisionRevision? = nil) async -> Bool {
+        guard let revision = target ?? currentDecision, let store, !isShowcase else { return false }
         let generation = decisionGeneration
         let perspective = DecisionPerspective(sessionID: revision.sessionID, text: text.trimmingCharacters(in: .whitespacesAndNewlines), revisionID: revision.id, anchorMessageID: revision.anchorMessageID)
         guard !perspective.text.isEmpty else { return false }
