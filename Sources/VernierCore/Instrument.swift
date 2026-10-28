@@ -168,7 +168,7 @@ public struct Preferences {
     public var reasoningModel: String {
         get {
             let saved = defaults.string(forKey: "reasoningModel") ?? "apple"
-            return ["apple", "qwen2.5:7b"].contains(saved) ? saved : "apple"
+            return ["apple", "gemma4:e2b-it-qat", "qwen2.5:7b"].contains(saved) ? saved : "apple"
         }
         nonmutating set { defaults.set(newValue, forKey: "reasoningModel") }
     }

@@ -6,12 +6,14 @@ The reasoning loop is implemented, but **no completed configuration met our inte
 
 Apple's on-device framework is the default experimental provider on an eligible Mac. Vernier uses its existing system model, requires no paid API subscription and downloads no separate weights for that provider. It is not a claim that this is the most accurate model, or that model inference has no memory or battery cost. If the framework is unavailable, the app says so and retains the source reader and map; it does not fall back to a cloud service.
 
+**Gemma 4 E2B QAT was the strongest completed manual-review experiment: 33/40 expected labels. It still missed the gate.** It is available as an optional experimental engine, not a dependable detector of steering or comprehension. Its [exact Ollama tag](https://ollama.com/library/gemma4:e2b-it-qat) has a 4.3 GB download. The E2B name means effective parameters, not a 2 GB installation. It has no per-request API fee; total process memory and all-day energy were not validated. Keep automatic review off while checking whether its readings are useful for your work.
+
 The optional Ollama path binds requests to `127.0.0.1:11434`. Its non-thinking Qwen2.5 7B configuration has no per-request API fee, but a [4.7 GB Q4_K_M download](https://ollama.com/library/qwen2.5:7b) and approximately 5.1 GB loaded GPU memory were observed on this test Mac with the 8,192-token context. It did not improve this test enough to justify choosing it as the default. Models and runtimes are separate installations; their licenses are separate from Vernier's MIT source license. There is no claim to have found the globally cheapest or smallest capable model.
 
 For an optional local experiment, install Ollama from its official site and run:
 
 ```sh
-ollama pull qwen2.5:7b
+ollama pull gemma4:e2b-it-qat
 ```
 
 Then select that engine in Overview's local reasoning disclosure and use **Check local engine**. Availability checks establish installation, not interpretation quality. Experimental weights downloaded during development were removed when not needed; they are never bundled or committed.
@@ -30,6 +32,7 @@ Correct labels can accompany wrong explanations; incorrect labels can be withhel
 
 On macOS 26.6.2, Apple M5, 24 GB RAM, Swift 6.3.1 and Ollama 0.40.9, with prompt `decision-2`:
 
+- **Gemma 4 E2B QAT (`gemma4:e2b-it-qat`, digest prefix `07ea59a47401`):** 21/24 main, 6/8 release, 6/8 additional; **33/40** total. Median complete three-pass runtimes were approximately 3.2, 3.3 and 3.5 seconds. Temperature 0, seed 42, 8,192-token context, 800 output tokens per pass, thinking disabled and schema-constrained JSON. It missed returning-failure reports, over-withheld some valid acts, treated an ambiguous “do it” as delegation and accepted an unsupported interpretation request as direction. The controlled presentation did not repeat the requested capability claim, but the action reading was wrong.
 - **Apple on-device:** 20/24 main, 5/8 release, 5/8 additional; **30/40** total. Median complete three-pass runtimes were approximately 3.8, 3.0 and 3.0 seconds respectively. The framework does not expose generated-token usage here; a diagnostic zero is not a claim of zero computation.
 - **Qwen2.5 7B:** 17/24 main, 5/8 release, 6/8 additional; **28/40** total. Corresponding median runtimes were approximately 7.4, 11.5 and 11.3 seconds. Temperature 0, seed 42, 8,192-token context, 800 output tokens per pass and schema-constrained JSON.
 - **Qwen3 1.7B thinking adapter:** stopped after ten failures in ten attempted main cases. This diagnostic run used a 16,384-token context, up to 4,096 generated tokens, temperature 0.6, top-p 0.95, top-k 20 and no grammar constraint on thinking. It rejected missing fields and malformed final objects rather than repairing their meaning. This is an unsuccessful runtime/protocol experiment, not a comparable 40-case score or proof about the model's general capability.
@@ -48,7 +51,7 @@ swift build --product Vernier
   --report /tmp/vernier-synthetic-model-report.json
 ```
 
-Run each of the other two fixture files separately and use distinct report paths. Substitute `qwen2.5:7b` for the optional Ollama configuration. Probes do not open the personal store, start a connector, register login or read real chats. Normal CI and showcase do not invoke models. Hardware, system model assets and mutable Ollama tags can change output; record runtime, prompt and model digest when comparing runs.
+Run each of the other two fixture files separately and use distinct report paths. Substitute `gemma4:e2b-it-qat` for the strongest tested Ollama manual-review configuration, or `qwen2.5:7b` for the other completed alternative. Probes do not open the personal store, start a connector, register login or read real chats. Normal CI and showcase do not invoke models. Hardware, system model assets and mutable Ollama tags can change output; record runtime, prompt and model digest when comparing runs.
 
 ## Resource and trust boundaries
 

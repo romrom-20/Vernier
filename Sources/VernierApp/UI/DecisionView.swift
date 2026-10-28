@@ -182,6 +182,7 @@ struct DecisionEngineSettings: View {
                 Toggle("Review saved work on this Mac", isOn: $model.localInsightsEnabled).toggleStyle(.switch)
                 Picker("Local model", selection: $model.reasoningModel) {
                     Text("Apple on-device · experimental").tag("apple")
+                    Text("Gemma 4 E2B · experimental").tag("gemma4:e2b-it-qat")
                     Text("Qwen2.5 7B · experimental").tag("qwen2.5:7b")
                 }.frame(maxWidth: 450)
                 Toggle("Revisit changed work automatically", isOn: $model.automaticDecisionReviews).toggleStyle(.switch)
