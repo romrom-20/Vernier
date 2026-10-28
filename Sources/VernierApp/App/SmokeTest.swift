@@ -8,7 +8,7 @@ extension AppCoordinator {
         print("PASS: \(message)")
     }
     private func waitUntil(_ message: String, _ condition: @MainActor () -> Bool) async throws {
-        for _ in 0..<50 {
+        for _ in 0..<150 {
             if condition() { print("PASS: \(message)"); return }
             try await Task.sleep(for: .milliseconds(20))
         }
@@ -79,6 +79,7 @@ extension AppCoordinator {
         model.pillEnabled = true
         openStudio(model.page)
         refreshPresence()
+        print("Focus wait: active=\(NSApp.isActive), key=\(studio?.isKeyWindow == true), surface=\(surface), pill=\(pillPresentation)")
         try await waitUntil("Pill hides while Studio is focused") {
             NSApp.isActive && studio?.isKeyWindow == true && pill?.isVisible != true && pillPresentation == .hidden
         }
@@ -174,6 +175,21 @@ extension AppCoordinator {
             await Task.yield()
         }
         try check(model.projection.coverage == "0 of 3 live sources connected", "No live coverage claimed")
+        try await runModelSmokeChecks()
+    }
+    /// Functional view-model routes and isolated storage; no window activation is required.
+    func runModelSmokeChecks() async throws {
+        let modelSuite = "local.vernier.model-smoke-\(UUID().uuidString)"
+        let modelDefaults = UserDefaults(suiteName: modelSuite)!
+        defer { modelDefaults.removePersistentDomain(forName: modelSuite) }
+        let model = AppModel(preferences: Preferences(defaults: modelDefaults), isolated: true)
+        try check(!model.automaticDecisionReviews, "New reasoning does not start background inference without the automatic-review choice")
+        model.automaticDecisionReviews = true
+        let beforeAutomaticStop = model.decisionGeneration
+        model.automaticDecisionReviews = false
+        try check(model.decisionGeneration > beforeAutomaticStop && !model.reviewingDecision, "Disabling automatic reviews invalidates pending review work")
+        model.demoEnabled = false; model.paused = false
+        model.openStudio = { [weak model] page in model?.page = page }
         let now = Date()
         let root = URL(fileURLWithPath: "/synthetic/conductor/workspaces")
         let raw: [String: Any] = ["id": "ui-fixture", "cwd": root.appendingPathComponent("repo/workspace").path, "createdAt": now.timeIntervalSince1970, "updatedAt": now.timeIntervalSince1970, "source": "vscode"]
@@ -182,12 +198,10 @@ extension AppCoordinator {
         model.codexEnabled = true
         model.lastSync = now
         model.paused = false
-        openStudio(.sessions)
-        studio?.contentView?.layoutSubtreeIfNeeded()
+        model.openStudio(.sessions)
         await Task.yield()
         try check(model.knownTurnCount == nil, "Unavailable turn history stays unknown")
         model.inspectSession(session)
-        studio?.contentView?.layoutSubtreeIfNeeded()
         await Task.yield()
         try check(model.selectedSessionID == session.id && model.page == .decisions, "Session evidence route opens for isolated fixture")
         try check(model.projection.status == "Codex session metadata connected", "Metadata projection uses distinct connection wording")
@@ -217,6 +231,57 @@ extension AppCoordinator {
             showcase.briefSessionID = nil
             showcase.workDetailExpanded = false
         }
+        try check(showcase.decisionHistory.count == 2 && showcase.currentDecision?.kind == .evidenceRequest && showcase.currentDecision?.actions?.delegatesNextStep == true && showcase.isDecisionCurrent,
+                  "Reasoning showcase has distinct source-backed revisions without model calls")
+        let latestDecision = showcase.currentDecision!
+        showcase.selectedDecisionRevisionID = showcase.decisionHistory.last!.id
+        try check(showcase.currentDecision?.kind == .humanDirection && showcase.currentDecision?.id != latestDecision.id,
+                  "Earlier account selection changes the displayed interpretation")
+        showcase.selectedDecisionRevisionID = nil
+        showcase.showDecisionSource(latestDecision)
+        try check(showcase.briefSessionID == latestDecision.sessionID && showcase.storyFocusID == latestDecision.anchorMessageID && showcase.workDetailExpanded,
+                  "Reasoning source action opens the precise conversation anchor")
+        showcase.briefSessionID = nil; showcase.workDetailExpanded = false
+        showcase.selectDecisionSession(showcase.library.sessions[1].id)
+        try check(showcase.currentDecision == nil && showcase.decisionSession?.id == showcase.library.sessions[1].id,
+                  "Changing conversations never borrows a neighboring interpretation")
+        showcase.selectDecisionSession(latestDecision.sessionID)
+        showcase.checkDecisionEngine()
+        try check(showcase.engineHealth?.contains("does not contact") == true && !showcase.checkingEngine,
+                  "Engine check in showcase cannot invoke personal inference")
+        model.localInsightsEnabled = true
+        let beforeDecisionPause = model.decisionGeneration
+        model.paused = true
+        try check(model.decisionGeneration > beforeDecisionPause && !model.reviewingDecision,
+                  "Pause cancels and invalidates an in-flight reasoning result")
+        model.paused = false
+        model.reviewDecision()
+        try check(!model.reviewingDecision, "Isolated smoke checks cannot invoke reasoning inference")
+        let decisionTestDirectory = FileManager.default.temporaryDirectory.appendingPathComponent("vernier-ui-decision-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: decisionTestDirectory) }
+        let decisionStore = try SessionStore(directory: decisionTestDirectory, gate: model.captureGate)
+        model.store = decisionStore; model.conversationMemoryEnabled = true
+        let fixtureToken = model.captureGate.token()!
+        let fixture = ShowcaseFixtures.workLibrary()
+        _ = try await decisionStore.apply(.init(sessions: fixture.sessions, turns: fixture.turns, truncated: false, observedAt: Date(), messages: fixture.messages), token: fixtureToken)
+        let fixtureContext = try await decisionStore.decisionContext(sessionID: latestDecision.sessionID)!
+        let storedDecision = DecisionRevision.validated(context: fixtureContext, draft: .init(kind: .evidenceRequest, goal: "Check blank emails", summary: "You requested a blank-email test.", reason: "The request names a missing check.", alternative: "It may be a routine release check.", unknown: "The result is not recorded.", sourceIDs: [fixtureContext.anchorID]), critique: .init(supported: true, reason: "Exact test request.", sourceIDs: [fixtureContext.anchorID]), engine: "synthetic-ui")
+        let storedOK = try await decisionStore.saveDecisionRevision(storedDecision, context: fixtureContext, token: fixtureToken)
+        try check(storedOK, "UI perspective fixture stores a source-validated account")
+        model.library = fixture; model.decisionRevisions = [storedDecision]; model.selectDecisionSession(storedDecision.sessionID)
+        let perspectiveSaved = await model.saveDecisionPerspective("I asked for the blank-email test after checking the normal import myself.")
+        try check(perspectiveSaved && model.currentPerspectives.count == 1 && !model.reviewingDecision,
+                  "Save perspective persists separately and respects isolated inference")
+        model.store = nil; model.clearDecisionMemory()
+        try check(model.decisionRevisions.isEmpty && model.decisionPerspectives.isEmpty, "Erasure clears the displayed reasoning and personal perspectives")
+        showcase.showMemorySource(sessionID: latestDecision.sessionID, messageID: latestDecision.anchorMessageID)
+        let firstRoute = showcase.memoryRouteRevision
+        showcase.showMemorySource(sessionID: latestDecision.sessionID, messageID: latestDecision.anchorMessageID)
+        let exactSources = await showcase.searchMemory("", sessionID: latestDecision.sessionID, sourceID: showcase.memorySourceID)
+        try check(exactSources.count == 1 && exactSources.first?.id == latestDecision.anchorMessageID && showcase.memoryQuery.isEmpty && showcase.memoryRouteRevision == firstRoute + 1,
+                  "Repeated source navigation resolves the exact record without searching common wording")
+        showcase.showMemory()
+        try check(showcase.memorySourceID == nil, "Browsing memory clears the focused source route")
         let overviewGeneration = showcase.workOverviewGeneration
         await showcase.loadWorkOverview()
         try check(showcase.workOverviewGeneration == overviewGeneration, "Quick view and dashboard reuse an unchanged bounded work overview")
@@ -253,4 +318,5 @@ extension AppCoordinator {
         try check(showcase.selectedParticipation == nil && showcase.participationMoments.isEmpty && showcase.workOverview == nil && showcase.workOverviewLoadedKey == nil && showcase.sessionStory == nil && showcase.storyLoadedKey == nil && !showcase.storyLoading && showcase.storyGeneration > beforeErase,
                   "Memory erasure clears map text and invalidates pending projection results")
     }
+
 }

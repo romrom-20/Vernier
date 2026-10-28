@@ -1,4 +1,4 @@
-# Source release — 0.7.0
+# Source release — 0.10.0
 
 Vernier is an experimental native Mac app and working project name. This repository publishes source, synthetic showcase data, tests and documentation under MIT. There is no production, notarized binary release yet.
 
@@ -21,7 +21,7 @@ Development launch flags `--connect-codex`, `--enable-conversation-memory`, `--e
 - **0.4.2:** native in-place play/pause, separate from click-to-open.
 - **0.4.3:** public documentation, MIT license, isolated synthetic showcase and reproducible CI/checks.
 
-SQLite schema v4 separates session/turn metadata, notes, change log, sync state, messages, safe agent signals conversation progress and cached derived briefs. UI changes preserve records and existing consent. See [validation and pending acceptance work](VALIDATION.md).
+SQLite schema v5 separates session/turn metadata, notes, change log, sync state, messages, safe agent signals conversation progress cached derived briefs, revisable interpretations, human perspectives and source dependencies. UI changes preserve records and existing consent. See [validation and pending acceptance work](VALIDATION.md).
 
 A DMG, Developer ID signature, notarization, secure updater, clean-Mac distribution, universal binary and crash-relaunch service are not implemented.
 
@@ -32,3 +32,6 @@ A DMG, Developer ID signature, notarization, secure updater, clean-Mac distribut
 The additional development flag `--enable-local-insights` enables this local analysis setting only. Normal launches honor saved consent. `--brief-model-probe` runs an isolated hardware-dependent model check on invented conversations; it is not part of normal CI or showcase.
 
 - **0.7.0:** Interactive native conversation map, compact recorded-activity data points, before/after source comparison, AI loop markers, illustrated interpretation cards and a review suggestion. Quick view is a visual entry point with pinned pause and Explore full story. The display-bounded Studio opens larger. No new capture source or schema change. [Map semantics and design rationale](VISUAL_REVIEW.md).
+
+
+- **0.10.0:** Experimental local reasoning loop with an action reading, source selection, host-composed account, challenge and source checks, immutable revision history and separate human perspectives. New messages and possible related context can trigger another reading. Original exchanges stay inspectable; the source map no longer leads with older interpretation panels. Local Ollama inference is available alongside the experimental Apple alternative, without a cloud fallback. [Mechanism and bounds](REASONING.md) · [Model evaluation](MODEL_EVALUATION.md).

@@ -6,11 +6,16 @@ struct MemoryView: View {
     @State private var query = ""
     @State private var sessionID: String?
     @State private var messages: [ConversationMessage] = []
-    private var searchKey: String { query + (sessionID ?? "all") + String(model.library.totalMessageCount) + (model.lastSync?.description ?? "") }
+    private var focusedSource: Bool { model.memorySourceID != nil && query.isEmpty }
+    private var searchKey: String {
+        let parts: [String] = [model.memorySourceID ?? "", String(model.memoryEraseRevision), query, sessionID ?? "all", String(model.library.totalMessageCount), model.lastSync?.description ?? ""]
+        return parts.joined(separator: "|")
+    }
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
-            Text("A memory of the work.").font(.system(size: 32, weight: .light))
-            Text("Your prompts. The agent’s replies. Evidence you can return to.").foregroundStyle(Palette.secondary)
+            Text(focusedSource ? "The original saved message." : "A memory of the work.").font(.system(size: 32, weight: .light))
+            Text(focusedSource ? "The exact source behind the reading, kept in its original form." : "Your prompts. The agent’s replies. Evidence you can return to.").foregroundStyle(Palette.secondary)
+            if !focusedSource {
             ConversationConsentView(model: model)
             InstrumentCard {
                 VStack(alignment: .leading, spacing: 17) {
@@ -36,10 +41,18 @@ struct MemoryView: View {
             }
             HStack {
                 TextField("Search all locally stored conversation text", text: $query).textFieldStyle(.roundedBorder)
-                Picker("Session", selection: $sessionID) {
+                Picker("Session", selection: Binding(get: { sessionID }, set: { model.memorySourceID = nil; sessionID = $0 })) {
                     Text("All sessions").tag(String?.none)
                     ForEach(model.library.sessions) { Text(model.library.title(for: $0)).tag(Optional($0.id)) }
                 }.frame(width: 180)
+            }
+            }
+            if model.memorySourceID != nil && query.isEmpty {
+                HStack {
+                    Text("Showing the exact original record.").font(.caption).foregroundStyle(Palette.secondary)
+                    Spacer()
+                    Button("Show this conversation") { model.memorySourceID = nil }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.mint)
+                }
             }
             Text("Showing up to 100 matches by available timestamps. Older formats can supply turn-boundary times; order is approximate when timestamps are missing. Search runs on this Mac.").font(.caption).foregroundStyle(Palette.secondary)
             if messages.isEmpty {
@@ -51,11 +64,13 @@ struct MemoryView: View {
                 }
             }
         }.onAppear { sessionID = model.memorySessionID; query = model.memoryQuery }
+            .onChange(of: model.memoryRouteRevision) { _, _ in sessionID = model.memorySessionID; query = model.memoryQuery }
+            .onChange(of: model.memoryEraseRevision) { _, _ in messages = [] }
             .onChange(of: model.memoryQuery) { _, value in query = value }
             .onChange(of: model.memorySessionID) { _, value in sessionID = value }
             .task(id: searchKey) {
             do { try await Task.sleep(for: .milliseconds(200)) } catch { return }
-            let result = await model.searchMemory(query, sessionID: sessionID)
+            let result = await model.searchMemory(query, sessionID: sessionID, sourceID: query.isEmpty ? model.memorySourceID : nil)
             if !Task.isCancelled { messages = result }
         }
     }
@@ -77,7 +92,7 @@ struct ConversationConsentView: View {
                     .toggleStyle(.switch).disabled(!model.codexEnabled && !model.conversationMemoryEnabled)
                 Text("Reads available prompts and visible agent replies from connected Conductor workspaces. Also saves file-change and command-outcome metadata, excluding tool bodies. Existing history within your retention window is included. Provider user-side messages can include app-added context; this is not a keystroke log.")
                     .font(.callout).foregroundStyle(Palette.secondary)
-                Text("Conversation text is sensitive. Credential redaction is best-effort; private details can remain. Stored locally as readable text and included in exports. Optional on-device AI briefs use this text with a separate setting; no conversation is sent to a cloud model. Images, attachments, private reasoning and raw command/file output are excluded.")
+                Text("Conversation text is sensitive. Credential redaction is best-effort; private details can remain. Stored locally as readable text and included in exports. Optional local reasoning uses this text with a separate setting; no conversation is sent to a cloud model. Images, attachments, private reasoning and raw command/file output are excluded.")
                     .font(.caption).foregroundStyle(Palette.secondary)
                 Text(model.retentionDays == 0 ? "Retention: until you delete it." : "Retention: sessions updated within \(model.retentionDays) days. Change this in Privacy.")
                     .font(.caption).foregroundStyle(Palette.secondary)
@@ -113,7 +128,7 @@ struct MemoryMessageCard: View {
                     Text("\(message.redactions) credential-like matches redacted\(message.textTruncated ? " · text length capped" : "")\(message.attachmentsOmitted ? " · attachments omitted" : "")")
                         .font(.caption2).foregroundStyle(Palette.amber)
                 }
-                Text(message.speaker == "assistant" ? "Provider conversation text · claims in this reply are not independently verified." : "Provider conversation text · a prompt does not establish reading or comprehension.")
+                Text(message.speaker == "assistant" ? "Provider conversation text · claims in this reply are not independently verified." : "Provider conversation text · can include app-added context; a prompt does not establish reading or comprehension.")
                     .font(.caption2).foregroundStyle(Palette.secondary)
             }
         }

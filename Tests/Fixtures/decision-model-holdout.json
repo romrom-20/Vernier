@@ -1,0 +1,186 @@
+[
+  {
+    "id": "webhook-check",
+    "split": "holdout",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Add retry handling for payment webhooks."
+      },
+      {
+        "role": "assistant",
+        "text": "I added three retries and the build passes."
+      },
+      {
+        "role": "user",
+        "text": "Before accepting this, show a failing-then-passing test where the same webhook arrives twice."
+      }
+    ],
+    "expectedKinds": [
+      "evidence_request"
+    ],
+    "critical": false,
+    "perspective": null
+  },
+  {
+    "id": "search-choice",
+    "split": "holdout",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Improve search relevance."
+      },
+      {
+        "role": "assistant",
+        "text": "I suggest replacing the index with vector search."
+      },
+      {
+        "role": "user",
+        "text": "Keep the current index. This project must run offline and fit in the existing memory budget."
+      }
+    ],
+    "expectedKinds": [
+      "human_direction"
+    ],
+    "critical": false,
+    "perspective": null
+  },
+  {
+    "id": "opaque-timeout",
+    "split": "holdout",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Fix the timed-out uploads."
+      },
+      {
+        "role": "assistant",
+        "text": "I changed the request deadline from 30 to 120 seconds."
+      },
+      {
+        "role": "user",
+        "text": "I do not see why a longer deadline fixes the cause. Walk me through the failure mechanism."
+      }
+    ],
+    "expectedKinds": [
+      "explanation_request"
+    ],
+    "critical": false,
+    "perspective": null
+  },
+  {
+    "id": "deliberate-execution",
+    "split": "holdout",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Add the approved footer to the invoice PDF."
+      },
+      {
+        "role": "assistant",
+        "text": "I will use the approved copy and leave page margins unchanged."
+      },
+      {
+        "role": "user",
+        "text": "That matches the agreed plan. Go ahead and implement it."
+      }
+    ],
+    "expectedKinds": [
+      "delegation"
+    ],
+    "critical": false,
+    "perspective": null
+  },
+  {
+    "id": "short-symptom-return",
+    "split": "holdout",
+    "messages": [
+      {
+        "role": "user",
+        "text": "The sidebar vanishes after resizing."
+      },
+      {
+        "role": "assistant",
+        "text": "I fixed the sidebar layout."
+      },
+      {
+        "role": "user",
+        "text": "Resizing still makes the sidebar vanish."
+      }
+    ],
+    "expectedKinds": [
+      "recurring_issue"
+    ],
+    "critical": true,
+    "perspective": null
+  },
+  {
+    "id": "quotation-with-doubt",
+    "split": "holdout",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Find a safe database migration."
+      },
+      {
+        "role": "assistant",
+        "text": "Drop the customer table and rebuild it from the remote source."
+      },
+      {
+        "role": "user",
+        "text": "\"Drop the customer table and rebuild it from the remote source.\" That would lose our offline edits. Preserve the local table and add a reversible migration instead."
+      }
+    ],
+    "expectedKinds": [
+      "human_direction"
+    ],
+    "critical": true,
+    "perspective": null
+  },
+  {
+    "id": "reported-undo",
+    "split": "holdout",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Update the keyboard shortcut handler."
+      },
+      {
+        "role": "assistant",
+        "text": "The new shortcuts work in my test."
+      },
+      {
+        "role": "user",
+        "text": "I tried the shortcut in the app. Undo stopped working, so I reverted your change."
+      }
+    ],
+    "expectedKinds": [
+      "outcome_report"
+    ],
+    "critical": true,
+    "perspective": null
+  },
+  {
+    "id": "not-a-recorded-review",
+    "split": "holdout",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Add a file picker."
+      },
+      {
+        "role": "assistant",
+        "text": "I suggest also adding an automatic cloud upload of selected files."
+      },
+      {
+        "role": "user",
+        "text": "Okay, do that."
+      }
+    ],
+    "expectedKinds": [
+      "agent_proposal"
+    ],
+    "critical": true,
+    "perspective": null
+  }
+]

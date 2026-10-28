@@ -36,6 +36,27 @@ import VernierCore
         super.init()
     }
     func applicationDidFinishLaunching(_ notification: Notification) {
+        if CommandLine.arguments.contains("--render-showcase") {
+            Task { @MainActor in
+                do { try await renderShowcase(); print("SYNTHETIC VIEW RENDERS SAVED"); NSApp.terminate(nil) }
+                catch { fputs("SHOWCASE RENDER FAILED: \(error)\n", stderr); exit(1) }
+            }
+            return
+        }
+        if CommandLine.arguments.contains("--model-smoke-test") {
+            Task { @MainActor in
+                do { try await runModelSmokeChecks(); print("MODEL STATE CHECKS PASSED"); NSApp.terminate(nil) }
+                catch { fputs("MODEL STATE CHECKS FAILED: \(error)\n", stderr); exit(1) }
+            }
+            return
+        }
+        if CommandLine.arguments.contains("--decision-model-probe") {
+            Task { @MainActor in
+                do { try await runDecisionModelProbe(); NSApp.terminate(nil) }
+                catch { fputs("DECISION MODEL PROBE FAILED: \(error)\n", stderr); exit(1) }
+            }
+            return
+        }
         if CommandLine.arguments.contains("--brief-model-probe") {
             Task { @MainActor in
                 do { try await runLocalModelProbe(); NSApp.terminate(nil) }
@@ -108,7 +129,7 @@ import VernierCore
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
     func applicationWillTerminate(_ notification: Notification) {
         syncTask?.cancel()
-        model.cancelWorkBrief()
+        model.cancelWorkBrief(); model.cancelDecisionReview()
         model.setSystemSuspended(true)
         savePillPosition()
     }

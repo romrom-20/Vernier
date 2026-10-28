@@ -10,7 +10,7 @@ Metadata normalization is allowlisted. Conversation normalization accepts only u
 
 Newest conversation pages and older ascending backfill have separate durable cursors. Recent pages stop at known records; old history advances independently. A bounded number of sessions advance per refresh. Unsupported/truncated histories remain partial. Source timestamps can be item milliseconds or older turn-boundary seconds; missing timestamps and approximate order are disclosed.
 
-SessionStore is an actor over system SQLite3, with transactional v1→v2→v3→v4 migrations, WAL, foreign keys, parameter binding, secure_delete and restrictive file permissions. Sessions/turns are snapshots; change_log records actual metadata changes only. sync_state holds successful check/reconciliation times. messages, agent_signals and memory_progress form a separately consented content layer. Unchanged upserts have predicates excluding observation time, avoiding full-history rewrites. The UI reads a bounded 300-message preview; local search queries the full archive; explicit export loads all stored messages.
+SessionStore is an actor over system SQLite3, with transactional v1→v2→v3→v4→v5 migrations, WAL, foreign keys, parameter binding, secure_delete and restrictive file permissions. Sessions/turns are snapshots; change_log records actual metadata changes only. sync_state holds successful check/reconciliation times. messages, agent_signals and memory_progress form a separately consented content layer. Unchanged upserts have predicates excluding observation time, avoiding full-history rewrites. The UI reads a bounded 300-message preview; local search queries the full archive; explicit export loads all stored messages.
 
 ObservationGate holds a synchronous generation and separate content permission through the storage transaction. Pause, disconnect, system rest and content revocation invalidate in-flight results. UI projection rechecks the generation after actor suspensions. Pause suspends synchronization, and a later resume can import provider history created while paused; per-session exclusions are not implemented.
 
@@ -36,9 +36,9 @@ The dashboard emphasizes intent, steering and understanding. Session review reus
 
 ## Measurement-layer boundaries — proposed design
 
-Current schema v4 stores observation records, user-authored notes and derived session briefs. It contains no probe attempts, study enrollment, randomization, intervention assignments or validated capability scores.
+Current schema v5 stores observation records, user-authored notes, legacy briefs, decision revisions, human perspectives and source dependencies. It contains no probe attempts, study enrollment, randomization, intervention assignments or validated capability scores.
 
-Future designs should preserve separate contracts for source observations, user reports, probe attempts/assessments and study assignments/outcomes. Each needs provenance, time/coverage context and its own applicable consent and retention rules. A task/decision contract must be defined before cross-session interpretation is implemented; a provider turn is not automatically a human task boundary.
+Future designs should preserve separate contracts for source observations, user reports, probe attempts/assessments and study assignments/outcomes. Each needs provenance, time/coverage context and its own applicable consent and retention rules. Bounded same-workspace retrieval supplies possible context, without asserting a shared task identity; a provider turn is not automatically a human task boundary.
 
 A future probe record needs task/version, domain/difficulty, prior familiarity, allowed assistance, response and rubric/evaluator provenance. A future experiment additionally needs enrollment, assignment, exposure and outcome timing. Do not silently reuse content consent as permission to run an exercise, alter a prompt or enroll a person in a study. These are design requirements, not implemented tables or APIs. See [the research framework](RESEARCH.md).
 
@@ -73,3 +73,8 @@ Generation is opt-in, debounced to five minutes automatically and cancelable wit
 The main view presents one human action, its literal source sequence and a template explanation. Other readings are available without leading with instrumentation counts. Selecting a reading is distinct from opening its exact source in the conversation map. Memory erasure clears both readings and selection. The circle labels its connected purpose (“Following Codex”) while retaining native hover, pause and dashboard hit routing.
 
 An isolated `--showcase --quick-preview` flag hosts the exact compact view in a native window for visual QA, with no personal store/connector/model access. This host does not replace real popover geometry tests. See [method and limits](PARTICIPATION.md).
+
+
+## Revisable local reasoning — 0.10.0
+
+`DecisionContext`, `SourceAttribution`, `DecisionGenerator` and `DecisionStore` separate canonical observation, known text reuse, model-selected acts and sources, host-composed presentation, model challenge and transactional source validation. `DecisionModel` schedules serial changed-evidence reviews only with the separate automatic-review switch; `DecisionView` presents their sources, alternatives, unknowns, history and user reports. SQLite v5 adds source-dependency invalidation and revision/perspective export and erasure. The main views replace the earlier template reading entry points; the map presents the recorded exchange. [Full behavior, bounds and invariants](REASONING.md).

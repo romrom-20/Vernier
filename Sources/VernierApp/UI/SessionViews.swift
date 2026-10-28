@@ -5,7 +5,7 @@ struct LiveOverviewView: View {
     @ObservedObject var model: AppModel
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
-            WorkOverviewView(model: model)
+            DecisionOverviewView(model: model)
             DisclosureGroup("Inspect a conversation", isExpanded: $model.workDetailExpanded) {
                 SessionStoryView(model: model).padding(.top, 18)
             }.font(.headline).id("session-inspector")
@@ -141,11 +141,10 @@ struct SessionDetailView: View {
             Text("Codex in Conductor · \(model.library.workspaceName(session.workspaceID))").font(.callout).foregroundStyle(Palette.secondary)
             HStack {
                 Button("Read this conversation →") { model.showMemory(sessionID: session.id) }.buttonStyle(QuietButtonStyle())
-                Button("Make a local brief") {
-                    model.cancelWorkBrief()
-                    model.briefSessionID = session.id
+                Button("Review this work") {
+                    model.selectDecisionSession(session.id)
                     if !model.localInsightsEnabled { model.localInsightsEnabled = true }
-                    else { model.generateWorkBrief() }
+                    model.reviewDecision(sessionID: session.id)
                     model.openStudio(.overview)
                 }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.mint)
                     .disabled(model.isShowcase || model.paused || !model.conversationMemoryEnabled)

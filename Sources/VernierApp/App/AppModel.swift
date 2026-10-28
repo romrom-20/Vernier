@@ -31,18 +31,43 @@ enum StudioPage: String, CaseIterable, Identifiable {
 @MainActor final class AppModel: ObservableObject {
     let preferences: Preferences
     let isShowcase: Bool
+    @Published var decisionRevisions: [DecisionRevision] = []
+    @Published var decisionPerspectives: [DecisionPerspective] = []
+    @Published var selectedDecisionSessionID: String?
+    @Published var selectedDecisionRevisionID: String?
+    @Published var reviewingDecision = false
+    @Published var decisionError: String?
+    @Published var decisionNotice: String?
+    @Published var engineHealth: String?
+    @Published var checkingEngine = false
+    @Published var reasoningModel: String { didSet { preferences.reasoningModel = reasoningModel; cancelDecisionReview(); if localInsightsEnabled { scheduleDecisionReview() } } }
+    @Published var automaticDecisionReviews: Bool {
+        didSet {
+            preferences.automaticDecisionReviews = automaticDecisionReviews
+            cancelDecisionReview()
+            if automaticDecisionReviews { scheduleDecisionReview() }
+        }
+    }
+    var decisionTask: Task<Void, Never>?
+    var decisionGeneration = 0
+    var lastAutomaticDecision = Date.distantPast
+    var lastDecisionAttempt: [String: Date] = [:]
+    var decisionDirtyAt: [String: Date] = [:]
     @Published var localInsightsEnabled: Bool {
         didSet {
             preferences.localInsightsEnabled = localInsightsEnabled
-            cancelWorkBrief()
+            cancelWorkBrief(); cancelDecisionReview()
             updateCaptureGate()
-            if localInsightsEnabled { scheduleWorkBrief() }
+            if localInsightsEnabled { scheduleDecisionReview() }
         }
     }
     @Published var generatingBrief = false
     @Published var briefError: String?
     @Published var briefSessionID: String?
     @Published var memoryQuery = ""
+    @Published var memorySourceID: String?
+    @Published var memoryRouteRevision = 0
+    @Published var memoryEraseRevision = 0
     @Published var selectedParticipationID: String?
     @Published var workOverview: WorkOverview?
     @Published var workOverviewLoading = false
@@ -66,7 +91,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
     @Published var paused: Bool {
         didSet {
             preferences.paused = paused
-            if paused { cancelWorkBrief() }
+            if paused { cancelWorkBrief(); cancelDecisionReview() }
             updateCaptureGate()
             resumePending = !paused && codexEnabled && !isolated && store != nil && !systemSuspended
             if !paused { Task { await syncSessions() } }
@@ -84,7 +109,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
     @Published var codexEnabled: Bool {
         didSet {
             preferences.codexEnabled = codexEnabled
-            if !codexEnabled { cancelWorkBrief() }
+            if !codexEnabled { cancelWorkBrief(); cancelDecisionReview() }
             updateCaptureGate()
             if codexEnabled { demoEnabled = false; Task { await syncSessions() } }
             else { connectionError = nil }
@@ -93,7 +118,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
     @Published var conversationMemoryEnabled: Bool {
         didSet {
             preferences.conversationMemoryEnabled = conversationMemoryEnabled
-            if !conversationMemoryEnabled { cancelWorkBrief() }
+            if !conversationMemoryEnabled { cancelWorkBrief(); cancelDecisionReview() }
             updateCaptureGate()
             if conversationMemoryEnabled { checkpoint = .init(); Task { await syncSessions(reconcile: true) } }
         }
@@ -194,7 +219,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
     func setSystemSuspended(_ value: Bool) {
         guard value != systemSuspended else { return }
         systemSuspended = value
-        if value { cancelWorkBrief() }
+        if value { cancelWorkBrief(); cancelDecisionReview() }
         updateCaptureGate()
         if !value { Task { await syncSessions() } }
     }
@@ -220,6 +245,8 @@ enum StudioPage: String, CaseIterable, Identifiable {
         self.isolated = isolated || showcase
         self.isShowcase = showcase
         self.preferences = preferences
+        reasoningModel = preferences.reasoningModel
+        automaticDecisionReviews = preferences.automaticDecisionReviews
         localInsightsEnabled = preferences.localInsightsEnabled
         demoEnabled = preferences.demoEnabled
         paused = preferences.paused
@@ -237,6 +264,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
             pillEnabled = true
             preferences.onboardingComplete = true
             library = ShowcaseFixtures.workLibrary()
+            decisionRevisions = ShowcaseFixtures.decisionHistory(library: library)
             lastSync = Date()
         }
     }
@@ -253,12 +281,13 @@ enum StudioPage: String, CaseIterable, Identifiable {
             store = try SessionStore(directory: directory, gate: captureGate)
             try await store?.enforceRetention(days: retentionDays)
             library = try await store?.load() ?? .empty
+            try await reloadDecisionRecords()
             checkpoint = try await store?.checkpoint() ?? .init()
             memoryStates = try await store?.memoryState() ?? [:]
             knownMemoryIDs = try await store?.knownMemoryIDs() ?? []
         } catch { storageError = error.localizedDescription }
         await syncSessions()
-        scheduleWorkBrief()
+        scheduleDecisionReview()
         while !Task.isCancelled {
             let delay = SyncCadence.delay(visible: studioVisible && NSApp.isActive, quietChecks: quietChecks, failures: consecutiveFailures,
                                           lowPower: ProcessInfo.processInfo.isLowPowerModeEnabled, suspended: systemSuspended || paused || !codexEnabled)
@@ -303,8 +332,17 @@ enum StudioPage: String, CaseIterable, Identifiable {
             coverageLimited = snapshot.truncated || snapshot.sessions.contains { !$0.turnsComplete }
             connectionError = nil
             storageError = nil
+            if writes.memory > 0 {
+                let affected = Set(snapshot.messages.map(\.sessionID))
+                var dirty = affected
+                for revision in decisionRevisions where !Set(revision.relatedMessageCounts.keys).isDisjoint(with: affected) { dirty.insert(revision.sessionID) }
+                for id in dirty { decisionDirtyAt[id] = Date() }
+            }
+            let retained = Set(library.sessions.map(\.id))
+            decisionDirtyAt = decisionDirtyAt.filter { retained.contains($0.key) }
+            if writes.changes > 0 { try await reloadDecisionRecords() }
             await loadWorkOverview()
-            scheduleWorkBrief()
+            scheduleDecisionReview()
         } catch {
             guard captureGate.token() == token else { return }
             consecutiveFailures += 1
@@ -312,7 +350,8 @@ enum StudioPage: String, CaseIterable, Identifiable {
             else { connectionError = error.localizedDescription }
         }
     }
-    func showMemory(sessionID: String? = nil, query: String = "") { memorySessionID = sessionID; memoryQuery = query; openStudio(.memory) }
+    func showMemory(sessionID: String? = nil, query: String = "") { memorySourceID = nil; memorySessionID = sessionID; memoryQuery = query; memoryRouteRevision += 1; openStudio(.memory) }
+    func showMemorySource(sessionID: String, messageID: String) { memorySessionID = sessionID; memoryQuery = ""; memorySourceID = messageID; memoryRouteRevision += 1; openStudio(.memory) }
     func inspectSession(_ session: SessionMetadata) { selectedSessionID = session.id; openStudio(.decisions) }
     func saveNote(_ text: String, session: SessionMetadata) async {
         guard !isShowcase else { storageError = "Showcase records are read-only."; return }
@@ -328,15 +367,25 @@ enum StudioPage: String, CaseIterable, Identifiable {
         }
         catch { storageError = error.localizedDescription }
     }
-    func searchMemory(_ query: String, sessionID: String? = nil) async -> [ConversationMessage] {
+    func searchMemory(_ query: String, sessionID: String? = nil, sourceID: String? = nil) async -> [ConversationMessage] {
         if isShowcase {
-            return library.messages.filter { (sessionID == nil || $0.sessionID == sessionID) && (query.isEmpty || $0.text.localizedCaseInsensitiveContains(query)) }
+            return library.messages.filter { (sourceID == nil || $0.id == sourceID) && (sessionID == nil || $0.sessionID == sessionID) && (query.isEmpty || $0.text.localizedCaseInsensitiveContains(query)) }
         }
-        do { return try await store?.memoryMessages(query: query, sessionID: sessionID) ?? [] }
+        let generation = memoryEraseRevision
+        do {
+            let result: [ConversationMessage]
+            if let sourceID {
+                let exact = try await store?.memoryMessage(id: sourceID)
+                result = exact.map { sessionID == nil || $0.sessionID == sessionID ? [$0] : [] } ?? []
+            } else { result = try await store?.memoryMessages(query: query, sessionID: sessionID) ?? [] }
+            return memoryEraseRevision == generation ? result : []
+        }
         catch { storageError = error.localizedDescription; return [] }
     }
     func eraseConversationMemory() async {
+        memorySourceID = nil; memoryEraseRevision += 1
         conversationMemoryEnabled = false
+        clearDecisionMemory()
         clearWorkOverview()
         storyGeneration += 1; sessionStory = nil; storyFocusID = nil; storyLoadedKey = nil; storyLoading = false
         do {
@@ -346,7 +395,9 @@ enum StudioPage: String, CaseIterable, Identifiable {
         } catch { storageError = error.localizedDescription }
     }
     func deleteLocalRecords() async {
+        memorySourceID = nil; memoryEraseRevision += 1
         conversationMemoryEnabled = false
+        clearDecisionMemory()
         clearWorkOverview()
         storyGeneration += 1; sessionStory = nil; storyFocusID = nil; storyLoadedKey = nil; storyLoading = false
         codexEnabled = false
@@ -359,7 +410,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
         guard let store else { return }
         let panel = NSSavePanel()
         panel.nameFieldStringValue = "Vernier-session-metadata.json"
-        panel.message = "This export contains captured conversations, activity metadata, local AI briefs and any notes you wrote. Choose a location you trust."
+        panel.message = "This export contains captured conversations, activity metadata, local interpretations, perspectives and notes you wrote. Choose a location you trust."
         guard panel.runModal() == .OK, let url = panel.url else { return }
         do { let data = try await store.exportJSON(); try data.write(to: url, options: [.atomic]); try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: url.path) }
         catch { storageError = "Could not export local records to the chosen location." }

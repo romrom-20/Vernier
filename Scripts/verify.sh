@@ -10,6 +10,7 @@ fi
 ./Scripts/build-app.sh
 plutil -lint Resources/Info.plist Sources/VernierApp/Resources/Brand.plist
 codesign --verify --deep --strict build/Vernier.app
+build/Vernier.app/Contents/MacOS/Vernier --model-smoke-test
 if [ "${1:-}" = "--ui" ]; then
     # Requires a logged-in graphical Mac session, not a headless CI runner.
     build/Vernier.app/Contents/MacOS/Vernier --smoke-test

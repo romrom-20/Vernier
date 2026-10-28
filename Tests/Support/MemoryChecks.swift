@@ -11,7 +11,12 @@ public enum MemoryChecks {
         ("Schema v3 upgrade preserves memory and adds derived-content deletion", briefMigration),
         ("Conversation map counts, scope, ordering, citations and synthetic provenance", StoryChecks.projection),
         ("Cross-workspace cues, source evidence, dates and bounded coverage", WorkOverviewChecks.projection),
-        ("Participation readings preserve exchange context and avoid invented understanding", ParticipationChecks.readings)
+        ("Participation readings preserve exchange context and avoid invented understanding", ParticipationChecks.readings),
+        ("Decision attribution, source guards and revisable human perspectives", DecisionChecks.provenance),
+        ("Decision revisions, stale-write rejection, export, consent and erasure", DecisionChecks.storage),
+        ("Long agent runs retain the latest human request and preceding proposal", DecisionChecks.longEpisode),
+        ("Bounded related evidence, foreign-source invalidation and stale reads", DecisionChecks.relatedStorage),
+        ("Schema v4 upgrade preserves memory and notes before adding decision storage", DecisionChecks.migration)
     ]
     private static func expect(_ value: @autoclosure () -> Bool, _ message: String) throws {
         if !value() { throw CoreCheckFailure(description: message) }

@@ -23,7 +23,7 @@ struct MenuBarView: View {
             Divider().overlay(Palette.line.opacity(0.5))
             ScrollView {
                 VStack(alignment: .leading, spacing: 15) {
-                    QuickWorkOverviewView(model: model)
+                    QuickDecisionView(model: model)
 
                 }.padding(18)
             }.frame(maxHeight: .infinity)

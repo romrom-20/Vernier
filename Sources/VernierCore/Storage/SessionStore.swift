@@ -105,7 +105,7 @@ public actor SessionStore {
         guard sqlite3_prepare_v2(db, "PRAGMA user_version", -1, &statement, nil) == SQLITE_OK, let statement else { throw StoreFailure.corrupt }
         let version = sqlite3_step(statement) == SQLITE_ROW ? sqlite3_column_int(statement, 0) : -1
         sqlite3_finalize(statement)
-        guard version >= 0 && version <= 4 else { throw StoreFailure.corrupt }
+        guard version >= 0 && version <= 5 else { throw StoreFailure.corrupt }
         if version == 0 {
             try execute("""
             BEGIN IMMEDIATE;
@@ -150,6 +150,22 @@ public actor SessionStore {
             CREATE TABLE work_briefs(session_id TEXT PRIMARY KEY REFERENCES sessions(id) ON DELETE CASCADE,payload TEXT NOT NULL);
             INSERT INTO schema_migrations VALUES(4,unixepoch());
             PRAGMA user_version=4;
+            COMMIT;
+            """)
+        }
+        if version < 5 {
+            try execute("""
+            BEGIN IMMEDIATE;
+            CREATE TABLE decision_revisions(id TEXT PRIMARY KEY,session_id TEXT NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,anchor_id TEXT NOT NULL REFERENCES messages(id) ON DELETE CASCADE,created_at REAL NOT NULL,input_digest TEXT NOT NULL,payload TEXT NOT NULL);
+            CREATE INDEX decision_revisions_session ON decision_revisions(session_id,created_at);
+            CREATE TABLE decision_perspectives(id TEXT PRIMARY KEY,session_id TEXT NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,revision_id TEXT NOT NULL REFERENCES decision_revisions(id) ON DELETE CASCADE,body TEXT NOT NULL,created_at REAL NOT NULL);
+            CREATE TABLE decision_sources(revision_id TEXT NOT NULL REFERENCES decision_revisions(id) ON DELETE CASCADE,message_id TEXT REFERENCES messages(id) ON DELETE CASCADE,perspective_id TEXT REFERENCES decision_perspectives(id) ON DELETE CASCADE,CHECK((message_id IS NOT NULL)!=(perspective_id IS NOT NULL)));
+            CREATE INDEX decision_sources_message ON decision_sources(message_id);
+            CREATE TRIGGER decision_message_delete BEFORE DELETE ON messages BEGIN DELETE FROM decision_revisions WHERE id IN (SELECT revision_id FROM decision_sources WHERE message_id=OLD.id); END;
+            CREATE TRIGGER decision_message_edit BEFORE UPDATE OF body,phase,source_at ON messages WHEN OLD.body IS NOT NEW.body OR OLD.phase IS NOT NEW.phase OR OLD.source_at IS NOT NEW.source_at BEGIN DELETE FROM decision_revisions WHERE id IN (SELECT revision_id FROM decision_sources WHERE message_id=OLD.id); END;
+            CREATE TRIGGER decision_perspective_delete BEFORE DELETE ON decision_perspectives BEGIN DELETE FROM decision_revisions WHERE id IN (SELECT revision_id FROM decision_sources WHERE perspective_id=OLD.id); END;
+            INSERT INTO schema_migrations VALUES(5,unixepoch());
+            PRAGMA user_version=5;
             COMMIT;
             """)
         }
@@ -243,7 +259,11 @@ public actor SessionStore {
     }
     public func exportJSON() throws -> Data {
         let encoder = JSONEncoder(); encoder.dateEncodingStrategy = .iso8601; encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-        return try encoder.encode(load(messageLimit: nil))
+        let data = try encoder.encode(load(messageLimit: nil))
+        var value = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+        value["decisionRevisions"] = try JSONSerialization.jsonObject(with: encoder.encode(loadDecisionRevisions(limit: nil)))
+        value["decisionPerspectives"] = try JSONSerialization.jsonObject(with: encoder.encode(loadDecisionPerspectives()))
+        return try JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted, .sortedKeys])
     }
     public func deleteAll() throws {
         try execute("DELETE FROM sessions; DELETE FROM sync_state; PRAGMA wal_checkpoint(TRUNCATE); VACUUM;")

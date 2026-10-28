@@ -1,0 +1,186 @@
+[
+  {
+    "id": "remote-suggestions-boundary",
+    "split": "release",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Add search suggestions to the app."
+      },
+      {
+        "role": "assistant",
+        "text": "I will send each keystroke to a remote suggestions API."
+      },
+      {
+        "role": "user",
+        "text": "Keep suggestions on the device. No network request may contain the query."
+      }
+    ],
+    "expectedKinds": [
+      "human_direction"
+    ],
+    "critical": true,
+    "perspective": null
+  },
+  {
+    "id": "equal-score-ordering",
+    "split": "release",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Fix the leaderboard sorting bug."
+      },
+      {
+        "role": "assistant",
+        "text": "I changed the comparator and the build succeeds."
+      },
+      {
+        "role": "user",
+        "text": "Run a test with equal scores and show the ordering before and after."
+      }
+    ],
+    "expectedKinds": [
+      "evidence_request"
+    ],
+    "critical": true,
+    "perspective": null
+  },
+  {
+    "id": "cache-key-question",
+    "split": "release",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Make search faster."
+      },
+      {
+        "role": "assistant",
+        "text": "I introduced a cache keyed by language."
+      },
+      {
+        "role": "user",
+        "text": "Why is language part of the cache key? I do not follow that decision."
+      }
+    ],
+    "expectedKinds": [
+      "explanation_request"
+    ],
+    "critical": true,
+    "perspective": null
+  },
+  {
+    "id": "agreed-tooltip-handoff",
+    "split": "release",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Add tooltip text from the approved copy and keep the current layout."
+      },
+      {
+        "role": "assistant",
+        "text": "I will use the approved tooltip copy and leave the layout unchanged."
+      },
+      {
+        "role": "user",
+        "text": "Go ahead."
+      }
+    ],
+    "expectedKinds": [
+      "delegation"
+    ],
+    "critical": true,
+    "perspective": null
+  },
+  {
+    "id": "sidebar-scope-assent",
+    "split": "release",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Change the link color in the navigation."
+      },
+      {
+        "role": "assistant",
+        "text": "I propose replacing the entire navigation with a sidebar instead."
+      },
+      {
+        "role": "user",
+        "text": "Okay, go ahead with the sidebar."
+      }
+    ],
+    "expectedKinds": [
+      "agent_proposal"
+    ],
+    "critical": true,
+    "perspective": null
+  },
+  {
+    "id": "timezone-returns",
+    "split": "release",
+    "messages": [
+      {
+        "role": "user",
+        "text": "My profile is set to Tokyo but the event time displays UTC."
+      },
+      {
+        "role": "assistant",
+        "text": "I fixed the timezone conversion."
+      },
+      {
+        "role": "user",
+        "text": "The event time still displays UTC when my profile is set to Tokyo."
+      }
+    ],
+    "expectedKinds": [
+      "recurring_issue"
+    ],
+    "critical": true,
+    "perspective": null
+  },
+  {
+    "id": "theme-relaunch-report",
+    "split": "release",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Fix the theme setting resetting after restart."
+      },
+      {
+        "role": "assistant",
+        "text": "The new persistence code is saved."
+      },
+      {
+        "role": "user",
+        "text": "I relaunched the app twice. The theme setting now stays dark."
+      }
+    ],
+    "expectedKinds": [
+      "outcome_report"
+    ],
+    "critical": true,
+    "perspective": null
+  },
+  {
+    "id": "repeated-cache-plan",
+    "split": "release",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Add a local statistics cache."
+      },
+      {
+        "role": "assistant",
+        "text": "I will store recent statistics in a local cache and refresh them only when the source records change."
+      },
+      {
+        "role": "user",
+        "text": "I will store recent statistics in a local cache and refresh them only when the source records change."
+      }
+    ],
+    "expectedKinds": [
+      "uncertain"
+    ],
+    "critical": true,
+    "perspective": null
+  }
+]

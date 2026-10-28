@@ -4,19 +4,14 @@ import VernierCore
 struct SessionStoryView: View {
     @ObservedObject var model: AppModel
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    private var leadMoment: BriefMoment? { model.currentBrief?.visibleMoments.first }
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Eyebrow(text: leadMoment == nil ? "Codex in Conductor / session perspective" : "Session perspective / AI interpretation")
-                    Text(leadMoment?.title ?? "How the work moved.").font(.system(size: 32, weight: .medium, design: .rounded)).tracking(-0.9)
-                    Text(leadMoment?.detail ?? "Your messages. The agent’s replies. The moments you came back.")
-                        .font(.callout).foregroundStyle(Palette.secondary).lineSpacing(3).lineLimit(3)
-                    if let brief = model.currentBrief, leadMoment != nil {
-                        Text("AI reviewed \(brief.reviewedMessages) of \(brief.storedMessages) saved messages · inspect the sources below")
-                            .font(.caption2).foregroundStyle(Palette.secondary)
-                    }
+                    Eyebrow(text: "Codex in Conductor / source exchange")
+                    Text("How the work moved.").font(.system(size: 32, weight: .medium, design: .rounded)).tracking(-0.9)
+                    Text("Compare the agent’s replies with your next request. The map shows recorded messages, not a measure of attention or understanding.")
+                        .font(.callout).foregroundStyle(Palette.secondary).lineSpacing(3)
                 }
                 Spacer()
                 CaptureToggle(model: model, compact: true)
@@ -25,7 +20,6 @@ struct SessionStoryView: View {
                 HStack {
                     Picker("Conversation", selection: Binding(get: { model.briefSession?.id ?? "" }, set: { id in
                         model.cancelWorkBrief(); model.briefSessionID = id; model.storyFocusID = nil; model.briefError = nil
-                        if model.localInsightsEnabled { model.generateWorkBrief() }
                     })) {
                         ForEach(model.library.sessions) { session in Text(model.library.title(for: session)).tag(session.id) }
                     }.labelsHidden().frame(maxWidth: 520)
@@ -38,9 +32,8 @@ struct SessionStoryView: View {
                     Text("Recent window · \(story.loadedMessages) of \(story.storedMessages) saved messages. Counts below apply to this window.")
                         .font(.caption).foregroundStyle(Palette.secondary)
                 }
-                StoryNumbers(story: story)
+                DisclosureGroup("Message coverage") { StoryNumbers(story: story).padding(.top, 8) }.font(.caption)
                 ConversationMap(model: model, story: story).id("conversation-map")
-                StoryInterpretations(model: model, story: story)
             } else if model.storyLoading {
                 InstrumentCard { HStack(spacing: 12) { ProgressView().controlSize(.small); Text("Opening the saved conversation…").font(.callout) } }
             } else {
@@ -101,16 +94,11 @@ struct ConversationMap: View {
     private let pageSize = 10
     private var first: Int { min(max(0, start ?? (story.runs.count - pageSize)), max(0, story.runs.count - pageSize)) }
     private var shown: [StoryRun] { Array(story.runs.dropFirst(first).prefix(pageSize)) }
-    private var defaultRun: StoryRun? {
-        if let evidence = model.currentBrief?.visibleMoments.first?.evidence.last(where: { $0.speaker == "user" }),
-           let run = story.run(containing: evidence.messageID) { return run }
-        return story.latestFollowUp ?? story.runs.last
-    }
+    private var reading: DecisionRevision? { model.decisionRevisions.first { $0.sessionID == story.sessionID } }
+    private var defaultRun: StoryRun? { story.latestFollowUp ?? story.runs.last }
     private var selected: StoryRun? { story.runs.first { $0.id == selectedID } ?? defaultRun }
     private func possibleLoop(_ run: StoryRun) -> Bool {
-        model.currentBrief?.visibleMoments.contains { moment in
-            moment.kind == .repair && moment.evidence.contains { source in run.messages.contains { $0.id == source.messageID } }
-        } == true
+        reading?.kind == .recurringIssue && reading?.evidence.contains { source in run.messages.contains { $0.id == source.messageID } } == true
     }
     private var previous: StoryRun? {
         guard let selected, let index = story.runs.firstIndex(where: { $0.id == selected.id }), index > 0 else { return nil }
@@ -177,8 +165,8 @@ struct ConversationMap: View {
                 Spacer()
                 Text("\(first + 1)–\(first + shown.count) of \(story.runs.count) groups")
             }.font(.caption2)
-            if model.currentBrief?.visibleMoments.contains(where: { $0.kind == .repair }) == true {
-                Label("Loop markers are AI interpretations; select a marked point to inspect the exchange.", systemImage: "arrow.triangle.2.circlepath")
+            if reading?.kind == .recurringIssue {
+                Label("Markers locate sources behind a tentative recurring-issue reading; they do not measure your understanding.", systemImage: "arrow.triangle.2.circlepath")
                     .font(.caption2).foregroundStyle(Palette.amber)
             }
             if let selected {
@@ -253,7 +241,7 @@ private struct StoryQuote: View {
             if let progress = run.progressExcerpt {
                 Text("Latest update: \(progress)").font(.caption).foregroundStyle(Palette.secondary).lineLimit(2)
             }
-            Button("Read source ↗") { model.showMemory(sessionID: sessionID, query: run.sourceQuote) }
+            Button("Read source ↗") { if let source = run.representative { model.showMemorySource(sessionID: sessionID, messageID: source.id) } }
                 .buttonStyle(.plain).font(.caption.weight(.medium)).foregroundStyle(Palette.mint)
         }.padding(15).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .background(emphasized ? Palette.mint.opacity(0.06) : Palette.inset.opacity(0.6), in: RoundedRectangle(cornerRadius: 12))

@@ -11,7 +11,7 @@ let package = Package(
     targets: [
         .systemLibrary(name: "CSQLite"),
         .target(name: "VernierCore", dependencies: ["CSQLite"]),
-        .executableTarget(name: "VernierApp", dependencies: ["VernierCore"], resources: [.copy("Resources/Brand.plist")]),
+        .executableTarget(name: "VernierApp", dependencies: ["VernierCore"], resources: [.copy("Resources/Brand.plist"), .copy("Resources/DecisionPrompt.json")]),
         .target(name: "VernierChecks", dependencies: ["VernierCore", "CSQLite"], path: "Tests/Support"),
         .executableTarget(name: "VernierCoreChecks", dependencies: ["VernierChecks", "VernierCore"], path: "Tests/CoreChecks"),
         .testTarget(name: "VernierCoreTests", dependencies: ["VernierChecks"])

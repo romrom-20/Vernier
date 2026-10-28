@@ -50,6 +50,9 @@ struct StudioView: View {
                         }
                     }.padding(30).frame(maxWidth: 1080, alignment: .leading).frame(maxWidth: .infinity)
             }.id(model.page).background(Palette.canvas)
+                .onChange(of: model.selectedDecisionSessionID) { _, _ in
+                    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { proxy.scrollTo("participation-focus", anchor: .top) }
+                }
                 .onChange(of: model.selectedParticipationID) { _, _ in
                     guard model.page == .overview else { return }
                     withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.25)) { proxy.scrollTo("participation-focus", anchor: .top) }

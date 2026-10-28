@@ -9,6 +9,7 @@ rm -rf "$app_path"
 mkdir -p "$app_path/Contents/MacOS" "$app_path/Contents/Resources"
 cp "$bin_path/Vernier" "$app_path/Contents/MacOS/Vernier"
 cp Sources/VernierApp/Resources/Brand.plist "$app_path/Contents/Resources/Brand.plist"
+cp Sources/VernierApp/Resources/DecisionPrompt.json "$app_path/Contents/Resources/DecisionPrompt.json"
 if [ ! -f build/Vernier.icns ] || [ Scripts/make-icon.swift -nt build/Vernier.icns ]; then
     swift Scripts/make-icon.swift "$PWD/build/Vernier.iconset"
     iconutil -c icns build/Vernier.iconset -o build/Vernier.icns

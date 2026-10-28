@@ -49,3 +49,8 @@ Use `./Scripts/showcase.sh` for synthetic-only reproduction. These are acceptanc
 - [ ] Enable Reduce Motion and test VoiceOver/keyboard access. Capture has a named action and status is not color-only.
 
 Actual sleep/login testing uses a normal consenting installation, not showcase: preserve user Pause across rest and confirm actual OS login approval. See [validation](VALIDATION.md).
+
+
+## Reasoning controls — 0.10.0
+
+Overview selects a conversation and its latest source-backed reading. The history disclosure opens earlier accounts and can return to the latest. Read original loads the canonical source by message ID, with an explicit route to the full conversation; See the surrounding exchange opens the map at the actual anchor. Revisit honors consent, pause and unchanged-evidence reuse; Stop review invalidates the current result without stopping capture. Add my perspective opens an explicit local report editor; saving it can trigger a revised interpretation. Engine selection, the separate automatic-revisit switch and Check local engine are in the reasoning disclosure. Automatic inference starts off; collection is independent. The isolated showcase blocks model calls and saves, while demonstrating invented revision history.

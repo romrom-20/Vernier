@@ -161,6 +161,17 @@ public struct Preferences {
         get { defaults.bool(forKey: "localInsightsEnabled") }
         nonmutating set { defaults.set(newValue, forKey: "localInsightsEnabled") }
     }
+    public var automaticDecisionReviews: Bool {
+        get { defaults.bool(forKey: "automaticDecisionReviews") }
+        nonmutating set { defaults.set(newValue, forKey: "automaticDecisionReviews") }
+    }
+    public var reasoningModel: String {
+        get {
+            let saved = defaults.string(forKey: "reasoningModel") ?? "apple"
+            return ["apple", "qwen2.5:7b"].contains(saved) ? saved : "apple"
+        }
+        nonmutating set { defaults.set(newValue, forKey: "reasoningModel") }
+    }
     public var codexEnabled: Bool {
         get { defaults.bool(forKey: "codexEnabled") }
         nonmutating set { defaults.set(newValue, forKey: "codexEnabled") }

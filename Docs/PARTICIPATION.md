@@ -1,4 +1,6 @@
-# Your part in the work — 0.9.0
+# Earlier participation readings — 0.9.0
+
+Version 0.10 replaces the primary template readings below with a [revisable local reasoning loop](REASONING.md). This file documents the retained earlier rules, not the current model’s accuracy.
 
 Vernier starts with a human action in context. A person should be able to recognize what they contributed and read the exchange behind the explanation. Workspace counts, wording categories, generated session labels and inventory totals no longer lead the menu-bar view or dashboard.
 

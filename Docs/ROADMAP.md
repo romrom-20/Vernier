@@ -24,12 +24,16 @@ Reliability work remains: manual accessibility and mouse testing, real multi-dis
 - [ ] Build personal recaps of supported changes in delegation, repair, scope and verification, with explicit task and coverage context.
 - [ ] Establish a person-specific observational baseline before describing a pattern as unusual for them.
 - [ ] Evaluate context-aware guidance that helps resolve one concrete uncertainty without routinely interrupting work.
-- [ ] Keep agent claims, observed artifacts and user reports distinct and correctable.
+- [x] Keep model interpretation, literal agent/user sources and explicit human perspectives distinct and correctable. Artifact verification remains limited to available recorded evidence.
 - [x] Label excerpt limits, clipping and missing source times; never infer absent review from missing evidence.
 - [ ] Evaluate whether a review helps users reconstruct or recover a concrete piece of work.
-- [ ] Establish context before interpreting repeated repair/continuation requests.
+- [x] Initial local proposer/critic loop uses bounded context, known text reuse, original sources, unknowns and revision history; accuracy still needs broader evaluation.
 
 **Gate:** users recognize the record as accurate and can resolve a concrete open question; attribution errors and false positives are documented.
+
+### Implemented next step: revisable local readings
+
+Version 0.10 adds a local proposer/challenge/source-check loop with immutable revisions and separate human perspectives. Bounded same-workspace retrieval supplies possible related context without asserting task identity. This is an initial reasoning mechanism, not a validated measure of agency. [Behavior and limits](REASONING.md).
 
 ### Next product milestone: a useful personal recap
 

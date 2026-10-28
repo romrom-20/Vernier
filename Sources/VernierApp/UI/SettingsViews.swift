@@ -85,12 +85,9 @@ struct PrivacyView: View {
             InstrumentCard {
                 VStack(alignment: .leading, spacing: 12) {
                     Eyebrow(text: "Local interpretation")
-                    Toggle("Generate on-device work briefs", isOn: $model.localInsightsEnabled).toggleStyle(.switch)
-                    Text("Apple’s on-device model reviews bounded excerpts of saved Codex conversations. It suggests a working goal, source-linked observations and a next step. No conversation is sent to a cloud model. Automatic reviews are limited to one every five minutes for the selected session; manual refresh is available. Pause and content revocation stop in-flight results from being saved.")
+                    DecisionEngineSettings(model: model)
+                    Text("Turning this off keeps existing interpretations. Erase conversation memory clears derived readings and your saved perspectives with the messages. Retention removes them with their session. They are included in private exports.")
                         .font(.caption).foregroundStyle(Palette.secondary)
-                    Text("Turning this off keeps existing briefs. Erase conversation memory clears them with the saved messages; retention removes them with their session. Briefs are included in your private export.")
-                        .font(.caption).foregroundStyle(Palette.secondary)
-                    if let reason = model.briefUnavailable { Text(reason).font(.caption).foregroundStyle(Palette.secondary) }
                 }
             }
             Button("Erase conversation memory…", role: .destructive) { confirmEraseMemory = true }

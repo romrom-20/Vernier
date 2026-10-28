@@ -1,16 +1,16 @@
 {
   "images": {
     "Docs/images/overview.png": {
-      "sha256": "53f1150046d3cba562ba3e3283a9f314a463604eadbd72ff1bb689e945ff8cd5",
-      "provenance": "Visually reviewed native 0.9 showcase. Invented CSV exchange from ShowcaseFixtures.workLibrary(); template reading with literal sources. No personal history, connector or model used."
-    },
-    "Docs/images/session-map.png": {
-      "sha256": "89b1b18cecd55710194c7b04de33661a52749810cba1e4c284a254205234f856",
-      "provenance": "Visually reviewed native showcase capture. Invented records from ShowcaseFixtures.visualLibrary(); fixed example interpretations; no personal archive or model used."
+      "sha256": "e98ea33d76ab66a8fe1ddd993a16491e3d0e33ca28a2a28f0f49ed6948cac74a",
+      "provenance": "Visually inspected offscreen render of the actual native SwiftUI overview component in 0.10.0. Invented ShowcaseFixtures messages and hand-authored, host-composed DecisionShowcase revision history; no personal store, connector, desktop capture or model inference. Presentation example only."
     },
     "Docs/images/quick-view.png": {
-      "sha256": "3e96f0e7314bb7c333b258f9dd3052bd31ac4b52010ff1eac4f5832cf5a11733",
-      "provenance": "Visually reviewed 0.9 compact-view layout in isolated --showcase --quick-preview native host. Same menu-bar component; invented messages only; no personal history or model used."
+      "sha256": "54367b78646d8180e29fc37c80a2a88a4b7bda75d7bdf18286987298d51b361d",
+      "provenance": "Visually inspected offscreen render of the actual native SwiftUI quick-view component in 0.10.0. Invented ShowcaseFixtures messages and hand-authored, host-composed DecisionShowcase revision history; no personal store, connector, desktop capture or model inference. Presentation example only."
+    },
+    "Docs/images/session-map.png": {
+      "sha256": "2c3053fd5c8abf63e31e85ee0fc9e71ca33922648b1be48272a0eced1eaa4643",
+      "provenance": "Visually inspected offscreen render of the actual native SwiftUI session-map component in 0.10.0. Invented ShowcaseFixtures messages and hand-authored, host-composed DecisionShowcase revision history; no personal store, connector, desktop capture or model inference. Presentation example only."
     }
   }
 }
