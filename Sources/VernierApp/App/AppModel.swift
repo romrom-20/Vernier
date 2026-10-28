@@ -43,6 +43,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
     @Published var briefError: String?
     @Published var briefSessionID: String?
     @Published var memoryQuery = ""
+    @Published var selectedParticipationID: String?
     @Published var workOverview: WorkOverview?
     @Published var workOverviewLoading = false
     @Published var workOverviewError: String?
@@ -167,6 +168,19 @@ enum StudioPage: String, CaseIterable, Identifiable {
         if lastSync == nil { return "Waiting for a first signal." }
         return "Here, in the background."
     }
+    var capturePresenceLabel: String {
+        if isShowcase { return paused ? "Showcase paused" : "Synthetic preview" }
+        switch capturePhase {
+        case .paused: return "Memory paused"
+        case .resting: return "Resting with Mac"
+        case .disconnected: return "Connect a source"
+        case .checking: return "Reading Codex"
+        case .issue: return "Check connection"
+        case .waiting: return "Waiting for Codex"
+        case .demo: return "Synthetic preview"
+        case .current: return conversationMemoryEnabled ? "Following Codex" : "Activity only"
+        }
+    }
     var ambientLabel: String {
         if demoEnabled { return "Demo preview" }
         if paused { return "Paused" }
@@ -289,6 +303,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
             coverageLimited = snapshot.truncated || snapshot.sessions.contains { !$0.turnsComplete }
             connectionError = nil
             storageError = nil
+            await loadWorkOverview()
             scheduleWorkBrief()
         } catch {
             guard captureGate.token() == token else { return }

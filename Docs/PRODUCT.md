@@ -92,3 +92,8 @@ See the [research framework](RESEARCH.md) for proposed study designs and the [ro
 ### Recent-work foundation — 0.8.0
 
 The menu-bar view and dashboard now span recent Codex sessions across Conductor workspaces, using bounded, source-linked wording cues and thread navigation. Agent-last replies and provider-reported failures help choose an exchange to inspect. These are transparent observations and rules, not semantic daily recaps or evidence of missing review. Task histories, outcome-linked reasoning and personal baselines remain planned. See [what the overview can and cannot say](WORK_OVERVIEW.md).
+
+
+### Human-first presentation — 0.9.0
+
+The first screen should help a person recognize their own contribution. One reading connects an agent reply to what the person added, questioned or returned to, with literal sources and a short account of why it may matter. Internal workspace names, inventory totals and wording bins no longer lead the experience. This is a contextual observation layer; it does not demonstrate comprehension, the amount of mental effort used, or overall independence from the agent. See [the implemented reading contract](PARTICIPATION.md).

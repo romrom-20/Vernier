@@ -10,7 +10,8 @@ public enum MemoryChecks {
         ("Separate local-analysis consent, correction, export and erasure", briefStorage),
         ("Schema v3 upgrade preserves memory and adds derived-content deletion", briefMigration),
         ("Conversation map counts, scope, ordering, citations and synthetic provenance", StoryChecks.projection),
-        ("Cross-workspace cues, source evidence, dates and bounded coverage", WorkOverviewChecks.projection)
+        ("Cross-workspace cues, source evidence, dates and bounded coverage", WorkOverviewChecks.projection),
+        ("Participation readings preserve exchange context and avoid invented understanding", ParticipationChecks.readings)
     ]
     private static func expect(_ value: @autoclosure () -> Bool, _ message: String) throws {
         if !value() { throw CoreCheckFailure(description: message) }

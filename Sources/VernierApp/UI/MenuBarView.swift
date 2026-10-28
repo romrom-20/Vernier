@@ -11,7 +11,7 @@ struct MenuBarView: View {
                 InstrumentMark(size: 25)
                 Text(Brand.name).font(.headline)
                 Spacer()
-                Text(model.isShowcase ? "Showcase" : model.paused ? "Paused" : model.syncing ? "Syncing" : "Local")
+                Text(model.isShowcase ? "Showcase" : model.paused ? "Paused" : model.syncing ? "Syncing" : model.codexEnabled ? "Following" : "Off")
                     .font(.caption.weight(.medium)).foregroundStyle(CaptureStyle.color(model.capturePhase))
                 Button { model.toggleCapture() } label: {
                     Image(systemName: model.paused ? "play.fill" : "pause.fill").font(.caption).frame(width: 25, height: 25)
@@ -24,26 +24,19 @@ struct MenuBarView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 15) {
                     QuickWorkOverviewView(model: model)
-                    Divider().overlay(Palette.line.opacity(0.5))
-                    DisclosureGroup("Capture details") {
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text(model.captureDescription).font(.caption).foregroundStyle(Palette.secondary)
-                            CaptureInventory(model: model, compact: true)
-                            Text("\(model.library.totalMessageCount.formatted()) messages saved · \(model.library.sessions.count) sessions").font(.caption2).foregroundStyle(Palette.secondary)
-                        }.padding(.top, 8)
-                    }.font(.caption).foregroundStyle(Palette.secondary)
+
                 }.padding(18)
             }.frame(maxHeight: .infinity)
             Divider().overlay(Palette.line.opacity(0.5))
             HStack {
                 Button { model.openStudio(.overview) } label: {
-                    Label("Explore all work", systemImage: "arrow.up.left.and.arrow.down.right").frame(maxWidth: .infinity)
-                }.buttonStyle(QuietButtonStyle()).keyboardShortcut("o").accessibilityLabel("Open dashboard and explore all recent work")
+                    Label("Open dashboard", systemImage: "arrow.up.left.and.arrow.down.right").frame(maxWidth: .infinity)
+                }.buttonStyle(QuietButtonStyle()).keyboardShortcut("o").accessibilityLabel("Open dashboard and understand your participation")
                 Spacer()
                 Button("Memory →") { model.showMemory() }.buttonStyle(.plain).font(.callout).foregroundStyle(Palette.mint)
             }.padding(.horizontal, 18).padding(.top, 12)
             HStack {
-                Label("Saved privately on this Mac", systemImage: "lock").font(.caption2).foregroundStyle(Palette.secondary)
+                Label(model.isShowcase ? "Synthetic preview · no history read" : "Codex · saved on this Mac", systemImage: "lock").font(.caption2).foregroundStyle(Palette.secondary)
                 Spacer()
                 Button("Quit") { model.quit() }.buttonStyle(.plain).font(.caption).keyboardShortcut("q")
             }.padding(.horizontal, 18).padding(.vertical, 12)

@@ -10,6 +10,7 @@ import VernierCore
     private(set) var studio: NSWindow?
     private(set) var pill: FloatingPanel?
     private var welcome: NSWindow?
+    private var quickPreview: NSWindow?
     private var subscriptions: Set<AnyCancellable> = []
     private var syncTask: Task<Void, Never>?
     private var sleeping = false
@@ -96,6 +97,7 @@ import VernierCore
                 catch { fputs("NATIVE UI SMOKE FAILED: \(error)\n", stderr); exit(1) }
             }
         } else if !model.preferences.onboardingComplete { openWelcome() }
+        else if model.isShowcase && CommandLine.arguments.contains("--quick-preview") { openQuickPreview() }
         else if !launchedAtLogin { openStudio(.overview) }
     }
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -178,6 +180,7 @@ import VernierCore
         refreshPresence()
     }
     func closeQuickView() {
+        quickPreview?.orderOut(nil)
         if surface == .quickView { surface = .ambient }
         popover.performClose(nil)
         refreshPresence()
@@ -192,6 +195,20 @@ import VernierCore
         popover.contentSize = size
     }
 
+    /// Isolated visual-QA host of the exact menu-bar content. Never reads personal records.
+    private func openQuickPreview() {
+        guard model.isShowcase else { return }
+        surface = .quickView
+        refreshPresence()
+        let size = QuickPanelLayout.size(screenHeight: NSScreen.main?.visibleFrame.height ?? 800)
+        let window = NSWindow(contentRect: NSRect(origin: .zero, size: size), styleMask: [.titled, .closable], backing: .buffered, defer: false)
+        window.title = "Vernier · Synthetic quick-view preview"
+        window.contentView = NSHostingView(rootView: MenuBarView(model: model, height: size.height))
+        window.isReleasedWhenClosed = false
+        window.center(); window.makeKeyAndOrderFront(nil)
+        quickPreview = window
+        NSApp.activate(ignoringOtherApps: true)
+    }
     private func configureMainMenu() {
         let menu = NSMenu()
         let appItem = NSMenuItem()
@@ -238,6 +255,7 @@ import VernierCore
         }
     }
     func openStudio(_ page: StudioPage) {
+        quickPreview?.orderOut(nil)
         surface = .studio
         model.page = page
         popover.performClose(nil)

@@ -153,7 +153,7 @@ struct PillView: View {
                         InstrumentMark(size: 23)
                         VStack(alignment: .leading, spacing: 3) {
                             Text(model.isShowcase ? "Vernier · Showcase" : Brand.name).font(.system(size: 12, weight: .medium))
-                            Text(model.capturePhase.title)
+                            Text(model.capturePresenceLabel)
                                 .font(.system(size: 11)).foregroundStyle(Palette.secondary).lineLimit(1)
                         }
                         Spacer(minLength: 0)
@@ -169,7 +169,7 @@ struct PillView: View {
             .accessibilityLabel("\(Brand.name), \(model.capturePhase.title). \(model.pillPinned ? "Release" : "Keep open") capture controls.")
             .accessibilityAddTraits(.isButton)
             .accessibilityAction { model.togglePillControls() }
-            .help("Hover for controls. Click to keep them open. Play/pause controls capture; the arrow opens the dashboard.")
+            .help("Vernier remembers saved Codex work across Conductor workspaces, even when this circle is hidden. Hover for controls. Click to keep them open. Play/pause controls capture; the arrow opens the dashboard.")
     }
     @ViewBuilder private var indicator: some View {
         if model.capturePhase == .checking && !reduceMotion && !ProcessInfo.processInfo.isLowPowerModeEnabled {

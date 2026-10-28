@@ -1,6 +1,6 @@
 # A visual story of the work
 
-The session map introduced in 0.7 remains the conversation drill-down. Version 0.8 starts with a [work overview across sessions](WORK_OVERVIEW.md), so the newest conversation does not represent all work.
+The session map introduced in 0.7 remains the conversation drill-down. Version 0.9 starts with [the person’s participation in an exchange](PARTICIPATION.md), selected from the bounded recent-work projection. One human action, its source sequence and its possible significance lead the screen. Inventory counts and internal workspace labels stay out of the primary experience.
 
 The small session brief could repeat a person's request instead of explaining an interaction. The dashboard now starts with a suggested finding, an explorable conversation map and the source exchanges. Its design hypothesis is that a builder can reconstruct a concrete point of friction more easily when the record, its possible meaning and a next check stay connected.
 
@@ -27,7 +27,7 @@ AI markers come from cached source-referenced brief interpretations. They have t
 
 The connector line reveals once, then stays still. Selecting a point briefly transitions the comparison. Reduce Motion disables these animations; Low Power Mode disables the introductory reveal. There is no perpetual animation or extra observation loop. This follows [Apple's motion guidance](https://developer.apple.com/design/human-interface-guidelines/motion).
 
-Quick view now contains recent-work coverage, sampled go-ahead and question/direction cues, an inspectable thread and an Explore all work action. The earlier miniature sequence and raw follow-up headline were removed. Pause/resume stays pinned in its header. Studio and quick view retain exclusive routing. Opening the full story uses a larger, display-bounded native window. The pill's hover, in-place capture controls and nonactivation remain unchanged.
+Quick view now contains one reading, the person’s actual words, a Why this matters action and an Open dashboard action. The statistics-first headline, go-ahead counters and opaque workspace/session labels were removed. Method and coverage live in Studio details. Pause/resume stays pinned in its header. Studio and quick view retain exclusive routing. Opening the full story uses a larger, display-bounded native window. The pill's hover, in-place capture controls and nonactivation remain unchanged.
 
 ## Boundaries
 

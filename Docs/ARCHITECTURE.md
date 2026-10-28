@@ -64,3 +64,12 @@ Generation is opt-in, debounced to five minutes automatically and cancelable wit
 `WorkOverview` projects existing sessions, turn outcomes and a bounded message sample into source-linked wording cues. `WorkOverviewModel` gives each workspace a slot before filling remaining slots by recency (24 sessions maximum), reads at most 100 messages per session with a 4,096-character SQL excerpt cap, and guards actor-resumed updates with generation, source key and cancellation checks. The full archive is unchanged. No model runs or new consent, schema or storage is introduced. Completed projections are reused; erasure clears and invalidates them.
 
 `WorkOverviewView` is the Studio entry point; `QuickWorkOverviewView` replaces the selected-session mini-map in the menu bar. A request or thread selection expands the session-map drill-down with the correct source ID, and map appearance completes scroll navigation after asynchronous loading. Wording cues, provider failures and agent-last flags do not establish review, comprehension or task outcomes. See [exact rules and scope](WORK_OVERVIEW.md).
+
+
+## Human participation readings — 0.9.0
+
+`ParticipationReview` projects explicit, dated user requests within a `SessionStory` into source-backed readings. `WorkSession` carries these transient readings; `WorkOverview` orders them across the existing balanced sample. Stable source keys and a five-minute rolling-window bucket avoid reloading unchanged data on each sync. Successful background collection also prepares the projection before the user opens a view.
+
+The main view presents one human action, its literal source sequence and a template explanation. Other readings are available without leading with instrumentation counts. Selecting a reading is distinct from opening its exact source in the conversation map. Memory erasure clears both readings and selection. The circle labels its connected purpose (“Following Codex”) while retaining native hover, pause and dashboard hit routing.
+
+An isolated `--showcase --quick-preview` flag hosts the exact compact view in a native window for visual QA, with no personal store/connector/model access. This host does not replace real popover geometry tests. See [method and limits](PARTICIPATION.md).

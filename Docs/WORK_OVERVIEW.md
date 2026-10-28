@@ -1,5 +1,7 @@
 # Reading work across sessions — 0.8.0
 
+This documents the earlier statistics-first interface. Version 0.9 leads with [your participation in an exchange](PARTICIPATION.md); the bounded source projection and sampling limits below remain in use.
+
 The overview and menu-bar quick view start with recent Codex work across Conductor workspaces. A busy conversation should not stand in for the rest of the person's work. Session maps remain available as a source drill-down.
 
 ## What the overview answers

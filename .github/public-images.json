@@ -1,12 +1,16 @@
 {
   "images": {
     "Docs/images/overview.png": {
-      "sha256": "b814200f6ee50f0e96fe7efeca0f39ae24aaa61b7a5c00d2ac18d6e42ad6be9a",
-      "provenance": "Visually reviewed native 0.8 showcase overview. Three invented workspaces from ShowcaseFixtures.workLibrary(); local wording rules; no personal archive, connector or model used."
+      "sha256": "53f1150046d3cba562ba3e3283a9f314a463604eadbd72ff1bb689e945ff8cd5",
+      "provenance": "Visually reviewed native 0.9 showcase. Invented CSV exchange from ShowcaseFixtures.workLibrary(); template reading with literal sources. No personal history, connector or model used."
     },
     "Docs/images/session-map.png": {
       "sha256": "89b1b18cecd55710194c7b04de33661a52749810cba1e4c284a254205234f856",
       "provenance": "Visually reviewed native showcase capture. Invented records from ShowcaseFixtures.visualLibrary(); fixed example interpretations; no personal archive or model used."
+    },
+    "Docs/images/quick-view.png": {
+      "sha256": "3e96f0e7314bb7c333b258f9dd3052bd31ac4b52010ff1eac4f5832cf5a11733",
+      "provenance": "Visually reviewed 0.9 compact-view layout in isolated --showcase --quick-preview native host. Same menu-bar component; invented messages only; no personal history or model used."
     }
   }
 }

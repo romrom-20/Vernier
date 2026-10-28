@@ -33,6 +33,7 @@ public struct WorkRequest: Identifiable, Sendable {
 public struct WorkSession: Identifiable, Sendable {
     public let session: SessionMetadata
     public let requests: [WorkRequest]
+    public let moments: [ParticipationMoment]
     public let loadedMessages: Int
     public let storedMessages: Int
     public let memoryComplete: Bool
@@ -53,6 +54,7 @@ public struct WorkOverview: Sendable {
         let a = $0.message.sourceAt!, b = $1.message.sourceAt!
         return a == b ? $0.id < $1.id : a > b
     } }
+    public var moments: [ParticipationMoment] { ParticipationReview.ordered(sessions.flatMap(\.moments)) }
     public var workspaces: Int { Set(sessions.map { $0.session.workspaceID }).count }
     public var agentLastCount: Int { sessions.filter { $0.agentLast != nil }.count }
     public var failureCount: Int { sessions.filter(\.hasRecordedFailure).count }
@@ -98,7 +100,7 @@ public struct WorkOverview: Sendable {
                 guard let time = turn.startedAt, time >= since, time <= now else { return nil }
                 return turn.outcome
             }
-            return WorkSession(session: session, requests: requests, loadedMessages: story.loadedMessages, storedMessages: story.storedMessages,
+            return WorkSession(session: session, requests: requests, moments: ParticipationReview.make(story: story, since: since, until: now), loadedMessages: story.loadedMessages, storedMessages: story.storedMessages,
                 memoryComplete: library.memoryCoverage.first { $0.sessionID == session.id }?.complete == true,
                 latestSpeaker: last?.speaker, agentLast: agentLast, lastOutcome: lastOutcome)
         }

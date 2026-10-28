@@ -73,3 +73,12 @@ The shared suite now has 22 passing groups. The new group checks cross-workspace
 The 60-check isolated native suite passes and adds overview fixture coverage, bounded projection reuse, source/session routing and erasure invalidation. Synthetic desktop inspection verified category selection exposes literal requests, request navigation selects its own session and map source, and the comparison scrolls visibly into view after loading. The current overview image uses three invented workspaces. No personal archive was used for these captures.
 
 The native popover geometry/routing checks pass. The external UI tool still times out inspecting the quick-view popover, including screenshot capture; a manual visual sign-off for that surface is not claimed. Command-O successfully returned to Studio. Real-world comprehension, task outcomes, absent review and daily semantic patterns remain unvalidated.
+
+
+## Participation readings — 0.9.0
+
+The shared suite passes 23 groups, and the native suite passes 63 checks. New checks cover recurring-issue context, literal source/speaker/session integrity, test versus build evidence, explicit scope constraints, explanation versus demonstrated understanding, negated explanation requests, short continuation, initial instructions, determinism and the recent-time window. Native checks cover quick-view-to-reading navigation, exact source routing and erasure clearing readings.
+
+Synthetic native inspection verified that the compact view fits its fixed content size, Why this matters opens the selected explanation, a returning-problem reading preserves both user requests and agent reports, and the source action selects the exact message in the conversation map. The quick-view screenshot uses the exact menu-bar component in an isolated standard-window host (`--showcase --quick-preview`) because external inspection of the real popover previously timed out. It is a visual content check; real popover sizing/routing retain separate native regression evidence. No personal archive is used in public captures.
+
+Readings remain rule/template interpretations; these checks establish source integrity and routing, not semantic accuracy, comprehension, cognitive effort or outcome validity. Background energy, broader source capture and the existing hardware/manual accessibility matrix remain unverified.

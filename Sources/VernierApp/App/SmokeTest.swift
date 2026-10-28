@@ -205,6 +205,18 @@ extension AppCoordinator {
         await showcase.loadWorkOverview()
         try check(showcase.workOverview?.workspaces == 3 && showcase.workOverview?.count(.goAhead) == 1 && showcase.workOverview?.failureCount == 1,
                   "Work overview spans workspaces with source-linked wording cues and failure status")
+        try check(showcase.participationMoments.contains { $0.kind == .requestedEvidence } && showcase.participationMoments.contains { $0.kind == .setBoundary },
+                  "Human-facing readings retain concrete checks and constraints, not just wording counts")
+        if let reading = showcase.participationMoments.first {
+            showcase.openParticipation(reading)
+            try check(showcase.selectedParticipation?.id == reading.id && !showcase.workDetailExpanded,
+                      "Quick view opens the selected human reading before the full source inspector")
+            showcase.readParticipation(reading)
+            try check(showcase.briefSessionID == reading.sessionID && showcase.storyFocusID == reading.anchorID && showcase.workDetailExpanded,
+                      "The reading opens the exact human message in its own source conversation")
+            showcase.briefSessionID = nil
+            showcase.workDetailExpanded = false
+        }
         let overviewGeneration = showcase.workOverviewGeneration
         await showcase.loadWorkOverview()
         try check(showcase.workOverviewGeneration == overviewGeneration, "Quick view and dashboard reuse an unchanged bounded work overview")
@@ -238,7 +250,7 @@ extension AppCoordinator {
                   "Changed source coverage reloads the map rather than keeping an old projection")
         let beforeErase = showcase.storyGeneration
         await showcase.eraseConversationMemory()
-        try check(showcase.workOverview == nil && showcase.workOverviewLoadedKey == nil && showcase.sessionStory == nil && showcase.storyLoadedKey == nil && !showcase.storyLoading && showcase.storyGeneration > beforeErase,
+        try check(showcase.selectedParticipation == nil && showcase.participationMoments.isEmpty && showcase.workOverview == nil && showcase.workOverviewLoadedKey == nil && showcase.sessionStory == nil && showcase.storyLoadedKey == nil && !showcase.storyLoading && showcase.storyGeneration > beforeErase,
                   "Memory erasure clears map text and invalidates pending projection results")
     }
 }
