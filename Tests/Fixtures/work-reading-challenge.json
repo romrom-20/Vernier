@@ -1,0 +1,176 @@
+[
+  {
+    "id": "drop-target-investigation",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Dropping one file into the sidebar imports it twice."
+      },
+      {
+        "role": "assistant",
+        "text": "The drop trace shows both the parent and child view receive the same event."
+      },
+      {
+        "role": "user",
+        "text": "Look through that trace and fix what is causing it."
+      },
+      {
+        "role": "assistant",
+        "text": "I plan to remove the parent handler and keep the child drop target."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "drop",
+      "file",
+      "import"
+    ]
+  },
+  {
+    "id": "recording-privacy-boundary",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Do not upload voice recordings. Transcription must stay on this machine."
+      },
+      {
+        "role": "assistant",
+        "text": "I will send the recordings to an external transcription provider."
+      },
+      {
+        "role": "user",
+        "text": "Okay, proceed."
+      }
+    ],
+    "expectedFocuses": [
+      "direction_change"
+    ],
+    "expectedCue": true,
+    "goalTerms": [
+      "recording",
+      "transcript",
+      "upload",
+      "machine"
+    ]
+  },
+  {
+    "id": "brief-rejection",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Keep query processing offline."
+      },
+      {
+        "role": "assistant",
+        "text": "I propose calling a hosted search service."
+      },
+      {
+        "role": "user",
+        "text": "No, keep it offline."
+      }
+    ],
+    "expectedFocuses": [
+      "handoff",
+      "check"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "offline",
+      "search",
+      "query"
+    ]
+  },
+  {
+    "id": "changed-requirement-before-assent",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Keep the image editor offline for now."
+      },
+      {
+        "role": "assistant",
+        "text": "A hosted renderer would simplify sharing."
+      },
+      {
+        "role": "user",
+        "text": "I have changed the requirement: remote rendering is now allowed for shared documents."
+      },
+      {
+        "role": "assistant",
+        "text": "I will implement the hosted renderer for shared documents."
+      },
+      {
+        "role": "user",
+        "text": "Yes, go ahead."
+      }
+    ],
+    "expectedFocuses": [
+      "handoff",
+      "check",
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "render",
+      "shared",
+      "image"
+    ]
+  },
+  {
+    "id": "specific-user-replay-success",
+    "messages": [
+      {
+        "role": "user",
+        "text": "The save action duplicates a note when I double-click."
+      },
+      {
+        "role": "assistant",
+        "text": "I added a guard around the save action."
+      },
+      {
+        "role": "user",
+        "text": "I double-clicked Save five times after the update. There was only one note each time."
+      }
+    ],
+    "expectedFocuses": [
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "save",
+      "note",
+      "duplicate"
+    ]
+  },
+  {
+    "id": "new-billing-question",
+    "messages": [
+      {
+        "role": "user",
+        "text": "The toolbar buttons overlap at small widths."
+      },
+      {
+        "role": "assistant",
+        "text": "I corrected toolbar spacing."
+      },
+      {
+        "role": "user",
+        "text": "New topic: explain why deleting one invoice changes the account balance by twice its value."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "invoice",
+      "balance",
+      "account"
+    ]
+  }
+]

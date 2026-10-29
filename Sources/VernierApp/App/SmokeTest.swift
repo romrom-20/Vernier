@@ -235,11 +235,11 @@ extension AppCoordinator {
             showcase.briefSessionID = nil
             showcase.workDetailExpanded = false
         }
-        try check(showcase.decisionHistory.count == 2 && showcase.currentDecision?.kind == .evidenceRequest && showcase.currentDecision?.actions?.delegatesNextStep == true && showcase.isDecisionCurrent,
+        try check(showcase.decisionHistory.count == 2 && showcase.currentDecision?.reading?.focus == .check && showcase.currentDecision?.reading?.nextStep.contains("blank emails") == true && showcase.isDecisionCurrent,
                   "Reasoning showcase has distinct source-backed revisions without model calls")
         let latestDecision = showcase.currentDecision!
         showcase.selectedDecisionRevisionID = showcase.decisionHistory.last!.id
-        try check(showcase.currentDecision?.kind == .humanDirection && showcase.currentDecision?.id != latestDecision.id,
+        try check(showcase.currentDecision?.reading?.focus == .handoff && showcase.currentDecision?.id != latestDecision.id,
                   "Earlier account selection changes the displayed interpretation")
         showcase.selectedDecisionRevisionID = nil
         showcase.showDecisionSource(latestDecision)
@@ -253,6 +253,20 @@ extension AppCoordinator {
         showcase.checkDecisionEngine()
         try check(showcase.engineHealth?.contains("does not contact") == true && !showcase.checkingEngine,
                   "Engine check in showcase cannot invoke personal inference")
+        let savedLibrary = showcase.library, savedReadings = showcase.decisionRevisions
+        showcase.library = ShowcaseFixtures.directionLibrary()
+        showcase.decisionRevisions = ShowcaseFixtures.directionHistory(library: showcase.library)
+        showcase.selectedDecisionSessionID = showcase.library.sessions[0].id; showcase.selectedDecisionRevisionID = nil
+        try check(showcase.directionToCheck?.reading?.signalKey != nil, "An eligible source-backed direction question reaches the ambient cue")
+        showcase.openDirectionCheck()
+        try check(showcase.page == .overview && showcase.selectedDecisionRevisionID == showcase.directionToCheck?.id, "The cue opens its own conversation and reading")
+        showcase.paused = true
+        try check(showcase.directionToCheck == nil, "Pause suppresses the ambient direction question")
+        showcase.paused = false
+        let cue = showcase.currentDecision!
+        showcase.decisionPerspectives = [.init(sessionID: cue.sessionID, text: WorkReading.intentionalResponse, createdAt: cue.createdAt.addingTimeInterval(-1), anchorMessageID: "earlier-approval", signalKey: cue.reading?.signalKey)]
+        try check(showcase.directionToCheck == nil, "A saved intentional choice suppresses repeat nudges for the same proposal")
+        showcase.decisionPerspectives = []; showcase.library = savedLibrary; showcase.decisionRevisions = savedReadings; showcase.selectedDecisionSessionID = latestDecision.sessionID; showcase.selectedDecisionRevisionID = nil
         model.localInsightsEnabled = true
         let beforeDecisionPause = model.decisionGeneration
         model.paused = true

@@ -16,7 +16,9 @@ public enum MemoryChecks {
         ("Decision revisions, stale-write rejection, export, consent and erasure", DecisionChecks.storage),
         ("Long agent runs retain the latest human request and preceding proposal", DecisionChecks.longEpisode),
         ("Bounded related evidence, foreign-source invalidation and stale reads", DecisionChecks.relatedStorage),
-        ("Schema v4 upgrade preserves memory and notes before adding decision storage", DecisionChecks.migration)
+        ("Schema v4 upgrade preserves memory and notes before adding decision storage", DecisionChecks.migration),
+        ("Contextual work readings preserve literal witnesses and bound direction cues", WorkReadingChecks.grounding),
+        ("Contextual memory round-trips, exports and erases with canonical evidence", WorkReadingChecks.storage)
     ]
     private static func expect(_ value: @autoclosure () -> Bool, _ message: String) throws {
         if !value() { throw CoreCheckFailure(description: message) }

@@ -54,3 +54,9 @@ Actual sleep/login testing uses a normal consenting installation, not showcase: 
 ## Reasoning controls — 0.10.0
 
 Overview selects a conversation and its latest source-backed reading. The history disclosure opens earlier accounts and can return to the latest. Read original loads the canonical source by message ID, with an explicit route to the full conversation; See the surrounding exchange opens the map at the actual anchor. Revisit honors consent, pause and unchanged-evidence reuse; Stop review invalidates the current result without stopping capture. Add my perspective opens an explicit local report editor; saving it can trigger a revised interpretation. Engine selection, the separate automatic-revisit switch and Check local engine are in the reasoning disclosure. Automatic inference starts off; collection is independent. The isolated showcase blocks model calls and saves, while demonstrating invented revision history.
+
+## Contextual review and quiet direction cues — 0.11
+
+The main view names the manual/automatic/paused state, offers Follow changed work and leads with a practical checkpoint. Why this appeared is collapsed; Read original uses exact canonical IDs. The circle stays static while its amber center marks a current eligible direction question; the menu-bar icon and accessibility label also carry that cue. The explicit dashboard arrow selects the question's conversation rather than unrelated latest work. No automatic expansion or keyboard-focus request is added.
+
+That was intentional / I want to check this save source-scoped reports. Their stable pair key suppresses repeat cues across later short approvals of the same proposal, without silencing a different or edited proposal. Pause/rest/revocation, source changes, erasure and a one-hour age limit suppress ambient questions. The underlying Mac focus and physical mouse matrix still needs its normal native QA; offscreen layout renders do not substitute for it.

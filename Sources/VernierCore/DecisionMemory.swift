@@ -138,8 +138,9 @@ public struct DecisionPerspective: Codable, Identifiable, Sendable {
     public let createdAt: Date
     public let revisionID: String?
     public let anchorMessageID: String?
-    public init(id: String = UUID().uuidString, sessionID: String, text: String, createdAt: Date = Date(), revisionID: String? = nil, anchorMessageID: String? = nil) {
-        self.id = id; self.sessionID = sessionID; self.text = String(text.prefix(1500)); self.createdAt = createdAt; self.revisionID = revisionID; self.anchorMessageID = anchorMessageID
+    public let signalKey: String?
+    public init(id: String = UUID().uuidString, sessionID: String, text: String, createdAt: Date = Date(), revisionID: String? = nil, anchorMessageID: String? = nil, signalKey: String? = nil) {
+        self.id = id; self.sessionID = sessionID; self.text = String(text.prefix(1500)); self.createdAt = createdAt; self.revisionID = revisionID; self.anchorMessageID = anchorMessageID; self.signalKey = signalKey
     }
 }
 
@@ -207,7 +208,9 @@ public struct DecisionContext: Codable, Sendable {
         if let last = primary.last { protected.insert(last.messageID) }
         let perspectiveTargets = Set(perspectives.suffix(3).compactMap(\.anchorMessageID))
         protected.formUnion(perspectiveTargets)
-        var needed = latestHuman + primary.filter { perspectiveTargets.contains($0.messageID) }
+        let intentIDs = Set(previous?.reading?.references.filter { $0.use == .intent }.map(\.sourceID) ?? [])
+        protected.formUnion(intentIDs)
+        var needed = latestHuman + primary.filter { perspectiveTargets.contains($0.messageID) || intentIDs.contains($0.messageID) }
         if let index = primary.firstIndex(where: { $0.messageID == anchor.id }), let proposal = primary.prefix(index).last(where: { $0.role == "assistant" }) {
             needed.append(proposal); protected.insert(proposal.messageID)
         }
@@ -224,7 +227,7 @@ public struct DecisionContext: Codable, Sendable {
             return value
         }
         guard let anchorID = labeled.first(where: { $0.messageID == anchor.id })?.id else { return nil }
-        return Self(sessionID: sessionID, anchorID: anchorID, sources: labeled, perspectives: Array(perspectives.suffix(3)), earlierAccount: previous.map { "Earlier HYPOTHESIS (not fact): \($0.kind.rawValue). \($0.summary) Uncertainty: \($0.unknown)" }, storedMessages: storedMessages, attributed: true, relatedMessageCounts: relatedMessageCounts, frontier: ordered.last.map { .init(messageID: $0.id, fingerprint: DecisionSource.fingerprint($0)) })
+        return Self(sessionID: sessionID, anchorID: anchorID, sources: labeled, perspectives: Array(perspectives.suffix(3)), earlierAccount: previous.map { "Earlier HYPOTHESIS (not fact): Goal: \($0.goal). \($0.summary) \($0.reason) Next check: \($0.reading?.nextStep ?? $0.unknown)" }, storedMessages: storedMessages, attributed: true, relatedMessageCounts: relatedMessageCounts, frontier: ordered.last.map { .init(messageID: $0.id, fingerprint: DecisionSource.fingerprint($0)) })
     }
 
     public func contextualSourceIDs(for kind: DecisionKind, selected: [String]) -> [String] {
@@ -307,6 +310,7 @@ public struct DecisionRevision: Codable, Identifiable, Sendable {
     public let loadedMessages: Int
     public let storedMessages: Int
     public let relatedMessageCounts: [String: Int]
+    public let reading: WorkReading?
 
     public static func validated(context: DecisionContext, draft: DecisionDraft, critique: DecisionCritique, engine: String, previousID: String? = nil, now: Date = Date(), actions: DecisionActions? = nil) -> Self {
         let known = Set(context.sources.map(\.id))
@@ -335,7 +339,7 @@ public struct DecisionRevision: Codable, Identifiable, Sendable {
             alternative: valid ? String(draft.alternative.prefix(350)) : "The proposal failed an evidence check. Read the original exchange before drawing a conclusion.",
             unknown: valid ? String(draft.unknown.prefix(350)) : "The available evidence does not establish a reliable interpretation of this exchange.",
             check: valid ? "The local challenge accepted the proposed action and references. Host checks also validated the current anchor, source identities and evidence structure. Agreement is not independent confirmation." : "The proposal was withheld after the challenge or a source check. No personal capability verdict is established.", evidence: valid && !evidence.isEmpty ? evidence : fallbackEvidence,
-            loadedMessages: context.loadedMessages, storedMessages: context.storedMessages, relatedMessageCounts: context.relatedMessageCounts)
+            loadedMessages: context.loadedMessages, storedMessages: context.storedMessages, relatedMessageCounts: context.relatedMessageCounts, reading: nil)
     }
 }
 

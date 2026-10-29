@@ -13,17 +13,45 @@ extension AppModel {
     }
     var decisionHistory: [DecisionRevision] { decisionRevisions.filter { $0.sessionID == decisionSession?.id } }
     var currentPerspectives: [DecisionPerspective] { decisionPerspectives.filter { $0.sessionID == decisionSession?.id } }
-    var isDecisionCurrent: Bool {
-        guard let revision = currentDecision, let session = decisionSession else { return false }
+    var isDecisionCurrent: Bool { currentDecision.map(isReadingCurrent) ?? false }
+    func isReadingCurrent(_ revision: DecisionRevision) -> Bool {
+        guard let session = library.sessions.first(where: { $0.id == revision.sessionID }) else { return false }
         let relatedCurrent = revision.relatedMessageCounts.allSatisfy { id, count in
             library.sessions.first(where: { $0.id == id }).flatMap { library.digest(for: $0)?.messageCount } == count
         }
-        return decisionDirtyAt[session.id] == nil && relatedCurrent && revision.storedMessages == library.digest(for: session)?.messageCount && !(currentPerspectives.last.map { $0.createdAt > revision.createdAt } ?? false)
+        let newerReport = decisionPerspectives.contains { $0.sessionID == session.id && $0.createdAt > revision.createdAt }
+        return (isShowcase || revision.engine.hasSuffix(" · " + DecisionGenerator.promptVersion)) && decisionDirtyAt[session.id] == nil && relatedCurrent && revision.storedMessages == library.digest(for: session)?.messageCount && !newerReport
+    }
+    var directionToCheck: DecisionRevision? {
+        guard !paused, !systemSuspended, localInsightsEnabled, conversationMemoryEnabled, codexEnabled else { return nil }
+        return decisionRevisions.first { revision in
+            revision.reading?.focus == .directionChange && revision.reading?.signalKey != nil && Date().timeIntervalSince(revision.createdAt) < 3600 && isReadingCurrent(revision) && !revision.directionAcknowledged(by: decisionPerspectives)
+        }
+    }
+    func openDirectionCheck() {
+        guard let revision = directionToCheck else { return }
+        selectDecisionSession(revision.sessionID); selectedDecisionRevisionID = revision.id; openStudio(.overview)
+    }
+    func startFollowingWork() {
+        guard !isolatedEnvironment, codexEnabled, conversationMemoryEnabled, !paused else { return }
+        lastAutomaticDecision = Date() // One explicit review, rather than racing the preference-triggered scheduler.
+        if !localInsightsEnabled { localInsightsEnabled = true }
+        if !automaticDecisionReviews { automaticDecisionReviews = true }
+        reviewDecision()
+    }
+    func copyNextCheck(_ reading: WorkReading) {
+        NSPasteboard.general.clearContents(); NSPasteboard.general.setString(reading.nextStep, forType: .string)
+        decisionNotice = "The suggested check was copied."
     }
     func decisionTitle(_ session: SessionMetadata) -> String {
-        if let goal = decisionRevisions.first(where: { $0.sessionID == session.id })?.goal, !goal.isEmpty { return goal }
-        if let text = library.messages.first(where: { $0.sessionID == session.id && $0.speaker == "user" }).flatMap({ SessionDisplay.excerpt($0.text) }) { return text }
-        return library.digest(for: session)?.promptExcerpt ?? "Saved conversation"
+        if let note = library.notes[session.id].flatMap({ SessionDisplay.excerpt($0) }) { return note }
+        if let goal = decisionRevisions.first(where: { $0.sessionID == session.id })?.reading?.goal, !goal.isEmpty { return goal }
+        let excerpt = library.messages.first(where: { $0.sessionID == session.id && $0.speaker == "user" }).flatMap { SessionDisplay.excerpt($0.text) } ?? library.digest(for: session)?.promptExcerpt
+        if let excerpt {
+            if excerpt.hasPrefix("http"), let host = URL(string: excerpt.components(separatedBy: .whitespacesAndNewlines).first ?? "")?.host { return "Article discussion · " + host }
+            return excerpt
+        }
+        return SessionDisplay.fallback(createdAt: session.createdAt)
     }
     func reloadDecisionRecords() async throws {
         guard let store else { return }
@@ -73,25 +101,25 @@ extension AppModel {
     }
     func scheduleDecisionReview() {
         guard !isolatedEnvironment, automaticDecisionReviews, localInsightsEnabled, codexEnabled, conversationMemoryEnabled, !paused, !systemSuspended,
-              !reviewingDecision, !ProcessInfo.processInfo.isLowPowerModeEnabled, Date().timeIntervalSince(lastAutomaticDecision) >= 300 else { return }
-        let recent = library.sessions.filter { $0.updatedAt >= Date().addingTimeInterval(-86400) && Date().timeIntervalSince($0.updatedAt) >= 45 && Date().timeIntervalSince(decisionDirtyAt[$0.id] ?? .distantPast) >= 45 && (library.digest(for: $0)?.messageCount ?? 0) >= 2 }
+              !reviewingDecision, !ProcessInfo.processInfo.isLowPowerModeEnabled, Date().timeIntervalSince(lastAutomaticDecision) >= 120 else { return }
+        let recent = library.sessions.filter { $0.updatedAt >= Date().addingTimeInterval(-86400) && Date().timeIntervalSince($0.updatedAt) >= 15 && Date().timeIntervalSince(decisionDirtyAt[$0.id] ?? .distantPast) >= 15 && (library.digest(for: $0)?.messageCount ?? 0) >= 2 }
         let dirty = recent.filter { session in
             let latest = decisionRevisions.first { $0.sessionID == session.id }
             let freshPerspective = decisionPerspectives.contains { $0.sessionID == session.id && $0.createdAt > (latest?.createdAt ?? .distantPast) }
             let relatedChanged = latest?.relatedMessageCounts.contains { id, count in
                 library.sessions.first(where: { $0.id == id }).flatMap { library.digest(for: $0)?.messageCount } != count
             } ?? false
-            return decisionDirtyAt[session.id] != nil || relatedChanged || latest == nil || latest?.engine != reasoningModel + " · " + DecisionGenerator.promptVersion || latest?.storedMessages != library.digest(for: session)?.messageCount || freshPerspective
-        }.filter { Date().timeIntervalSince(lastDecisionAttempt[$0.id] ?? .distantPast) >= 300 }
+            return decisionDirtyAt[session.id] != nil || relatedChanged || latest == nil || !(latest.map { $0.engine.hasSuffix(" · " + DecisionGenerator.promptVersion) && ($0.reading?.boundaryRule != nil || $0.engine == reasoningModel + " · " + DecisionGenerator.promptVersion) } ?? false) || latest?.storedMessages != library.digest(for: session)?.messageCount || freshPerspective
+        }.filter { Date().timeIntervalSince(lastDecisionAttempt[$0.id] ?? .distantPast) >= 120 }
         guard let next = dirty.sorted(by: { left, right in
             let a = decisionRevisions.first { $0.sessionID == left.id }?.createdAt ?? .distantPast
             let b = decisionRevisions.first { $0.sessionID == right.id }?.createdAt ?? .distantPast
             return a == b ? left.updatedAt > right.updatedAt : a < b
         }).first else { return }
         lastAutomaticDecision = Date()
-        reviewDecision(sessionID: next.id)
+        reviewDecision(sessionID: next.id, retryUnknown: false)
     }
-    func reviewDecision(sessionID: String? = nil) {
+    func reviewDecision(sessionID: String? = nil, retryUnknown: Bool = true) {
         guard !isolatedEnvironment, localInsightsEnabled, !paused, !systemSuspended, codexEnabled, conversationMemoryEnabled,
               let sessionID = sessionID ?? decisionSession?.id, let token = captureGate.token(), let store else { return }
         cancelDecisionReview()
@@ -106,13 +134,13 @@ extension AppModel {
             do {
                 guard let context = try await store.decisionContext(sessionID: sessionID) else { self.decisionNotice = "No saved request is available in this conversation yet. History may still be filling."; return }
                 let previous = try await store.loadDecisionRevisions(sessionID: sessionID, limit: 1).first
-                if previous?.inputDigest == context.inputDigest, previous?.engine == model + " · " + DecisionGenerator.promptVersion {
+                if (!retryUnknown || previous?.reading != nil), previous?.inputDigest == context.inputDigest, (previous?.engine == model + " · " + DecisionGenerator.promptVersion || (previous?.reading?.boundaryRule != nil && previous?.engine.hasSuffix(" · " + DecisionGenerator.promptVersion) == true)) {
                     self.clearDecisionDirty(sessionID, through: startedAt)
                     if self.decisionSession?.id == sessionID { self.selectedDecisionRevisionID = nil }
                     self.decisionNotice = "The saved evidence is unchanged. The existing reading is still available."
                     return
                 }
-                let result = try await DecisionGenerator.shared.generate(context: context, model: model, previousID: previous?.id)
+                let result = try await DecisionGenerator.shared.review(context: context, model: model, previousID: previous?.id)
                 try Task.checkCancellation()
                 guard self.decisionGeneration == generation, self.captureGate.token() == token else { return }
                 guard try await store.saveDecisionRevision(result.revision, context: context, token: token) else {

@@ -11,17 +11,24 @@ struct DecisionOverviewView: View {
         VStack(alignment: .leading, spacing: 23) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Eyebrow(text: "An account that can change with the evidence")
-                    Text("Keep the decisions in view.").font(.system(size: 32, weight: .medium, design: .rounded)).tracking(-0.6)
-                    Text("What you wanted. Who introduced the direction. What you contributed. What remains open.")
+                    Eyebrow(text: "A little perspective on the work")
+                    Text("See the next thing worth checking.").font(.system(size: 32, weight: .medium, design: .rounded)).tracking(-0.6)
+                    Text("A short account of what changed, and one useful way back in.")
                         .font(.callout).foregroundStyle(Palette.secondary).lineSpacing(3)
                 }
                 Spacer()
                 CaptureToggle(model: model, compact: true)
             }
+            FollowingWorkStatus(model: model)
+            if let signal = model.directionToCheck, signal.sessionID != model.decisionSession?.id {
+                Button { model.openDirectionCheck() } label: {
+                    HStack { Image(systemName: "arrow.triangle.branch"); Text(signal.reading?.headline ?? "A direction changed in another conversation"); Spacer(); Text("Take a look →") }
+                        .font(.callout).foregroundStyle(Palette.amber).padding(16).background(Palette.amber.opacity(0.07), in: RoundedRectangle(cornerRadius: 12))
+                }.buttonStyle(.plain)
+            }
             if !model.library.sessions.isEmpty {
                 HStack {
-                    Picker("Work to understand", selection: Binding(get: { model.decisionSession?.id ?? "" }, set: { id in
+                    Picker("Conversation", selection: Binding(get: { model.decisionSession?.id ?? "" }, set: { id in
                         model.selectDecisionSession(id)
                     })) {
                         ForEach(model.library.sessions) { session in Text(model.decisionTitle(session)).tag(session.id) }
@@ -95,12 +102,13 @@ struct DecisionOverviewView: View {
                 }
             } else {
                 InstrumentCard {
-                    VStack(alignment: .leading, spacing: 15) {
-                        ParticipationGlyph(kind: .soughtExplanation).frame(width: 52, height: 52)
-                        Text(model.reviewingDecision ? "Reconstructing the decisions…" : "A reading starts with the evidence.").font(.title2)
-                        Text("The local engine reads a recent exchange, checks text reuse, proposes an account and challenges it against the sources. Your later messages and corrections can change the account.")
-                            .font(.callout).foregroundStyle(Palette.secondary).lineSpacing(3)
-                        Button(model.reviewingDecision ? "Reviewing locally…" : "Review this work") { model.reviewDecision() }.buttonStyle(QuietButtonStyle()).disabled(!canReview || model.decisionSession == nil)
+                    HStack(alignment: .top, spacing: 20) {
+                        Image(systemName: "point.topleft.down.curvedto.point.bottomright.up").font(.system(size: 28, weight: .light)).foregroundStyle(Palette.mint).frame(width: 45)
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text(model.reviewingDecision ? "Finding the thread of this work…" : "Let’s connect the request to what happened next.").font(.title2)
+                            Text("Vernier looks for a changed direction, a result worth checking, or a problem that returned. The main view gives you a short takeaway; the messages stay one click away.").font(.callout).foregroundStyle(Palette.secondary).lineSpacing(3)
+                            Button(model.reviewingDecision ? "Reading locally…" : "Find a useful next check") { model.reviewDecision() }.buttonStyle(QuietButtonStyle()).disabled(!canReview || model.decisionSession == nil)
+                        }
                     }
                 }
             }
@@ -119,65 +127,91 @@ struct DecisionOverviewView: View {
 struct DecisionAccountView: View {
     @ObservedObject var model: AppModel
     let revision: DecisionRevision
+    @State private var responding = false
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            HStack {
-                Eyebrow(text: revision.status == .unknown ? "What remains uncertain" : "A working interpretation")
-                Spacer()
-                if revision.id != model.decisionHistory.first?.id { Text("Earlier account").font(.caption).foregroundStyle(Palette.amber) }
-                else if !model.isDecisionCurrent { Text("New evidence is waiting").font(.caption).foregroundStyle(Palette.amber) }
-                Label(model.isShowcase ? "Synthetic example" : "Reviewed locally", systemImage: "lock").font(.caption2).foregroundStyle(Palette.secondary)
-            }
-            Text(revision.summary).font(.system(size: 26, weight: .medium, design: .rounded)).tracking(-0.4).fixedSize(horizontal: false, vertical: true)
-            if !revision.goal.isEmpty { Text("Saved request: " + revision.goal).font(.callout).foregroundStyle(Palette.secondary) }
-            Text(revision.reason).font(.callout).lineSpacing(4).foregroundStyle(Palette.secondary).textSelection(.enabled)
-            VStack(alignment: .leading, spacing: 13) {
-                ForEach(revision.evidence) { source in
-                    VStack(alignment: .leading, spacing: 7) {
-                        Text((source.sessionID == revision.sessionID ? "" : "Retrieved from another conversation · ") + sourceLabel(source)).font(.caption.weight(.medium)).foregroundStyle(source.role == "assistant" ? Palette.lavender : Palette.mint)
-                        Text("“\(source.quote)”").font(.callout).lineSpacing(3).textSelection(.enabled)
-                        if source.role != "user_report" {
-                            Button("Read original ↗") { model.showMemorySource(sessionID: source.sessionID, messageID: source.messageID) }.font(.caption).buttonStyle(.plain).foregroundStyle(Palette.mint)
-                        }
-                    }.padding(15).frame(maxWidth: .infinity, alignment: .leading).background(Palette.inset.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
+        VStack(alignment: .leading, spacing: 21) {
+            if let reading = revision.reading {
+                HStack {
+                    Label(reading.focus.label, systemImage: reading.focus == .directionChange ? "arrow.triangle.branch" : "sparkle.magnifyingglass")
+                        .font(.caption.weight(.medium)).foregroundStyle(reading.focus == .directionChange ? Palette.amber : Palette.mint)
+                    Spacer()
+                    Text(model.isShowcase ? "Invented example" : reading.boundaryRule != nil ? "Source-backed question" : "A local interpretation").font(.caption2).foregroundStyle(Palette.secondary)
                 }
+                Text(reading.displayTitle).font(.system(size: 27, weight: .medium, design: .rounded)).tracking(-0.5).fixedSize(horizontal: false, vertical: true)
+                HStack(spacing: 10) {
+                    Image(systemName: "scope").foregroundStyle(Palette.mint)
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(reading.focus == .directionChange ? "Earlier requirement" : "Likely goal").font(.caption2).foregroundStyle(Palette.secondary)
+                        Text(reading.goal).font(.callout.weight(.medium))
+                    }
+                }.padding(14).frame(maxWidth: .infinity, alignment: .leading).background(Palette.inset.opacity(0.55), in: RoundedRectangle(cornerRadius: 12))
+                Text(reading.account).font(.callout).lineSpacing(5).textSelection(.enabled)
+                if reading.focus != .directionChange {
+                    if reading.focus == .progress || reading.focus == .none { Text(reading.nextStep).font(.callout).foregroundStyle(Palette.secondary) }
+                    Button { model.copyNextCheck(reading) } label: { Label("Copy this check", systemImage: "doc.on.doc") }.buttonStyle(QuietButtonStyle())
+                }
+                if reading.focus == .directionChange {
+                    if revision.directionAcknowledged(by: model.decisionPerspectives) {
+                        Label("Your response is saved. This direction won’t keep nudging you.", systemImage: "checkmark").font(.caption).foregroundStyle(Palette.secondary)
+                    } else {
+                        HStack(spacing: 16) {
+                            Button("That was intentional") { respond(WorkReading.intentionalResponse) }.buttonStyle(QuietButtonStyle()).disabled(responding || model.isShowcase)
+                            Button("I want to check this") { respond(WorkReading.checkResponse) }.buttonStyle(.plain).foregroundStyle(Palette.mint).disabled(responding || model.isShowcase)
+                        }
+                    }
+                }
+            } else {
+                Label("No useful takeaway passed the checks yet", systemImage: "magnifyingglass").font(.title3)
+                Text("The previous reading couldn’t reliably connect the request to a useful next step. You can retry with the latest conversation; your saved messages are still here.").font(.callout).foregroundStyle(Palette.secondary).lineSpacing(4)
             }
-            VStack(alignment: .leading, spacing: 15) {
-                explanation("Another possible reading", revision.alternative)
-                explanation("Still unknown", revision.unknown)
-            }
-            HStack {
-                Button { model.showDecisionSource(revision) } label: { Label("See the surrounding exchange", systemImage: "bubble.left.and.bubble.right") }.buttonStyle(QuietButtonStyle())
-                Spacer()
-                Text(revision.createdAt.formatted(date: .omitted, time: .shortened)).font(.caption).foregroundStyle(Palette.secondary)
-            }
-            DisclosureGroup("How this account was checked") {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(revision.check)
-                    Text("The action reading, source selection and challenge used \(revision.engine). A host check validates source IDs, text reuse and unsupported claims. Three passes of one model are not independent proof.")
-                    Text("\(revision.loadedMessages) source messages, including any retrieved context; \(revision.storedMessages) saved in the conversation. Retrieval and clipping can miss context. User-supplied text is not proof of original authorship, attention or understanding.")
-                }.font(.caption).foregroundStyle(Palette.secondary).padding(.top, 8)
+            if revision.id != model.decisionHistory.first?.id { Text("You’re viewing an earlier reading.").font(.caption).foregroundStyle(Palette.secondary) }
+            else if !model.isDecisionCurrent { Text("More work has arrived since this reading. A newer result may change this check.").font(.caption).foregroundStyle(Palette.amber) }
+            DisclosureGroup("Why this appeared · see the supporting messages") {
+                VStack(alignment: .leading, spacing: 12) {
+                    ForEach(revision.evidence) { source in
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(source.role == "assistant" ? "The agent’s report or proposal" : source.role == "user_report" ? "Your saved perspective" : "Your supplied words").font(.caption.weight(.medium)).foregroundStyle(source.role == "assistant" ? Palette.lavender : Palette.mint)
+                            Text("“\(source.quote)”").font(.callout).textSelection(.enabled)
+                            if source.role != "user_report" { Button("Read original ↗") { model.showMemorySource(sessionID: source.sessionID, messageID: source.messageID) }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.mint) }
+                        }.padding(14).frame(maxWidth: .infinity, alignment: .leading).background(Palette.inset.opacity(0.6), in: RoundedRectangle(cornerRadius: 12))
+                    }
+                    Button("See the surrounding exchange") { model.showDecisionSource(revision) }.buttonStyle(QuietButtonStyle())
+                    Text("A likely goal is inferred from a bounded excerpt. Agent reports are claims, not independently verified results. This does not establish what you read or understood outside the saved conversation.").font(.caption).foregroundStyle(Palette.secondary)
+                }.padding(.top, 12)
             }.font(.caption)
-        }.padding(25).frame(maxWidth: .infinity, alignment: .leading).background(Palette.surface, in: RoundedRectangle(cornerRadius: 22))
+            DisclosureGroup("Review details") {
+                Text(revision.check + " Engine: " + revision.engine + ". \(revision.loadedMessages) messages selected from \(revision.storedMessages) saved here. Context may be missing. Your corrections can change the next reading.").font(.caption).foregroundStyle(Palette.secondary).padding(.top, 8)
+            }.font(.caption)
+        }.padding(26).frame(maxWidth: .infinity, alignment: .leading).background(Palette.surface, in: RoundedRectangle(cornerRadius: 22))
     }
-    private func explanation(_ title: String, _ value: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) { Text(title).font(.caption.weight(.medium)); Text(value).font(.callout).foregroundStyle(Palette.secondary).lineSpacing(3) }
+    private func respond(_ text: String) {
+        responding = true
+        Task { _ = await model.saveDecisionPerspective(text, about: revision); responding = false }
     }
-    private func sourceLabel(_ source: DecisionEvidence) -> String {
-        if source.role == "assistant" { return "The agent’s message" }
-        if source.role == "user_report" { return "Your saved perspective" }
-        switch source.origin {
-        case .reusedAgent: return "Text you supplied · matches known agent wording"
-        case .mixed: return "Added words in your supplied message"
-        default: return "Your saved message"
-        }
+}
+
+struct FollowingWorkStatus: View {
+    @ObservedObject var model: AppModel
+    private var ready: Bool { model.codexEnabled && model.conversationMemoryEnabled && !model.paused }
+    var body: some View {
+        HStack(spacing: 12) {
+            Circle().fill(ready && model.automaticDecisionReviews && model.localInsightsEnabled ? Palette.mint : Palette.amber).frame(width: 7, height: 7)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(model.paused ? "Updates are paused" : !ready ? "Connect saved Codex conversations to begin" : !model.localInsightsEnabled ? "Saved conversations are collecting; AI review is off" : model.automaticDecisionReviews ? "Following changed work automatically" : "Reviews are manual right now").font(.callout.weight(.medium))
+                Text(model.paused ? "Resume capture to bring new work into view." : model.automaticDecisionReviews && model.localInsightsEnabled ? "Short local reviews after the conversation settles. The circle quietly marks a possible direction change." : "New messages won’t produce a reading until you review them or turn on automatic revisiting.").font(.caption).foregroundStyle(Palette.secondary)
+            }
+            Spacer(minLength: 12)
+            if model.paused { CaptureToggle(model: model, compact: true) }
+            else if ready && (!model.automaticDecisionReviews || !model.localInsightsEnabled) { Button("Follow changed work") { model.startFollowingWork() }.buttonStyle(QuietButtonStyle()).disabled(model.isShowcase) }
+            else if !ready { Button("Connect saved conversations") { model.showMemory() }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.mint) }
+        }.padding(15).background(Palette.inset.opacity(0.55), in: RoundedRectangle(cornerRadius: 13))
     }
 }
 
 struct DecisionEngineSettings: View {
     @ObservedObject var model: AppModel
     var body: some View {
-        DisclosureGroup(model.localInsightsEnabled ? "Local reasoning is enabled" : "Enable the local reasoning engine") {
+        DisclosureGroup("Local model and review settings") {
             VStack(alignment: .leading, spacing: 12) {
                 Toggle("Review saved work on this Mac", isOn: $model.localInsightsEnabled).toggleStyle(.switch)
                 Picker("Local model", selection: $model.reasoningModel) {
@@ -205,23 +239,21 @@ struct QuickDecisionView: View {
     @ObservedObject var model: AppModel
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Eyebrow(text: "An evolving picture of your work")
-            if let review = model.currentDecision {
-                Text(review.summary).font(.system(size: 19, weight: .medium, design: .rounded)).tracking(-0.3).lineLimit(4)
-                if let anchor = review.evidence.first(where: { $0.messageID == review.anchorMessageID }) {
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("Saved message").font(.caption2.weight(.medium)).foregroundStyle(Palette.mint)
-                        Text("“\(String(anchor.quote.prefix(160)))”").font(.caption).foregroundStyle(Palette.secondary).lineLimit(3)
-                    }
-                }
-                Text(review.unknown).font(.caption).foregroundStyle(Palette.secondary).lineLimit(3)
-                Button("Read the evidence →") { model.openStudio(.overview) }.font(.caption.weight(.medium)).buttonStyle(.plain).foregroundStyle(Palette.mint)
-                if !model.isDecisionCurrent { Text("New evidence is waiting for review.").font(.caption2).foregroundStyle(Palette.secondary) }
+            let revision = model.directionToCheck ?? model.currentDecision
+            if let reading = revision?.reading {
+                Eyebrow(text: reading.focus.label)
+                Text(reading.displayTitle).font(.system(size: 20, weight: .medium, design: .rounded)).tracking(-0.3).lineLimit(4)
+                Text(reading.goal).font(.caption.weight(.medium)).foregroundStyle(Palette.mint).lineLimit(3)
+                Text(reading.account).font(.caption).foregroundStyle(Palette.secondary).lineLimit(3)
+                Button("Look at this →") {
+                    if model.directionToCheck != nil { model.openDirectionCheck() } else { model.openStudio(.overview) }
+                }.font(.caption.weight(.medium)).buttonStyle(.plain).foregroundStyle(Palette.mint)
             } else {
-                Text(model.reviewingDecision ? "Reading the decisions in context…" : "Your next reading starts with context.").font(.system(size: 20, weight: .medium, design: .rounded))
-                Text(model.localInsightsEnabled ? "The local engine revisits saved work as new evidence arrives. Open the dashboard to review a conversation." : "Enable local reasoning in the dashboard to connect your requests, the agent’s proposals and what happened afterward.").font(.caption).foregroundStyle(Palette.secondary)
+                Eyebrow(text: "Your next useful check")
+                Text(model.reviewingDecision ? "Connecting the request to what happened next…" : model.automaticDecisionReviews ? "Following the work as it changes." : "Saved work is waiting for a review.").font(.system(size: 20, weight: .medium, design: .rounded))
+                Text(model.paused ? "Capture is paused. Resume when you want new work brought into view." : model.automaticDecisionReviews ? "A short account will appear after the next local review. Open the dashboard to choose a conversation." : "Open the dashboard to review a conversation or turn on automatic revisiting.").font(.caption).foregroundStyle(Palette.secondary)
             }
-            if model.reviewingDecision { HStack { ProgressView().controlSize(.mini); Text("Reviewing on this Mac").font(.caption2).foregroundStyle(Palette.secondary) } }
+            if model.reviewingDecision { HStack { ProgressView().controlSize(.mini); Text("Reading on this Mac").font(.caption2).foregroundStyle(Palette.secondary) } }
             if let error = model.decisionError { Text(error).font(.caption2).foregroundStyle(Palette.amber).lineLimit(2) }
         }
     }

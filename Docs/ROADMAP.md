@@ -75,3 +75,7 @@ Configurable workspace roots, user-chosen project labels, additional source adap
 Employee monitoring, hidden screen capture, medical diagnosis and universal cognitive-decline claims are outside the project’s scope. There is no current agency, strain or readiness score.
 
 See the [measurement framework and proposed experiments](RESEARCH.md).
+
+## 0.11 checkpoint
+
+Contextual goal/check readings, collapsed evidence, explicit automatic-review status and five narrow source-backed boundary-question families are implemented. Quiet cues and intentional-choice reports are available. Personal cognitive measurement, reliable general steering detection, broad cross-tool capture and a complete cross-session task graph remain unimplemented/unvalidated. The current small-model interpretation layer remains experimental.

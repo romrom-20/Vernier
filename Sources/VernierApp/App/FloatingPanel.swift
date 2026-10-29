@@ -153,7 +153,7 @@ struct PillView: View {
                         InstrumentMark(size: 23)
                         VStack(alignment: .leading, spacing: 3) {
                             Text(model.isShowcase ? "Vernier · Showcase" : Brand.name).font(.system(size: 12, weight: .medium))
-                            Text(model.capturePresenceLabel)
+                            Text(model.directionToCheck == nil ? model.capturePresenceLabel : "A direction to check")
                                 .font(.system(size: 11)).foregroundStyle(Palette.secondary).lineLimit(1)
                         }
                         Spacer(minLength: 0)
@@ -166,13 +166,16 @@ struct PillView: View {
                 .overlay(Capsule().strokeBorder(Palette.line.opacity(0.75), lineWidth: 0.5))
                 .foregroundStyle(Palette.text).contentShape(Capsule())
         }.accessibilityElement(children: .ignore)
-            .accessibilityLabel("\(Brand.name), \(model.capturePhase.title). \(model.pillPinned ? "Release" : "Keep open") capture controls.")
+            .accessibilityLabel("\(Brand.name), \(model.capturePhase.title). \(model.directionToCheck == nil ? "" : "Possible direction change to check. ")\(model.pillPinned ? "Release" : "Keep open") capture controls.")
             .accessibilityAddTraits(.isButton)
             .accessibilityAction { model.togglePillControls() }
             .help("Vernier remembers saved Codex work across Conductor workspaces, even when this circle is hidden. Hover for controls. Click to keep them open. Play/pause controls capture; the arrow opens the dashboard.")
     }
     @ViewBuilder private var indicator: some View {
-        if model.capturePhase == .checking && !reduceMotion && !ProcessInfo.processInfo.isLowPowerModeEnabled {
+        if model.directionToCheck != nil {
+            Circle().strokeBorder(Palette.amber.opacity(0.65), lineWidth: 1)
+                .overlay(Circle().fill(Palette.amber).frame(width: 6, height: 6)).frame(width: 15, height: 15)
+        } else if model.capturePhase == .checking && !reduceMotion && !ProcessInfo.processInfo.isLowPowerModeEnabled {
             ProgressView().controlSize(.mini).frame(width: 12, height: 12)
         } else if model.capturePhase == .current {
             Circle().strokeBorder(Palette.mint.opacity(0.65), lineWidth: 1)

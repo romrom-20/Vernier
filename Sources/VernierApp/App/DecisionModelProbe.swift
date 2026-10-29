@@ -42,7 +42,7 @@ extension AppCoordinator {
                 rows.append(["id": item.id, "split": item.split, "critical": item.critical, "pass": false, "error": String(describing: error)])
                 print("MODEL CASE \(item.id): ERROR \(error)")
             }
-            let report: [String: Any] = ["engine": engine, "promptVersion": DecisionGenerator.promptVersion, "syntheticOnly": true, "cases": rows, "passed": rows.filter { $0["pass"] as? Bool == true }.count, "total": rows.count]
+            let report: [String: Any] = ["engine": engine, "promptVersion": (try? DecisionPromptResource.load().0.version) ?? "unavailable", "syntheticOnly": true, "cases": rows, "passed": rows.filter { $0["pass"] as? Bool == true }.count, "total": rows.count]
             try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys]).write(to: URL(fileURLWithPath: reportPath), options: .atomic)
         }
         print("MODEL EVALUATION COMPLETE: \(rows.filter { $0["pass"] as? Bool == true }.count)/\(rows.count)")

@@ -50,6 +50,13 @@ import VernierCore
             }
             return
         }
+        if CommandLine.arguments.contains("--work-model-probe") {
+            Task { @MainActor in
+                do { try await runWorkModelProbe(); NSApp.terminate(nil) }
+                catch { fputs("WORK MODEL PROBE FAILED: \(error)\n", stderr); exit(1) }
+            }
+            return
+        }
         if CommandLine.arguments.contains("--decision-model-probe") {
             Task { @MainActor in
                 do { try await runDecisionModelProbe(); NSApp.terminate(nil) }
@@ -320,8 +327,9 @@ import VernierCore
     }
     func refreshPresence() {
         statusItem?.button?.image = makeStatusImage()
-        statusItem?.button?.toolTip = "\(Brand.name) · \(model.capturePhase.title) · \(model.captureModeTitle)"
-        statusItem?.button?.setAccessibilityLabel("\(Brand.name), \(model.capturePhase.title)")
+        let cueLabel = model.directionToCheck == nil ? "" : " · Possible direction change to check"
+        statusItem?.button?.toolTip = "\(Brand.name) · \(model.capturePhase.title) · \(model.captureModeTitle)\(cueLabel)"
+        statusItem?.button?.setAccessibilityLabel("\(Brand.name), \(model.capturePhase.title)\(cueLabel)")
         let studioFocused = surface == .studio && NSApp.isActive && studio?.isVisible == true && studio?.isMiniaturized != true && studio?.isKeyWindow == true
         let presentation = PillPresentation.resolve(enabled: model.pillEnabled, resting: model.systemSuspended,
             studioFocused: studioFocused, quickPanelVisible: surface == .quickView || surface == .welcome,
@@ -363,7 +371,10 @@ import VernierCore
             self.model.pillHovered = hovered
         }
         host.captureToggled = { [weak self] in self?.model.toggleCapture() }
-        host.dashboardOpened = { [weak self] in self?.openStudio(.overview) }
+        host.dashboardOpened = { [weak self] in
+            guard let self else { return }
+            if self.model.directionToCheck != nil { self.model.openDirectionCheck() } else { self.openStudio(.overview) }
+        }
         host.clicked = { [weak self] in self?.model.togglePillControls() }
         host.moved = { [weak self] in self?.restoreAndSavePillPosition() }
         panel.contentView = host
@@ -405,6 +416,7 @@ import VernierCore
     @objc private func hidePillAction() { model.pillEnabled = false }
     private func makeStatusImage() -> NSImage {
         let state = model.projection.state
+        let hasDirectionCue = model.directionToCheck != nil
         let image = NSImage(size: NSSize(width: 27, height: 19), flipped: false) { _ in
             NSColor.labelColor.setStroke()
             NSColor.labelColor.setFill()
@@ -418,6 +430,12 @@ import VernierCore
             mark.lineWidth = 1.3
             mark.stroke()
             // Shape also communicates status; VoiceOver/tooltip provides the complete label.
+            if hasDirectionCue {
+                let branch = NSBezierPath()
+                branch.move(to: NSPoint(x: 22, y: 5)); branch.line(to: NSPoint(x: 22, y: 9)); branch.line(to: NSPoint(x: 26, y: 14))
+                branch.move(to: NSPoint(x: 22, y: 9)); branch.line(to: NSPoint(x: 20, y: 13)); branch.lineWidth = 1.3; branch.stroke()
+                return true
+            }
             switch state {
             case .idle:
                 NSBezierPath(ovalIn: NSRect(x: 22, y: 7, width: 4, height: 4)).stroke()

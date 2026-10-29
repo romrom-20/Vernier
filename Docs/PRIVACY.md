@@ -1,3 +1,15 @@
+# Privacy update — 0.11
+
+The new goal/check reader uses the same separately consented Codex conversation archive and local inference choice. Source-backed literal boundary questions can run without inference; inferred goals and checkpoints use the selected local provider. No new capture source, screenshot, browser, global mouse or keystroke access is added. Quiet cues use only Vernier's own circle/menu bar, with no system-notification permission or agent-control action.
+
+Choice responses are saved as separate human perspectives and are scoped to the actual requirement/proposal fingerprints. Conversation selection is a local preference. Erasure clears the displayed readings, source dependencies, responses and selected conversation; source invalidation cascades to dependent reports. A user-initiated Copy this check writes only that visible suggestion to the Mac clipboard. Nothing is sent to a coding agent automatically.
+
+Automatic reviewing has a visible status and independent switch. It runs serially at most once per two minutes after fifteen seconds of source quiet, rests in Low Power Mode, and honors pause, opt-out, rest and erasure gates. Literal questions and model interpretations have separate provenance. No model weights are trained on personal sessions.
+
+The existing capture/storage/export/redaction boundaries below remain in force. Historical release sections describe earlier reader behavior.
+
+---
+
 # Local data and consent
 
 Vernier has two distinct Codex permissions: metadata access and conversation memory. Both are off on a fresh install. No screen, browser content, microphone, Accessibility or general app-usage permission is requested.

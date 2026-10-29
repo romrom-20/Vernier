@@ -1,16 +1,20 @@
 {
   "images": {
     "Docs/images/overview.png": {
-      "sha256": "e98ea33d76ab66a8fe1ddd993a16491e3d0e33ca28a2a28f0f49ed6948cac74a",
-      "provenance": "Visually inspected offscreen render of the actual native SwiftUI overview component in 0.10.0. Invented ShowcaseFixtures messages and hand-authored, host-composed DecisionShowcase revision history; no personal store, connector, desktop capture or model inference. Presentation example only."
+      "sha256": "4716f114d28933b4ab8ccc4f73fbea42c4d4a269618a87c8c5286148d89105fa",
+      "provenance": "Visually inspected offscreen render of the actual native SwiftUI overview component in 0.11.0. Invented ShowcaseFixtures messages and hand-authored, source-validated WorkReading; no personal store, connector, desktop capture or model inference. Presentation example only."
     },
     "Docs/images/quick-view.png": {
-      "sha256": "54367b78646d8180e29fc37c80a2a88a4b7bda75d7bdf18286987298d51b361d",
-      "provenance": "Visually inspected offscreen render of the actual native SwiftUI quick-view component in 0.10.0. Invented ShowcaseFixtures messages and hand-authored, host-composed DecisionShowcase revision history; no personal store, connector, desktop capture or model inference. Presentation example only."
+      "sha256": "57bb86b2839a4cd92fe0013c02b77fd086028f37af47a891a837b683f57dfb5c",
+      "provenance": "Visually inspected offscreen render of the actual native SwiftUI quick-view component in 0.11.0. Invented ShowcaseFixtures messages and hand-authored, source-validated WorkReading; no personal store, connector, desktop capture or model inference. Presentation example only."
     },
     "Docs/images/session-map.png": {
-      "sha256": "2c3053fd5c8abf63e31e85ee0fc9e71ca33922648b1be48272a0eced1eaa4643",
-      "provenance": "Visually inspected offscreen render of the actual native SwiftUI session-map component in 0.10.0. Invented ShowcaseFixtures messages and hand-authored, host-composed DecisionShowcase revision history; no personal store, connector, desktop capture or model inference. Presentation example only."
+      "sha256": "c72a6cd9add711bf765ebbf8527a6877cbc98724acef3b24d4616deea53e7703",
+      "provenance": "Visually inspected offscreen render of the actual native SwiftUI session-map component in 0.11.0. Invented ShowcaseFixtures messages and hand-authored, source-validated WorkReading; no personal store, connector, desktop capture or model inference. Presentation example only."
+    },
+    "Docs/images/direction-check.png": {
+      "sha256": "142963aaf6e195f116bfe785ee8d361ad4a8821223d86128f99831ad6d3483e5",
+      "provenance": "Visually inspected offscreen render of the actual native SwiftUI direction-check component in 0.11.0. Invented ShowcaseFixtures messages and hand-authored, source-validated WorkReading; no personal store, connector, desktop capture or model inference. Presentation example only."
     }
   }
 }

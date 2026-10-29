@@ -1,4 +1,4 @@
-# Source release — 0.10.0
+# Source release — 0.11.0
 
 Vernier is an experimental native Mac app and working project name. This repository publishes source, synthetic showcase data, tests and documentation under MIT. There is no production, notarized binary release yet.
 
@@ -35,3 +35,5 @@ The additional development flag `--enable-local-insights` enables this local ana
 
 
 - **0.10.0:** Experimental local reasoning loop with an action reading, source selection, host-composed account, challenge and source checks, immutable revision history and separate human perspectives. New messages and possible related context can trigger another reading. Original exchanges stay inspectable; the source map no longer leads with older interpretation panels. Local Ollama inference is available alongside the experimental Apple alternative, without a cloud fallback. [Mechanism and bounds](REASONING.md) · [Model evaluation](MODEL_EVALUATION.md).
+
+- **0.11.0:** Contextual goals and specific checkpoints replace latest-prompt classifications in the main view. Sources are collapsed, automatic/manual status is explicit, conversation selection persists, and bounded source-backed direction questions have quiet cues and intentional-choice responses. Five literal conflict families have separate provenance from model interpretation. Schema remains v5 and existing records/consent are preserved. No clinical, comprehension or agency verdict is claimed.

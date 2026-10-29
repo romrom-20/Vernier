@@ -33,7 +33,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
     let isShowcase: Bool
     @Published var decisionRevisions: [DecisionRevision] = []
     @Published var decisionPerspectives: [DecisionPerspective] = []
-    @Published var selectedDecisionSessionID: String?
+    @Published var selectedDecisionSessionID: String? { didSet { preferences.selectedDecisionSessionID = selectedDecisionSessionID } }
     @Published var selectedDecisionRevisionID: String?
     @Published var reviewingDecision = false
     @Published var decisionError: String?
@@ -245,6 +245,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
         self.isolated = isolated || showcase
         self.isShowcase = showcase
         self.preferences = preferences
+        selectedDecisionSessionID = preferences.selectedDecisionSessionID
         reasoningModel = preferences.reasoningModel
         automaticDecisionReviews = preferences.automaticDecisionReviews
         localInsightsEnabled = preferences.localInsightsEnabled
@@ -263,8 +264,10 @@ enum StudioPage: String, CaseIterable, Identifiable {
             conversationMemoryEnabled = true
             pillEnabled = true
             preferences.onboardingComplete = true
-            library = ShowcaseFixtures.workLibrary()
-            decisionRevisions = ShowcaseFixtures.decisionHistory(library: library)
+            let directionPreview = CommandLine.arguments.contains("--direction-preview")
+            library = directionPreview ? ShowcaseFixtures.directionLibrary() : ShowcaseFixtures.workLibrary()
+            decisionRevisions = directionPreview ? ShowcaseFixtures.directionHistory(library: library) : ShowcaseFixtures.decisionHistory(library: library)
+            localInsightsEnabled = true; automaticDecisionReviews = true
             lastSync = Date()
         }
     }

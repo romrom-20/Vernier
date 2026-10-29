@@ -1,3 +1,37 @@
+# Goals, checkpoints and direction questions — 0.11
+
+The primary reader now connects surrounding messages to a likely practical goal and a concrete checkpoint. It no longer starts by labeling the latest message as a kind of human contribution. A vague request to investigate can be understood using the failure and agent diagnosis around it. Inferred goals and suggestions remain tentative.
+
+The main card leads with the proposed check or a plain choice between approaches. Supporting excerpts and review details are collapsed. Goal-based conversation titles replace raw URL titles when a reading is available. The current conversation is kept across launches. The primary status explicitly distinguishes capture pause, manual review and automatic following.
+
+## Two kinds of reading
+
+**Literal boundary questions** handle five narrow, recognizable conflicts: offline processing versus hosted processing, no new dependency versus adding a package, preserving local data versus dropping its table, no paid service versus a paid API, and keeping data on-device versus uploading it. These questions use exact spans from a human requirement and an agent proposal, followed by a recognizable brief approval (at most twelve words). Sources must belong to the same conversation and appear in order. A substantive intervening human request suppresses an older boundary question. Negated proposed actions and known reused agent text are guarded. These are conservative text rules, not comprehension measurements or proof of a shared intended scope. They can miss differently worded constraints or misread scope.
+
+A literal rule constructs only a question from its two source spans; it performs no inference call. The reading records the rule name and uses a separate local-rule engine label. It does not claim that an LLM challenge approved it. Other possible boundary conflicts use a dedicated local comparison and a separate model challenge, with the same source/role/approval guards. A short reply on its own never establishes a conflict.
+
+**Contextual model readings** extract a likely goal, a specific next step, an outcome state and IDs of app-made witness spans. The app supplies the exact saved text for those IDs; the model never has to reproduce a quotation. The app composes restrained text attributing a proposal or report to its actual speaker; a second model pass checks the goal, account and checkpoint. Build-only or explicitly unrun checks are guarded rather than treated as demonstrated behavioral success. Explicit topic switches separate a new question from unrelated older reports. This is still imperfect: a valid quote does not establish a correct relationship or a useful recommendation. Unsupported readings are withheld.
+
+The model does not write an unrestricted biography or a cognitive score. Goal and next-step text are bounded and screened for recognizable unsupported personal verdicts. Exact witness spans must occur in both the supplied excerpt and saved original. Witness and source IDs are constrained and rechecked. Even a one-word disagreement remains eligible evidence. The model cannot call tools or control a coding agent. Ollama requests serialize their schema deterministically; schema validity is not semantic validation.
+
+## Quiet cues and your response
+
+A current direction question can mark the circle in amber and add a branch indicator to the menu-bar icon, without opening a window, animating continuously or interrupting another app. Its explicit dashboard arrow opens the relevant conversation. Quick view prioritizes that question. A cue expires after an hour and is suppressed while capture is paused, during system rest, after source changes, or after a matching response.
+
+**That was intentional** and **I want to check this** save separate human reports. The response is linked to the original reading and a stable fingerprint of the requirement/proposal pair, so later short approvals of that same pair do not keep nudging. A different proposal or edited source gets a different key. An intentionally accepted literal change is passed back to contextual review rather than repeatedly regenerating the same rule question. Reports are self-reports, not proof of review or understanding. Source invalidation and erasure also remove dependent reports; they are not permanent independent notes.
+
+## Scheduling and accumulated context
+
+Collection retains its adaptive 20/60/180-second cadence. Automatic reviews are serial, at most once per two minutes, with at least fifteen seconds of source quiet and a two-minute per-conversation retry interval. Changed conversations active in the last day rotate by oldest reading, giving unreviewed work a chance. A large backlog can take substantially longer to cover. Automatic inference rests in Low Power Mode; manual review remains available. There is no claim of instantaneous interpretation of every running agent.
+
+The previous goal, reading and cited sources help provide continuity on later short requests. Goal-source references are canonical message IDs, not transient prompt labels. A prior goal can also help retrieve candidate related context when the next request is short. Retrieved context is explicitly unconfirmed. This is bounded external memory, not model-weight training, the Google Sleep algorithm, a complete task graph or a personal cognitive model.
+
+The original context limits and storage protections below remain in force: canonical records stay separate, source changes invalidate dependents, stale/revoked results cannot commit, and erasure/export include derived readings. Schema stays v5; older revision payloads still decode. See [current model tests and limitations](MODEL_EVALUATION.md), [UI walkthrough](READING_A_SESSION.md) and [privacy](PRIVACY.md).
+
+---
+
+# Historical implementation: action readings — 0.10
+
 # A reading that changes when the evidence changes
 
 Vernier 0.10 adds an experimental local reasoning loop to the main dashboard and compact view. Its job is to reconstruct a particular exchange: what you wanted, what the agent proposed, what your next message contributed, and which question the record leaves open. It does not determine whether you are losing cognitive ability or being controlled by an agent.

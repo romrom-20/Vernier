@@ -165,6 +165,10 @@ public struct Preferences {
         get { defaults.bool(forKey: "automaticDecisionReviews") }
         nonmutating set { defaults.set(newValue, forKey: "automaticDecisionReviews") }
     }
+    public var selectedDecisionSessionID: String? {
+        get { defaults.string(forKey: "selectedDecisionSessionID") }
+        nonmutating set { defaults.set(newValue, forKey: "selectedDecisionSessionID") }
+    }
     public var reasoningModel: String {
         get {
             let saved = defaults.string(forKey: "reasoningModel") ?? "apple"

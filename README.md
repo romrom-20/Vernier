@@ -15,15 +15,19 @@ Today, the experimental Mac app gathers consented **Codex history from Conductor
 
 The broader question is **human agency in AI-mediated work**: when does delegation expand what you can do, and what remains within your ability to understand, redirect and recover?
 
-**Current version: 0.10.0.** An experimental local reasoning loop extracts proposed observable acts from the latest human request, selects sources, composes an account and challenges it in a separate pass, checks its source references, and saves a revisable history. The dashboard separates the reading, literal evidence, another possible explanation and what remains unknown. You can add your own perspective. Neither model agreement nor a valid citation proves the account is correct. There is no comprehension, cognitive-effort or agency score. [How the loop works](Docs/REASONING.md).
+**Current version: 0.11.0.** The main card now gives a likely practical goal and one specific checkpoint, with supporting messages folded away. A short “go ahead” is read alongside the surrounding exchange. When a saved requirement conflicts with a proposed approach, Vernier can ask which direction you want to keep. It does not claim to know whether you understood, surrendered control or made a mistake. [How the loop works](Docs/REASONING.md).
 
-![Vernier explains a request for a concrete check using an invented conversation](Docs/images/overview.png)
+![An invented import case with a practical goal and concrete next check](Docs/images/overview.png)
 
-*Offscreen render of the actual native SwiftUI view in isolated showcase mode. The conversation is invented. The hand-written example shows an agent report and a request for a missing check; no model ran. It demonstrates layout and sources, not understanding, correctness or measured AI accuracy.*
+*Offscreen render of actual native SwiftUI components using invented records and a hand-authored, source-validated reading. This illustrates layout, not model accuracy.*
 
-![Compact reading of the same invented exchange](Docs/images/quick-view.png)
+![A concrete choice between an offline requirement and a hosted proposal](Docs/images/direction-check.png)
 
-*Offscreen render of the exact menu-bar content using the same invented records. Its normal popover geometry and routing are tested separately.*
+*An invented boundary question. The circle can show a quiet cue; “That was intentional” records your choice and suppresses repeat nudges for the same requirement and proposal.*
+
+![Compact view of an invented next check](Docs/images/quick-view.png)
+
+*The exact menu-bar content rendered offscreen with the same synthetic data. Capture, dashboard routing and source controls have separate regression checks.*
 
 ## The product we are working toward
 
@@ -73,7 +77,7 @@ The diagram's height identifies the speaker. It does not encode attention, elaps
 
 ## What works today
 
-- **Revisable local readings:** a focused action reading, source selection, host-composed account, challenge and source checks. Literal evidence, alternatives, unknowns, history and your corrections stay separate. Optional local inference uses already-consented saved content.
+- **Revisable local readings:** contextual goal/check extraction, host-composed presentation, a model challenge and source checks. Literal evidence, alternatives, unknowns, history and your corrections stay separate. Optional local inference uses already-consented saved content.
 - **Visual review:** interactive speaker lanes, before-and-after comparisons and source navigation. Counts are folded into coverage; old interpretation panels no longer compete with the main account.
 - **Quiet Mac presence:** native SwiftUI/AppKit, menu-bar quick view, optional draggable circle/pill and short, reduced-motion-aware transitions. Pause works in place; Open dashboard opens Studio. The circle controls background memory; collection continues while it is hidden.
 - **Codex in Conductor:** read-only local history access. Vernier never starts, resumes or controls an agent.
@@ -103,7 +107,7 @@ open "$HOME/Applications/Vernier.app"
 
 This installs a local development app at `~/Applications/Vernier.app` and preserves the previous same-ID bundle. Enable sources in Connections, conversation capture in Memory, and optional login/pill behavior in Privacy. Closing Studio leaves the menu-bar app running.
 
-**Local reasoning is experimental, optional and off for new installations.** It runs through a separately installed [Ollama](https://ollama.com/) model on your Mac, or the experimental Apple on-device alternative on an eligible macOS 26.4+ installation. Open Overview → local reasoning, choose an installed model and use **Check local engine**. No Vernier backend, extra ChatGPT plan or paid model API is required. Automatic revisiting has its own switch, initially off. Start with a manual reading and compare its sources: none of the tested configurations met the interpretation-quality gate. Apple’s eligible on-device model needs no separate weights or API subscription. Optional Gemma 4 E2B QAT through Ollama matched 33/40 synthetic labels, the strongest completed experiment here, but still missed the gate. It requires a 4.3 GB download. The reader and map work with inference off. See [model setup, test results and limits](Docs/MODEL_EVALUATION.md).
+**Local reasoning is experimental, optional and off for new installations.** It runs through a separately installed [Ollama](https://ollama.com/) model on your Mac, or the experimental Apple on-device alternative on an eligible macOS 26.4+ installation. Open Overview → local reasoning, choose an installed model and use **Check local engine**. No Vernier backend, extra ChatGPT plan or paid model API is required. Automatic revisiting has its own visible status and a **Follow changed work** action; it is initially off on a fresh installation. Compare its sources: contextual readings remain experimental. Apple’s eligible on-device model needs no separate weights or API subscription. Optional Gemma 4 E2B QAT through Ollama requires a 4.3 GB download. The current pipeline matched 18/24 synthetic development examples; this combines model readings and narrow literal rules, and is not an accuracy estimate. It can miss useful checks and withhold usable context. The reader and map work with inference off. See [model setup, test results and limits](Docs/MODEL_EVALUATION.md).
 
 A live connector requires Conductor's installed Codex binary and available local history. This is a source release with an ad-hoc signature; a notarized download, DMG and automatic updater are not available.
 

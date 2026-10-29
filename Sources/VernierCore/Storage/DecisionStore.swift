@@ -17,9 +17,9 @@ extension SessionStore {
         return payloads.compactMap { try? JSONDecoder().decode(DecisionRevision.self, from: Data($0.utf8)) }
     }
     public func loadDecisionPerspectives(sessionID: String? = nil) throws -> [DecisionPerspective] {
-        let sql = "SELECT p.id,p.session_id,p.body,p.created_at,p.revision_id,d.anchor_id FROM decision_perspectives p JOIN decision_revisions d ON d.id=p.revision_id" + (sessionID == nil ? "" : " WHERE p.session_id=?") + " ORDER BY p.created_at,p.id"
+        let sql = "SELECT p.id,p.session_id,p.body,p.created_at,p.revision_id,d.anchor_id,d.payload FROM decision_perspectives p JOIN decision_revisions d ON d.id=p.revision_id" + (sessionID == nil ? "" : " WHERE p.session_id=?") + " ORDER BY p.created_at,p.id"
         return try decisionRows(sql, values: sessionID.map { [$0] } ?? []) { row in
-            DecisionPerspective(id: string(row, 0), sessionID: string(row, 1), text: string(row, 2), createdAt: date(row, 3), revisionID: string(row, 4), anchorMessageID: string(row, 5))
+            DecisionPerspective(id: string(row, 0), sessionID: string(row, 1), text: string(row, 2), createdAt: date(row, 3), revisionID: string(row, 4), anchorMessageID: string(row, 5), signalKey: (try? JSONDecoder().decode(DecisionRevision.self, from: Data(string(row, 6).utf8)))?.reading?.signalKey)
         }
     }
     /// User-authored local perspective, separate from observation and model inference.
@@ -61,7 +61,8 @@ extension SessionStore {
         let opening = try memoryMessages(sessionID: sessionID, limit: 3, newestFirst: false, speaker: "user")
         for message in opening where !messages.contains(where: { $0.id == message.id }) { messages.append(message) }
         let preliminary = DecisionContext.make(sessionID: sessionID, messages: messages, perspectives: [], previous: previous, storedMessages: recent.count)
-        let query = preliminary?.anchor?.novelText ?? ""
+        let wording = preliminary?.anchor?.novelText ?? ""
+        let query = wording.count < 80 ? wording + " " + (previous?.reading?.goal ?? "") : wording
         let related = try relatedDecisionMessages(sessionID: sessionID, query: query, previous: previous)
         let count: Int = try decisionRows("SELECT COUNT(*) FROM messages WHERE session_id=?", values: [sessionID]) { Int(sqlite3_column_int64($0, 0)) }.first ?? recent.count
         return DecisionContext.make(sessionID: sessionID, messages: messages, perspectives: perspectives, previous: previous, storedMessages: count, retrieved: related.0, relatedMessageCounts: related.1)

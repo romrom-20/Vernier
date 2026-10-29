@@ -1,3 +1,23 @@
+# Get back into the work — 0.11
+
+Overview starts with a likely practical goal and one specific checkpoint. For example: import a blank-email file twice and compare contact counts. You can copy the check; Vernier does not execute it or send it to an agent. Supporting messages and review details are folded away until you ask for them.
+
+The status above the conversation picker tells you whether new work is paused, reviewed manually or followed automatically. **Follow changed work** enables local analysis and automatic revisiting over already-connected, consented conversations, then reviews the selected work. It does not connect a new data source. Closing the window leaves the app resident; paused capture remains paused until you resume it.
+
+A direction question names a concrete choice, such as keeping processing offline versus accepting a hosted service. The main card shows the saved requirement and the proposed approach. This is a question about a potential conflict, not a verdict that you were controlled or failed to think. **That was intentional** records your decision; **I want to check this** records an open concern. Both stop repeated ambient nudges for the same requirement/proposal pair. Your response stays separate from the model account.
+
+The circle marks an eligible question quietly in amber; the menu-bar icon gains a branch. Its dashboard arrow opens that question's conversation. Pause still toggles capture in place. The app does not pop up a window or send a notification. A cue requires source evidence and brief recognizable approval; many differently worded or ambiguous cases will be missed.
+
+A short request can have an understandable purpose in surrounding context. The local model infers that purpose rather than treating every short prompt as a lapse in judgment. It can still get the goal or checkpoint wrong, or withhold an understandable exchange. Use **Why this appeared** for exact witnesses and **Add my perspective** when it misses your situation. A source link opens the canonical saved record, not a search for matching words.
+
+Your conversation selection is kept across launches; revision history remains inspectable. Older action-label readings can be refreshed with the contextual reader. The scope is still Codex history from Conductor workspaces. This is bounded external memory and an experimental aid to review, not a full project graph or a measurement of comprehension.
+
+See [current reasoning and cue rules](REASONING.md), [executed model tests](MODEL_EVALUATION.md) and [privacy](PRIVACY.md).
+
+---
+
+## Earlier walkthrough — 0.10 source map and revision controls
+
 # Read a session, recover the thread
 
 Choose a piece of work you want to revisit: a feature, bug or decision. In Overview, select its saved Codex conversation. One conversation can contain several tasks; Vernier does not know their boundaries automatically.

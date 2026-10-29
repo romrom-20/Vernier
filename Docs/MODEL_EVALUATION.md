@@ -1,3 +1,29 @@
+# Current contextual reader — 0.11
+
+The current production path is `DecisionGenerator.review`, using `WorkPrompt.json` (`work-11`). It is different from the historical action-label experiment below. Do not compare its results directly to the older 40-case labels.
+
+The local model extracts a practical goal, checkpoint and selectable witness IDs. The host constructs those spans from saved messages and copies their exact text, preventing a paraphrased citation from invalidating an otherwise useful account. The app composes a narrow account, then asks for a separate challenge. Explicit boundary questions can instead come from five named literal rules with no model request. Other boundary comparisons use a dedicated local pass. Reports identify the actual review engine and rule basis. Agreement between passes is not independent proof.
+
+`work-reading-cases.json` contains 18 invented development exchanges; `work-reading-challenge.json` contains six additional examples. All 24 have now been inspected or used during development and are **regression cases, not a blind test**. Labels allow some overlapping useful focuses; a lexical goal-term check is shallow. Manual inspection and source-integrity checks remain necessary.
+
+The release run with Gemma 4 E2B QAT and the hybrid pipeline matched 14/18 main and 4/6 additional examples, **18/24** in total. Five explicit conflict questions were raised, including the on-device/upload case; the other nineteen examples raised no direction cue. The literal rules, not LLM accuracy, account for those five detections. In this final run, the model kept a useful replay suggestion but mislabeled a build-only case as a handoff; it also missed the returning-fault label and withheld a short rejection and several understandable topic-change/new-issue requests. The critic can reject a plausible goal along with a poor account. A passing behavioral report and a failure report are both reports; the interface does not certify success. These results do not validate an agency or comprehension detector.
+
+```sh
+swift build --product Vernier
+.build/debug/Vernier --work-model-probe \
+  --model gemma4:e2b-it-qat \
+  --cases Tests/Fixtures/work-reading-cases.json \
+  --report /tmp/vernier-work-reading-report.json
+```
+
+Run the additional file separately. Both probes use invented in-memory packets and open no personal archive, connector or login service. Literal-rule rows report their own review engine and no model challenge; model rows record their proposed frame, compiled account and challenge. Normal CI invokes no model.
+
+No new paid API or remote inference provider is configured. The existing 4.3 GB Gemma weights and loopback Ollama service are used. No claim is made that the smallest model reliably understands private intentions. Natural long conversations, broader languages and all-day energy remain unvalidated.
+
+---
+
+# Historical local model evaluation — 0.10 action protocol
+
 # Local model evaluation
 
 The reasoning loop is implemented, but **no completed configuration met our interpretation-quality gate**. Model agreement and valid references do not establish semantic correctness. Automatic revisiting has a separate switch, off initially. Start with manual readings and compare their sources.
