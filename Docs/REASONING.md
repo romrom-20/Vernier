@@ -1,3 +1,9 @@
+# Where reasoning fits in the daily view — 0.12
+
+The first layer is now a descriptive [daily recap](DAILY_RECAP.md) of saved human follow-ups and optional self-reports. Its percentages use transparent wording rules and no model call; they do not measure task delegation, thought, prompt quality or understanding. The contextual reasoning loop below remains the deeper conversation reader and source-backed direction question. A daily pattern can open that specific exchange and its map.
+
+---
+
 # Goals, checkpoints and direction questions — 0.11
 
 The primary reader now connects surrounding messages to a likely practical goal and a concrete checkpoint. It no longer starts by labeling the latest message as a kind of human contribution. A vague request to investigate can be understood using the failure and agent diagnosis around it. Inferred goals and suggestions remain tentative.

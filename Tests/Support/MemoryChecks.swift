@@ -3,6 +3,8 @@ import VernierCore
 
 public enum MemoryChecks {
     public static let cases: [(String, @Sendable () async throws -> Void)] = [
+        ("Daily participation has honest denominators, dates and source attribution", DailyChecks.projection),
+        ("Daily archive queries, v5 migration, check-in export, retention and erasure", DailyChecks.storage),
         ("Conversation normalization, best-effort redaction and honest wording flags", boundary),
         ("Separate content consent, local search, export and memory deletion", storage),
         ("Conversation backfill advances independently of metadata", protocolBackfill),

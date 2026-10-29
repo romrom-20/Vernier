@@ -1,3 +1,11 @@
+# Daily participation layer — 0.12
+
+`DailyStore` queries a bounded source-time day slice from the full SQLite archive, with one prior message where needed to preserve midnight context. `DailyParticipation` orders messages, annotates known text reuse, assigns mutually exclusive wording categories and projects active-hour counts, workspace groups and candidate reflection patterns. `DailyModel` computes off the main actor, keys projections to day/source changes and rejects stale results. Compact and full views share that projection; conversation interpretation remains a separate layer.
+
+Schema v6 adds source-time indexes and an independent `daily_reflections` table for optional human reports. Export, retention and erasure include those reports. A store generation prevents an in-flight old report from being saved after erasure. The daily counts require no model request, new connector or daemon. [Meaning and bounds](DAILY_RECAP.md).
+
+---
+
 # Resident app, incremental storage, conversation memory
 
 SwiftUI views live inside an AppKit coordinator owning the native status item, anchored popover, Studio and optional nonactivating panel. The panel follows ordinary desktop Spaces and excludes full-screen Spaces. Native semantic text, adaptive colors and source-triggered motion preserve accessibility. The app icon is generated from the same vector caliper mark with AppKit, not a remote asset.

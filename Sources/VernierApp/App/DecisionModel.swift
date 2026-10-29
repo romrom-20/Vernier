@@ -30,6 +30,7 @@ extension AppModel {
     }
     func openDirectionCheck() {
         guard let revision = directionToCheck else { return }
+        dailyConversationExpanded = true
         selectDecisionSession(revision.sessionID); selectedDecisionRevisionID = revision.id; openStudio(.overview)
     }
     func startFollowingWork() {

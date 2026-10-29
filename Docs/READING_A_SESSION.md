@@ -1,3 +1,11 @@
+# Start with your day — 0.12
+
+Overview and the compact panel begin with your recorded day. Select a count to see its follow-ups; choose a pattern to open the specific conversation and map. Yesterday and earlier dates remain available within retention. The optional check-in adds your own clarity and energy report. These describe different kinds of evidence; none establishes a percentage of brain use or a personal health score. [Definitions and limits](DAILY_RECAP.md).
+
+“Look closer at one conversation” contains the contextual reader described below. Direction cues expand that relevant reading directly.
+
+---
+
 # Get back into the work — 0.11
 
 Overview starts with a likely practical goal and one specific checkpoint. For example: import a blank-email file twice and compare contact counts. You can copy the check; Vernier does not execute it or send it to an agent. Supporting messages and review details are folded away until you ask for them.

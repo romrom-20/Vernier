@@ -1,4 +1,4 @@
-# Source release — 0.11.0
+# Source release — 0.12.0
 
 Vernier is an experimental native Mac app and working project name. This repository publishes source, synthetic showcase data, tests and documentation under MIT. There is no production, notarized binary release yet.
 
@@ -21,7 +21,7 @@ Development launch flags `--connect-codex`, `--enable-conversation-memory`, `--e
 - **0.4.2:** native in-place play/pause, separate from click-to-open.
 - **0.4.3:** public documentation, MIT license, isolated synthetic showcase and reproducible CI/checks.
 
-SQLite schema v5 separates session/turn metadata, notes, change log, sync state, messages, safe agent signals conversation progress cached derived briefs, revisable interpretations, human perspectives and source dependencies. UI changes preserve records and existing consent. See [validation and pending acceptance work](VALIDATION.md).
+SQLite schema v6 includes optional daily self-reports and source-time indexes. The existing tables separate session/turn metadata, notes, change log, sync state, messages, safe agent signals conversation progress cached derived briefs, revisable interpretations, human perspectives and source dependencies. UI changes preserve records and existing consent. See [validation and pending acceptance work](VALIDATION.md).
 
 A DMG, Developer ID signature, notarization, secure updater, clean-Mac distribution, universal binary and crash-relaunch service are not implemented.
 
@@ -37,3 +37,5 @@ The additional development flag `--enable-local-insights` enables this local ana
 - **0.10.0:** Experimental local reasoning loop with an action reading, source selection, host-composed account, challenge and source checks, immutable revision history and separate human perspectives. New messages and possible related context can trigger another reading. Original exchanges stay inspectable; the source map no longer leads with older interpretation panels. Local Ollama inference is available alongside the experimental Apple alternative, without a cloud fallback. [Mechanism and bounds](REASONING.md) · [Model evaluation](MODEL_EVALUATION.md).
 
 - **0.11.0:** Contextual goals and specific checkpoints replace latest-prompt classifications in the main view. Sources are collapsed, automatic/manual status is explicit, conversation selection persists, and bounded source-backed direction questions have quiet cues and intentional-choice responses. Five literal conflict families have separate provenance from model interpretation. Schema remains v5 and existing records/consent are preserved. No clinical, comprehension or agency verdict is claimed.
+
+- **0.12.0:** Daily recap becomes the first layer in Studio and quick view: a named follow-up denominator, wording breakdown, active-hour pattern, exact-source drill-down, previous days and optional clarity/energy check-ins. Initial requests with agent replies but no follow-up are kept separate. Schema v5→v6 preserves canonical records. These are descriptive source patterns, not prompt-quality, task-completion or cognitive-health scores.

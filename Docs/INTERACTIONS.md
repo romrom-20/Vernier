@@ -1,3 +1,9 @@
+# Daily recap interaction — 0.12
+
+The compact panel shows the selected day's breakdown and one pattern, rather than a latest agent instruction. Studio opens the daily recap. Counts filter literal follow-ups and scroll to the breakdown; a pattern opens its own conversation and map anchor. Previous/next controls change the local calendar day. Conversation readings remain collapsed under “Look closer at one conversation”; a direction cue opens and expands its relevant reading. Optional check-ins stay separate and collapsed until requested. Existing fixed popover bounds, in-place Pause/Resume and circle behavior are retained.
+
+---
+
 # Native interactions and mouse checks
 
 The app observes mouse entry/exit and dragging only for its own floating control. It does not log mouse activity elsewhere on the Mac or use clicks to score comprehension.

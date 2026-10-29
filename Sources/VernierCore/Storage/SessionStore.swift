@@ -90,6 +90,7 @@ public actor SessionStore {
     let connection: SQLiteConnection
     let gate: ObservationGate
     public private(set) var lastWriteSummary = StoreWriteSummary()
+    var reflectionGeneration = 0
     private let transient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
     public init(directory: URL, gate: ObservationGate) throws {
         self.directory = directory; self.gate = gate
@@ -105,7 +106,7 @@ public actor SessionStore {
         guard sqlite3_prepare_v2(db, "PRAGMA user_version", -1, &statement, nil) == SQLITE_OK, let statement else { throw StoreFailure.corrupt }
         let version = sqlite3_step(statement) == SQLITE_ROW ? sqlite3_column_int(statement, 0) : -1
         sqlite3_finalize(statement)
-        guard version >= 0 && version <= 5 else { throw StoreFailure.corrupt }
+        guard version >= 0 && version <= 6 else { throw StoreFailure.corrupt }
         if version == 0 {
             try execute("""
             BEGIN IMMEDIATE;
@@ -169,6 +170,17 @@ public actor SessionStore {
             COMMIT;
             """)
         }
+        if version < 6 {
+            try execute("""
+            BEGIN IMMEDIATE;
+            CREATE TABLE daily_reflections(day_key TEXT PRIMARY KEY,day_start REAL NOT NULL,payload TEXT NOT NULL);
+            CREATE INDEX messages_source_time ON messages(source_at);
+            CREATE INDEX messages_session_source_time ON messages(session_id,source_at);
+            INSERT INTO schema_migrations VALUES(6,unixepoch());
+            PRAGMA user_version=6;
+            COMMIT;
+            """)
+        }
         try execute("CREATE INDEX IF NOT EXISTS agent_signals_session ON agent_signals(session_id)")
         for suffix in ["", "-wal", "-shm"] {
             let path = url.path + suffix
@@ -183,6 +195,7 @@ public actor SessionStore {
             try execute("BEGIN IMMEDIATE")
             do {
                 let cutoff = RetentionPolicy.cutoff(days: retentionDays)
+                try write("DELETE FROM daily_reflections WHERE day_start < ?", values: [cutoff.timeIntervalSince1970])
                 let sessions = snapshot.sessions.filter { $0.updatedAt >= cutoff }
                 let ids = Set(sessions.map(\.id))
                 for session in sessions {
@@ -254,6 +267,7 @@ public actor SessionStore {
         try write("INSERT INTO notes VALUES(?,?) ON CONFLICT(session_id) DO UPDATE SET note=excluded.note", values: [sessionID, text])
     }
     public func enforceRetention(days: Int) throws {
+        try write("DELETE FROM daily_reflections WHERE day_start < ?", values: [RetentionPolicy.cutoff(days: days).timeIntervalSince1970])
         try write("DELETE FROM sessions WHERE updated_at < ?", values: [RetentionPolicy.cutoff(days: days).timeIntervalSince1970])
         try execute("PRAGMA wal_checkpoint(TRUNCATE)")
     }
@@ -263,10 +277,12 @@ public actor SessionStore {
         var value = try JSONSerialization.jsonObject(with: data) as! [String: Any]
         value["decisionRevisions"] = try JSONSerialization.jsonObject(with: encoder.encode(loadDecisionRevisions(limit: nil)))
         value["decisionPerspectives"] = try JSONSerialization.jsonObject(with: encoder.encode(loadDecisionPerspectives()))
+        value["dailyReflections"] = try JSONSerialization.jsonObject(with: encoder.encode(dailyReflections()))
         return try JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted, .sortedKeys])
     }
     public func deleteAll() throws {
-        try execute("DELETE FROM sessions; DELETE FROM sync_state; PRAGMA wal_checkpoint(TRUNCATE); VACUUM;")
+        reflectionGeneration += 1
+        try execute("DELETE FROM daily_reflections; DELETE FROM sessions; DELETE FROM sync_state; PRAGMA wal_checkpoint(TRUNCATE); VACUUM;")
     }
     func execute(_ sql: String) throws { if sqlite3_exec(connection.handle, sql, nil, nil, nil) != SQLITE_OK { throw StoreFailure.unavailable } }
     func write(_ sql: String, values: [Any?]) throws {

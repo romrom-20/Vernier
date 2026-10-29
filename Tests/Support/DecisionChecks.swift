@@ -205,7 +205,7 @@ public enum DecisionChecks {
         old = nil
         var db: OpaquePointer?
         try check(sqlite3_open(directory.appendingPathComponent("sessions.sqlite").path, &db) == SQLITE_OK, "Cannot open temporary migration fixture")
-        let sql = "DROP TRIGGER decision_message_delete; DROP TRIGGER decision_message_edit; DROP TRIGGER decision_perspective_delete; DROP TABLE decision_sources; DROP TABLE decision_perspectives; DROP TABLE decision_revisions; DELETE FROM schema_migrations WHERE version=5; PRAGMA user_version=4;"
+        let sql = "DROP TABLE daily_reflections; DROP INDEX messages_source_time; DROP INDEX messages_session_source_time; DROP TRIGGER decision_message_delete; DROP TRIGGER decision_message_edit; DROP TRIGGER decision_perspective_delete; DROP TABLE decision_sources; DROP TABLE decision_perspectives; DROP TABLE decision_revisions; DELETE FROM schema_migrations WHERE version>=5; PRAGMA user_version=4;"
         try check(sqlite3_exec(db, sql, nil, nil, nil) == SQLITE_OK, "Cannot prepare a genuine v4 schema")
         sqlite3_close(db)
         let upgraded = try SessionStore(directory: directory, gate: gate)

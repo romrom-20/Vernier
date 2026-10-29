@@ -8,6 +8,7 @@ extension AppCoordinator {
         guard model.isShowcase, let flag = CommandLine.arguments.firstIndex(of: "--render-showcase"), flag + 1 < CommandLine.arguments.count else { throw DecisionGenerationError.unavailable }
         let directory = URL(fileURLWithPath: CommandLine.arguments[flag + 1], isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        await model.loadDailyParticipation()
         try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 1180, height: 820), file: directory.appendingPathComponent("overview.png"))
         try await snapshot(AnyView(MenuBarView(model: model)), size: NSSize(width: 382, height: 414), file: directory.appendingPathComponent("quick-view.png"))
         model.briefSessionID = model.library.sessions.first?.id

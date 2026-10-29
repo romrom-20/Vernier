@@ -1,3 +1,9 @@
+# Current daily baseline — 0.12
+
+Daily and compact recaps now aggregate saved follow-up wording across connected workspaces, preserve source drill-downs and support past days and optional personal check-ins. The remaining goal is task-aware, contextual interpretation of delegation and outcomes: connected task boundaries, useful coding subfields, validated prompt-quality feedback and evidence of what a person can explain or recover. The current percentages do not measure those capabilities. [Implemented definitions](DAILY_RECAP.md).
+
+---
+
 # Roadmap: from Mac utility to agency instrument
 
 This is a direction with evidence gates, not a release schedule. The three measurement layers remain separate throughout: passive observations, consented active probes and longitudinal experiments.

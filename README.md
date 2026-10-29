@@ -11,21 +11,21 @@ A coding session can produce a working feature and a long conversation. Reconstr
 
 Vernier is being built as a **personal instrument for understanding and directing your work with AI over time**. The intended experience connects your goals, delegation, questions, corrections and available outcomes, helping you notice a pattern and find a useful way back into the work.
 
-Today, the experimental Mac app gathers consented **Codex history from Conductor workspaces** and starts with your part in an exchange: what the agent said, what you added or questioned, and why that contribution may matter. Each reading opens its original conversation. Interactive maps open the surrounding exchange. An optional local model revisits a source-backed account as new evidence and your corrections arrive; bounded same-workspace retrieval can supply possible related context. Connected task histories and personal recaps remain planned.
+Today, the experimental Mac app gathers consented **Codex history from Conductor workspaces** and gives a daily picture: brief handoffs, added direction, check requests, result reports and work worth revisiting. Each number opens the saved follow-ups behind it. A separate optional check-in records your own clarity and energy. Local conversation readings and maps help you inspect a particular decision. Connected task histories and independently measured learning remain planned.
 
 The broader question is **human agency in AI-mediated work**: when does delegation expand what you can do, and what remains within your ability to understand, redirect and recover?
 
-**Current version: 0.11.0.** The main card now gives a likely practical goal and one specific checkpoint, with supporting messages folded away. A short “go ahead” is read alongside the surrounding exchange. When a saved requirement conflicts with a proposed approach, Vernier can ask which direction you want to keep. It does not claim to know whether you understood, surrendered control or made a mistake. [How the loop works](Docs/REASONING.md).
+**Current version: 0.12.0.** The main and compact views now start with **your day**, rather than the agent's latest instruction. A percentage names recorded follow-ups with brief approvals or continuations; it does not claim a percentage of tasks delegated, brain use or time spent thinking. The dashboard adds active-hour patterns, original-message drill-downs, previous-day recaps and optional personal check-ins. Specific conversation readings and quiet direction questions remain one layer deeper. [How to read the daily recap](Docs/DAILY_RECAP.md) · [How the local reasoning loop works](Docs/REASONING.md).
 
-![An invented import case with a practical goal and concrete next check](Docs/images/overview.png)
+![An invented daily recap with a follow-up breakdown and a pattern to revisit](Docs/images/overview.png)
 
-*Offscreen render of actual native SwiftUI components using invented records and a hand-authored, source-validated reading. This illustrates layout, not model accuracy.*
+*Actual native SwiftUI components rendered offscreen from invented saved messages. Daily counts come from those messages; conversation readings in the showcase are hand-authored. This illustrates presentation, not measured prompt quality or model accuracy.*
 
 ![A concrete choice between an offline requirement and a hosted proposal](Docs/images/direction-check.png)
 
-*An invented boundary question. The circle can show a quiet cue; “That was intentional” records your choice and suppresses repeat nudges for the same requirement and proposal.*
+*Conversation-detail example from 0.11, retained beneath the daily recap in 0.12. The circle can show a quiet cue; “That was intentional” records your choice and suppresses repeat nudges for the same requirement and proposal.*
 
-![Compact view of an invented next check](Docs/images/quick-view.png)
+![Compact view of the same invented daily recap](Docs/images/quick-view.png)
 
 *The exact menu-bar content rendered offscreen with the same synthetic data. Capture, dashboard routing and source controls have separate regression checks.*
 
@@ -42,7 +42,7 @@ The aim is to recognize useful patterns and support better decisions. A long age
 
 ```mermaid
 flowchart LR
-    A["Today: revisable local readings<br/>Sources, alternatives, corrections and maps"] --> B["Planned: connected work history<br/>Tasks, outcomes, personal patterns and recaps"]
+    A["Today: daily recap and local readings<br/>Follow-ups, check-ins, sources and maps"] --> B["Planned: connected work history<br/>Tasks, outcomes and contextual patterns"]
     B --> C["Proposed: voluntary capability probes<br/>Evidence about a narrow independent attempt"]
 ```
 
@@ -66,6 +66,7 @@ Vernier helps reconstruct that sequence. A possible repair loop links back to it
 
 ## How to read it
 
+- **The day:** the denominator is saved human follow-ups with a preceding agent message. The percentage describes brief approval/continuation wording; it is not a task or thinking-time percentage. Filter a count to inspect its evidence. Your optional check-in stays a separate self-report.
 - **The working account:** the local loop describes a concrete human contribution and its surrounding exchange. Read the exact sources, compare the alternative and missing fact, and add your perspective if it misses something. [Method and limits](Docs/REASONING.md).
 - **The record:** the map shows saved messages from one session. Select a point, compare neighboring exchanges, and open the exact source. Its window is capped at the latest 500 saved messages; coverage stays visible.
 - **The history:** a later message or correction can change the account. Earlier readings remain inspectable. A valid reference or agreement between model passes still does not establish truth.

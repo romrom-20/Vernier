@@ -50,6 +50,10 @@ struct StudioView: View {
                         }
                     }.padding(30).frame(maxWidth: 1080, alignment: .leading).frame(maxWidth: .infinity)
             }.id(model.page).background(Palette.canvas)
+                .onChange(of: model.dailyFilter) { _, value in
+                    guard value != nil else { return }
+                    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { proxy.scrollTo("daily-breakdown", anchor: .center) }
+                }
                 .onChange(of: model.selectedDecisionSessionID) { _, _ in
                     withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { proxy.scrollTo("participation-focus", anchor: .top) }
                 }

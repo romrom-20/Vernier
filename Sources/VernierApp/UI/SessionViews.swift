@@ -5,7 +5,10 @@ struct LiveOverviewView: View {
     @ObservedObject var model: AppModel
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
-            DecisionOverviewView(model: model)
+            DailyOverviewView(model: model)
+            DisclosureGroup("Look closer at one conversation", isExpanded: $model.dailyConversationExpanded) {
+                DecisionOverviewView(model: model).padding(.top, 18)
+            }.font(.headline).id("participation-focus")
             DisclosureGroup("Inspect a conversation", isExpanded: $model.workDetailExpanded) {
                 SessionStoryView(model: model).padding(.top, 18)
             }.font(.headline).id("session-inspector")

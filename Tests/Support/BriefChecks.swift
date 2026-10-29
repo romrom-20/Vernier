@@ -98,7 +98,7 @@ extension MemoryChecks {
         }
         var db: OpaquePointer?
         try SessionChecks.expect(sqlite3_open(directory.appendingPathComponent("sessions.sqlite").path, &db) == SQLITE_OK, "Cannot prepare v3 fixture")
-        try SessionChecks.expect(sqlite3_exec(db, "DROP TRIGGER decision_message_delete; DROP TRIGGER decision_message_edit; DROP TRIGGER decision_perspective_delete; DROP TABLE decision_sources; DROP TABLE decision_perspectives; DROP TABLE decision_revisions; DROP TABLE work_briefs; DELETE FROM schema_migrations WHERE version>=4; PRAGMA user_version=3;", nil, nil, nil) == SQLITE_OK, "Cannot prepare v3 schema")
+        try SessionChecks.expect(sqlite3_exec(db, "DROP TABLE daily_reflections; DROP INDEX messages_source_time; DROP INDEX messages_session_source_time; DROP TRIGGER decision_message_delete; DROP TRIGGER decision_message_edit; DROP TRIGGER decision_perspective_delete; DROP TABLE decision_sources; DROP TABLE decision_perspectives; DROP TABLE decision_revisions; DROP TABLE work_briefs; DELETE FROM schema_migrations WHERE version>=4; PRAGMA user_version=3;", nil, nil, nil) == SQLITE_OK, "Cannot prepare v3 schema")
         sqlite3_close(db)
         let upgraded = try SessionStore(directory: directory, gate: gate)
         let loaded = try await upgraded.load()

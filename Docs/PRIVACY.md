@@ -1,3 +1,11 @@
+# Daily recap and check-ins — 0.12
+
+Daily counts use the existing, separately consented archive and local-analysis setting. They do not send a new inference request or add an observation permission. Up to 4,000 dated messages from one day are read into a bounded, temporary projection; unknown times stay unassigned. Previous-day controls read saved history. During system sleep the app rests, then can catch up from provider history after wake.
+
+Optional clarity, energy and a short note are explicit personal self-reports. Schema v6 keeps them in `daily_reflections`, separately from generated readings. They are included in local export and deleted by retention, conversation-memory erasure and full deletion. Analysis off clears the current recap while retaining saved records. Stale reads and saves are guarded against erasure. No training, cloud account or new model is added. [Definitions and limits](DAILY_RECAP.md).
+
+---
+
 # Privacy update — 0.11
 
 The new goal/check reader uses the same separately consented Codex conversation archive and local inference choice. Source-backed literal boundary questions can run without inference; inferred goals and checkpoints use the selected local provider. No new capture source, screenshot, browser, global mouse or keystroke access is added. Quiet cues use only Vernier's own circle/menu bar, with no system-notification permission or agent-control action.

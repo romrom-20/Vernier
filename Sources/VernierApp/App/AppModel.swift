@@ -31,6 +31,15 @@ enum StudioPage: String, CaseIterable, Identifiable {
 @MainActor final class AppModel: ObservableObject {
     let preferences: Preferences
     let isShowcase: Bool
+    @Published var dailyReport: DailyParticipation?
+    @Published var dailyDayOffset = 0
+    @Published var dailyFilter: DailyAction?
+    @Published var dailyConversationExpanded = false
+    @Published var dailyLoading = false
+    @Published var dailyError: String?
+    @Published var dailyReflections: [DailyReflection] = []
+    var dailyGeneration = 0
+    var dailyLoadedKey: String?
     @Published var decisionRevisions: [DecisionRevision] = []
     @Published var decisionPerspectives: [DecisionPerspective] = []
     @Published var selectedDecisionSessionID: String? { didSet { preferences.selectedDecisionSessionID = selectedDecisionSessionID } }
@@ -57,6 +66,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
         didSet {
             preferences.localInsightsEnabled = localInsightsEnabled
             cancelWorkBrief(); cancelDecisionReview()
+            if !localInsightsEnabled { clearDailyParticipation() }
             updateCaptureGate()
             if localInsightsEnabled { scheduleDecisionReview() }
         }
@@ -283,6 +293,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
             let directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent("local.vernier.instrument.dev", isDirectory: true)
             store = try SessionStore(directory: directory, gate: captureGate)
             try await store?.enforceRetention(days: retentionDays)
+            clearDailyParticipation()
             library = try await store?.load() ?? .empty
             try await reloadDecisionRecords()
             checkpoint = try await store?.checkpoint() ?? .init()
@@ -343,8 +354,9 @@ enum StudioPage: String, CaseIterable, Identifiable {
             }
             let retained = Set(library.sessions.map(\.id))
             decisionDirtyAt = decisionDirtyAt.filter { retained.contains($0.key) }
-            if writes.changes > 0 { try await reloadDecisionRecords() }
+            if writes.changes > 0 { try await reloadDecisionRecords(); dailyLoadedKey = nil }
             await loadWorkOverview()
+            await loadDailyParticipation()
             scheduleDecisionReview()
         } catch {
             guard captureGate.token() == token else { return }
@@ -365,6 +377,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
         checkpoint = .init() // Expanding retention requires a full metadata reconciliation.
         do {
             try await store?.enforceRetention(days: retentionDays)
+            clearDailyParticipation()
             library = try await store?.load() ?? .empty
             await syncSessions(reconcile: true)
         }
@@ -390,6 +403,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
         conversationMemoryEnabled = false
         clearDecisionMemory()
         clearWorkOverview()
+        clearDailyParticipation()
         storyGeneration += 1; sessionStory = nil; storyFocusID = nil; storyLoadedKey = nil; storyLoading = false
         do {
             try await store?.eraseConversationMemory()
@@ -402,6 +416,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
         conversationMemoryEnabled = false
         clearDecisionMemory()
         clearWorkOverview()
+        clearDailyParticipation()
         storyGeneration += 1; sessionStory = nil; storyFocusID = nil; storyLoadedKey = nil; storyLoading = false
         codexEnabled = false
         connectionError = nil

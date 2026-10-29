@@ -221,6 +221,20 @@ extension AppCoordinator {
         try check(showcase.currentStory?.followUps == 4 && showcase.currentStory?.runs.count == 9,
                   "Visual showcase loads real fixture exchanges rather than decorative data")
         await showcase.loadWorkOverview()
+        await showcase.loadDailyParticipation()
+        try check(showcase.dailyReport?.day == showcase.selectedWorkDay && showcase.dailyReport?.datedTotal == showcase.library.messages.filter { $0.sourceAt.map(showcase.selectedWorkDay.contains) == true }.count,
+                  "The daily overview counts the selected source day from synthetic records")
+        let dailyGeneration = showcase.dailyGeneration
+        await showcase.loadDailyParticipation()
+        try check(showcase.dailyGeneration == dailyGeneration, "Compact and full daily views reuse an unchanged projection")
+        if let moment = showcase.dailyReport?.moments.first {
+            showcase.openDailyMoment(moment)
+            try check(!showcase.dailyConversationExpanded && showcase.workDetailExpanded && showcase.briefSessionID == moment.sessionID && showcase.storyFocusID == moment.id,
+                      "A daily pattern opens its own saved exchange and source anchor")
+            showcase.dailyConversationExpanded = false; showcase.workDetailExpanded = false; showcase.selectedDecisionSessionID = showcase.library.sessions.first?.id
+        }
+        showcase.clearDailyParticipation()
+        try check(showcase.dailyReport == nil && showcase.dailyReflections.isEmpty && showcase.dailyLoadedKey == nil, "Daily erasure clears the recap and private check-ins")
         try check(showcase.workOverview?.workspaces == 3 && showcase.workOverview?.count(.goAhead) == 1 && showcase.workOverview?.failureCount == 1,
                   "Work overview spans workspaces with source-linked wording cues and failure status")
         try check(showcase.participationMoments.contains { $0.kind == .requestedEvidence } && showcase.participationMoments.contains { $0.kind == .setBoundary },

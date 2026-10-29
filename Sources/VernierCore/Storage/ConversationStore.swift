@@ -68,6 +68,7 @@ extension SessionStore {
         }
     }
     public func eraseConversationMemory() throws {
-        try execute("DELETE FROM decision_perspectives; DELETE FROM decision_revisions; DELETE FROM work_briefs; DELETE FROM messages; DELETE FROM agent_signals; DELETE FROM memory_progress; PRAGMA wal_checkpoint(TRUNCATE); VACUUM;")
+        reflectionGeneration += 1
+        try execute("DELETE FROM daily_reflections; DELETE FROM decision_perspectives; DELETE FROM decision_revisions; DELETE FROM work_briefs; DELETE FROM messages; DELETE FROM agent_signals; DELETE FROM memory_progress; PRAGMA wal_checkpoint(TRUNCATE); VACUUM;")
     }
 }

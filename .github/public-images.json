@@ -1,16 +1,16 @@
 {
   "images": {
     "Docs/images/overview.png": {
-      "sha256": "4716f114d28933b4ab8ccc4f73fbea42c4d4a269618a87c8c5286148d89105fa",
-      "provenance": "Visually inspected offscreen render of the actual native SwiftUI overview component in 0.11.0. Invented ShowcaseFixtures messages and hand-authored, source-validated WorkReading; no personal store, connector, desktop capture or model inference. Presentation example only."
+      "sha256": "fcd34c72285d1fac938f13704ae20e89827fedbbbe6cc7ca5bdba71725e6344f",
+      "provenance": "Visually inspected offscreen render of the actual native SwiftUI overview component in 0.12.0. Invented ShowcaseFixtures saved messages; daily counts computed from those invented messages. Deeper conversation readings are hand-authored. No personal store, connector, desktop capture or model inference. Presentation example only."
     },
     "Docs/images/quick-view.png": {
-      "sha256": "57bb86b2839a4cd92fe0013c02b77fd086028f37af47a891a837b683f57dfb5c",
-      "provenance": "Visually inspected offscreen render of the actual native SwiftUI quick-view component in 0.11.0. Invented ShowcaseFixtures messages and hand-authored, source-validated WorkReading; no personal store, connector, desktop capture or model inference. Presentation example only."
+      "sha256": "f75b02e64e6260d3e8c665805c231df547df33a572c2d7d7b12cdc061a460ff9",
+      "provenance": "Visually inspected offscreen render of the actual native SwiftUI quick-view component in 0.12.0. Invented ShowcaseFixtures saved messages; daily counts computed from those invented messages. Deeper conversation readings are hand-authored. No personal store, connector, desktop capture or model inference. Presentation example only."
     },
     "Docs/images/session-map.png": {
-      "sha256": "c72a6cd9add711bf765ebbf8527a6877cbc98724acef3b24d4616deea53e7703",
-      "provenance": "Visually inspected offscreen render of the actual native SwiftUI session-map component in 0.11.0. Invented ShowcaseFixtures messages and hand-authored, source-validated WorkReading; no personal store, connector, desktop capture or model inference. Presentation example only."
+      "sha256": "3d2627976cc9d1e582ce141ffa14a690420d0d83016fd968de1e68aa34eda211",
+      "provenance": "Visually inspected offscreen render of the actual native SwiftUI session-map component in 0.12.0. Invented ShowcaseFixtures saved messages; daily counts computed from those invented messages. Deeper conversation readings are hand-authored. No personal store, connector, desktop capture or model inference. Presentation example only."
     },
     "Docs/images/direction-check.png": {
       "sha256": "142963aaf6e195f116bfe785ee8d361ad4a8821223d86128f99831ad6d3483e5",
