@@ -180,6 +180,16 @@ extension AppCoordinator {
         }
         try check(model.projection.coverage == "0 of 3 live sources connected", "No live coverage claimed")
         try await runModelSmokeChecks()
+        model.paused = false; model.localInsightsEnabled = true
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Calendar.current.startOfDay(for: Date()))!
+        model.library = ShowcaseFixtures.workLibrary(now: yesterday.addingTimeInterval(12 * 3600))
+        model.dailyDayOffset = 0; model.clearDailyParticipation()
+        await model.loadDailyParticipation()
+        togglePopover()
+        openStudioAction()
+        try await waitUntil("The menu shortcut opens the same previous-day recap as the compact button") {
+            model.dailyDayOffset == -1 && surface == .studio && studio?.isVisible == true && !popover.isShown
+        }
     }
     /// Functional view-model routes and isolated storage; no window activation is required.
     func runModelSmokeChecks() async throws {
@@ -212,6 +222,35 @@ extension AppCoordinator {
         let showcaseSuite = "local.vernier.showcase-test-\(UUID().uuidString)"
         let showcaseDefaults = UserDefaults(suiteName: showcaseSuite)!
         defer { showcaseDefaults.removePersistentDomain(forName: showcaseSuite) }
+        let morning = AppModel(preferences: Preferences(defaults: showcaseDefaults), showcase: true)
+        let yesterdayStart = Calendar.current.date(byAdding: .day, value: -1, to: Calendar.current.startOfDay(for: Date()))!
+        morning.library = ShowcaseFixtures.workLibrary(now: yesterdayStart.addingTimeInterval(12 * 3600))
+        await morning.loadDailyParticipation()
+        try check(morning.dailyReport?.followUps == 0 && morning.quickRecapIsPreviousDay && morning.quickDailyReport?.followUps ?? 0 > 0,
+                  "After midnight the compact view uses yesterday’s real recap instead of introductory copy")
+        try check(morning.quickRecapButtonTitle == "Open yesterday’s recap", "The compact action names the day it will open")
+        let emptyToday = morning.dailyReport
+        let today = morning.selectedWorkDay
+        let todayFixture = ShowcaseFixtures.workLibrary(now: today.start.addingTimeInterval(12 * 3600))
+        let firstThread = todayFixture.sessions[0].id
+        let few = Array(todayFixture.messages.filter { $0.sessionID == firstThread }.sorted { ($0.sourceAt ?? .distantPast) < ($1.sourceAt ?? .distantPast) }.prefix(4))
+        morning.dailyReport = DailyParticipation.make(day: today, input: .init(messages: few, datedTotal: few.count, undatedTotal: 0), sessions: todayFixture.sessions)
+        try check((morning.dailyReport?.followUps ?? 0) == 1 && morning.quickRecapIsPreviousDay, "One new reply does not replace a fuller previous-day recap")
+        morning.dailyReport = DailyParticipation.make(day: today, input: .init(messages: todayFixture.messages, datedTotal: todayFixture.messages.count, undatedTotal: 0), sessions: todayFixture.sessions)
+        try check((morning.dailyReport?.followUps ?? 0) >= 3 && !morning.quickRecapIsPreviousDay && morning.quickDailyReport?.day == today,
+                  "Enough new replies switch the compact recap back to today")
+        morning.dailyReport = emptyToday
+        morning.paused = true
+        try check(morning.quickRecapIsPreviousDay, "Pause retains the saved previous-day recap")
+        morning.paused = false
+        morning.openQuickRecap()
+        try await waitUntil("Opening yesterday’s compact recap selects the matching full dashboard day") {
+            morning.dailyDayOffset == -1 && (morning.dailyReport?.followUps ?? 0) > 0 && morning.page == .overview
+        }
+        morning.clearDailyParticipation()
+        try check(morning.quickDailyReport == nil && morning.dailyPreviousReport == nil, "Erasure clears the compact fallback as well as the main day")
+        morning.localInsightsEnabled = false
+        try check(morning.quickDailyReport == nil, "Analysis opt-out cannot expose a cached compact recap")
         let showcase = AppModel(preferences: Preferences(defaults: showcaseDefaults), showcase: true)
         await showcase.startSessionSync()
         showcase.setLaunchAtLogin(true)
@@ -231,7 +270,7 @@ extension AppCoordinator {
             showcase.openDailyMoment(moment)
             try check(!showcase.dailyConversationExpanded && showcase.workDetailExpanded && showcase.briefSessionID == moment.sessionID && showcase.storyFocusID == moment.id,
                       "A daily pattern opens its own saved exchange and source anchor")
-            showcase.dailyConversationExpanded = false; showcase.workDetailExpanded = false; showcase.selectedDecisionSessionID = showcase.library.sessions.first?.id
+            showcase.dailyConversationExpanded = false; showcase.workDetailExpanded = false; showcase.selectDecisionSession(showcase.library.sessions.first!.id)
         }
         showcase.clearDailyParticipation()
         try check(showcase.dailyReport == nil && showcase.dailyReflections.isEmpty && showcase.dailyLoadedKey == nil, "Daily erasure clears the recap and private check-ins")

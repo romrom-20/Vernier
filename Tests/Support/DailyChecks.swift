@@ -27,6 +27,8 @@ public enum DailyChecks {
         try check(report.projects.count == 1 && report.hours.reduce(0) { $0 + $1.moments.count } == report.followUps, "Hourly or workspace aggregation double-counted follow-ups")
         try check(DailyParticipation.classify("Please proceed, but keep all edits offline.") == .directed && DailyParticipation.classify("How would I test this?") == .checked && DailyParticipation.classify("I haven't tried it.") != .reported, "Meaningful qualifiers or hypothetical tests became plain approval or a result")
         try check(DailyParticipation.classify("Do not test this yet.") == .directed && DailyParticipation.classify("Skip checking that.") != .checked, "Negated check instructions inflated the check-request metric")
+        let compact = QuickRecap(report: report)
+        try check(compact.headline.contains("3 times in a row") && compact.detail.contains("one saved conversation") && !compact.headline.contains("%"), "The compact recap lost its plain, bounded explanation")
         let copied = "Use the local index for search and keep the query on this machine."
         let copiedReport = DailyParticipation.make(day: day, input: .init(messages: [message("copy-a", "assistant", copied, spring), message("copy-u", "user", copied, spring.addingTimeInterval(2))], datedTotal: 2, undatedTotal: 0), sessions: [])
         try check(copiedReport.count(.other) == 1 && copiedReport.moments.first?.knownCopiedText == true, "Known copied agent text was attributed as independent direction")

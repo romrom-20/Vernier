@@ -1,3 +1,9 @@
+# Compact recap after midnight — 0.12.1
+
+The compact panel labels the day, states one observed pattern and its count in plain language, and asks one reflection question. It shows yesterday when today has no replies and prefers a fuller yesterday until three replies are saved today. Today’s small count remains separate. A single footer action opens the displayed day. “Saved chats” names the source reader; capture remains an in-place pause button. Missing data, disabled review and failed reads have explicit states. The full daily breakdown retains its separate figures and controls.
+
+---
+
 # Daily recap interaction — 0.12
 
 The compact panel shows the selected day's breakdown and one pattern, rather than a latest agent instruction. Studio opens the daily recap. Counts filter literal follow-ups and scroll to the breakdown; a pattern opens its own conversation and map anchor. Previous/next controls change the local calendar day. Conversation readings remain collapsed under “Look closer at one conversation”; a direction cue opens and expands its relevant reading. Optional check-ins stay separate and collapsed until requested. Existing fixed popover bounds, in-place Pause/Resume and circle behavior are retained.

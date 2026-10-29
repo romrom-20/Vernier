@@ -15,7 +15,7 @@ Today, the experimental Mac app gathers consented **Codex history from Conductor
 
 The broader question is **human agency in AI-mediated work**: when does delegation expand what you can do, and what remains within your ability to understand, redirect and recover?
 
-**Current version: 0.12.0.** The main and compact views now start with **your day**, rather than the agent's latest instruction. A percentage names recorded follow-ups with brief approvals or continuations; it does not claim a percentage of tasks delegated, brain use or time spent thinking. The dashboard adds active-hour patterns, original-message drill-downs, previous-day recaps and optional personal check-ins. Specific conversation readings and quiet direction questions remain one layer deeper. [How to read the daily recap](Docs/DAILY_RECAP.md) · [How the local reasoning loop works](Docs/REASONING.md).
+**Current version: 0.12.1.** The main and compact views now start with **your day**, rather than the agent's latest instruction. A percentage names recorded follow-ups with brief approvals or continuations; it does not claim a percentage of tasks delegated, brain use or time spent thinking. The dashboard adds active-hour patterns, original-message drill-downs, previous-day recaps and optional personal check-ins. Specific conversation readings and quiet direction questions remain one layer deeper. [How to read the daily recap](Docs/DAILY_RECAP.md) · [How the local reasoning loop works](Docs/REASONING.md).
 
 ![An invented daily recap with a follow-up breakdown and a pattern to revisit](Docs/images/overview.png)
 
@@ -27,7 +27,7 @@ The broader question is **human agency in AI-mediated work**: when does delegati
 
 ![Compact view of the same invented daily recap](Docs/images/quick-view.png)
 
-*The exact menu-bar content rendered offscreen with the same synthetic data. Capture, dashboard routing and source controls have separate regression checks.*
+*The exact compact view, rendered from invented messages dated yesterday. It keeps yesterday’s fuller recap visible while today gets started, labels the days separately, and opens the matching dashboard day. Capture and routing have separate regression checks.*
 
 ## The product we are working toward
 

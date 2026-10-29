@@ -108,7 +108,10 @@ public struct DailyParticipation: Sendable {
         if longestContinuation.count >= 3 { return "You handed the next step back \(longestContinuation.count) times in a row in one conversation." }
         if repairRequests.count >= 2 { return "\(repairRequests.count) brief repair requests are worth a closer look." }
         if count(.checked) > 0 { return "You asked for checks or explanations in \(count(.checked)) of \(followUps) follow-ups." }
-        return "\(count(.continued)) of \(followUps) follow-ups handed the next step back without adding a requirement."
+        if count(.continued) > 0 { return "\(count(.continued)) of \(followUps) replies asked AI to carry on." }
+        if count(.directed) > 0 { return "\(count(.directed)) replies added a condition, choice or correction." }
+        if count(.reported) > 0 { return "\(count(.reported)) replies reported a result from a personal check." }
+        return followUps == 1 ? "One saved reply is too little to describe a daily pattern." : "These replies don’t fit the simple wording categories yet."
     }
     public static func make(day: WorkDay, input: DailyInput, sessions: [SessionMetadata], coverage: [MemoryCoverage] = []) -> Self {
         let relevant = input.messages.filter { $0.sourceAt.map(day.contains) == true && ["user", "assistant"].contains($0.speaker) }

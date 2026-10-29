@@ -5,8 +5,8 @@
       "provenance": "Visually inspected offscreen render of the actual native SwiftUI overview component in 0.12.0. Invented ShowcaseFixtures saved messages; daily counts computed from those invented messages. Deeper conversation readings are hand-authored. No personal store, connector, desktop capture or model inference. Presentation example only."
     },
     "Docs/images/quick-view.png": {
-      "sha256": "f75b02e64e6260d3e8c665805c231df547df33a572c2d7d7b12cdc061a460ff9",
-      "provenance": "Visually inspected offscreen render of the actual native SwiftUI quick-view component in 0.12.0. Invented ShowcaseFixtures saved messages; daily counts computed from those invented messages. Deeper conversation readings are hand-authored. No personal store, connector, desktop capture or model inference. Presentation example only."
+      "sha256": "04372a04194b89becc64ad90581d3cafcae3801cb31a43beb018c4942b32aecd",
+      "provenance": "Visually inspected offscreen render of the actual native SwiftUI compact recap in 0.12.1. Invented ShowcaseFixtures messages dated yesterday with --showcase --yesterday-preview; counts and wording computed from those records. No personal store, connector, desktop capture or model inference. Presentation example only."
     },
     "Docs/images/session-map.png": {
       "sha256": "3d2627976cc9d1e582ce141ffa14a690420d0d83016fd968de1e68aa34eda211",

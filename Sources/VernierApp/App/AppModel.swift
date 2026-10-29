@@ -32,6 +32,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
     let preferences: Preferences
     let isShowcase: Bool
     @Published var dailyReport: DailyParticipation?
+    @Published var dailyPreviousReport: DailyParticipation?
     @Published var dailyDayOffset = 0
     @Published var dailyFilter: DailyAction?
     @Published var dailyConversationExpanded = false
@@ -275,7 +276,8 @@ enum StudioPage: String, CaseIterable, Identifiable {
             pillEnabled = true
             preferences.onboardingComplete = true
             let directionPreview = CommandLine.arguments.contains("--direction-preview")
-            library = directionPreview ? ShowcaseFixtures.directionLibrary() : ShowcaseFixtures.workLibrary()
+            let fixtureDate = CommandLine.arguments.contains("--yesterday-preview") ? Calendar.current.date(byAdding: .hour, value: 12, to: Calendar.current.date(byAdding: .day, value: -1, to: Calendar.current.startOfDay(for: Date()))!)! : Date()
+            library = directionPreview ? ShowcaseFixtures.directionLibrary() : ShowcaseFixtures.workLibrary(now: fixtureDate)
             decisionRevisions = directionPreview ? ShowcaseFixtures.directionHistory(library: library) : ShowcaseFixtures.decisionHistory(library: library)
             localInsightsEnabled = true; automaticDecisionReviews = true
             lastSync = Date()

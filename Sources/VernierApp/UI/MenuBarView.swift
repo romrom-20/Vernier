@@ -11,7 +11,7 @@ struct MenuBarView: View {
                 InstrumentMark(size: 25)
                 Text(Brand.name).font(.headline)
                 Spacer()
-                Text(model.isShowcase ? "Showcase" : model.paused ? "Paused" : model.syncing ? "Syncing" : model.codexEnabled ? "Following" : "Off")
+                Text(model.isShowcase ? "Showcase" : model.paused ? "Paused" : model.syncing ? "Syncing" : model.codexEnabled ? "Connected" : "Off")
                     .font(.caption.weight(.medium)).foregroundStyle(CaptureStyle.color(model.capturePhase))
                 Button { model.toggleCapture() } label: {
                     Image(systemName: model.paused ? "play.fill" : "pause.fill").font(.caption).frame(width: 25, height: 25)
@@ -29,11 +29,11 @@ struct MenuBarView: View {
             }.frame(maxHeight: .infinity)
             Divider().overlay(Palette.line.opacity(0.5))
             HStack {
-                Button { model.openStudio(.overview) } label: {
-                    Label("Open dashboard", systemImage: "arrow.up.left.and.arrow.down.right").frame(maxWidth: .infinity)
-                }.buttonStyle(QuietButtonStyle()).keyboardShortcut("o").accessibilityLabel("Open dashboard and understand your participation")
+                Button { model.openQuickRecap() } label: {
+                    Label(model.quickRecapButtonTitle, systemImage: "arrow.up.left.and.arrow.down.right").frame(maxWidth: .infinity)
+                }.buttonStyle(QuietButtonStyle()).keyboardShortcut("o").accessibilityLabel(model.quickRecapButtonTitle)
                 Spacer()
-                Button("Memory →") { model.showMemory() }.buttonStyle(.plain).font(.callout).foregroundStyle(Palette.mint)
+                Button("Saved chats") { model.showMemory() }.buttonStyle(.plain).font(.callout).foregroundStyle(Palette.mint)
             }.padding(.horizontal, 18).padding(.top, 12)
             HStack {
                 Label(model.isShowcase ? "Synthetic preview · no history read" : "Codex · saved on this Mac", systemImage: "lock").font(.caption2).foregroundStyle(Palette.secondary)

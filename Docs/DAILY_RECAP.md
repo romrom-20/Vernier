@@ -1,6 +1,6 @@
 # A daily picture of the human side
 
-The main view now asks **how did I work with AI today?**, rather than leading with the agent's latest next step. The compact view and dashboard share a day-level projection. Conversation readings and maps remain available underneath it.
+The main view now asks **how did I work with AI today?**, rather than leading with the agent's latest next step. The compact view and dashboard use the same day-level projection. The compact panel explains its counts in short sentences and offers one reflection question, with one main button to open that recap. Conversation readings and maps remain available underneath it.
 
 ## What the numbers mean
 
@@ -28,7 +28,7 @@ An optional **check-in** records the person's own clarity, energy and short note
 
 ## During the day and the next morning
 
-Today updates from the existing saved-history sync. Previous-day controls provide a recap for the morning and dates within retention. No additional daemon, timer, external provider or inference schedule is added. Vernier and capture rest during system sleep; after wake, history that the provider saved can fill in. This does not observe sleep or establish what happened while away from the machine.
+Today updates from the existing saved-history sync. In 0.12.1, the compact panel uses yesterday when today has no recorded replies, and keeps a fuller yesterday (at least three replies) visible until today has three replies. Both the shown day and today’s small count are labeled; counts from the days are never combined. The main button selects the same day in Studio. This is a presentation rule, not a threshold for adequate thought or prompt quality. A loading, disabled, disconnected or failed read has its own explicit message rather than introductory copy. Previous-day controls provide a recap for the morning and dates within retention. No additional daemon, timer, external provider or inference schedule is added. Vernier and capture rest during system sleep; after wake, history that the provider saved can fill in. This does not observe sleep or establish what happened while away from the machine.
 
 The projection uses up to 4,000 dated messages from the day, clipped to 4,096 characters each, from the SQLite archive rather than its 300-message resident preview. A bounded preceding message preserves the link when the first reply crosses midnight. Unknown source times stay unassigned; observation time never moves an old message into today. Caps, clipping and incomplete history are disclosed. A busy day beyond the cap is a partial recent window.
 

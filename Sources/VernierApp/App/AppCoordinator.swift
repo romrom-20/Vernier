@@ -262,7 +262,10 @@ import VernierCore
         menu.addItem(edit)
         NSApp.mainMenu = menu
     }
-    @objc private func openStudioAction() { openStudio(.overview) }
+    @objc func openStudioAction() {
+        if surface == .quickView || model.quickRecapIsPreviousDay { model.openQuickRecap() }
+        else { openStudio(.overview) }
+    }
     @objc func togglePopover() {
         guard let button = statusItem?.button else { return }
         if surface == .quickView && popover.isShown { closeQuickView() } else {

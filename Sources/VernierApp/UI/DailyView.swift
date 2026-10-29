@@ -171,7 +171,7 @@ private struct DailyPatternCard: View {
         VStack(alignment: .leading, spacing: 13) {
             Eyebrow(text: "One pattern to reflect on")
             Text(report.takeaway).font(.title3.weight(.medium)).fixedSize(horizontal: false, vertical: true)
-            Text(report.longestContinuation.count >= 3 ? "That may be efficient delegation. Pick one change from that stretch: what was the reason for it, and what evidence would convince you it works?" : report.repairRequests.count >= 2 ? "A concrete expected behavior can help break a repair loop. What happened, what should have happened, and how would you check the difference?" : "A check request shows where you asked for evidence. The saved result, when there is one, helps you see what was actually settled.")
+            Text(report.longestContinuation.count >= 3 ? "That may be efficient delegation. Pick one change from that stretch: what was the reason for it, and what evidence would convince you it works?" : report.repairRequests.count >= 2 ? "A concrete expected behavior can help break a repair loop. What happened, what should have happened, and how would you check the difference?" : report.count(.checked) > 0 ? "A check request shows where you asked for evidence. The saved result, when there is one, helps you see what was actually settled." : "Open the exchange to see what changed and decide what you’d like to understand better.")
                 .font(.caption).foregroundStyle(Palette.secondary).lineSpacing(4)
             if let moment = model.dailyRevisit {
                 Text("One place to return: “" + moment.excerpt + "”").font(.caption).foregroundStyle(Palette.text).lineLimit(2)
@@ -277,29 +277,48 @@ private struct DailyCheckInView: View {
 struct QuickDailyView: View {
     @ObservedObject var model: AppModel
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 13) {
             if let cue = model.directionToCheck, let reading = cue.reading {
-                Eyebrow(text: "A direction to check")
-                Text(reading.displayTitle).font(.system(size: 19, weight: .medium, design: .rounded)).lineLimit(3)
-                Button("Look at this choice →") { model.openDirectionCheck() }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.amber)
-            } else if let day = model.dailyReport, day.followUps > 0 {
-                Eyebrow(text: model.dailyDayOffset == 0 ? "Your day with AI" : model.dailyDayOffset == -1 ? "Yesterday with AI" : model.selectedWorkDay.start.formatted(date: .abbreviated, time: .omitted))
-                HStack(alignment: .firstTextBaseline, spacing: 9) {
-                    Text("\(day.percent(.continued) ?? 0)%").font(.system(size: 44, weight: .light, design: .rounded)).foregroundStyle(Palette.lavender)
-                    Text("handed the\nnext step back").font(.callout.weight(.medium))
+                Eyebrow(text: "A choice to revisit")
+                Text(reading.displayTitle).font(.system(size: 20, weight: .medium, design: .rounded)).fixedSize(horizontal: false, vertical: true)
+                Text("A proposed approach differs from an earlier requirement. The recap shows both so you can choose.").font(.callout).foregroundStyle(Palette.secondary)
+            } else if let day = model.quickDailyReport {
+                let recap = QuickRecap(report: day)
+                HStack {
+                    Eyebrow(text: model.quickRecapIsPreviousDay || model.dailyDayOffset == -1 ? "Yesterday’s recap" : model.dailyDayOffset == 0 ? "Today so far" : day.day.start.formatted(date: .abbreviated, time: .omitted))
+                    Spacer()
+                    if day.limited { Text("Partial history").font(.caption2).foregroundStyle(Palette.amber) }
                 }
-                Text("\(day.count(.continued)) of \(day.followUps) saved follow-ups\(day.limited ? " · partial picture" : "")").font(.caption2).foregroundStyle(Palette.secondary)
-                DailyShareBar(report: day)
-                Text(day.takeaway).font(.callout).lineLimit(3)
-                Text("\(day.count(.directed)) added direction · \(day.count(.checked)) asked for a check").font(.caption).foregroundStyle(Palette.secondary)
-                Button("Understand my day →") { model.openStudio(.overview) }.buttonStyle(.plain).font(.caption.weight(.medium)).foregroundStyle(Palette.mint)
+                Text(recap.headline).font(.system(size: 21, weight: .medium, design: .rounded)).tracking(-0.3).fixedSize(horizontal: false, vertical: true)
+                Text(recap.detail).font(.callout).foregroundStyle(Palette.secondary)
+                if !recap.secondary.isEmpty { Text(recap.secondary).font(.caption).foregroundStyle(Palette.secondary).fixedSize(horizontal: false, vertical: true) }
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("One thing to reflect on").font(.caption2).foregroundStyle(Palette.secondary)
+                    Text(recap.question).font(.callout.weight(.medium))
+                }.padding(12).frame(maxWidth: .infinity, alignment: .leading).background(Palette.inset.opacity(0.65), in: RoundedRectangle(cornerRadius: 12))
+                if model.quickRecapIsPreviousDay { Text("Today: \(model.dailyReport?.followUps ?? 0) saved replies so far. Showing yesterday’s fuller recap.").font(.caption2).foregroundStyle(Palette.secondary) }
             } else {
-                Eyebrow(text: "Your day with AI")
-                Text(model.dailyLoading ? "Bringing your day into view…" : "A picture of how you worked.").font(.system(size: 20, weight: .medium, design: .rounded))
-                Text(model.paused ? "Capture is paused; your saved day is still in the dashboard." : "See what you handed over, where you added direction and one place worth revisiting.").font(.callout).foregroundStyle(Palette.secondary)
-                Button("See my day →") { model.openStudio(.overview) }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.mint)
-                if model.dailyDayOffset == 0 && model.dailyReport != nil { Button("Start with yesterday’s recap") { model.chooseDay(-1); model.openStudio(.overview) }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.secondary) }
+                Eyebrow(text: "Your saved work")
+                Text(emptyTitle).font(.system(size: 21, weight: .medium, design: .rounded)).fixedSize(horizontal: false, vertical: true)
+                Text(emptyDetail).font(.callout).foregroundStyle(Palette.secondary).fixedSize(horizontal: false, vertical: true)
             }
         }.task(id: model.dailyLoadKey) { await model.loadDailyParticipation() }
+    }
+    private var emptyTitle: String {
+        if !model.codexEnabled && model.library.totalMessageCount == 0 { return "Connect your saved Codex conversations." }
+        if !model.conversationMemoryEnabled && model.library.totalMessageCount == 0 { return "Saved conversation capture is off." }
+        if !model.localInsightsEnabled { return "Daily reviews are off." }
+        if model.dailyError != nil { return "The recap couldn’t load." }
+        if model.dailyLoading { return "Reading your recent conversations…" }
+        return model.dailyDayOffset == 0 ? "No saved replies today yet." : "No saved replies for this day."
+    }
+    private var emptyDetail: String {
+        if !model.codexEnabled && model.library.totalMessageCount == 0 { return "Vernier needs saved conversations before it can describe how you worked." }
+        if !model.conversationMemoryEnabled && model.library.totalMessageCount == 0 { return "Connect saved chat text to build a recap. Metadata alone doesn’t include your replies." }
+        if !model.localInsightsEnabled { return "Turn on local review in the dashboard to build a recap from your saved messages." }
+        if let error = model.dailyError { return error + " Open the recap to try again." }
+        if model.dailyLoading { return "Checking today and yesterday. Everything stays on this Mac." }
+        if model.paused { return "Capture is paused. Your existing conversations are still saved; resume to collect new work." }
+        return "A recap needs saved replies from you after an agent message. Earlier conversations remain in the dashboard."
     }
 }

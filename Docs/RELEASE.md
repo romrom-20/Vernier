@@ -1,4 +1,4 @@
-# Source release — 0.12.0
+# Source release — 0.12.1
 
 Vernier is an experimental native Mac app and working project name. This repository publishes source, synthetic showcase data, tests and documentation under MIT. There is no production, notarized binary release yet.
 
@@ -39,3 +39,5 @@ The additional development flag `--enable-local-insights` enables this local ana
 - **0.11.0:** Contextual goals and specific checkpoints replace latest-prompt classifications in the main view. Sources are collapsed, automatic/manual status is explicit, conversation selection persists, and bounded source-backed direction questions have quiet cues and intentional-choice responses. Five literal conflict families have separate provenance from model interpretation. Schema remains v5 and existing records/consent are preserved. No clinical, comprehension or agency verdict is claimed.
 
 - **0.12.0:** Daily recap becomes the first layer in Studio and quick view: a named follow-up denominator, wording breakdown, active-hour pattern, exact-source drill-down, previous days and optional clarity/energy check-ins. Initial requests with agent replies but no follow-up are kept separate. Schema v5→v6 preserves canonical records. These are descriptive source patterns, not prompt-quality, task-completion or cognitive-health scores.
+
+- **0.12.1:** The compact panel retains yesterday’s fuller recap after midnight while today gets started. Short sentences explain the observations, one reflection question replaces the percentage/bar display, and one main button opens the displayed day. Loading, unavailable and disabled states name the cause. No schema, capture permission or inference-provider change.
