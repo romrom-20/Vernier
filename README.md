@@ -64,6 +64,10 @@ Vernier helps reconstruct that sequence. A possible repair loop links back to it
 
 *These are offscreen renders of the app’s real SwiftUI components using invented records, with no personal archive or live model. The same invented session. Green points identify user-side directions; purple points identify agent reply stretches. The curve follows reading order.*
 
+## Understand what we build
+
+For Vernier development, we use a local [Floorplan](https://github.com/haydenschmitty/floorplan) map to explain the relevant path before a substantial change and highlight what changed afterward. A short optional check helps the owner explain or verify it; opening the map is not treated as proof of understanding. [Our workflow and map limits](Docs/UNDERSTANDING_VERNIER.md). The generated map and project-local tooling stay out of git.
+
 ## How to read it
 
 - **The day:** the denominator is saved human follow-ups with a preceding agent message. The percentage describes brief approval/continuation wording; it is not a task or thinking-time percentage. Filter a count to inspect its evidence. Your optional check-in stays a separate self-report.
