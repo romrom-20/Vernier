@@ -78,6 +78,7 @@ struct StudioView: View {
                 }
             }
         }.foregroundStyle(Palette.text).frame(minWidth: 860, minHeight: 580)
+            .disclosureGroupStyle(RecapDisclosureStyle())
     }
 }
 

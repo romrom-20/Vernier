@@ -1,21 +1,21 @@
 # Vernier
 
-**Understand how you steer AI-assisted work.**
+**Keep your judgment in view as you use AI.**
 
 [![Build and core checks](https://github.com/romrom-20/Vernier/actions/workflows/ci.yml/badge.svg)](https://github.com/romrom-20/Vernier/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Native macOS](https://img.shields.io/badge/native-macOS%2014%2B-black)
 ![Swift 6](https://img.shields.io/badge/Swift-6-orange)
 
-A coding session can produce a working feature and a long conversation. Reconstructing how you got there is harder: which requirement kept returning, where you changed direction, what evidence the agent offered, and what still needs checking.
+AI can help you code, research, plan and make personal decisions. Reconstructing its influence is harder: which priorities came from you, which recommendations changed your direction, whether those changes were deliberate, and what you thought of the outcome later.
 
-Vernier is being built as a **personal instrument for understanding and directing your work with AI over time**. The intended experience connects your goals, delegation, questions, corrections and available outcomes, helping you notice a pattern and find a useful way back into the work.
+Vernier is being built as a **personal instrument for understanding how AI influences your choices and judgment over time**. Coding is the first connected setting; the intended scope includes personal agents and everyday decisions. The intended experience connects your goals, delegation, questions, corrections and available outcomes, helping you notice a pattern and find a useful way back into the work.
 
 Today, the experimental Mac app gathers consented **Codex history from Conductor workspaces** and offers a way back into the work: a likely goal, the result actually reported and one concrete checkpoint. It separates proposed changes, build reports, AI-reported checks and checks you reported yourself. Local readings can be wrong; each opens its saved sources. Reply counts and an hour chart are supporting detail, and optional clarity/energy check-ins remain your own reports.
 
-The broader question is **human agency in AI-mediated work**: when does delegation expand what you can do, and what remains within your ability to understand, redirect and recover?
+The broader question is **human agency in AI interaction**: are you choosing a direction deliberately, accepting a useful suggestion, or being carried toward a choice you did not intend? The current app can surface some explicit conflicts; it cannot reliably determine this overall. [Purpose and current limits](Docs/PRODUCT.md).
 
-**Current version: 0.13.1.** The dashboard opens with visible category cards, an hourly chart and a reflection panel. A contextual reading follows with a goal, reported outcome and checkpoint; the compact recap stays focused on that reading. Press **⌃⌥⌘V**, or reopen the app icon, for the compact view; open the full dashboard from its footer. The compact surface dismisses when you return to another app. This is an experimental local reader, not a measure of cognitive strain, comprehension or tasks delegated. Connected task histories and independent capability assessments remain planned. [Daily recap](Docs/DAILY_RECAP.md) · [Reasoning and evidence](Docs/REASONING.md) · [Research choices](Docs/RESEARCH.md).
+**Current version: 0.13.2.** The dashboard opens with visible category cards, an hourly chart and a reflection panel. A contextual reading follows with a goal, reported outcome and checkpoint; the compact recap stays focused on that reading. Press **⌃⌥⌘V**, or reopen the app icon, for the compact view; open the full dashboard from its footer. The compact surface dismisses when you return to another app. This is an experimental local reader, not a measure of cognitive strain, comprehension or tasks delegated. Connected task histories and independent capability assessments remain planned. [Daily recap](Docs/DAILY_RECAP.md) · [Reasoning and evidence](Docs/REASONING.md) · [Research choices](Docs/RESEARCH.md).
 
 ![An invented visual overview with category cards and an hourly chart](Docs/images/overview.png)
 

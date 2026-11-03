@@ -252,11 +252,11 @@ private struct DailyPatternCard: View {
         }.padding(20).frame(maxWidth: .infinity, alignment: .leading).background(Palette.accent.opacity(0.06), in: RoundedRectangle(cornerRadius: 18))
     }
 }
-private struct DailyProjectsView: View {
+struct DailyProjectsView: View {
     @ObservedObject var model: AppModel
     let report: DailyParticipation
     var body: some View {
-        DisclosureGroup("Across your work") {
+        DisclosureGroup("Across your work", isExpanded: $model.dailyProjectsExpanded) {
             VStack(alignment: .leading, spacing: 16) {
                 Text("Grouped by workspace. Each title names one conversation’s current goal; a workspace can contain several tasks.").font(.caption2).foregroundStyle(Palette.secondary)
                 ForEach(report.projects.prefix(8)) { project in

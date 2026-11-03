@@ -42,6 +42,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
     @Published var dailyReadingFocusRevision = 0
     @Published var quickShortcutError: String?
     @Published var dailyConversationExpanded = false
+    @Published var dailyProjectsExpanded = false
     @Published var dailyLoading = false
     @Published var dailyError: String?
     @Published var dailyReflections: [DailyReflection] = []

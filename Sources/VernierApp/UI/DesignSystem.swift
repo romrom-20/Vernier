@@ -2,6 +2,40 @@ import SwiftUI
 import AppKit
 import VernierCore
 
+/// Deliver the first click to controls when returning to the visible dashboard.
+final class StudioHostingView: NSHostingView<StudioView> {
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+}
+
+/// Make the label and empty header space one explicit, keyboard-accessible control.
+struct RecapDisclosureStyle: DisclosureGroupStyle {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    func makeBody(configuration: Configuration) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Button {
+                withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.16)) {
+                    configuration.isExpanded.toggle()
+                }
+            } label: {
+                HStack(spacing: 10) {
+                    Image(systemName: configuration.isExpanded ? "chevron.down" : "chevron.right")
+                        .font(.caption.weight(.semibold)).frame(width: 12).accessibilityHidden(true)
+                    configuration.label.frame(maxWidth: .infinity, alignment: .leading)
+                    Text(configuration.isExpanded ? "Hide" : "Show").font(.caption).foregroundStyle(Palette.secondary)
+                }
+                .padding(.horizontal, 10).padding(.vertical, 8).frame(minHeight: 44)
+                .foregroundStyle(Palette.text)
+                .background(Palette.inset.opacity(0.35), in: RoundedRectangle(cornerRadius: 8))
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityValue(configuration.isExpanded ? "Expanded" : "Collapsed")
+            .accessibilityHint("Show or hide this section")
+            if configuration.isExpanded { configuration.content }
+        }
+    }
+}
+
 enum Palette {
     static func adaptive(_ dark: UInt32, _ light: UInt32) -> Color {
         Color(nsColor: NSColor(name: nil) { appearance in

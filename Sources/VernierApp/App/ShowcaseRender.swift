@@ -9,6 +9,13 @@ extension AppCoordinator {
         let directory = URL(fileURLWithPath: CommandLine.arguments[flag + 1], isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         await model.loadDailyParticipation()
+        if let report = model.dailyReport {
+            let projectView = AnyView(DailyProjectsView(model: model, report: report).disclosureGroupStyle(RecapDisclosureStyle()).padding(20).background(Palette.canvas))
+            try await snapshot(projectView, size: NSSize(width: 660, height: 124), file: directory.appendingPathComponent("across-work-collapsed.png"))
+            model.dailyProjectsExpanded = true
+            try await snapshot(projectView, size: NSSize(width: 660, height: 600), file: directory.appendingPathComponent("across-work-expanded.png"))
+            model.dailyProjectsExpanded = false
+        }
         try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 1180, height: 820), file: directory.appendingPathComponent("overview.png"))
         try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 1180, height: 1600), file: directory.appendingPathComponent("overview-full.png"))
         try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 860, height: 760), file: directory.appendingPathComponent("overview-narrow.png"))

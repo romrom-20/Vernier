@@ -1,4 +1,4 @@
-# Source release — 0.13.1
+# Source release — 0.13.2
 
 Vernier is an experimental native Mac app and working project name. This repository publishes source, synthetic showcase data, tests and documentation under MIT. There is no production, notarized binary release yet.
 
@@ -59,3 +59,6 @@ While using the Mac for other work, run `./Scripts/verify-background.sh` for iso
 
 
 - **0.13.1:** restores the dashboard's category cards, hourly chart and reflection panel as visible sections. The new contextual reading sits below them rather than hiding the visual overview. Category/hour evidence actions and the compact reading remain intact. No model, capture or schema change.
+
+
+- **0.13.2:** full-width disclosure-header buttons and dashboard first-click acceptance; Across your work expansion survives projection refreshes. Product documentation clarifies the broader human-judgment purpose and the distinction between wording boxes, contextual interpretation and proposed longitudinal decision histories. No new capture, model protocol or schema change.

@@ -302,6 +302,13 @@ extension AppCoordinator {
         let dailyGeneration = showcase.dailyGeneration
         await showcase.loadDailyParticipation()
         try check(showcase.dailyGeneration == dailyGeneration, "Compact and full daily views reuse an unchanged projection")
+        let firstClickHost = StudioHostingView(rootView: StudioView(model: showcase))
+        try check(firstClickHost.acceptsFirstMouse(for: nil), "The dashboard host accepts a control click when returning from another app")
+        showcase.dailyProjectsExpanded = true
+        showcase.dailyLoadedKey = nil
+        await showcase.loadDailyParticipation()
+        try check(showcase.dailyProjectsExpanded, "Across your work stays expanded while the daily projection refreshes")
+        showcase.dailyProjectsExpanded = false
         if let insight = showcase.dayInsights.first {
             let focusRevision = showcase.dailyReadingFocusRevision
             showcase.openDayInsight(insight)

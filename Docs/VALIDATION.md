@@ -1,3 +1,9 @@
+# Expandable headers — 0.13.2
+
+Background verification passed **34 shared core groups and 67 isolated app-state checks**, with invented offscreen renders of both collapsed and expanded Across your work. New checks assert returning-click acceptance on the production dashboard host and retained expansion after a daily projection refresh. Headers now use full-width buttons with a 44-point minimum height, visible Show/Hide text and keyboard/accessibility button behavior. No foreground mouse, physical hit testing or focus transition was automated; those require a separate desktop or an agreed owner check. No model prompt, capture path or schema changed.
+
+---
+
 # Visible visual overview — 0.13.1
 
 Background verification passed **34 shared core groups and 65 isolated app-state checks**. Invented offscreen previews at wide and narrow dashboard sizes show the category cards and hourly/reflection panels visible by default; a tall preview also shows the contextual reading beneath them. Existing checks cover category/hour evidence navigation. No foreground input, personal records or model inference was used for this layout correction; the reasoning protocol is unchanged.

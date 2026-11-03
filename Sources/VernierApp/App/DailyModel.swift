@@ -11,7 +11,7 @@ extension AppModel {
     }
     func clearDailyParticipation() {
         dailyGeneration += 1; dailyReport = nil; dailyPreviousReport = nil; dailyLoadedKey = nil; dailyLoading = false; dailyError = nil
-        dailyReflections = []; dailyReadings = []; dailyPreviousReadings = []; dailyFilter = nil; dailyHour = nil; dailyEvidenceRevision += 1; dailyConversationExpanded = false
+        dailyReflections = []; dailyReadings = []; dailyPreviousReadings = []; dailyFilter = nil; dailyHour = nil; dailyEvidenceRevision += 1; dailyConversationExpanded = false; dailyProjectsExpanded = false
     }
     func loadDailyParticipation() async {
         let key = dailyLoadKey
@@ -46,7 +46,7 @@ extension AppModel {
         }
     }
     func chooseDay(_ offset: Int) {
-        dailyDayOffset = min(0, max(dailyOldestOffset, offset)); dailyReport = nil; dailyReadings = []; dailyFilter = nil; dailyHour = nil
+        dailyDayOffset = min(0, max(dailyOldestOffset, offset)); dailyReport = nil; dailyReadings = []; dailyFilter = nil; dailyHour = nil; dailyProjectsExpanded = false
         Task { await loadDailyParticipation() }
     }
     /// Every selection is a navigation event, including selecting the same category again.

@@ -2,23 +2,34 @@
 
 ## The central question
 
-> When does delegation expand a person’s effective capabilities, and when does it leave them less able to understand, redirect or recover the work?
+> As I use AI, am I choosing the direction—or is the interaction carrying me toward choices I did not intend? How is my relationship with AI changing over time?
 
-Vernier is an instrument for investigating that question. Its ambition extends from a quiet Mac utility to an evidence-grounded personal agency ledger, and eventually to an experimental system for understanding how people and agents work together.
+Vernier is a human-first personal instrument for investigating that question. Coding work is the first observable setting, not the product's boundary. The ambition includes personal agents, research, planning and everyday decisions where a connected source exposes usable evidence with consent. Today only the Codex-in-Conductor path is connected; this ambition does not imply capture from other apps.
 
-The value of delegation depends on the task, the person’s goals, their prior capability and what they can do when circumstances change. Efficient delegation is legitimate. Accepting useful advice and rejecting misleading advice can both demonstrate good judgment.
+Finishing work is one outcome. Retaining judgment, recognizing influence, choosing delegation deliberately and being able to revisit a decision are separate concerns. Accepting advice can be excellent judgment. A change of mind is not automatically an unwanted loss of direction, and a missing reason in a chat is not proof that the person had none.
 
 ## The intended everyday experience
 
-A person doing substantial work with AI should be able to open Vernier and recover the thread: what they intended, how they delegated, what the agent proposed, where they redirected it, what evidence was offered and what remains unresolved. Over time, the intended product would connect those threads across sessions and show changes in the person's recorded interaction patterns.
+Vernier should collect quietly and offer occasional useful reflections, rather than make the person continually watch a dashboard. A useful reading would connect a concrete decision to the person's stated priorities, what the AI introduced, how the person responded, and any later report about the outcome. It would invite correction when intentionality is unknown.
 
-A useful recap might locate recurring requirements, stretches of simple continuation, additional verification or changes of scope. It would explain those observations in context and offer a small way to regain direction. Repeated repair may reflect a persistent agent failure; extra questions may be necessary review; a long delegated stretch may be an efficient choice. The product must keep those possibilities open rather than grade prompt style.
+For an invented example: a person wanted a private local journal; an agent recommended a hosted service; the person approved the proposal. The observable change is local → hosted. Vernier can ask whether the privacy priority changed deliberately. It cannot decide from a short approval that the person surrendered judgment. If they say the change was unintended, that is a human report tied to this decision, separately from the original observation.
 
-The intended feedback has three parts: **what happened, what it might mean for this task, and what could settle the uncertainty next**. Personal baselines and task context matter more than comparing users by approval or message counts. A behavioral recap can describe a change in the record without diagnosing a change in the person.
+The proposed longitudinal view should help answer:
 
-This everyday product direction and the longer-term measurement program have different evidence requirements. Useful memory and review can be evaluated before any capability or causal claim is made. Separately consented probes could later add evidence about narrow independent performance; longitudinal experiments would be needed to assess lasting change or intervention effects.
+- **Whose priorities shaped the decision?** Compare the person's stated aim and boundaries with the recommendation and later choice.
+- **Was the change deliberate?** Retain explicit reasons or the person's later correction; otherwise show that intention is unknown.
+- **What followed from the choice?** Connect available outcomes and later satisfaction, regret or a changed preference without assuming every outcome was caused by AI.
+- **What remains within my judgment?** Separately consented attempts could test explaining, challenging or recovering a narrow decision; asking for an explanation does not demonstrate the capability.
 
-Codex in Conductor is the first source to make dependable. The larger ambition includes other explicitly connected tools and downstream outcomes where sources expose them with consent. It does not imply access to every interaction on a Mac.
+This decision history and a personal baseline are proposed, not implemented by the current daily recap. Descriptive changes in a person's records, independent capability and a causal claim about what AI did to them need different evidence. Changes could also reflect task mix, prior skill, available time and deliberate preferences.
+
+The everyday feedback should say **what changed, why it may matter to this person, what remains uncertain, and one useful way to check**. It should not turn model agreement, prompt length, message counts, clicks or a map opening into a measure of cognitive strain or agency.
+
+## What the existing boxes actually do
+
+The five daily categories are local English wording rules, not model judgments about steering. Each dated human follow-up after an agent reply receives one category. The first matching rule wins: a recognizable personal attempt; a question/explanation/check; an explicit condition or choice; brief continuation; otherwise unclear. Specific guards handle copied agent text, clipped messages, negated checks and short replies to clarification questions. A mixed reply can contain more than its one displayed category; its source and matched rule remain inspectable.
+
+The separate contextual reader reconstructs a likely goal and checkpoint, challenges the account and checks quoted evidence. Narrow boundary rules can flag an explicit requirement conflicting with a later agent proposal and brief assent. This is a source-backed question about a possible change, not a validated answer to whether the person is being steered overall. There is no all-life AI-impact score or longitudinal human-judgment model today.
 
 ## Three measurement layers
 
@@ -71,11 +82,9 @@ The measurement system should be able to produce an informative negative result.
 
 ## What exists today
 
-Version 0.7.0 provides an optional circle/pill, menu-bar quick view, Studio, read-only Codex history, separately consented conversation memory, local storage controls and user-authored interaction review. The dashboard maps up to 500 saved messages from one session into user directions and agent reply stretches, with source comparisons and visible coverage. Optional on-device AI briefs suggest the working goal, source-linked patterns and a next step from a smaller bounded excerpt. These are fallible interpretations, not validated agency assessments.
+Version 0.13.2 provides a quiet circle/pill, compact recap, dashboard, read-only Codex history from Conductor, separately enabled conversation memory and local storage controls. Daily cards describe saved follow-up wording, an hourly chart opens exact replies, optional check-ins record clarity and energy, and local contextual readings suggest goals and concrete checkpoints with inspectable sources. The visual overview and contextual explanation complement each other. Model regressions still miss useful readings; the public previews use invented records and hand-authored readings.
 
-Connected task histories, cross-session recaps, personal baselines and adaptive guidance are not implemented. The screenshots show the session-review foundation using invented records and fixed interpretations. They do not demonstrate the intended longitudinal experience or establish the local model’s accuracy.
-
-It is a foundation for observation and reflection. It does not yet predict independent capability, validate understanding, measure permanent change, run experiments or calculate an agency/strain/readiness score.
+Connected personal-agent histories, a decision ledger across domains, personal baselines and validated adaptive guidance are not implemented. The app does not predict independent capability, establish lasting change caused by AI, diagnose cognitive dysfunction or calculate an agency/strain/readiness score.
 
 ## Product principles
 
