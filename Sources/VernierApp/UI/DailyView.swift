@@ -50,7 +50,7 @@ struct DailyOverviewView: View {
                             ForEach(day.agentOnlyThreads.prefix(6)) { thread in
                                 VStack(alignment: .leading, spacing: 6) {
                                     Text(thread.excerpt).font(.callout).lineLimit(2)
-                                    Button("Read this exchange →") { model.showMemorySource(sessionID: thread.id, messageID: thread.anchorID) }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.mint)
+                                    Button("Read this exchange →") { model.showMemorySource(sessionID: thread.id, messageID: thread.anchorID) }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.accent)
                                 }
                             }
                         }.padding(.top, 12)
@@ -101,14 +101,21 @@ private struct DailySummaryCard: View {
     @ObservedObject var model: AppModel
     let report: DailyParticipation
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("Your replies, at a glance.").font(.title2.weight(.medium))
-                Spacer()
-                Text("\(report.followUps) saved follow-ups").font(.callout).foregroundStyle(Palette.secondary)
-            }
-            Text("Choose a category to see what you said, when, and why it was counted.")
-                .font(.callout).foregroundStyle(Palette.secondary)
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .center, spacing: 18) {
+                VStack(alignment: .leading, spacing: 7) {
+                    Text("A CLOSER LOOK AT YOUR DAY").font(.system(size: 10, weight: .medium)).tracking(1.5).foregroundStyle(.white.opacity(0.85))
+                    Text("Your replies, at a glance.").font(.system(size: 25, weight: .medium, design: .rounded)).tracking(-0.4).foregroundStyle(.white)
+                }
+                Spacer(minLength: 0)
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text("\(report.followUps)").font(.system(size: 31, weight: .light, design: .rounded)).monospacedDigit()
+                    Text("saved follow-ups").font(.caption2)
+                }.foregroundStyle(.white).padding(12).background(.black.opacity(0.18), in: RoundedRectangle(cornerRadius: 12))
+            }.padding(22).background { VernierField() }
+            VStack(alignment: .leading, spacing: 18) {
+                Text("Choose a category to see what you said, when, and why it counted.")
+                    .font(.callout).foregroundStyle(Palette.secondary)
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 10)], spacing: 10) {
                 ForEach(DailyAction.allCases, id: \.self) { action in
                     Button { model.selectDailyEvidence(action: action) } label: {
@@ -130,7 +137,8 @@ private struct DailySummaryCard: View {
             DailyShareBar(report: report, height: 7)
             Text("From saved words, not a grade. A brief approval can be deliberate; asking for a check does not mean it happened.")
                 .font(.caption).foregroundStyle(Palette.secondary).lineSpacing(3)
-        }.padding(24).background(Palette.surface, in: RoundedRectangle(cornerRadius: 22))
+            }.padding(22)
+        }.background(Palette.surface.opacity(0.78)).clipShape(RoundedRectangle(cornerRadius: 22))
     }
 }
 private extension DailyAction {
@@ -238,7 +246,7 @@ private struct DailyPatternCard: View {
                 Text("One place to return: “" + moment.excerpt + "”").font(.caption).foregroundStyle(Palette.text).lineLimit(2)
                 Button("Review this stretch →") { model.openDailyMoment(moment) }.buttonStyle(.plain).font(.caption.weight(.medium)).foregroundStyle(Palette.mint)
             }
-        }.padding(20).frame(maxWidth: .infinity, alignment: .leading).background(Palette.inset.opacity(0.65), in: RoundedRectangle(cornerRadius: 18))
+        }.padding(20).frame(maxWidth: .infinity, alignment: .leading).background(Palette.accent.opacity(0.06), in: RoundedRectangle(cornerRadius: 18))
     }
 }
 private struct DailyProjectsView: View {
@@ -252,7 +260,7 @@ private struct DailyProjectsView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(model.dailyProjectTitle(project)).font(.callout.weight(.medium)).lineLimit(2)
                         Text("\(project.continued) handed back · \(project.checked) asked for a check · \(project.moments.count) follow-ups").font(.caption).foregroundStyle(Palette.secondary)
-                        if let last = project.moments.last { Button("Explore this work →") { model.openDailyMoment(last) }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.mint) }
+                        if let last = project.moments.last { Button("Explore this work →") { model.openDailyMoment(last) }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.accent) }
                     }
                     if project.id != report.projects.prefix(8).last?.id { Divider() }
                 }
@@ -301,7 +309,7 @@ private struct DailyEvidenceView: View {
                         HStack(spacing: 18) {
                             Button("Read this exchange →") { model.openDailyMoment(moment) }
                             Button("Original reply ↗") { model.showMemorySource(sessionID: moment.sessionID, messageID: moment.id) }
-                        }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.mint)
+                        }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.accent)
                     }
                     Spacer(minLength: 0)
                 }.padding(.vertical, 5)
@@ -377,26 +385,26 @@ private struct DailyCheckInView: View {
 struct QuickDailyView: View {
     @ObservedObject var model: AppModel
     var body: some View {
-        VStack(alignment: .leading, spacing: 13) {
+        VStack(alignment: .leading, spacing: 8) {
             if let cue = model.directionToCheck, let reading = cue.reading {
                 Eyebrow(text: "A choice to revisit")
                 Text(reading.displayTitle).font(.system(size: 20, weight: .medium, design: .rounded)).fixedSize(horizontal: false, vertical: true)
                 Text("A proposed approach differs from an earlier requirement. The recap shows both so you can choose.").font(.callout).foregroundStyle(Palette.secondary)
             } else if let day = model.quickDailyReport {
                 let recap = QuickRecap(report: day)
-                HStack {
+                HStack(spacing: 8) {
                     Eyebrow(text: model.quickRecapIsPreviousDay || model.dailyDayOffset == -1 ? "Yesterday’s recap" : model.dailyDayOffset == 0 ? "Today so far" : day.day.start.formatted(date: .abbreviated, time: .omitted))
-                    Spacer()
-                    if day.limited { Text("Partial history").font(.caption2).foregroundStyle(Palette.amber) }
+                    Spacer(minLength: 0)
+                    Text("\(day.followUps) saved \(day.followUps == 1 ? "reply" : "replies")").font(.caption2).foregroundStyle(Palette.secondary)
                 }
-                Text(recap.headline).font(.system(size: 21, weight: .medium, design: .rounded)).tracking(-0.3).fixedSize(horizontal: false, vertical: true)
-                Text(recap.detail).font(.callout).foregroundStyle(Palette.secondary)
-                if !recap.secondary.isEmpty { Text(recap.secondary).font(.caption).foregroundStyle(Palette.secondary).fixedSize(horizontal: false, vertical: true) }
-                VStack(alignment: .leading, spacing: 5) {
-                    Text("One thing to reflect on").font(.caption2).foregroundStyle(Palette.secondary)
-                    Text(recap.question).font(.callout.weight(.medium))
-                }.padding(12).frame(maxWidth: .infinity, alignment: .leading).background(Palette.inset.opacity(0.65), in: RoundedRectangle(cornerRadius: 12))
-                if model.quickRecapIsPreviousDay { Text("Today: \(model.dailyReport?.followUps ?? 0) saved replies so far. Showing yesterday’s fuller recap.").font(.caption2).foregroundStyle(Palette.secondary) }
+                Text(recap.headline).font(.system(size: 20, weight: .medium, design: .rounded)).tracking(-0.3).foregroundStyle(Palette.text).fixedSize(horizontal: false, vertical: true)
+                    .help(recap.detail)
+                if let moment = recap.moment {
+                    QuickExchangeCard(model: model, moment: moment)
+                }
+                if model.quickRecapIsPreviousDay { Text("Today: \(model.dailyReport?.followUps ?? 0) saved replies. Yesterday’s fuller recap is shown.").font(.caption2).foregroundStyle(Palette.secondary) }
+                if day.limited { Text("Some history is missing. This picture may change.").font(.caption2).foregroundStyle(Palette.secondary) }
+
             } else {
                 Eyebrow(text: "Your saved work")
                 Text(emptyTitle).font(.system(size: 21, weight: .medium, design: .rounded)).fixedSize(horizontal: false, vertical: true)
@@ -420,5 +428,37 @@ struct QuickDailyView: View {
         if model.dailyLoading { return "Checking today and yesterday. Everything stays on this Mac." }
         if model.paused { return "Capture is paused. Your existing conversations are still saved; resume to collect new work." }
         return "A recap needs saved replies from you after an agent message. Earlier conversations remain in the dashboard."
+    }
+}
+
+private struct QuickExchangeCard: View {
+    @ObservedObject var model: AppModel
+    let moment: DailyMoment
+    var body: some View {
+        VStack(alignment: .leading, spacing: 7) {
+            HStack {
+                Text(moment.knownCopiedText || moment.action == .other ? "Saved reply" : moment.action == .reported ? "You reported" : "You asked").font(.caption2.weight(.medium))
+                Spacer()
+                Text(moment.at.formatted(date: .omitted, time: .shortened)).font(.caption2.monospacedDigit())
+            }.foregroundStyle(Palette.secondary)
+            Text(snippet(moment.excerpt)).font(.callout.weight(.medium)).lineLimit(2)
+            if let response = moment.response {
+                Divider()
+                Text("AI replied · excerpt").font(.caption2.weight(.medium)).foregroundStyle(Palette.secondary)
+                Text(snippet(response.excerpt)).font(.caption).foregroundStyle(Palette.text).lineLimit(2)
+            } else {
+                Text("No AI reply appears in this day’s saved history.").font(.caption).foregroundStyle(Palette.secondary)
+            }
+            Button("Open this exchange →") { model.openQuickExchange(moment) }
+                .font(.caption.weight(.medium)).buttonStyle(.plain).foregroundStyle(Palette.accent)
+                .accessibilityHint("Opens this saved request and its surrounding replies, on the day shown above")
+        }.padding(12).frame(maxWidth: .infinity, alignment: .leading)
+            .background(Palette.surface.opacity(0.70), in: RoundedRectangle(cornerRadius: 12))
+            .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(Palette.line.opacity(0.70), lineWidth: 0.5))
+    }
+    private func snippet(_ text: String) -> String {
+        let cleaned = text.split(whereSeparator: \.isWhitespace).joined(separator: " ")
+        guard !cleaned.isEmpty else { return "No visible text in this saved message." }
+        return String(cleaned.prefix(150)) + (cleaned.count > 150 ? "…" : "")
     }
 }

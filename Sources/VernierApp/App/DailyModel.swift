@@ -91,6 +91,21 @@ extension AppModel {
 
 
 extension AppModel {
+    var pillRecap: DailyParticipation? {
+        guard !paused, !systemSuspended, codexEnabled, conversationMemoryEnabled,
+              connectionError == nil, storageError == nil else { return nil }
+        return quickDailyReport
+    }
+    var pillTitle: String {
+        guard let day = pillRecap else { return Brand.name }
+        let label = day.day == WorkDay(containing: Date()) ? "Today" : day.day.start.formatted(.dateTime.month(.abbreviated).day())
+        return Brand.name + " · " + label
+    }
+    var pillSummary: String {
+        if directionToCheck != nil { return "A direction to check" }
+        if let day = pillRecap { return QuickRecap(report: day).presence }
+        return capturePresenceLabel
+    }
     private func dayInput(day: WorkDay, snapshot: SessionLibrary) async throws -> DailyInput {
         if !isolatedEnvironment {
             guard let store else { return DailyInput(messages: [], datedTotal: 0, undatedTotal: 0) }
@@ -124,5 +139,10 @@ extension AppModel {
         if quickRecapIsPreviousDay { chooseDay(-1) }
         if !localInsightsEnabled { dailyConversationExpanded = true }
         openStudio(.overview)
+    }
+    func openQuickExchange(_ moment: DailyMoment) {
+        guard let report = quickDailyReport, report.moments.contains(where: { $0.id == moment.id && $0.sessionID == moment.sessionID }) else { return }
+        if quickRecapIsPreviousDay { chooseDay(-1) }
+        openDailyMoment(moment)
     }
 }

@@ -1,5 +1,12 @@
 # Validation and evidence
 
+## Compact source evidence and direct access — 0.12.3
+
+The final background run passed **32 core groups and 55 isolated model-state checks**. Checks cover same-conversation/day response pairing, source IDs behind continuation patterns, three check requests paired with an explicitly unrun agent report, missing-response handling and opening the compact card on the displayed previous day. Pill-state checks verify that its text matches the same recap and that Pause takes priority over cached summaries. Invented default-ink, alternate light-source, unanswered-request and native expanded-pill layouts are rendered offscreen with no visible/key windows or app activation. The shortcut is not registered by these isolated processes.
+
+The new macOS-wide Control–Option–Command–V registration and lifecycle were source-reviewed and compiled. Full physical key delivery and native focus transitions were not automated on the owner’s active desktop. Testing those remains a small optional hands-on check or a separate-desktop task. Hidden renders and model-state routes are not presented as proof of physical shortcut delivery. No personal records or model requests are used in the background checks.
+
+
 ## Dated recap evidence and background testing — 0.12.2
 
 The final foreground run, completed before switching to the noninterrupting workflow, passed **32 shared core groups, 52 isolated model-state checks and 100 native-window checks**. New assertions connect category counts and source hours to exact reply IDs, retain actual rule/guard explanations, clear old-day filters and make repeated category clicks navigate again. A first native run inspected a reappearing control before AppKit completed layout; a bounded layout wait fixed that test timing. A later run opened the menu before its asynchronously loaded previous-day fixture was ready; an explicit readiness wait made that requirement testable. These failed runs are not counted as passes.

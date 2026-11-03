@@ -2,6 +2,19 @@ import Foundation
 
 /// Public presentation data. Never derived from a user's local provider or archive.
 public enum ShowcaseFixtures {
+    /// Invented check requests with a build-only agent report, for compact-view regression and visual review.
+    public static func quickReviewLibrary(now: Date = Date(), includeLastReply: Bool = true) -> SessionLibrary {
+        let session = library(now: now).sessions[0]
+        let text = ["Help prevent duplicate contacts.", "I can use email as the key.",
+                    "Explain how blank email addresses are handled.", "The current proposal treats all blank emails as one contact. That behavior needs a decision.",
+                    "Compare preserving blank-email rows with merging them.", "Preserving them avoids merging unrelated people. It leaves duplicates for manual review.",
+                    "Before shipping, check importing the same file twice, including blank emails.", "I only checked that the project builds. I have not replayed that import yet."]
+        let messages = text.enumerated().filter { includeLastReply || $0.offset < 7 }.map { i, body in
+            ConversationMessage(id: "quick-review-\(i)", sessionID: session.id, turnID: "quick-review-turn-\(i)", speaker: i % 2 == 0 ? "user" : "assistant", phase: i % 2 == 0 ? "user" : "final_answer", text: body, sourceAt: now.addingTimeInterval(Double(i - 8) * 60), observedAt: now, redactions: 0, textTruncated: false, attachmentsOmitted: false)
+        }
+        return SessionLibrary(sessions: [session], turns: [], notes: [:], messages: messages, memoryCoverage: [.init(sessionID: session.id, complete: false, issue: false)], totalMessageCount: messages.count,
+                              digests: [.init(sessionID: session.id, promptExcerpt: text[0], messageCount: messages.count, signalCount: 0)])
+    }
     public static func library(now: Date = Date()) -> SessionLibrary {
         let prompts = [
             "Make capture rest when my Mac sleeps, and resume only when I choose.",

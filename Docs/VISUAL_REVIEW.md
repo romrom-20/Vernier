@@ -1,3 +1,13 @@
+# Compact source comparison and ink appearance — 0.12.3
+
+Vernier defaults to its own deep ink appearance with warm white text, soft cyan/pink background fields, translucent-looking panels and a cream primary recap button. The static textured header carries a supplied blue/white/pink visual direction into the dashboard. Existing chart category colors keep their labels and meanings. The Mac’s appearance preference is not changed. The reference screenshot, person, brand and health claims are not imported. There is no continuous animation, downloaded asset or blur/shader loop.
+
+Default ink, narrow and source-level alternate light renders were reviewed. The compact panel keeps fixed outer geometry and independent capture controls, fits a dated request/reply comparison and source action, and explains incomplete history in plain words. A no-response example is separate from an unverified agent reply. The expanded native pill was rendered offscreen with actual pause/dashboard controls and the same brief recap.
+
+The global shortcut is shown in the compact footer and native menu. Hidden tests do not register or press it; physical key delivery remains an optional owner check. The installed local build reported successful macOS shortcut registration.
+
+---
+
 # A visual story of the work
 
 The session map introduced in 0.7 remains the source drill-down. Version 0.10 starts with a [revisable local reading](REASONING.md), its literal evidence, another possible account and the unresolved fact. The map shows the exchange rather than competing with a second set of older interpretation cards. Inventory counts stay in coverage details.

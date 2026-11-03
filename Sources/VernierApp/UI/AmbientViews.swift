@@ -62,6 +62,13 @@ struct ResidencySettings: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             Eyebrow(text: "Always available")
+            HStack {
+                Label("Open quick recap", systemImage: "keyboard").font(.callout)
+                Spacer()
+                Text(GlobalShortcut.display).font(.system(.callout, design: .monospaced)).foregroundStyle(Palette.mint)
+            }
+            Text(model.isolatedEnvironment ? "Global shortcut is not registered in test previews." : model.quickShortcutError ?? "Works from another app while Vernier is running. The full dashboard is one button away in the recap.")
+                .font(.caption).foregroundStyle(model.quickShortcutError == nil ? Palette.secondary : Palette.amber)
             Toggle("Open Vernier at login", isOn: Binding(
                 get: { model.loginStatus == .enabled || model.loginStatus == .needsApproval },
                 set: { model.setLaunchAtLogin($0) }

@@ -1,3 +1,11 @@
+# Quick access and source pairing — 0.12.3
+
+The compact panel pairs saved request/reply excerpts from the existing bounded day projection. This does not add a capture source, inference request or database table. Agent text is visibly attributed and is not a verified outcome.
+
+The requested global shortcut registers only Control–Option–Command–V with macOS, without observing other keys, storing keystrokes or requesting Accessibility permission. It opens Vernier’s compact panel and unregisters at Quit; test/showcase processes do not register it. Registration conflicts are reported rather than replacing another app’s shortcut. The floating pill shares existing recap counts and prioritizes Pause and connection state.
+
+---
+
 # Daily recap and check-ins — 0.12
 
 Daily counts use the existing, separately consented archive and local-analysis setting. They do not send a new inference request or add an observation permission. Up to 4,000 dated messages from one day are read into a bounded, temporary projection; unknown times stay unassigned. Previous-day controls read saved history. During system sleep the app rests, then can catch up from provider history after wake.

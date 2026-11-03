@@ -21,6 +21,7 @@ import VernierCore
     private(set) var surface: Surface = .ambient
     private(set) var pillPresentation: PillPresentation = .hidden
     private var lastPillTarget: NSRect?
+    private var quickShortcut: GlobalShortcut?
 
     init(smokeTest: Bool = false, showcase: Bool = false) {
         self.smokeTest = smokeTest
@@ -75,6 +76,8 @@ import VernierCore
             }
             return
         }
+        // Vernier's own ink appearance; does not change the Mac's appearance setting.
+        NSApp.appearance = NSAppearance(named: .darkAqua)
         NSApp.setActivationPolicy(.accessory)
         configureMainMenu()
         model.openStudio = { [weak self] page in self?.openStudio(page) }
@@ -101,6 +104,11 @@ import VernierCore
         NotificationCenter.default.addObserver(self, selector: #selector(screenParametersChanged), name: NSApplication.didChangeScreenParametersNotification, object: nil)
         refreshPresence()
         if !smokeTest && !model.isShowcase {
+            let shortcut = GlobalShortcut { [weak self] in self?.openQuickViewAction() }
+            let status = shortcut.start()
+            NSLog("Vernier quick recap shortcut registration status: %d", status)
+            if status == 0 { quickShortcut = shortcut }
+            else { model.quickShortcutError = "The quick recap shortcut could not register (macOS code \(status)). Another app may already use it." }
             if CommandLine.arguments.contains("--connect-codex") {
                 model.codexEnabled = true
                 model.demoEnabled = false
@@ -139,6 +147,7 @@ import VernierCore
     }
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
     func applicationWillTerminate(_ notification: Notification) {
+        quickShortcut?.stop(); quickShortcut = nil
         syncTask?.cancel()
         model.cancelWorkBrief(); model.cancelDecisionReview()
         model.setSystemSuspended(true)
@@ -248,7 +257,8 @@ import VernierCore
         let open = NSMenuItem(title: "Open dashboard", action: #selector(openStudioAction), keyEquivalent: "o")
         open.target = self
         appMenu.addItem(open)
-        let quick = NSMenuItem(title: "Quick View", action: #selector(togglePopover), keyEquivalent: "")
+        let quick = NSMenuItem(title: "Open quick recap", action: #selector(openQuickViewAction), keyEquivalent: "v")
+        quick.keyEquivalentModifierMask = [.control, .option, .command]
         quick.target = self
         appMenu.addItem(quick)
         appMenu.addItem(.separator())
@@ -269,6 +279,14 @@ import VernierCore
     @objc func openStudioAction() {
         if surface == .quickView || model.quickRecapIsPreviousDay { model.openQuickRecap() }
         else { openStudio(.overview) }
+    }
+    /// Idempotent so a global key event and an active app menu equivalent cannot close each other.
+    @objc func openQuickViewAction() {
+        if surface != .quickView || !popover.isShown { togglePopover() }
+        // A global shortcut arrives while another app is active. Make only the
+        // already-requested compact panel ready for keyboard input, never Studio.
+        NSApp.activate(ignoringOtherApps: true)
+        popover.contentViewController?.view.window?.makeKey()
     }
     @objc func togglePopover() {
         guard let button = statusItem?.button else { return }
@@ -335,8 +353,8 @@ import VernierCore
     func refreshPresence() {
         statusItem?.button?.image = makeStatusImage()
         let cueLabel = model.directionToCheck == nil ? "" : " · Possible direction change to check"
-        statusItem?.button?.toolTip = "\(Brand.name) · \(model.capturePhase.title) · \(model.captureModeTitle)\(cueLabel)"
-        statusItem?.button?.setAccessibilityLabel("\(Brand.name), \(model.capturePhase.title)\(cueLabel)")
+        statusItem?.button?.toolTip = "\(Brand.name) · \(model.pillSummary) · \(model.capturePhase.title)\(cueLabel) · \(GlobalShortcut.display) opens quick recap"
+        statusItem?.button?.setAccessibilityLabel("\(Brand.name), \(model.capturePhase.title). \(model.pillSummary)\(cueLabel). Control Option Command V opens quick recap.")
         let studioFocused = surface == .studio && NSApp.isActive && studio?.isVisible == true && studio?.isMiniaturized != true && studio?.isKeyWindow == true
         let presentation = PillPresentation.resolve(enabled: model.pillEnabled, resting: model.systemSuspended,
             studioFocused: studioFocused, quickPanelVisible: surface == .quickView || surface == .welcome,

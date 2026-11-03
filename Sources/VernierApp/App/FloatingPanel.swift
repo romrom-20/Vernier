@@ -152,9 +152,9 @@ struct PillView: View {
                     HStack(spacing: 11) {
                         InstrumentMark(size: 23)
                         VStack(alignment: .leading, spacing: 3) {
-                            Text(model.isShowcase ? "Vernier · Showcase" : Brand.name).font(.system(size: 12, weight: .medium))
-                            Text(model.directionToCheck == nil ? model.capturePresenceLabel : "A direction to check")
-                                .font(.system(size: 11)).foregroundStyle(Palette.secondary).lineLimit(1)
+                            Text(model.pillTitle).font(.system(size: 12, weight: .medium)).lineLimit(1)
+                            Text(model.pillSummary)
+                                .font(.system(size: 11)).foregroundStyle(Palette.secondary).lineLimit(1).minimumScaleFactor(0.85)
                         }
                         Spacer(minLength: 0)
                         Color.clear.frame(width: 28, height: 28) // Native capture button owns this hit target.
@@ -166,7 +166,7 @@ struct PillView: View {
                 .overlay(Capsule().strokeBorder(Palette.line.opacity(0.75), lineWidth: 0.5))
                 .foregroundStyle(Palette.text).contentShape(Capsule())
         }.accessibilityElement(children: .ignore)
-            .accessibilityLabel("\(Brand.name), \(model.capturePhase.title). \(model.directionToCheck == nil ? "" : "Possible direction change to check. ")\(model.pillPinned ? "Release" : "Keep open") capture controls.")
+            .accessibilityLabel("\(model.pillTitle), \(model.capturePhase.title). \(model.pillSummary). \(model.pillPinned ? "Release" : "Keep open") capture controls.")
             .accessibilityAddTraits(.isButton)
             .accessibilityAction { model.togglePillControls() }
             .help("Vernier remembers saved Codex work across Conductor workspaces, even when this circle is hidden. Hover for controls. Click to keep them open. Play/pause controls capture; the arrow opens the dashboard.")

@@ -1,4 +1,4 @@
-# Source release — 0.12.2
+# Source release — 0.12.3
 
 Vernier is an experimental native Mac app and working project name. This repository publishes source, synthetic showcase data, tests and documentation under MIT. There is no production, notarized binary release yet.
 
@@ -47,3 +47,6 @@ The additional development flag `--enable-local-insights` enables this local ana
 
 
 While using the Mac for other work, run `./Scripts/verify-background.sh` for isolated state checks and offscreen synthetic previews. Interactive showcase launches and `verify.sh --ui` can move focus and are reserved for a separate desktop or an agreed foreground test session. A second app window is not desktop isolation.
+
+
+- **0.12.3:** the compact panel shows a dated source request and the next available AI reply instead of a generic reflection question. Its exchange button focuses that request on the day shown; missing replies and incomplete history are explicit. The menu-bar panel and expanded floating pill share the same day/pattern. Control–Option–Command–V opens the compact panel from another app, with the full dashboard available from its footer. Fixed outer geometry and independent Pause controls remain. The dashboard and compact panel share an ink appearance with warm text, soft cyan/pink fields and a cream main button, without changing the Mac’s appearance setting. No model or schema change.

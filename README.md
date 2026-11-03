@@ -15,7 +15,7 @@ Today, the experimental Mac app gathers consented **Codex history from Conductor
 
 The broader question is **human agency in AI-mediated work**: when does delegation expand what you can do, and what remains within your ability to understand, redirect and recover?
 
-**Current version: 0.12.2.** The daily recap shows five named reply counts. Select a category or an hour to see dated examples, the wording rule used, and the original exchange. Color is accompanied by text and symbols. These counts describe recorded follow-ups; they do not measure tasks delegated, time spent thinking or understanding. A separate optional local conversation reader suggests goals, checks and direction questions. [How to read the daily recap](Docs/DAILY_RECAP.md) · [How the local reasoning loop works](Docs/REASONING.md).
+**Current version: 0.12.3.** The daily recap shows five named reply counts. Select a category or an hour to see dated examples, the wording rule used, and the original exchange. Color is accompanied by text and symbols. These counts describe recorded follow-ups; they do not measure tasks delegated, time spent thinking or understanding. The compact panel pairs a dated request with the next available AI reply and opens that exchange. Press **⌃⌥⌘V** from another app to open it while Vernier is running; the expanded floating pill shows the same day’s brief pattern. A separate optional local conversation reader suggests goals, checks and direction questions. [How to read the daily recap](Docs/DAILY_RECAP.md) · [How the local reasoning loop works](Docs/REASONING.md).
 
 ![An invented daily recap with a follow-up breakdown and a pattern to revisit](Docs/images/overview.png)
 
@@ -27,7 +27,7 @@ The broader question is **human agency in AI-mediated work**: when does delegati
 
 ![Compact view of the same invented daily recap](Docs/images/quick-view.png)
 
-*The exact compact view, rendered from invented messages dated yesterday. It keeps yesterday’s fuller recap visible while today gets started, labels the days separately, and opens the matching dashboard day. Capture and routing have separate regression checks.*
+*The actual compact view from invented records: a request to replay an import paired with an AI reply that says only the build was checked. This is a source comparison, not a verified outcome or model-quality demonstration. The source button opens that exchange; yesterday’s matching-day routing remains separately checked.*
 
 ## The product we are working toward
 

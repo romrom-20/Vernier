@@ -13,8 +13,8 @@ struct StudioView: View {
                         Button { if page == .memory { model.memorySessionID = nil }; model.page = page } label: {
                             HStack(spacing: 11) { Image(systemName: page.symbol).frame(width: 20); Text(page.rawValue); Spacer() }
                                 .font(.callout.weight(model.page == page ? .medium : .regular))
-                                .padding(12).foregroundStyle(model.page == page ? Palette.text : Palette.secondary)
-                                .background(model.page == page ? Palette.inset : .clear, in: RoundedRectangle(cornerRadius: 9))
+                                .padding(12).foregroundStyle(model.page == page ? Palette.accent : Palette.secondary)
+                                .background(model.page == page ? Palette.accent.opacity(0.09) : .clear, in: RoundedRectangle(cornerRadius: 9))
                         }.buttonStyle(.plain).accessibilityAddTraits(model.page == page ? .isSelected : [])
                     }
                 }
@@ -54,7 +54,7 @@ struct StudioView: View {
                             }
                         }
                     }.padding(30).frame(maxWidth: 1080, alignment: .leading).frame(maxWidth: .infinity)
-            }.id(model.page).background(Palette.canvas)
+            }.id(model.page).background { VernierBackdrop() }
                 .onChange(of: model.dailyEvidenceRevision) { _, _ in
                     withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { proxy.scrollTo("daily-breakdown", anchor: .top) }
                 }

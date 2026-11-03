@@ -1,6 +1,6 @@
 # A daily picture of the human side
 
-The main view now asks **how did I work with AI today?**, rather than leading with the agent's latest next step. The compact view and dashboard use the same day-level projection. The compact panel explains its counts in short sentences and offers one reflection question, with one main button to open that recap. Conversation readings and maps remain available underneath it.
+The main view now asks **how did I work with AI today?**, rather than leading with the agent's latest next step. The compact view and dashboard use the same day-level projection. The compact panel explains a count through one dated request and the next available agent reply, with direct exchange access and a main button to open the full recap. Conversation readings and maps remain available underneath it.
 
 ## What the numbers mean
 
@@ -44,3 +44,19 @@ This is a first descriptive daily recap. Validated prompt-quality scores, task/s
 **How Vernier reads your work** explains that daily counts use wording rules while contextual conversation review is separate. It reports the current review mode and the latest available saved review time, explicitly warning that the review may belong to another day or conversation. The existing local reader, prompt, schedule and schema are unchanged. There is no new cognitive or prompt-quality score.
 
 The sidebar names the capture state, says whether saved chats or metadata are being collected, and opens connection settings. Running in the background means Vernier stays open while the Mac is awake; it rests during sleep. Open at login means macOS starts it at sign-in, not that it runs while the machine is off.
+
+
+## A useful compact view — 0.12.3
+
+The menu-bar panel now pairs a pattern with its source: **what you asked, when, and what AI replied**. The generic reflection box has been replaced by short, clearly attributed excerpts and **Open this exchange**. A build claim or success report stays visibly an AI reply; the panel does not certify an outcome. If no following reply exists in the loaded day, it says that rather than borrowing an earlier reply or guessing. The selected request comes from the stated continuation stretch, repair pattern or most frequent meaningful wording category (ties prefer check requests). Counts themselves are unchanged.
+
+Responses come only from the immediately following agent stretch in the same loaded conversation/day. A final-answer message is preferred; otherwise the first visible reply is used. Consecutive human messages before that stretch can share its response. The excerpt may not answer the request and source timing/order can be approximate. Replies after midnight, outside the day cap or not yet synced may be absent. The UI says **some history is missing** in plain words when coverage is limited.
+
+The source card selects the displayed day (including yesterday’s morning fallback), then focuses its own saved request in the conversation map. It rejects a source card no longer present in the current compact report. The footer still opens the named day’s full recap. No inference call, capture source, database table or consent change is added.
+
+
+## Reach it without the dashboard
+
+**Control–Option–Command–V (⌃⌥⌘V)** opens the compact menu-bar recap from another app while Vernier is running. It presents the recap instead of toggling it closed if already visible. The existing footer opens the named day’s full recap; its source card opens its own exchange. Capture Pause is independent. The expanded floating pill now names the day and the same brief pattern (for example, “3 check requests”). Pause, rest, missing consent and connection errors take priority over cached recap text. The idle circle stays small.
+
+The shortcut uses the macOS Carbon hot-key API to register one combination, with exclusive registration to catch collisions with another app. It does not monitor general typing or request Accessibility permission. It unregisters at Quit. Isolated state checks, model probes and showcase rendering do not register it. If registration fails, the app shows a message in its residency/connection settings. The shortcut hint is visible in the compact footer and the native app menu.

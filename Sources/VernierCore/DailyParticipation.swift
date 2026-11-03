@@ -48,6 +48,13 @@ public struct DailyMoment: Identifiable, Sendable {
     public let knownCopiedText: Bool
     /// Explains the actual wording/guard used, separately from any contextual model reading.
     public let reason: String
+    /// A reply from the immediately following agent stretch in this loaded day, not a verified outcome.
+    public let response: DailyResponse?
+}
+public struct DailyResponse: Sendable {
+    public let messageID: String
+    public let at: Date?
+    public let excerpt: String
 }
 public struct DailyProject: Identifiable, Sendable {
     public let id: String
@@ -133,6 +140,16 @@ public struct DailyParticipation: Sendable {
             }
             let sources = story.runs.flatMap(\.messages).map { m in DecisionSource(id: m.id, messageID: m.id, sessionID: m.sessionID, role: m.speaker, text: SessionDisplay.visibleText(m.text)) }
             let annotated = Dictionary(uniqueKeysWithValues: SourceAttribution.annotate(sources).map { ($0.id, $0) })
+            var responses: [String: DailyResponse] = [:]
+            for (index, run) in story.runs.enumerated() where run.isUser {
+                guard index + 1 < story.runs.count, !story.runs[index + 1].isUser else { continue }
+                let replies = story.runs[index + 1].messages
+                guard let reply = replies.last(where: { $0.phase == "final_answer" }) ?? replies.first else { continue }
+                let visible = SessionDisplay.visibleText(reply.text).trimmingCharacters(in: .whitespacesAndNewlines)
+                guard !visible.isEmpty else { continue }
+                let response = DailyResponse(messageID: reply.id, at: reply.sourceAt, excerpt: String(visible.prefix(220)))
+                for message in run.messages { responses[message.id] = response }
+            }
             var previousAgent: ConversationMessage?
             for message in story.runs.flatMap(\.messages) {
                 if message.speaker == "assistant" { previousAgent = message; continue }
@@ -148,7 +165,7 @@ public struct DailyParticipation: Sendable {
                 }
                 moments.append(.init(id: message.id, sessionID: sessionID, workspaceID: workspace[sessionID] ?? sessionID, at: time,
                     action: action, excerpt: String(humanText(message.text).prefix(220)), agentID: agent.id,
-                    repairOnly: !copied && !message.textTruncated && isBriefRepair(text), knownCopiedText: copied, reason: reason))
+                    repairOnly: !copied && !message.textTruncated && isBriefRepair(text), knownCopiedText: copied, reason: reason, response: responses[message.id]))
             }
         }
         moments.sort { $0.at == $1.at ? $0.id < $1.id : $0.at < $1.at }

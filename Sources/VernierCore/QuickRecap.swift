@@ -1,53 +1,53 @@
 import Foundation
 
-/// Small, source-counted sentences for the compact view. No inference about thought or prompt quality.
+/// A source-linked moment for the compact view. Agent replies remain claims, not verified outcomes.
 public struct QuickRecap: Sendable {
     public let headline: String
     public let detail: String
-    public let secondary: String
-    public let question: String
+    public let moment: DailyMoment?
+    public let focus: DailyAction?
+    public let presence: String
     public init(report: DailyParticipation) {
-        let streak = report.longestContinuation.count
-        if streak >= 3 {
-            headline = "You approved or continued \(streak) times in a row."
+        let streak = report.longestContinuation
+        if streak.count >= 3 {
+            headline = "\(streak.count) brief continuations in one conversation."
             detail = "In one saved conversation. A short reply can still be a deliberate choice."
-            question = "Could I explain why one of those changes works?"
+            focus = .continued; moment = streak.last
+            presence = "\(streak.count) brief continuations"
         } else if report.repairRequests.count >= 2 {
-            headline = "You came back with short repair requests."
-            detail = "\(report.repairRequests.count) replies asked for another fix without describing the expected result."
-            question = "What should happen instead, and how will I check it?"
+            headline = "\(report.repairRequests.count) short requests for another fix."
+            detail = "These replies did not name a specific expected result. Open the exchange for context."
+            focus = .other; moment = report.repairRequests.last
+            presence = "\(report.repairRequests.count) short repair requests"
         } else {
             let kinds: [DailyAction] = [.checked, .directed, .reported, .continued]
-            let focus = kinds.max { report.count($0) < report.count($1) } ?? .other
-            if report.count(focus) == 0 {
-                headline = "Your replies didn’t fit a simple pattern."
-                detail = "The wording alone wasn’t clear enough to group \(report.followUps) saved replies."
-                question = "Which change would I like to understand better?"
-            } else {
-                switch focus {
-                case .checked:
-                    headline = "You asked for explanations and checks."
-                    question = "What did I try myself, and what happened?"
-                case .directed:
-                    headline = "You told AI what to change or keep."
-                    question = "Which change did I choose, and why?"
-                case .reported:
-                    headline = "You reported results from your own checks."
-                    question = "Could I repeat that check after the next change?"
-                case .continued:
-                    headline = "You asked AI to carry on."
-                    question = "Could I explain why one of those changes works?"
-                case .other:
-                    headline = "Your saved replies are ready to revisit."
-                    question = "Which change would I like to understand better?"
-                }
-                detail = "\(report.count(focus)) of \(report.followUps) saved replies."
+            let largest = kinds.map { report.count($0) }.max() ?? 0
+            let selected = kinds.first { report.count($0) == largest && largest > 0 }
+            focus = selected
+            moment = selected.flatMap { action in report.moments.last { $0.action == action } } ?? report.moments.last
+            let count = selected.map { report.count($0) } ?? 0
+            switch selected {
+            case .checked:
+                presence = "\(count) check \(count == 1 ? "request" : "requests")"
+                headline = count == 1 ? "One request for a check or explanation." : "\(count) requests for checks or explanations."
+                detail = "A request is not a result. Read what AI actually supplied in response."
+            case .directed:
+                presence = "\(count) \(count == 1 ? "condition or choice" : "conditions or choices")"
+                headline = count == 1 ? "One reply set a condition or choice." : "\(count) replies set conditions or choices."
+                detail = "Compare your requirement with the approach in the next agent reply."
+            case .reported:
+                presence = "\(count) \(count == 1 ? "result you reported" : "results you reported")"
+                headline = count == 1 ? "You reported one result." : "You reported \(count) results."
+                detail = "Your own report, separately from what AI claimed."
+            case .continued:
+                presence = "\(count) \(count == 1 ? "continuation" : "continuations")"
+                headline = count == 1 ? "You asked AI to continue once." : "You asked AI to continue \(count) times."
+                detail = "A short approval can be deliberate. Open the exchange to see what followed."
+            default:
+                presence = "Saved replies to revisit"
+                headline = report.followUps == 0 ? "No saved follow-ups to describe." : "This reply needs its context."
+                detail = "The wording rules could not confidently group these replies."
             }
         }
-        let continued = report.count(.continued), directed = report.count(.directed)
-        var parts: [String] = []
-        if continued > 0 { parts.append("\(continued) \(continued == 1 ? "short reply asked" : "short replies asked") AI to carry on.") }
-        if directed > 0 { parts.append("\(directed) \(directed == 1 ? "reply added" : "replies added") a condition, choice or correction.") }
-        secondary = parts.joined(separator: " ")
     }
 }

@@ -30,7 +30,7 @@ public enum DailyChecks {
         try check(DailyParticipation.classify("Please proceed, but keep all edits offline.") == .directed && DailyParticipation.classify("How would I test this?") == .checked && DailyParticipation.classify("I haven't tried it.") != .reported, "Meaningful qualifiers or hypothetical tests became plain approval or a result")
         try check(DailyParticipation.classify("Do not test this yet.") == .directed && DailyParticipation.classify("Skip checking that.") != .checked, "Negated check instructions inflated the check-request metric")
         let compact = QuickRecap(report: report)
-        try check(compact.headline.contains("3 times in a row") && compact.detail.contains("one saved conversation") && !compact.headline.contains("%"), "The compact recap lost its plain, bounded explanation")
+        try check(compact.headline.contains("3 brief continuations") && compact.detail.contains("one saved conversation") && compact.moment?.id == "m6" && compact.moment?.response?.messageID == "m7" && !compact.headline.contains("%"), "The compact recap must connect its pattern to the actual request and following agent reply")
         let copied = "Use the local index for search and keep the query on this machine."
         let copiedReport = DailyParticipation.make(day: day, input: .init(messages: [message("copy-a", "assistant", copied, spring), message("copy-u", "user", copied, spring.addingTimeInterval(2))], datedTotal: 2, undatedTotal: 0), sessions: [])
         try check(copiedReport.count(.other) == 1 && copiedReport.moments.first?.knownCopiedText == true, "Known copied agent text was attributed as independent direction")
@@ -43,6 +43,14 @@ public enum DailyChecks {
         try check(DailyParticipation.humanText(".context/attachments/synthetic/Screenshot 2026-10-29 at 11.11.25 PM.png  Explain the change.") == "Explain the change.", "An attachment path overwhelmed the human display excerpt")
         let morning = DailyParticipation.make(day: day, input: .init(messages: [message("morning", "user", "Go ahead.", day.start.addingTimeInterval(30))], datedTotal: 1, undatedTotal: 0, precedingContext: [message("last-night", "assistant", "The plan is ready.", day.start.addingTimeInterval(-30))]), sessions: [])
         try check(morning.count(.continued) == 1 && morning.loadedMessages == 1 && morning.moments.first?.agentID == "last-night", "A midnight boundary lost the preceding agent context or counted yesterday's message in today's denominator")
+        try check(morning.moments.first?.response == nil, "A preceding agent proposal must not be displayed as a reply to a later human request")
+        let reviewLibrary = ShowcaseFixtures.quickReviewLibrary(now: spring)
+        let review = DailyParticipation.make(day: day, input: .init(messages: reviewLibrary.messages, datedTotal: reviewLibrary.messages.count, undatedTotal: 0), sessions: reviewLibrary.sessions)
+        let reviewRecap = QuickRecap(report: review)
+        try check(review.followUps == 3 && review.count(.checked) == 3 && reviewRecap.moment?.id == "quick-review-6" && reviewRecap.moment?.response?.messageID == "quick-review-7" && reviewRecap.moment?.response?.excerpt.contains("not replayed") == true, "Three check requests must reveal their selected request and the agent's unverified report, not a made-up outcome")
+        let pendingLibrary = ShowcaseFixtures.quickReviewLibrary(now: spring, includeLastReply: false)
+        let pending = DailyParticipation.make(day: day, input: .init(messages: pendingLibrary.messages, datedTotal: pendingLibrary.messages.count, undatedTotal: 0), sessions: pendingLibrary.sessions)
+        try check(QuickRecap(report: pending).moment?.id == "quick-review-6" && QuickRecap(report: pending).moment?.response == nil, "An unanswered request cannot borrow a reply from an earlier exchange")
         let empty = DailyParticipation.make(day: day, input: .init(messages: [], datedTotal: 0, undatedTotal: 12), sessions: [])
         try check(empty.percent(.continued) == nil && empty.followUps == 0, "An empty day displayed a made-up percentage")
     }

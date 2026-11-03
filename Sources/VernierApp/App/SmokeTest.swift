@@ -250,6 +250,12 @@ extension AppCoordinator {
         morning.paused = true
         try check(morning.quickRecapIsPreviousDay, "Pause retains the saved previous-day recap")
         morning.paused = false
+        let compactMoment = QuickRecap(report: morning.quickDailyReport!).moment!
+        morning.openQuickExchange(compactMoment)
+        try check(morning.dailyDayOffset == -1 && morning.storyFocusID == compactMoment.id && morning.briefSessionID == compactMoment.sessionID && morning.workDetailExpanded,
+                  "The compact source card opens its own request on the displayed previous day")
+        morning.chooseDay(0)
+        await morning.loadDailyParticipation()
         morning.openQuickRecap()
         try await waitUntil("Opening yesterday’s compact recap selects the matching full dashboard day") {
             morning.dailyDayOffset == -1 && (morning.dailyReport?.followUps ?? 0) > 0 && morning.page == .overview
@@ -273,6 +279,12 @@ extension AppCoordinator {
         let dailyGeneration = showcase.dailyGeneration
         await showcase.loadDailyParticipation()
         try check(showcase.dailyGeneration == dailyGeneration, "Compact and full daily views reuse an unchanged projection")
+        try check(showcase.pillSummary == QuickRecap(report: showcase.quickDailyReport!).presence && showcase.pillTitle.contains("Today"),
+                  "The floating pill describes the same day and pattern as the menu-bar recap")
+        showcase.paused = true
+        try check(showcase.pillRecap == nil && showcase.pillSummary == showcase.capturePresenceLabel,
+                  "Pause takes priority over a cached daily pattern in the floating pill")
+        showcase.paused = false
         showcase.selectDailyEvidence(action: .directed)
         let selectionRevision = showcase.dailyEvidenceRevision
         try check(showcase.dailyMatchingMoments.allSatisfy { $0.action == .directed } && showcase.dailyMatchingMoments.count == showcase.dailyReport?.count(.directed), "A recap metric opens exactly its matching saved replies")
