@@ -10,6 +10,7 @@ extension AppCoordinator {
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         await model.loadDailyParticipation()
         try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 1180, height: 820), file: directory.appendingPathComponent("overview.png"))
+        try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 1180, height: 1600), file: directory.appendingPathComponent("overview-full.png"))
         try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 860, height: 760), file: directory.appendingPathComponent("overview-narrow.png"))
         try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 1180, height: 820), file: directory.appendingPathComponent("overview-light.png"), dark: false)
         try await snapshot(AnyView(MenuBarView(model: model)), size: NSSize(width: 382, height: 414), file: directory.appendingPathComponent("quick-view.png"))

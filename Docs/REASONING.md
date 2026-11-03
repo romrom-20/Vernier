@@ -1,3 +1,9 @@
+# Keep the visual overview — 0.13.1
+
+The dashboard again shows the category cards, hourly chart and reflection panel immediately. The contextual reading follows those visual sections, adding the goal, reported evidence and checkpoint. They are complementary ways into the same saved work; the compact recap keeps its focused reading. This restores information access without changing the model prompt, evidence classification, selection, capture or database schema described below.
+
+---
+
 # Outcomes before activity counts — 0.13
 
 The daily view now promotes a useful contextual reading over reply totals. It connects a likely goal, the kind of outcome evidence actually cited and one concrete way back into the work. The compact panel and expanded pill use the same selected reading. Reply counts and the active-hour chart remain supporting evidence under a disclosure. None is a percentage of tasks delegated or thought used.

@@ -1,8 +1,8 @@
 {
   "images": {
     "Docs/images/overview.png": {
-      "sha256": "62729db14a46f989da9ee1f24c60f7338cd7149127831fa5cf4d7140a9557e29",
-      "provenance": "Visually reviewed offscreen render of actual 0.13.0 native components at the wide dashboard size. Invented ShowcaseFixtures messages and hand-authored source-checked reading only; no personal archive, connector, desktop capture, hotkey registration or inference. Renderer verified activation prohibited and no visible/key windows. Presentation example, not model validation."
+      "sha256": "193024b168ff773a2997c7165d0490900e585ec4fd286b8aa78f5cfe284d8c4f",
+      "provenance": "Visually reviewed offscreen render of actual 0.13.1 native dashboard with category cards and hourly/reflection panels restored as visible sections. Invented ShowcaseFixtures records only; contextual reading below the viewport is hand-authored and source-checked. No personal archive, connector, desktop capture, hotkey registration or inference. Renderer verified activation prohibited and no visible/key windows. Presentation example, not model validation."
     },
     "Docs/images/quick-view.png": {
       "sha256": "81ece1907111e3ec96da3ceeb45fc17178b35a14766ffe7909bd7c32a7ce0769",

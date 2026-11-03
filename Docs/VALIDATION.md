@@ -1,3 +1,9 @@
+# Visible visual overview — 0.13.1
+
+Background verification passed **34 shared core groups and 65 isolated app-state checks**. Invented offscreen previews at wide and narrow dashboard sizes show the category cards and hourly/reflection panels visible by default; a tall preview also shows the contextual reading beneath them. Existing checks cover category/hour evidence navigation. No foreground input, personal records or model inference was used for this layout correction; the reasoning protocol is unchanged.
+
+---
+
 # Outcome readings and contextual recap — 0.13
 
 The release background run passed **34 shared core groups and 65 isolated app-state checks**, built and signed the native app, and rendered invented dashboard (wide/narrow), compact, production-popover and pill views offscreen. No visible/key test windows or app activation occurred. Local XCTest was skipped because only Command Line Tools are selected; CI runs it with Xcode. No interactive mouse, physical shortcut, focus or live-ingestion behavior was exercised on the owner's active desktop.

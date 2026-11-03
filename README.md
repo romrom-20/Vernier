@@ -15,9 +15,9 @@ Today, the experimental Mac app gathers consented **Codex history from Conductor
 
 The broader question is **human agency in AI-mediated work**: when does delegation expand what you can do, and what remains within your ability to understand, redirect and recover?
 
-**Current version: 0.13.0.** The compact recap and dashboard prioritize the same contextual reading across active conversations, rather than repeating a continuation count. Press **⌃⌥⌘V**, or reopen the app icon, for the compact view; open the full dashboard from its footer. The compact surface dismisses when you return to another app. This is an experimental local reader, not a measure of cognitive strain, comprehension or tasks delegated. Connected task histories and independent capability assessments remain planned. [Daily recap](Docs/DAILY_RECAP.md) · [Reasoning and evidence](Docs/REASONING.md) · [Research choices](Docs/RESEARCH.md).
+**Current version: 0.13.1.** The dashboard opens with visible category cards, an hourly chart and a reflection panel. A contextual reading follows with a goal, reported outcome and checkpoint; the compact recap stays focused on that reading. Press **⌃⌥⌘V**, or reopen the app icon, for the compact view; open the full dashboard from its footer. The compact surface dismisses when you return to another app. This is an experimental local reader, not a measure of cognitive strain, comprehension or tasks delegated. Connected task histories and independent capability assessments remain planned. [Daily recap](Docs/DAILY_RECAP.md) · [Reasoning and evidence](Docs/REASONING.md) · [Research choices](Docs/RESEARCH.md).
 
-![An invented goal, open outcome and specific checkpoint](Docs/images/overview.png)
+![An invented visual overview with category cards and an hourly chart](Docs/images/overview.png)
 
 *Native components rendered offscreen from invented records. The reading is hand-authored and source-checked; it illustrates presentation, not model accuracy or measured human understanding.*
 

@@ -28,18 +28,15 @@ struct DailyOverviewView: View {
                     Button("Open local review settings") { model.dailyConversationExpanded = true }.buttonStyle(QuietButtonStyle())
                 }
             } else if let day = model.dailyReport {
+                if day.followUps > 0 {
+                    DailySummaryCard(model: model, report: day)
+                    HStack(alignment: .top, spacing: 18) {
+                        DailyRhythmView(model: model, report: day).frame(maxWidth: .infinity)
+                        DailyPatternCard(model: model, report: day).frame(maxWidth: .infinity)
+                    }
+                }
                 DailyContextView(model: model)
                 if day.followUps > 0 {
-                    DisclosureGroup("Your recorded replies · supporting detail") {
-                        VStack(alignment: .leading, spacing: 18) {
-                            DailySummaryCard(model: model, report: day)
-                            HStack(alignment: .top, spacing: 18) {
-                                DailyRhythmView(model: model, report: day).frame(maxWidth: .infinity)
-                                DailyPatternCard(model: model, report: day).frame(maxWidth: .infinity)
-                            }
-                        }.padding(.top, 14)
-                    }
-                    .font(.callout)
                     DailyEvidenceView(model: model, report: day).id("daily-breakdown")
                     DailyProjectsView(model: model, report: day)
                 } else {
