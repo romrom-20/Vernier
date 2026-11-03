@@ -58,6 +58,9 @@ struct StudioView: View {
                 .onChange(of: model.dailyEvidenceRevision) { _, _ in
                     withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { proxy.scrollTo("daily-breakdown", anchor: .top) }
                 }
+                .onChange(of: model.dailyReadingFocusRevision) { _, _ in
+                    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { proxy.scrollTo("participation-focus", anchor: .top) }
+                }
                 .onChange(of: model.selectedDecisionSessionID) { _, _ in
                     withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { proxy.scrollTo("participation-focus", anchor: .top) }
                 }

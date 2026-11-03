@@ -68,11 +68,29 @@ Possible tasks include locating a failing subsystem, explaining an architectural
 
 Check whether the exercise helps a user locate a concrete gap and take an effective next step. Predictive validity, usefulness and causal improvement are distinct success criteria.
 
-## Research provenance
+## Verified sources and what we take from them
 
-The project brief includes references to studies about prompting and unaided code evolution, but does not include identifiable paper citations for those claims. Their participant counts, effect sizes and conclusions are not repeated as established evidence here. A primary-source bibliography should be verified before making empirical claims or designing around a particular reported result.
+[Weight-space programming — Takehi and colleagues](https://rikiyat.github.io/blog/weight-space-programming/) is an experimental blog report about models reading and editing neural-network weights. It reports improvements for some targeted failures, but not meaningful improvement of ordinary arithmetic/reasoning errors in its small Gemma experiment. It does not validate a measure of human strain or promise that our Gemma model can repair itself. We use its hypothesis → targeted change → behavioral evaluation approach. Vernier does not edit weights, train on private sessions or implement that method.
 
-[Addy Osmani’s cognitive-surrender essay](https://addyosmani.com/blog/cognitive-surrender/) is a design influence about retaining independent judgment. It is not a measurement validation study for Vernier.
+[NASA Task Load Index](https://www.nasa.gov/human-systems-integration-division/nasa-task-load-index-tlx/) measures **subjective workload** across mental demand, physical demand, time pressure, performance, effort and frustration. A future opt-in workload check-in could follow its actual protocol. The current clarity/energy check-in is not NASA-TLX and must not inherit its validity. Workload and cognitive dysfunction are different constructs.
+
+[Lee and colleagues, CHI 2025](https://www.microsoft.com/en-us/research/publication/the-impact-of-generative-ai-on-critical-thinking-self-reported-reductions-in-cognitive-effort-and-confidence-effects-from-a-survey-of-knowledge-workers/) surveyed knowledge workers about effort and confidence. Its self-reported associations and discussion of verification/integration motivate attention to the work surrounding a generated answer. They cannot establish cognitive decline or an individual's effort from their chat trace.
+
+[Risko and Gilbert, Cognitive Offloading (2016)](https://doi.org/10.1016/j.tics.2016.07.002) reviews how external actions can reduce cognitive demands. Delegation can be useful. A count of offloaded actions does not by itself establish harm; goals, context and independent outcomes matter.
+
+[Anthropic's coding-skill experiment (2026)](https://www.anthropic.com/research/AI-assistance-coding-skills) studied developers learning an unfamiliar Python library, with a later quiz. It motivates measuring assisted completion separately from later independent understanding. Its qualitative interaction clusters are not causal evidence that more explanation requests improve learning, nor a calibrated classifier for our users. We have not reproduced the study.
+
+[Basner and Dinges, PVT and sleep loss (2011)](https://pubmed.ncbi.nlm.nih.gov/21532951/) studied behavioral alertness in controlled sleep-loss experiments using a timed vigilance task. Such a test measures a different outcome from coding understanding. A casual click counter or short generic reaction game is not that validated protocol. No PVT, sleep measurement or clinical assessment is implemented in Vernier.
+
+[Addy Osmani's cognitive-surrender essay](https://addyosmani.com/blog/cognitive-surrender/) remains a design influence about independent judgment, not a validation study for Vernier.
+
+## Product decisions from this reading
+
+**Implemented:** show a likely goal, distinguish who reported which outcome, expose the exact source and offer one task-specific checkpoint. Keep historical readings, deterministic observations and human self-reports separate. Never infer thought from a long prompt, map opening, short approval or missing review message.
+
+**Proposed:** an occasional voluntary recovery exercise with a rubric fixed in advance: predict an edge case, explain one decision, find a failing part or make a small independent change. Track the actual attempt and its conditions; a request for an explanation is not a passed exercise. Workload self-report would be separate from performance. These require their own consent and validation, not a universal strain number added to current logs.
+
+**Unvalidated:** whether these readings improve oversight, whether a pattern predicts later recovery, and whether repeated use changes capability. The experiments above remain necessary. Public synthetic regression improvements do not answer those questions.
 
 ## Privacy and participation
 

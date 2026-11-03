@@ -94,6 +94,7 @@ public struct DailyParticipation: Sendable {
     public let undatedTotal: Int
     public let partialHistory: Bool
     public let clippedMessages: Int
+    public let activeSessionIDs: [String]
     public var followUps: Int { moments.count }
     public var limited: Bool { loadedMessages < datedTotal || partialHistory || clippedMessages > 0 }
     public func count(_ action: DailyAction) -> Int { moments.filter { $0.action == action }.count }
@@ -185,7 +186,7 @@ public struct DailyParticipation: Sendable {
         let used = Set(relevant.map(\.sessionID))
         let partial = used.contains { id in coverage.first { $0.sessionID == id }?.complete != true }
         return Self(day: day, moments: moments, hours: hours, agentOnlyThreads: agentOnly.sorted { $0.id < $1.id }, projects: projects, loadedMessages: relevant.count, datedTotal: input.datedTotal,
-                    undatedTotal: input.undatedTotal, partialHistory: partial, clippedMessages: relevant.filter(\.textTruncated).count)
+                    undatedTotal: input.undatedTotal, partialHistory: partial, clippedMessages: relevant.filter(\.textTruncated).count, activeSessionIDs: used.sorted())
     }
     /// Display/input cleanup only. Original records remain unchanged and open through the source link.
     public static func humanText(_ raw: String) -> String {

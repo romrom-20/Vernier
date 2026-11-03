@@ -1,3 +1,28 @@
+# Outcome reasoning regression — 0.13
+
+The current protocol is `work-12`, with the existing local **Gemma 4 E2B QAT** model and additional host evidence/provenance checks. No weights were changed or downloaded. All inference used invented in-memory packets, serially, with application activation prohibited. No personal archive or connector was opened by the probes. These explicit model experiments are separate from the inference-free background verification script.
+
+The final local run matched **16/18** original development cases and **4/6** additional cases (**20/24**), plus **11/12** new outcome cases (**31/36** combined). The 12 outcome cases also matched **11/12** expected evidence statuses. Five expected direction questions appeared through existing literal rules; no unexpected cue appeared in the other 31 examples. The combined match checks permitted focus labels, a shallow lexical goal term and cue presence; it is not semantic accuracy or a measure of human agency. A withheld reading counts as a miss where the expected label called for a useful reading.
+
+All five final misses were withheld: a brief investigation was incorrectly framed as progress and failed the new evidence check; a new symptom and two topic-change questions failed interpretation/challenge checks; a concrete successful replay was incorrectly framed as recurring and failed the two-human-report requirement. Correct withholding prevents those particular misleading cards but loses useful assistance. The limited evidence-wording rules can also miss real checks. The small model remains experimental, especially on topic boundaries and changing outcomes.
+
+The 12 new examples in `work-evidence-cases.json` were written before prompt editing, then inspected and used during development: **they are regression cases, not a blind test**. They cover an unrun original case, agent/human replay reports, deliberate delegation, a returning fault, changed topics, hypothetical checks, copied agent claims and unsupported personal verdicts. The initial unchanged work-11 run matched 8/12 on the older combined metric, including a lexical-only miss; it had no comparable evidence-status field. An intermediate work-12 prototype matched 11/12 combined but only 6/12 evidence statuses. Those failures drove stricter actor/wording checks instead of trusting the model's result tag. The final result does not establish an out-of-sample improvement, and variation from the earlier 19/24 old-fixture run is not a causal quality estimate.
+
+Deterministic checks additionally cover negated/conditional builds, question versus performed attempt, copied-text attribution, exact-request human perspectives, export/comparison reports, generic assent without context, legacy payload decoding, newer withheld revisions, current-source suppression and historical day boundaries. This tests specific failure modes; it does not independently validate inferred goals or task relationships.
+
+Reproduce with the existing loopback Ollama model available:
+
+```sh
+./Scripts/build-app.sh
+build/Vernier.app/Contents/MacOS/Vernier --work-model-probe \
+  --cases Tests/Fixtures/work-evidence-cases.json \
+  --report /tmp/vernier-outcome-regression.json
+```
+
+Run the original two fixture files separately; do not rebuild the executable during a running probe. Scores, full proposed frames and challenges are saved in the requested report. Reports may vary between runs. Independent adjudication of unseen natural conversations, broader languages, sustained usefulness, capability outcomes and all-day resource cost remain unvalidated. Neither exact citations nor model agreement establishes understanding or cognitive health.
+
+---
+
 # Recheck while improving the recap — 0.12.2
 
 With the unchanged `work-11` pipeline and installed Gemma 4 E2B QAT, a fresh local run of the same 18 + 6 invented regression examples matched **15/18 and 4/6, 19/24 overall**. The five expected literal boundary cues appeared; no unexpected direction cue appeared in the other nineteen examples. The model still accepted a handoff framing for a build-only case, withheld a returning-fault case, a new symptom and a brief rejection, and accepted a new billing question with the wrong focus/goal outcome. Model calls used invented packets only, with no personal archive or connector.
@@ -6,9 +31,9 @@ No prompt, retrieval, scheduler or model was upgraded in this UI change. Variati
 
 ---
 
-# Current contextual reader — 0.11
+# Historical contextual reader — 0.11
 
-The current production path is `DecisionGenerator.review`, using `WorkPrompt.json` (`work-11`). It is different from the historical action-label experiment below. Do not compare its results directly to the older 40-case labels.
+At 0.11 the production path was `DecisionGenerator.review`, using `WorkPrompt.json` (`work-11`). It is different from the historical action-label experiment below. Do not compare its results directly to the older 40-case labels.
 
 The local model extracts a practical goal, checkpoint and selectable witness IDs. The host constructs those spans from saved messages and copies their exact text, preventing a paraphrased citation from invalidating an otherwise useful account. The app composes a narrow account, then asks for a separate challenge. Explicit boundary questions can instead come from five named literal rules with no model request. Other boundary comparisons use a dedicated local pass. Reports identify the actual review engine and rule basis. Agreement between passes is not independent proof.
 

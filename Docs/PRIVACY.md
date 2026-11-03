@@ -81,3 +81,8 @@ Automatic generation applies only to the selected/latest session, only after a s
 ## Visual projection — 0.7.0
 
 The conversation map reads at most 500 already saved messages for one session into an in-memory projection. It does not observe additional activity. Role/sequence counts apply to the loaded window; AI interpretations retain their separate reviewed-message coverage. Erase conversation memory and full deletion clear the projection and invalidate pending reads. No new table or consent is introduced.
+
+
+## Outcome readings in 0.13
+
+The new evidence label is derived from already-consented saved text, copied-text attribution and optional perspectives; it adds no screen, mouse, browser, keyboard, sleep or health capture. New fields are optional in existing saved reading payloads and covered by the existing derived-data retention, export and erase paths. No personal conversations were used in model development probes: the new outcome examples and public previews are invented. The local model still consumes the bounded source packet described in [reasoning](REASONING.md), not an uninterrupted live feed or an edited set of model weights.

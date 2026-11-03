@@ -254,6 +254,7 @@ extension AppCoordinator {
         let morning = AppModel(preferences: Preferences(defaults: showcaseDefaults), showcase: true)
         let yesterdayStart = Calendar.current.date(byAdding: .day, value: -1, to: Calendar.current.startOfDay(for: Date()))!
         morning.library = ShowcaseFixtures.workLibrary(now: yesterdayStart.addingTimeInterval(12 * 3600))
+        morning.decisionRevisions = [] // Count-only fallback fixture has no coherent contextual readings.
         await morning.loadDailyParticipation()
         try check(morning.dailyReport?.followUps == 0 && morning.quickRecapIsPreviousDay && morning.quickDailyReport?.followUps ?? 0 > 0,
                   "After midnight the compact view uses yesterday’s real recap instead of introductory copy")
@@ -301,8 +302,27 @@ extension AppCoordinator {
         let dailyGeneration = showcase.dailyGeneration
         await showcase.loadDailyParticipation()
         try check(showcase.dailyGeneration == dailyGeneration, "Compact and full daily views reuse an unchanged projection")
-        try check(showcase.pillSummary == QuickRecap(report: showcase.quickDailyReport!).presence && showcase.pillTitle.contains("Today"),
-                  "The floating pill describes the same day and pattern as the menu-bar recap")
+        if let insight = showcase.dayInsights.first {
+            let focusRevision = showcase.dailyReadingFocusRevision
+            showcase.openDayInsight(insight)
+            try check(showcase.selectedDecisionRevisionID == insight.id && showcase.dailyConversationExpanded && showcase.dailyReadingFocusRevision > focusRevision,
+                      "A day insight opens its exact reading and can focus it repeatedly")
+            showcase.dailyConversationExpanded = false
+            showcase.decisionDirtyAt[insight.revision.sessionID] = Date()
+            try check(showcase.dayInsights.isEmpty && showcase.quickInsight == nil, "New source evidence withholds the old contextual recap while it is reconsidered")
+            showcase.decisionDirtyAt.removeValue(forKey: insight.revision.sessionID)
+        }
+        try check(showcase.quickInsight?.id == showcase.dayInsights.first?.id && showcase.quickInsight != nil && showcase.pillTitle.contains("Today") && !showcase.pillSummary.contains("requests"),
+                  "The pill and compact recap prioritize the same contextual reading instead of a request count")
+        let fullReport = showcase.dailyReport
+        if let insight = showcase.quickInsight {
+            let agentMessages = showcase.library.messages.filter { $0.sessionID == insight.revision.sessionID && $0.speaker == "assistant" }
+            showcase.dailyReport = DailyParticipation.make(day: showcase.selectedWorkDay, input: .init(messages: agentMessages, datedTotal: agentMessages.count, undatedTotal: 0), sessions: showcase.library.sessions)
+            try check(showcase.dailyReport?.followUps == 0 && showcase.quickInsight?.id == insight.id && !showcase.quickRecapIsPreviousDay,
+                      "A fresh reading of delegated activity remains visible with zero human follow-ups")
+            showcase.dailyReport = fullReport
+        }
+        let staleInsight = showcase.quickInsight
         showcase.paused = true
         try check(showcase.pillRecap == nil && showcase.pillSummary == showcase.capturePresenceLabel,
                   "Pause takes priority over a cached daily pattern in the floating pill")
@@ -327,7 +347,13 @@ extension AppCoordinator {
             showcase.dailyConversationExpanded = false; showcase.workDetailExpanded = false; showcase.selectDecisionSession(showcase.library.sessions.first!.id)
         }
         showcase.clearDailyParticipation()
-        try check(showcase.dailyReport == nil && showcase.dailyReflections.isEmpty && showcase.dailyLoadedKey == nil && showcase.dailyHour == nil && showcase.dailyFilter == nil, "Daily erasure clears the recap, evidence filters and private check-ins")
+        try check(showcase.dailyReport == nil && showcase.dailyReadings.isEmpty && showcase.dailyPreviousReadings.isEmpty && showcase.dayInsights.isEmpty && showcase.dailyReflections.isEmpty && showcase.dailyLoadedKey == nil && showcase.dailyHour == nil && showcase.dailyFilter == nil, "Daily erasure clears the recap, contextual readings, evidence filters and private check-ins")
+        if let staleInsight {
+            let focus = showcase.dailyReadingFocusRevision
+            showcase.openDayInsight(staleInsight)
+            try check(showcase.dailyReadingFocusRevision == focus && showcase.dailyReadings.isEmpty,
+                      "A captured contextual-card action cannot reopen erased daily evidence")
+        }
         try check(showcase.workOverview?.workspaces == 3 && showcase.workOverview?.count(.goAhead) == 1 && showcase.workOverview?.failureCount == 1,
                   "Work overview spans workspaces with source-linked wording cues and failure status")
         try check(showcase.participationMoments.contains { $0.kind == .requestedEvidence } && showcase.participationMoments.contains { $0.kind == .setBoundary },

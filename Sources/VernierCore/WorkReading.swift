@@ -73,7 +73,7 @@ public struct WorkFrame: Codable, Sendable {
             account = "The available context did not establish a concrete next check. The original messages remain available."
             step = nextStep
         }
-        return .init(focus: focus, goal: practicalGoal, headline: headline, account: account, nextStep: step, references: references)
+        return .init(focus: focus, goal: practicalGoal, headline: headline, account: account, nextStep: step, references: references, resultState: resultState)
     }
 }
 public struct WorkProposal: Codable, Sendable {
@@ -83,8 +83,9 @@ public struct WorkProposal: Codable, Sendable {
     public let account: String
     public let nextStep: String
     public let references: [WorkReference]
-    public init(focus: WorkFocus, goal: String, headline: String, account: String, nextStep: String, references: [WorkReference]) {
-        self.focus = focus; self.goal = goal; self.headline = headline; self.account = account; self.nextStep = nextStep; self.references = references
+    public let resultState: WorkResultState?
+    public init(focus: WorkFocus, goal: String, headline: String, account: String, nextStep: String, references: [WorkReference], resultState: WorkResultState? = nil) {
+        self.focus = focus; self.goal = goal; self.headline = headline; self.account = account; self.nextStep = nextStep; self.references = references; self.resultState = resultState
     }
 }
 public struct WorkChallenge: Codable, Sendable {
@@ -107,6 +108,8 @@ public struct WorkReading: Codable, Sendable {
     public let references: [WorkReference]
     public let signalKey: String?
     public let boundaryRule: String?
+    /// Optional for decoding pre-v0.13 readings; it is never a health or understanding score.
+    public let evidenceStatus: WorkEvidenceStatus?
     /// A cue is limited to brief, recognizable assent; longer explanations are never treated as surrender.
     public static func isBriefAssent(_ text: String) -> Bool {
         let words = text.lowercased().components(separatedBy: CharacterSet.alphanumerics.inverted).filter { !$0.isEmpty }
@@ -163,6 +166,9 @@ public struct WorkReading: Codable, Sendable {
         guard ids.contains(context.anchorID), ids.isSubset(of: known),
               (literalRule != nil || (challenge.sourceIDs.contains(context.anchorID) && Set(challenge.sourceIDs).isSubset(of: known) && ids.isSubset(of: Set(challenge.sourceIDs)))),
               let anchor = context.anchor, anchor.role == "user", anchor.origin != .reusedAgent else { return nil }
+        // A bare assent with no substantive surrounding record cannot support an invented goal.
+        let bare = #"(?i)^\s*(?:do it|go ahead|proceed|continue|ok|okay|yes|sure)[.!\s]*$"#
+        guard context.sources.contains(where: { $0.novelText.rangeOfCharacter(from: .alphanumerics) != nil && $0.novelText.range(of: bare, options: .regularExpression) == nil }) else { return nil }
         // Exact witness spans are checked against the actual model excerpt, never guessed or repaired.
         for reference in proposal.references {
             guard let source = context.sources.first(where: { $0.id == reference.sourceID }),
@@ -172,8 +178,10 @@ public struct WorkReading: Codable, Sendable {
             if source.origin == .mixed && reference.sourceID == context.anchorID && !source.novelText.contains(reference.quote) { return nil }
         }
         let generated = [proposal.goal, proposal.headline, proposal.account, proposal.nextStep].joined(separator: " ")
-        let personal = #"(?i)\b(cognitive decline|brain atrophy|sanity score|IQ|mental health)\b|\byou (?:are|were|seem|became|have become) (?:being steered|tired|disengaged|dependent|uncritical)|\byou (?:did not|didn't|never|failed to) (?:read|review|understand|think)|\byou (?:fully|clearly|definitely) understand"#
+        let personal = #"(?i)\b(cognitive decline|brain atrophy|sanity score|IQ|mental health|cognitive dysfunction score|brain strain score)\b|\byou (?:are|were|seem|became|have become|have) (?:being steered|tired|disengaged|dependent|uncritical)|\byou (?:did not|didn't|never|failed to) (?:read|review|understand|think)|\byou (?:have|show|are showing|suffer from) (?:cognitive dysfunction|cognitive impairment|dementia|burnout)\b|\byou (?:fully|clearly|definitely) understand"#
         guard generated.range(of: personal, options: .regularExpression) == nil else { return nil }
+        let evidenceStatus = WorkEvidenceStatus.classify(proposal, context: context)
+        if proposal.resultState != nil && proposal.focus == .progress && ![.humanReported, .agentReported].contains(evidenceStatus) { return nil }
         var key: String?
         if proposal.focus == .directionChange {
             // An ambient cue needs an earlier human boundary, an intervening agent proposal and this human response.
@@ -201,7 +209,7 @@ public struct WorkReading: Codable, Sendable {
         let canonical = proposal.references.map { reference in
             WorkReference(sourceID: context.sources.first { $0.id == reference.sourceID }!.messageID, quote: reference.quote, use: reference.use)
         }
-        return Self(focus: proposal.focus, goal: proposal.goal, headline: proposal.headline, account: proposal.account, nextStep: proposal.nextStep, references: canonical, signalKey: key, boundaryRule: literalRule)
+        return Self(focus: proposal.focus, goal: proposal.goal, headline: proposal.headline, account: proposal.account, nextStep: proposal.nextStep, references: canonical, signalKey: key, boundaryRule: literalRule, evidenceStatus: evidenceStatus)
     }
 }
 
@@ -244,13 +252,13 @@ extension WorkProposal {
            let index = context.sources.firstIndex(where: { $0.id == context.anchorID }), let earlier = context.sources.prefix(index).last(where: { $0.role == "user" && $0.sessionID == context.sessionID && $0.origin != .reusedAgent }) {
             values.append(.init(sourceID: earlier.id, quote: String(earlier.quote.prefix(100)), use: .intent))
         }
-        return .init(focus: focus, goal: goal, headline: headline, account: account, nextStep: nextStep, references: values)
+        return .init(focus: focus, goal: goal, headline: headline, account: account, nextStep: nextStep, references: values, resultState: resultState)
     }
     public func respectingExplicitTopicChange(_ context: DecisionContext) -> Self {
         guard let anchor = context.anchor, references.allSatisfy({ ref in context.sources.contains { $0.id == ref.sourceID } }),
               anchor.novelText.range(of: #"(?i)\b(?:switch topics|separate issue|new topic)\b"#, options: .regularExpression) != nil else { return self }
         let refs: [WorkReference] = [.init(sourceID: anchor.id, quote: String(anchor.quote.prefix(160)), use: .intent), .init(sourceID: anchor.id, quote: String(anchor.quote.prefix(160)), use: .response)]
-        return .init(focus: focus == .recurringIssue ? .check : focus, goal: goal, headline: "A new question worth settling.", account: "This request opens another topic. The earlier agent report does not settle this new question.", nextStep: nextStep, references: refs)
+        return .init(focus: focus == .recurringIssue || focus == .progress ? .check : focus, goal: goal, headline: "A new question worth settling.", account: "This request asks about another topic. The cited words identify the current question; no outcome is established here.", nextStep: nextStep, references: refs, resultState: WorkResultState.none)
     }
 }
 

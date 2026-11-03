@@ -1,3 +1,15 @@
+# Outcome readings and contextual recap — 0.13
+
+The release background run passed **34 shared core groups and 65 isolated app-state checks**, built and signed the native app, and rendered invented dashboard (wide/narrow), compact, production-popover and pill views offscreen. No visible/key test windows or app activation occurred. Local XCTest was skipped because only Command Line Tools are selected; CI runs it with Xcode. No interactive mouse, physical shortcut, focus or live-ingestion behavior was exercised on the owner's active desktop.
+
+New checks cover outcome provenance, hypothetical/negated checks, copied agent claims, exact-request perspectives, unsupported personal scores, generic assent, older reading decoding, latest-per-conversation selection, historical creation dates, stale source suppression, zero-follow-up delegated activity, exact-reading navigation and erased-card actions. The new bounded day query is tested against both included and excluded calendar days; this caught a missing integer binding for its limit during development and was fixed before the passing run.
+
+Separately, serial local-model probes on invented packets matched 31/36 permitted outcomes and 11/12 new evidence-status expectations. Five missed useful readings were withheld. These reused development examples are not blind validation of goal interpretation, cognitive state or user benefit. [Detailed failures and reproduction](MODEL_EVALUATION.md).
+
+The installed source release preserves schema v6 and capture settings. Real source collection, model availability, physical focus/hover and all-day resource impact still depend on the local environment; hidden renders do not prove those behaviors.
+
+---
+
 # Validation and evidence
 
 ## Production popover and departure routes — 0.12.4

@@ -1,6 +1,10 @@
-# A daily picture of the human side
+# A useful way back into your work
 
-The main view now asks **how did I work with AI today?**, rather than leading with the agent's latest next step. The compact view and dashboard use the same day-level projection. The compact panel explains a count through one dated request and the next available agent reply, with direct exchange access and a main button to open the full recap. Conversation readings and maps remain available underneath it.
+The dashboard, compact panel and expanded pill now lead with a contextual reading when a current one is available: **what you were trying to achieve, what kind of result is in the record, and one useful next step**. For example, an AI saying the project builds does not establish that a double import avoids duplicates. The next step can connect that build to the original interaction, rather than asking for more prompts generally.
+
+The compact card opens its exact reading and sources; its footer opens the full recap. Other active conversations are available in the dashboard. Today's changed sources withhold old readings until reconsidered. A missing model reading falls back to saved exchanges and an explicit unavailable state, rather than inventing a takeaway. The reply breakdown and hour chart are supporting detail, not the primary judgment.
+
+A day uses up to 200 saved readings created that day, latest per active conversation. It is not all tasks or all work done. An old day shows interpretations saved then, not a retrospective model reconstruction. With no current reading and few new replies, the compact panel can retain yesterday's fuller recap; it names that date and opens that date. A fresh reading of delegated work can take priority even without a human follow-up. [Source and model boundaries](REASONING.md).
 
 ## What the numbers mean
 

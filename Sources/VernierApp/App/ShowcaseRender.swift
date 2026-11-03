@@ -13,8 +13,8 @@ extension AppCoordinator {
         try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 860, height: 760), file: directory.appendingPathComponent("overview-narrow.png"))
         try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 1180, height: 820), file: directory.appendingPathComponent("overview-light.png"), dark: false)
         try await snapshot(AnyView(MenuBarView(model: model)), size: NSSize(width: 382, height: 414), file: directory.appendingPathComponent("quick-view.png"))
-        let original = model.library
-        model.library = ShowcaseFixtures.quickReviewLibrary(); model.clearDailyParticipation()
+        let original = model.library, originalReadings = model.decisionRevisions
+        model.library = ShowcaseFixtures.quickReviewLibrary(); model.decisionRevisions = ShowcaseFixtures.decisionHistory(library: model.library); model.clearDailyParticipation()
         await model.loadDailyParticipation()
         // Exercise the production host on a light window: a separate SwiftUI render hid this inheritance bug.
         prepareQuickPanel()
@@ -30,7 +30,7 @@ extension AppCoordinator {
         model.library = ShowcaseFixtures.quickReviewLibrary(includeLastReply: false); model.clearDailyParticipation()
         await model.loadDailyParticipation()
         try await snapshot(AnyView(MenuBarView(model: model)), size: NSSize(width: 382, height: 414), file: directory.appendingPathComponent("quick-pending.png"))
-        model.library = original; model.clearDailyParticipation()
+        model.library = original; model.decisionRevisions = originalReadings; model.clearDailyParticipation()
         await model.loadDailyParticipation()
         model.briefSessionID = model.library.sessions.first?.id
         model.storyFocusID = model.currentDecision?.anchorMessageID

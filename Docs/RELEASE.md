@@ -1,4 +1,4 @@
-# Source release — 0.12.4
+# Source release — 0.13.0
 
 Vernier is an experimental native Mac app and working project name. This repository publishes source, synthetic showcase data, tests and documentation under MIT. There is no production, notarized binary release yet.
 
@@ -53,3 +53,6 @@ While using the Mac for other work, run `./Scripts/verify-background.sh` for iso
 
 
 - **0.12.4:** explicit ink appearance on the production popover/host/window; dismiss the compact surface when leaving Vernier or activating another app. Desktop/Dock launch and reopen use the compact entry. Pending anchor waits cannot reopen it after returning to work. No capture, model, archive or permission change.
+
+
+- **0.13.0:** contextual outcomes lead the daily dashboard, compact recap and pill. The `work-12` prompt reconstructs goals and checkpoints; host checks separate build-only, agent-reported and human-reported results from unestablished outcomes. Latest-per-conversation selection respects source freshness, historical creation dates and erasure. Wording counts remain supporting detail. Limited English rules and the same-model critic can still misread context or withhold useful readings; no cognitive-health score, weight editing or capability assessment is implemented. Schema v6, capture permissions, provider and automatic cadence are unchanged.

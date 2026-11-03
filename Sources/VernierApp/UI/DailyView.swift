@@ -28,12 +28,18 @@ struct DailyOverviewView: View {
                     Button("Open local review settings") { model.dailyConversationExpanded = true }.buttonStyle(QuietButtonStyle())
                 }
             } else if let day = model.dailyReport {
+                DailyContextView(model: model)
                 if day.followUps > 0 {
-                    DailySummaryCard(model: model, report: day)
-                    HStack(alignment: .top, spacing: 18) {
-                        DailyRhythmView(model: model, report: day).frame(maxWidth: .infinity)
-                        DailyPatternCard(model: model, report: day).frame(maxWidth: .infinity)
+                    DisclosureGroup("Your recorded replies · supporting detail") {
+                        VStack(alignment: .leading, spacing: 18) {
+                            DailySummaryCard(model: model, report: day)
+                            HStack(alignment: .top, spacing: 18) {
+                                DailyRhythmView(model: model, report: day).frame(maxWidth: .infinity)
+                                DailyPatternCard(model: model, report: day).frame(maxWidth: .infinity)
+                            }
+                        }.padding(.top, 14)
                     }
+                    .font(.callout)
                     DailyEvidenceView(model: model, report: day).id("daily-breakdown")
                     DailyProjectsView(model: model, report: day)
                 } else {
@@ -390,6 +396,8 @@ struct QuickDailyView: View {
                 Eyebrow(text: "A choice to revisit")
                 Text(reading.displayTitle).font(.system(size: 20, weight: .medium, design: .rounded)).fixedSize(horizontal: false, vertical: true)
                 Text("A proposed approach differs from an earlier requirement. The recap shows both so you can choose.").font(.callout).foregroundStyle(Palette.secondary)
+            } else if let insight = model.quickInsight {
+                QuickContextView(model: model, insight: insight)
             } else if let day = model.quickDailyReport {
                 let recap = QuickRecap(report: day)
                 HStack(spacing: 8) {
@@ -397,13 +405,14 @@ struct QuickDailyView: View {
                     Spacer(minLength: 0)
                     Text("\(day.followUps) saved \(day.followUps == 1 ? "reply" : "replies")").font(.caption2).foregroundStyle(Palette.secondary)
                 }
-                Text(recap.headline).font(.system(size: 20, weight: .medium, design: .rounded)).tracking(-0.3).foregroundStyle(Palette.text).fixedSize(horizontal: false, vertical: true)
+                Text("One exchange to come back to.").font(.system(size: 20, weight: .medium, design: .rounded)).tracking(-0.3).foregroundStyle(Palette.text).fixedSize(horizontal: false, vertical: true)
                     .help(recap.detail)
                 if let moment = recap.moment {
                     QuickExchangeCard(model: model, moment: moment)
                 }
+                Text(model.reviewingDecision ? "Reading this work locally…" : day.limited ? "Source comparison · some history is missing." : "Source comparison · contextual reading not ready.")
+                    .font(.caption2).foregroundStyle(Palette.secondary).lineLimit(1).minimumScaleFactor(0.9)
                 if model.quickRecapIsPreviousDay { Text("Today: \(model.dailyReport?.followUps ?? 0) saved replies. Yesterday’s fuller recap is shown.").font(.caption2).foregroundStyle(Palette.secondary) }
-                if day.limited { Text("Some history is missing. This picture may change.").font(.caption2).foregroundStyle(Palette.secondary) }
 
             } else {
                 Eyebrow(text: "Your saved work")

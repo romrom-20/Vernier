@@ -57,6 +57,7 @@ import VernierCore
             return
         }
         if CommandLine.arguments.contains("--work-model-probe") {
+            NSApp.setActivationPolicy(.prohibited)
             Task { @MainActor in
                 do { try await runWorkModelProbe(); NSApp.terminate(nil) }
                 catch { fputs("WORK MODEL PROBE FAILED: \(error)\n", stderr); exit(1) }
@@ -64,6 +65,7 @@ import VernierCore
             return
         }
         if CommandLine.arguments.contains("--decision-model-probe") {
+            NSApp.setActivationPolicy(.prohibited)
             Task { @MainActor in
                 do { try await runDecisionModelProbe(); NSApp.terminate(nil) }
                 catch { fputs("DECISION MODEL PROBE FAILED: \(error)\n", stderr); exit(1) }
@@ -71,6 +73,7 @@ import VernierCore
             return
         }
         if CommandLine.arguments.contains("--brief-model-probe") {
+            NSApp.setActivationPolicy(.prohibited)
             Task { @MainActor in
                 do { try await runLocalModelProbe(); NSApp.terminate(nil) }
                 catch { fputs("LOCAL MODEL PROBE FAILED: \(error)\n", stderr); exit(1) }

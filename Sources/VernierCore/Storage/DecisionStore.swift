@@ -3,6 +3,11 @@ import CSQLite
 import CryptoKit
 
 extension SessionStore {
+    /// Bounded readings created on this calendar day, without borrowing later interpretations.
+    public func decisionRevisionsCreated(in day: WorkDay, limit: Int = 200) throws -> [DecisionRevision] {
+        try decisionRows("SELECT payload FROM decision_revisions WHERE created_at>=? AND created_at<? ORDER BY created_at DESC,id DESC LIMIT ?", values: [day.start.timeIntervalSince1970, day.end.timeIntervalSince1970, min(500, max(1, limit))]) { string($0, 0) }
+            .compactMap { try? JSONDecoder().decode(DecisionRevision.self, from: Data($0.utf8)) }
+    }
     public func loadDecisionRevisions(sessionID: String? = nil, limit: Int? = 200) throws -> [DecisionRevision] {
         var values: [Any?] = []
         var sql = "SELECT payload FROM decision_revisions"
@@ -149,6 +154,7 @@ extension SessionStore {
         for (offset, value) in values.enumerated() {
             if let text = value as? String { sqlite3_bind_text(statement, Int32(offset + 1), text, -1, copy) }
             else if let number = value as? Double { sqlite3_bind_double(statement, Int32(offset + 1), number) }
+            else if let number = value as? Int { sqlite3_bind_int64(statement, Int32(offset + 1), sqlite3_int64(number)) }
             else { sqlite3_bind_null(statement, Int32(offset + 1)) }
         }
         var result: [T] = []

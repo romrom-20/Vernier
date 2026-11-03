@@ -146,6 +146,12 @@ struct DecisionAccountView: View {
                     }
                 }.padding(14).frame(maxWidth: .infinity, alignment: .leading).background(Palette.inset.opacity(0.55), in: RoundedRectangle(cornerRadius: 12))
                 Text(reading.account).font(.callout).lineSpacing(5).textSelection(.enabled)
+                if let evidence = reading.evidenceStatus, evidence != .unknown {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(evidence.label).font(.caption.weight(.medium))
+                        Text(evidence.explanation).font(.caption).foregroundStyle(Palette.secondary)
+                    }.padding(14).frame(maxWidth: .infinity, alignment: .leading).background(Palette.inset.opacity(0.45), in: RoundedRectangle(cornerRadius: 12))
+                }
                 if reading.focus != .directionChange {
                     if reading.focus == .progress || reading.focus == .none { Text(reading.nextStep).font(.callout).foregroundStyle(Palette.secondary) }
                     Button { model.copyNextCheck(reading) } label: { Label("Copy this check", systemImage: "doc.on.doc") }.buttonStyle(QuietButtonStyle())

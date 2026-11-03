@@ -11,15 +11,15 @@ A coding session can produce a working feature and a long conversation. Reconstr
 
 Vernier is being built as a **personal instrument for understanding and directing your work with AI over time**. The intended experience connects your goals, delegation, questions, corrections and available outcomes, helping you notice a pattern and find a useful way back into the work.
 
-Today, the experimental Mac app gathers consented **Codex history from Conductor workspaces** and gives a daily picture: brief handoffs, added direction, check requests, result reports and work worth revisiting. Each number opens the saved follow-ups behind it. A separate optional check-in records your own clarity and energy. Local conversation readings and maps help you inspect a particular decision. Connected task histories and independently measured learning remain planned.
+Today, the experimental Mac app gathers consented **Codex history from Conductor workspaces** and offers a way back into the work: a likely goal, the result actually reported and one concrete checkpoint. It separates proposed changes, build reports, AI-reported checks and checks you reported yourself. Local readings can be wrong; each opens its saved sources. Reply counts and an hour chart are supporting detail, and optional clarity/energy check-ins remain your own reports.
 
 The broader question is **human agency in AI-mediated work**: when does delegation expand what you can do, and what remains within your ability to understand, redirect and recover?
 
-**Current version: 0.12.4.** The daily recap shows five named reply counts. Select a category or an hour to see dated examples, the wording rule used, and the original exchange. Color is accompanied by text and symbols. These counts describe recorded follow-ups; they do not measure tasks delegated, time spent thinking or understanding. The compact panel pairs a dated request with the next available AI reply and opens that exchange. Press **⌃⌥⌘V** from another app, or reopen Vernier from its app icon, to open the compact recap. It dismisses when you return to another app; the expanded floating pill shows the same day’s brief pattern. A separate optional local conversation reader suggests goals, checks and direction questions. [How to read the daily recap](Docs/DAILY_RECAP.md) · [How the local reasoning loop works](Docs/REASONING.md).
+**Current version: 0.13.0.** The compact recap and dashboard prioritize the same contextual reading across active conversations, rather than repeating a continuation count. Press **⌃⌥⌘V**, or reopen the app icon, for the compact view; open the full dashboard from its footer. The compact surface dismisses when you return to another app. This is an experimental local reader, not a measure of cognitive strain, comprehension or tasks delegated. Connected task histories and independent capability assessments remain planned. [Daily recap](Docs/DAILY_RECAP.md) · [Reasoning and evidence](Docs/REASONING.md) · [Research choices](Docs/RESEARCH.md).
 
-![An invented daily recap with a follow-up breakdown and a pattern to revisit](Docs/images/overview.png)
+![An invented goal, open outcome and specific checkpoint](Docs/images/overview.png)
 
-*Actual native SwiftUI components rendered offscreen from invented saved messages. Daily counts come from those messages; conversation readings in the showcase are hand-authored. This illustrates presentation, not measured prompt quality or model accuracy.*
+*Native components rendered offscreen from invented records. The reading is hand-authored and source-checked; it illustrates presentation, not model accuracy or measured human understanding.*
 
 ![A concrete choice between an offline requirement and a hosted proposal](Docs/images/direction-check.png)
 
@@ -27,7 +27,7 @@ The broader question is **human agency in AI-mediated work**: when does delegati
 
 ![Compact view of the same invented daily recap](Docs/images/quick-view.png)
 
-*The actual compact view from invented records: a request to replay an import paired with an AI reply that says only the build was checked. This is a source comparison, not a verified outcome or model-quality demonstration. The source button opens that exchange; yesterday’s matching-day routing remains separately checked.*
+*The production compact host, using invented records: a build-only report leads to a specific import replay. The source action opens the exact saved interpretation. This is a presentation example, not a verified result or model-quality demonstration.*
 
 ## The product we are working toward
 

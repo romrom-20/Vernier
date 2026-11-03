@@ -20,6 +20,8 @@ public enum MemoryChecks {
         ("Bounded related evidence, foreign-source invalidation and stale reads", DecisionChecks.relatedStorage),
         ("Schema v4 upgrade preserves memory and notes before adding decision storage", DecisionChecks.migration),
         ("Contextual work readings preserve literal witnesses and bound direction cues", WorkReadingChecks.grounding),
+        ("Outcome evidence separates builds, reports, copied text and hypothetical checks", WorkEvidenceChecks.provenance),
+        ("Day readings preserve freshness, historical scope and withheld results", WorkEvidenceChecks.daySelection),
         ("Contextual memory round-trips, exports and erases with canonical evidence", WorkReadingChecks.storage)
     ]
     private static func expect(_ value: @autoclosure () -> Bool, _ message: String) throws {

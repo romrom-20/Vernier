@@ -8,6 +8,7 @@ private struct WorkProbeCase: Decodable {
     let expectedFocuses: [WorkFocus]
     let expectedCue: Bool
     let goalTerms: [String]
+    let expectedEvidenceStatus: WorkEvidenceStatus?
 }
 extension AppCoordinator {
     /// Only explicit invented fixtures. Never opens the personal archive or connector.
@@ -27,14 +28,16 @@ extension AppCoordinator {
                 let reading = result.revision.reading
                 let cue = reading?.signalKey != nil
                 let focusOK = reading.map { item.expectedFocuses.contains($0.focus) } ?? item.expectedFocuses.contains(.none)
-                let goalOK = item.goalTerms.isEmpty || reading.map { r in item.goalTerms.contains { r.goal.localizedCaseInsensitiveContains($0) } } == true
+                let goalOK = (reading == nil && item.expectedFocuses.contains(.none)) || item.goalTerms.isEmpty || reading.map { r in item.goalTerms.contains { r.goal.localizedCaseInsensitiveContains($0) } } == true
                 let pass = focusOK && goalOK && cue == item.expectedCue
+                let evidenceOK = item.expectedEvidenceStatus.map { reading?.evidenceStatus == $0 }
                 let row: [String: Any] = ["id": item.id, "pass": pass, "accepted": reading != nil, "cue": cue, "expectedCue": item.expectedCue, "seconds": result.seconds, "reviewEngine": result.revision.engine, "basis": reading?.boundaryRule ?? "model_challenge",
+                    "focusMatch": focusOK, "goalTermMatch": goalOK, "evidenceMatch": evidenceOK as Any? ?? NSNull(), "evidenceStatus": reading?.evidenceStatus?.rawValue ?? "withheld", "resultState": result.frame.resultState.rawValue,
                     "frame": try JSONSerialization.jsonObject(with: JSONEncoder().encode(result.frame)), "proposal": try JSONSerialization.jsonObject(with: JSONEncoder().encode(result.proposal)), "challenge": try JSONSerialization.jsonObject(with: JSONEncoder().encode(result.challenge))]
                 rows.append(row)
                 print("WORK CASE \(item.id): \(pass ? "PASS" : "FAIL"), \(reading?.focus.rawValue ?? "withheld"), \(String(format: "%.2f", result.seconds))s")
             } catch { rows.append(["id": item.id, "pass": false, "expectedCue": item.expectedCue, "error": String(describing: error)]) }
-            let output: [String: Any] = ["syntheticOnly": true, "engine": model, "promptVersion": DecisionGenerator.promptVersion, "passed": rows.filter { $0["pass"] as? Bool == true }.count, "total": rows.count, "cases": rows]
+            let output: [String: Any] = ["syntheticOnly": true, "engine": model, "promptVersion": DecisionGenerator.promptVersion, "passed": rows.filter { $0["pass"] as? Bool == true }.count, "evidencePassed": rows.filter { $0["evidenceMatch"] as? Bool == true }.count, "total": rows.count, "cases": rows]
             try JSONSerialization.data(withJSONObject: output, options: [.prettyPrinted, .sortedKeys]).write(to: URL(fileURLWithPath: report), options: .atomic)
         }
     }

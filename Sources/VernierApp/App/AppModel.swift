@@ -37,6 +37,9 @@ enum StudioPage: String, CaseIterable, Identifiable {
     @Published var dailyFilter: DailyAction?
     @Published var dailyHour: Date?
     @Published var dailyEvidenceRevision = 0
+    @Published var dailyReadings: [DecisionRevision] = []
+    @Published var dailyPreviousReadings: [DecisionRevision] = []
+    @Published var dailyReadingFocusRevision = 0
     @Published var quickShortcutError: String?
     @Published var dailyConversationExpanded = false
     @Published var dailyLoading = false

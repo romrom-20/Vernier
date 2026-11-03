@@ -1,3 +1,19 @@
+# Outcomes before activity counts — 0.13
+
+The daily view now promotes a useful contextual reading over reply totals. It connects a likely goal, the kind of outcome evidence actually cited and one concrete way back into the work. The compact panel and expanded pill use the same selected reading. Reply counts and the active-hour chart remain supporting evidence under a disclosure. None is a percentage of tasks delegated or thought used.
+
+`WorkPrompt.json` is now `work-12`. The local reader is asked to separate a proposed implementation, a build report, a behavioral attempt and a reported outcome; interpret brief corrections in context; respect an explicit new topic; and treat deliberate delegation as a valid choice. The same-model challenge still sees the same bounded evidence. Agreement is not independent confirmation. No weights, model provider, retrieval limit or automatic-review cadence changed.
+
+After exact quotation and source checks, `WorkEvidence` classifies the cited change/result/response spans by wording and actor. The displayed categories are **a build was reported**, **AI reports a check**, **you reported a check**, and **outcome not established here**. Known copied agent text cannot become a human check. A human result needs a recognizable first-person past attempt plus result language; a hypothetical question does not qualify. A perspective must concern the exact current request to count as its human report. These are limited English rules and can miss valid reports or misclassify a span; they do not verify an outcome or independently establish that a test concerns the original requirement. A new progress reading without reported behavioral evidence is withheld. A lone generic assent without substantive context cannot support an invented goal.
+
+The daily selection loads at most 200 revisions **created on the selected local day**, takes the latest per conversation active that day, and prioritizes a returning fault, build-only gap, open question or delegation checkpoint before reported outcomes. A newer withheld reading suppresses an older accepted reading. Today's readings must match current source fingerprints and prompt version. Historical readings are explicitly saved interpretations from that date; a review made later is not backdated. This is a bounded revisit list, not a task ledger or an exhaustive account of the day. Delegated activity can appear even with zero human follow-ups.
+
+The source button opens the exact saved revision and its evidence. Pending source changes, opt-out and erasure hide cached contextual cards, and a stale captured action cannot reinsert erased daily evidence. Older payloads without outcome status still decode and remain available in conversation history, but do not acquire an invented classification. SQLite remains schema v6; existing capture consent and retention/erasure/export paths remain in effect.
+
+The research-inspired improvement is failure analysis and behavior testing, **not weight-space programming or a cognitive-health model**. See [research choices](RESEARCH.md) and [development evaluations](MODEL_EVALUATION.md). Floorplan maps the source path locally; it does not receive personal sessions or run this reasoning loop.
+
+---
+
 # Explain the two readers — 0.12.2
 
 The recap now exposes dated source replies and their specific wording rules. Its **How Vernier reads your work** disclosure separates those deterministic counts from the optional contextual reader, reports review mode and the latest available saved review time, and states that a model reading can be wrong. A saved review time can concern another day or conversation; enabled automatic review does not itself establish a current useful takeaway.

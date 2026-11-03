@@ -7,11 +7,11 @@ extension AppModel {
         WorkDay(containing: Calendar.current.date(byAdding: .day, value: dailyDayOffset, to: Date()) ?? Date())
     }
     var dailyLoadKey: String {
-        [selectedWorkDay.key, String(library.totalMessageCount), String(memoryEraseRevision), String(localInsightsEnabled), String(library.sessions.map { $0.updatedAt.timeIntervalSince1970 }.max() ?? 0), String(Int(Date().timeIntervalSince1970 / 300))].joined(separator: ":")
+        [selectedWorkDay.key, String(library.totalMessageCount), String(memoryEraseRevision), String(localInsightsEnabled), String(library.sessions.map { $0.updatedAt.timeIntervalSince1970 }.max() ?? 0), String(decisionRevisions.map { $0.createdAt.timeIntervalSince1970 }.max() ?? 0), String(Int(Date().timeIntervalSince1970 / 300))].joined(separator: ":")
     }
     func clearDailyParticipation() {
         dailyGeneration += 1; dailyReport = nil; dailyPreviousReport = nil; dailyLoadedKey = nil; dailyLoading = false; dailyError = nil
-        dailyReflections = []; dailyFilter = nil; dailyHour = nil; dailyEvidenceRevision += 1; dailyConversationExpanded = false
+        dailyReflections = []; dailyReadings = []; dailyPreviousReadings = []; dailyFilter = nil; dailyHour = nil; dailyEvidenceRevision += 1; dailyConversationExpanded = false
     }
     func loadDailyParticipation() async {
         let key = dailyLoadKey
@@ -24,26 +24,29 @@ extension AppModel {
         do {
             let input = try await dayInput(day: day, snapshot: snapshot)
             let reflections = isolatedEnvironment ? [] : try await store?.dailyReflections() ?? []
+            let readings = isolatedEnvironment ? decisionRevisions.filter { day.contains($0.createdAt) } : try await store?.decisionRevisionsCreated(in: day) ?? []
             let report = await Task.detached(priority: .utility) {
                 DailyParticipation.make(day: day, input: input, sessions: snapshot.sessions, coverage: snapshot.memoryCoverage)
             }.value
             var previous: DailyParticipation?
+            var previousReadings: [DecisionRevision] = []
             if dailyDayOffset == 0 && report.followUps < 3 {
                 let yesterday = WorkDay(containing: Calendar.current.date(byAdding: .day, value: -1, to: day.start)!)
                 let earlier = try await dayInput(day: yesterday, snapshot: snapshot)
+                previousReadings = isolatedEnvironment ? decisionRevisions.filter { yesterday.contains($0.createdAt) } : try await store?.decisionRevisionsCreated(in: yesterday) ?? []
                 previous = await Task.detached(priority: .utility) {
                     DailyParticipation.make(day: yesterday, input: earlier, sessions: snapshot.sessions, coverage: snapshot.memoryCoverage)
                 }.value
             }
             guard !Task.isCancelled, generation == dailyGeneration, erased == memoryEraseRevision, key == dailyLoadKey else { return }
-            dailyReport = report; dailyPreviousReport = previous; dailyReflections = reflections; dailyLoadedKey = key
+            dailyReport = report; dailyPreviousReport = previous; dailyReflections = reflections; dailyReadings = readings; dailyPreviousReadings = previousReadings; dailyLoadedKey = key
         } catch {
             guard generation == dailyGeneration, erased == memoryEraseRevision else { return }
-            dailyReport = nil; dailyPreviousReport = nil; dailyError = "This day couldn’t be read. Your saved conversations are still here."
+            dailyReport = nil; dailyPreviousReport = nil; dailyReadings = []; dailyPreviousReadings = []; dailyError = "This day couldn’t be read. Your saved conversations are still here."
         }
     }
     func chooseDay(_ offset: Int) {
-        dailyDayOffset = min(0, max(dailyOldestOffset, offset)); dailyReport = nil; dailyFilter = nil; dailyHour = nil
+        dailyDayOffset = min(0, max(dailyOldestOffset, offset)); dailyReport = nil; dailyReadings = []; dailyFilter = nil; dailyHour = nil
         Task { await loadDailyParticipation() }
     }
     /// Every selection is a navigation event, including selecting the same category again.
@@ -51,6 +54,35 @@ extension AppModel {
         dailyFilter = action; dailyHour = hour; dailyEvidenceRevision += 1
     }
     var dailyMatchingMoments: [DailyMoment] { dailyReport?.matchingMoments(action: dailyFilter, hour: dailyHour) ?? [] }
+    var dayInsights: [WorkDayInsight] {
+        guard localInsightsEnabled, dailyLoadedKey == dailyLoadKey, let report = dailyReport else { return [] }
+        return insights(for: report, revisions: dailyReadings)
+    }
+    var quickInsight: WorkDayInsight? {
+        guard localInsightsEnabled, dailyLoadedKey == dailyLoadKey, let report = quickDailyReport else { return nil }
+        let records = report.day == dailyReport?.day ? dailyReadings : dailyPreviousReadings
+        return insights(for: report, revisions: records).first
+    }
+    private func insights(for report: DailyParticipation, revisions: [DecisionRevision]) -> [WorkDayInsight] {
+        let historical = !report.day.contains(Date())
+        let current = historical ? nil : Set(revisions.filter(isReadingCurrent).map(\.id))
+        let versioned = revisions.filter { isShowcase || $0.engine.hasSuffix(" · " + DecisionGenerator.promptVersion) }
+        return WorkDayInsight.make(day: report.day, activeSessionIDs: Set(report.activeSessionIDs), revisions: versioned, currentIDs: current)
+    }
+    func openDayInsight(_ insight: WorkDayInsight) {
+        let revision = insight.revision
+        guard localInsightsEnabled, library.sessions.contains(where: { $0.id == revision.sessionID }),
+              dayInsights.contains(where: { $0.id == insight.id }) || quickInsight?.id == insight.id,
+              insight.historical || isReadingCurrent(revision) else { return }
+        if quickRecapIsPreviousDay { chooseDay(-1) }
+        // Keep the exact historical target even when it is older than the normal 40-row history page.
+        selectedDecisionSessionID = revision.sessionID
+        if !decisionRevisions.contains(where: { $0.id == revision.id }) { decisionRevisions.append(revision) }
+        selectedDecisionRevisionID = revision.id
+        dailyConversationExpanded = true; workDetailExpanded = false
+        dailyReadingFocusRevision += 1
+        openStudio(.overview)
+    }
     func dailyMomentTitle(_ moment: DailyMoment) -> String {
         guard let session = library.sessions.first(where: { $0.id == moment.sessionID }) else { return "Saved conversation" }
         return "Conversation · " + decisionTitle(session)
@@ -87,6 +119,9 @@ extension AppModel {
         if let checked = report.moments.last(where: { $0.action == .checked }) { return checked }
         return report.moments.last { $0.action == .continued } ?? report.moments.last
     }
+    var dailyReviewSessionID: String? {
+        dailyRevisit?.sessionID ?? library.sessions.filter { dailyReport?.activeSessionIDs.contains($0.id) == true }.max { $0.updatedAt < $1.updatedAt }?.id
+    }
 }
 
 
@@ -103,7 +138,17 @@ extension AppModel {
     }
     var pillSummary: String {
         if directionToCheck != nil { return "A direction to check" }
-        if let day = pillRecap { return QuickRecap(report: day).presence }
+        if pillRecap != nil {
+            if let insight = quickInsight {
+                switch insight.evidenceStatus {
+                case .buildOnly: return "Check the original case"
+                case .humanReported: return "A result you reported"
+                case .agentReported: return "AI reports a test"
+                case .noResult, .unknown: return "A checkpoint to revisit"
+                }
+            }
+            return reviewingDecision ? "Reading saved work…" : "Saved exchange ready"
+        }
         return capturePresenceLabel
     }
     private func dayInput(day: WorkDay, snapshot: SessionLibrary) async throws -> DailyInput {
@@ -120,6 +165,8 @@ extension AppModel {
         let current = dailyReport.flatMap { $0.day == selectedWorkDay ? $0 : nil }
         let yesterday = WorkDay(containing: Calendar.current.date(byAdding: .day, value: -1, to: Date())!)
         let previous = dailyPreviousReport.flatMap { $0.day == yesterday && $0.followUps > 0 ? $0 : nil }
+        // A fresh contextual result can make delegated work useful before a human follow-up exists.
+        if let current, dailyLoadedKey == dailyLoadKey, !insights(for: current, revisions: dailyReadings).isEmpty { return current }
         if dailyDayOffset == 0, let previous, (current?.followUps ?? 0) == 0 || ((current?.followUps ?? 0) < 3 && previous.followUps >= 3) { return previous }
         return current.flatMap { $0.followUps > 0 ? $0 : nil }
     }
