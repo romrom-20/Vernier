@@ -21,7 +21,8 @@ class PublicationChecks(unittest.TestCase):
         shutil.copyfile(SOURCE / "Scripts/check-public-content.py", self.root / "Scripts/check-public-content.py")
         (self.root / ".github").mkdir()
         (self.root / "Docs/images").mkdir(parents=True)
-        image = (SOURCE / "Docs/images/overview.png").read_bytes()
+        reviewed_images = json.loads((SOURCE / ".github/public-images.json").read_text())["images"]
+        image = (SOURCE / next(iter(reviewed_images))).read_bytes()
         self.write("Docs/images/example.png", image)
         self.write(".github/public-images.json", json.dumps({"images": {"Docs/images/example.png": {
             "sha256": hashlib.sha256(image).hexdigest(), "provenance": "Reviewed synthetic fixture"

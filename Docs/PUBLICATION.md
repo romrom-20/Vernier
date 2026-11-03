@@ -36,3 +36,10 @@ Do not attach real sessions to issues or pull requests. Use invented reproductio
 ## Reasoning source update — 29 October 2026
 
 The 0.10 update was checked as an exact staged source export with Gitleaks, publication-policy tests, tracked-content/image hashes and documentation links. The secret scanner detected no secrets in that source snapshot. The three replacement images are visually reviewed offscreen renders of real native views with invented records and hand-authored readings; their precise provenance is in the image manifest. Private model reports, personal archive backups, attachments and installed bundles remain outside the tracked tree. This snapshot check does not re-audit unrelated refs or promise that arbitrary future content is safe.
+
+
+## GitHub presentation refresh — 0.14
+
+The main README now uses current native UI previews with distinct asset paths: dashboard, compact recap, decision review and conversation map. The old version-mixed image files were replaced, their references updated, and all four new images visually reviewed. The default dashboard was rendered with `--showcase --wording-preview --render-showcase`, so it shows production wording counts rather than the optional model-category experiment. Conversation readings remain explicitly hand-authored synthetic fixtures, not evidence of model accuracy.
+
+The screenshot process prohibits activation and checks that no test window is visible or key. It uses no personal archive, connector, inference or desktop capture. Image hashes and provenance are recorded in the publication manifest. Repository metadata describes the broader human-judgment purpose while the README identifies Codex in Conductor as the only current adapter and the model-category mode as an experiment that failed its quality gate.

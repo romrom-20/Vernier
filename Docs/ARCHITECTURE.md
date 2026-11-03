@@ -1,3 +1,21 @@
+# Current architecture — 0.14
+
+Vernier is a native single-device Mac app. There is no hosted Vernier API, Postgres service or account sync. The sections below the divider record earlier implementation checkpoints; their versioned schema descriptions are historical.
+
+- **Surfaces:** `AppCoordinator` owns the menu-bar popover, dashboard and optional nonactivating pill. Shared app state routes navigation and capture controls. A Carbon shortcut opens the compact recap.
+- **Capture:** the read-only Codex connector discovers Conductor workspaces and reads available saved history under separate metadata/content choices. It never controls the agent.
+- **Archive:** a Swift actor owns local SQLite schema v6. Canonical messages, revision dependencies, human perspectives, check-ins, retention, export and erasure remain local.
+- **Daily picture:** `DailyModel` loads a bounded source day and `DailyParticipation` computes wording-based follow-ups. Category/hour selections navigate to exact evidence.
+- **Contextual goals:** `DecisionGenerator` uses bounded sources, optional local inference, source-selected witnesses, a challenge and host validation. Narrow literal boundary rules can ask about explicit changes without a model call. Interpretations stay revisable.
+- **Category experiment:** the selected local engine can propose mixed contribution acts when an explicit experimental switch is on. Cached labels inherit source invalidation and erasure. The quality gate failed, so this remains off by default.
+- **Presentation checks:** `ShowcaseRender` uses invented records and offscreen native components with activation prohibited. `--wording-preview` lets public previews show default categories rather than the experimental fixture mode. This is separate from capture and model evaluation.
+
+[Reasoning and limits](REASONING.md) · [Category experiment](MODEL_IMPROVEMENT.md) · [Storage and privacy](PRIVACY.md) · [Local Floorplan workflow](UNDERSTANDING_VERNIER.md)
+
+---
+
+## Historical implementation checkpoints
+
 # Source evidence behind the recap — 0.12.2
 
 `DailyParticipation` now retains a short explanation of the wording or guard actually used for each counted reply. Category and source-hour selection use the same bounded day projection, without an additional capture source or database migration. `DailyModel` owns both filters and a navigation revision, so repeated selection of the same metric still opens its evidence. Day changes and erasure clear filters. `DailyView` shows dated excerpts, rule explanations and routes to exact records or the surrounding exchange.
@@ -52,7 +70,7 @@ The dashboard emphasizes intent, steering and understanding. Session review reus
 
 ## Measurement-layer boundaries — proposed design
 
-Current schema v5 stores observation records, user-authored notes, legacy briefs, decision revisions, human perspectives and source dependencies. It contains no probe attempts, study enrollment, randomization, intervention assignments or validated capability scores.
+At 0.11, schema v5 stored observation records, user-authored notes, legacy briefs, decision revisions, human perspectives and source dependencies. It contains no probe attempts, study enrollment, randomization, intervention assignments or validated capability scores.
 
 Future designs should preserve separate contracts for source observations, user reports, probe attempts/assessments and study assignments/outcomes. Each needs provenance, time/coverage context and its own applicable consent and retention rules. Bounded same-workspace retrieval supplies possible context, without asserting a shared task identity; a provider turn is not automatically a human task boundary.
 

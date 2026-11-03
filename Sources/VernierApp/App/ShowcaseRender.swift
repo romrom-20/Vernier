@@ -17,6 +17,7 @@ extension AppCoordinator {
             model.dailyProjectsExpanded = false
         }
         try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 1180, height: 820), file: directory.appendingPathComponent("overview.png"))
+        try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 1180, height: 910), file: directory.appendingPathComponent("overview-public.png"))
         try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 1180, height: 1600), file: directory.appendingPathComponent("overview-full.png"))
         try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 860, height: 760), file: directory.appendingPathComponent("overview-narrow.png"))
         try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 1180, height: 820), file: directory.appendingPathComponent("overview-light.png"), dark: false)
@@ -44,6 +45,19 @@ extension AppCoordinator {
         model.storyFocusID = model.currentDecision?.anchorMessageID
         await model.loadSessionStory()
         try await snapshot(AnyView(VStack(alignment: .leading, spacing: 14) { Eyebrow(text: "Showcase · invented conversation"); SessionStoryView(model: model) }.padding(24).background(Palette.canvas)), size: NSSize(width: 1000, height: 760), file: directory.appendingPathComponent("session-map.png"))
+        model.library = ShowcaseFixtures.directionLibrary()
+        model.decisionRevisions = ShowcaseFixtures.directionHistory(library: model.library)
+        model.selectedDecisionSessionID = model.library.sessions.first?.id
+        model.selectedDecisionRevisionID = model.decisionRevisions.first?.id
+        if let revision = model.currentDecision {
+            let direction = VStack(alignment: .leading, spacing: 18) {
+                Eyebrow(text: "Vernier · a choice to revisit · invented example")
+                DecisionAccountView(model: model, revision: revision)
+            }.padding(28).frame(width: 1000, height: 530, alignment: .topLeading)
+                .background { VernierBackdrop() }.foregroundStyle(Palette.text)
+                .disclosureGroupStyle(RecapDisclosureStyle())
+            try await snapshot(AnyView(direction), size: NSSize(width: 1000, height: 530), file: directory.appendingPathComponent("direction-check.png"))
+        } else { throw DecisionGenerationError.invalidResponse }
         for name in ["overview.png", "quick-view.png", "session-map.png"] {
             guard FileManager.default.fileExists(atPath: directory.appendingPathComponent(name).path) else { throw DecisionGenerationError.invalidResponse }
         }

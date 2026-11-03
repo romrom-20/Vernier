@@ -1,20 +1,20 @@
 {
   "images": {
-    "Docs/images/overview.png": {
-      "sha256": "193024b168ff773a2997c7165d0490900e585ec4fd286b8aa78f5cfe284d8c4f",
-      "provenance": "Visually reviewed offscreen render of actual 0.13.1 native dashboard with category cards and hourly/reflection panels restored as visible sections. Invented ShowcaseFixtures records only; contextual reading below the viewport is hand-authored and source-checked. No personal archive, connector, desktop capture, hotkey registration or inference. Renderer verified activation prohibited and no visible/key windows. Presentation example, not model validation."
+    "Docs/images/dashboard.png": {
+      "sha256": "c793bcce93b30d00b82e40831291661430c31d39c6a82a009d1d217fe816f20c",
+      "provenance": "Current 0.14.0 native dashboard at 1180x910 with default wording categories, generated through --showcase --wording-preview --render-showcase. Category/hour values are computed by production rules over invented records. Visually reviewed. No personal archive, connector, desktop capture, hot-key registration or inference. Renderer verified activation prohibited and no visible/key windows. Presentation example only."
     },
-    "Docs/images/quick-view.png": {
+    "Docs/images/compact-recap.png": {
       "sha256": "81ece1907111e3ec96da3ceeb45fc17178b35a14766ffe7909bd7c32a7ce0769",
-      "provenance": "Visually reviewed offscreen render of actual 0.13.0 native components in the production popover host inside a deliberately light test window. Invented ShowcaseFixtures messages and hand-authored source-checked reading only; no personal archive, connector, desktop capture, hotkey registration or inference. Renderer verified activation prohibited and no visible/key windows. Presentation example, not model validation."
+      "provenance": "Current 0.14.0 production NSPopover host at its fixed compact size, rendered inside a deliberately light offscreen window while the host remains ink. Invented source data and a hand-authored source-checked goal reading. Visually reviewed. No personal archive, connector, desktop capture, hot-key registration or inference. Renderer verified activation prohibited and no visible/key windows. Presentation example only."
     },
-    "Docs/images/session-map.png": {
-      "sha256": "3d2627976cc9d1e582ce141ffa14a690420d0d83016fd968de1e68aa34eda211",
-      "provenance": "Visually inspected offscreen render of the actual native SwiftUI session-map component in 0.12.0. Invented ShowcaseFixtures saved messages; daily counts computed from those invented messages. Deeper conversation readings are hand-authored. No personal store, connector, desktop capture or model inference. Presentation example only."
+    "Docs/images/decision-review.png": {
+      "sha256": "50ec683a0a66e9134d83bfaf8822f4fb3ed922b238dd7bb3454e3bb6305dff09",
+      "provenance": "Current 0.14.0 DecisionAccountView rendered at 1000x530. Invented offline requirement and hosted proposal with a hand-authored source-validated question; no model-quality claim. Visually reviewed. No personal archive, connector, desktop capture, hot-key registration or inference. Renderer verified activation prohibited and no visible/key windows. Presentation example only."
     },
-    "Docs/images/direction-check.png": {
-      "sha256": "142963aaf6e195f116bfe785ee8d361ad4a8821223d86128f99831ad6d3483e5",
-      "provenance": "Visually inspected offscreen render of the actual native SwiftUI direction-check component in 0.11.0. Invented ShowcaseFixtures messages and hand-authored, source-validated WorkReading; no personal store, connector, desktop capture or model inference. Presentation example only."
+    "Docs/images/conversation-map.png": {
+      "sha256": "b3151d107960928dff27d4546a1fd8c61ae8b69d712946a39d23f03ab914f03c",
+      "provenance": "Current 0.14.0 SessionStoryView at 1000x760. Invented user and agent messages with graph structure and source comparison computed from those records. Visually reviewed. No personal archive, connector, desktop capture, hot-key registration or inference. Renderer verified activation prohibited and no visible/key windows. Presentation example only."
     }
   }
 }

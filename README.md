@@ -5,94 +5,78 @@
 [![Build and core checks](https://github.com/romrom-20/Vernier/actions/workflows/ci.yml/badge.svg)](https://github.com/romrom-20/Vernier/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Native macOS](https://img.shields.io/badge/native-macOS%2014%2B-black)
-![Swift 6](https://img.shields.io/badge/Swift-6-orange)
+![Status: research prototype](https://img.shields.io/badge/status-research%20prototype-c8b8ee)
 
-AI can help you code, research, plan and make personal decisions. Reconstructing its influence is harder: which priorities came from you, which recommendations changed your direction, whether those changes were deliberate, and what you thought of the outcome later.
+AI can help you build, research, plan and decide. It is harder to see **how those interactions are changing your choices**: what you meant to do, what the AI introduced, what you accepted deliberately, and what you later wished you had questioned.
 
-Vernier is being built as a **personal instrument for understanding how AI influences your choices and judgment over time**. Coding is the first connected setting; the intended scope includes personal agents and everyday decisions. The intended experience connects your goals, delegation, questions, corrections and available outcomes, helping you notice a pattern and find a useful way back into the work.
+Vernier is an open-source Mac app exploring that human side of AI. It keeps a local record and gives you a quiet way to revisit the interaction, with the original evidence close by. **Codex in Conductor is the first connected source.** Personal agents and everyday decisions are part of the wider direction.
 
-Today, the experimental Mac app gathers consented **Codex history from Conductor workspaces** and offers a way back into the work: a likely goal, the result actually reported and one concrete checkpoint. It separates proposed changes, build reports, AI-reported checks and checks you reported yourself. Local readings can be wrong; each opens its saved sources. Reply counts and an hour chart are supporting detail, and optional clarity/energy check-ins remain your own reports.
+[Try the showcase](#try-it) · [Product direction](Docs/PRODUCT.md) · [How the reasoning works](Docs/REASONING.md) · [Evaluation results](Docs/MODEL_EVALUATION.md)
 
-The broader question is **human agency in AI interaction**: are you choosing a direction deliberately, accepting a useful suggestion, or being carried toward a choice you did not intend? The current app can surface some explicit conflicts; it cannot reliably determine this overall. [Purpose and current limits](Docs/PRODUCT.md).
+![Current Vernier dashboard with category cards, a reply timeline and a reflection panel](Docs/images/dashboard.png)
 
-**Current version: 0.14.0.** The dashboard opens with visible category cards, an hourly chart and a reflection panel. A contextual reading follows with a goal, reported outcome and checkpoint; the compact recap stays focused on that reading. Press **⌃⌥⌘V**, or reopen the app icon, for the compact view; open the full dashboard from its footer. The compact surface dismisses when you return to another app. The default categories still use wording rules. An optional model-category experiment retains mixed signals and source-linked readings, but remains off initially because its local quality tests failed. [Model improvement work](Docs/MODEL_IMPROVEMENT.md). This is an experimental local reader, not a measure of cognitive strain, comprehension or tasks delegated. Connected task histories and independent capability assessments remain planned. [Daily recap](Docs/DAILY_RECAP.md) · [Reasoning and evidence](Docs/REASONING.md) · [Research choices](Docs/RESEARCH.md).
+*Current 0.14 UI, rendered offscreen from invented records. The default cards use wording rules. Showcase conversation readings are hand-authored and source-checked; these images demonstrate the interface, not model accuracy.*
 
-![An invented visual overview with category cards and an hourly chart](Docs/images/overview.png)
+## The question behind Vernier
 
-*Native components rendered offscreen from invented records. The reading is hand-authored and source-checked; it illustrates presentation, not model accuracy or measured human understanding.*
+**Am I choosing a direction with AI, or being carried toward a choice I did not intend?**
 
-![A concrete choice between an offline requirement and a hosted proposal](Docs/images/direction-check.png)
+That question reaches beyond coding. A personal agent might change a plan, a research assistant might narrow the options you consider, or a coding agent might introduce an approach that conflicts with your original requirement.
 
-*Conversation-detail example from 0.11, retained beneath the daily recap in 0.12. The circle can show a quiet cue; “That was intentional” records your choice and suppresses repeat nudges for the same requirement and proposal.*
+A useful instrument should help you notice that change, understand its context, and decide whether it was intentional. Accepting a suggestion can be good judgment. So can delegating an entire task. A short approval alone cannot tell us which happened.
 
-![Compact view of the same invented daily recap](Docs/images/quick-view.png)
+Vernier does not yet answer that question reliably across your life. The current app builds the foundation: consented history, inspectable observations, revisable local readings and your own perspective. [The full thesis and current limits →](Docs/PRODUCT.md)
 
-*The production compact host, using invented records: a build-only report leads to a specific import replay. The source action opens the exact saved interpretation. This is a presentation example, not a verified result or model-quality demonstration.*
+## What you can use today
 
-## The product we are working toward
+**A visual picture of the day.** Category cards and an hourly chart show recorded follow-ups, with exact-message drill-down and an explanation of how each was counted. Optional clarity and energy check-ins record how the work felt to you.
 
-A useful personal recap would help you understand:
+**One useful way back in.** Local conversation readings connect a likely goal, the available outcome evidence and a concrete checkpoint. A proposed fix, a passing build, an AI-reported test and a result you reported remain distinct.
 
-- **How the work developed:** what you wanted, what you delegated, which decisions you revisited, and what the available evidence says happened across sessions.
-- **How your interaction changed:** stretches of simple continuation, recurring repair requests, new constraints and verification questions, interpreted in the context of the task and your own history.
-- **How to regain direction:** an explanation of a consequential unresolved question and one small check that could settle it. More questions can be good oversight; efficient delegation can be good judgment.
-- **What you could recover independently:** later, voluntary sandbox exercises could test whether you can explain, modify or take over a narrow piece of work without the original agent.
+**A quiet Mac presence.** A menu-bar recap and optional circle/pill keep access nearby. Press **⌃⌥⌘V** for the compact recap; open the full dashboard from its footer. Pause works independently, and closing the dashboard leaves the menu-bar app running.
 
-The aim is to recognize useful patterns and support better decisions. A long agent run does not establish that you stopped paying attention; repeated questions do not establish excessive checking or fatigue. Those explanations need context and, for capability claims, evidence beyond conversation logs.
+<img src="Docs/images/compact-recap.png" width="356" alt="Current compact Vernier recap suggesting a specific check after a build-only report" />
+
+*The current production popover, using invented sources. A reported passing build leads to a check of the original interaction; it does not certify that the feature works.*
+
+**A decision you can revisit.** Some explicit conflicts between an earlier requirement and a later agent proposal can surface as a question. You can inspect both and record that the change was intentional.
+
+![Current decision detail comparing an offline requirement with a hosted-service proposal](Docs/images/decision-review.png)
+
+*Invented example in the current UI. This is a question about a recorded change, not a verdict that the person was steered.*
+
+<details>
+<summary><strong>Explore the source conversation</strong></summary>
+
+![Current conversation map with human directions and AI reply stretches](Docs/images/conversation-map.png)
+
+The map follows saved message order. Select a point to compare neighboring exchanges and open the original source. Speaker lanes and colors identify who contributed; they do not measure attention, elapsed time or cognitive strain. A conversation can contain several tasks, and incomplete coverage stays visible.
+
+</details>
+
+## How it works
 
 ```mermaid
 flowchart LR
-    A["Today: daily recap and local readings<br/>Follow-ups, check-ins, sources and maps"] --> B["Planned: connected work history<br/>Tasks, outcomes and contextual patterns"]
-    B --> C["Proposed: voluntary capability probes<br/>Evidence about a narrow independent attempt"]
+    A["Consented Codex history<br/>from Conductor"] --> B["Private local archive<br/>SQLite on your Mac"]
+    B --> C["Daily wording counts<br/>and exact source evidence"]
+    B --> D["Optional local reader<br/>goal, outcome, checkpoint"]
+    C --> E["Compact recap<br/>and full dashboard"]
+    D --> E
+    E --> F["Your perspective<br/>kept separately"]
 ```
 
-*Product direction. The later stages are not demonstrated by the current screenshots. Broader source adapters and context-aware guidance need their own implementation and evaluation; causal claims additionally require the longitudinal experiments described in the research framework.*
+The app uses **SwiftUI and AppKit**, with local SQLite storage. Optional inference runs through **Ollama on loopback** or Apple's on-device framework on an eligible Mac. Vernier does not send captured conversations to a cloud model, and it does not need a paid model API or an extra ChatGPT subscription.
 
-## A concrete example
+The model proposes an interpretation, another pass challenges it, and the app checks source references. Agreement between passes is not independent proof. The default category boxes use transparent wording rules; they are separate from the contextual goal reader.
 
-Imagine building a CSV importer:
+**An experimental model-category mode is available but off by default.** It retains mixed signals and cached interpretations, but the tested configurations did not pass their quality gate. We publish the failures and keep the stable default. No production weight editing or private-session training is enabled. [Mechanism](Docs/MODEL_IMPROVEMENT.md) · [Results and reproduction](Docs/MODEL_EVALUATION.md)
 
-1. You specify that importing the same file twice must not create duplicate contacts.
-2. The agent reports an implementation. You try again and report duplicates.
-3. After another update and a successful build, you ask for the same file to be imported twice, with before-and-after counts.
+## Try it
 
-The useful story is the relationship between those events. A requirement returned after a completion claim. You made the acceptance check more specific. The blank-email case still needs evidence.
+**Current source release: 0.14.0.** Requires a Mac and Swift 6+ with Command Line Tools or Xcode. macOS 14 is the deployment target; compatibility across all supported versions has not been established. Local model availability has additional requirements described in the [release guide](Docs/RELEASE.md).
 
-Vernier helps reconstruct that sequence. A possible repair loop links back to its messages; selecting a point compares the preceding agent reply with your next instruction. Repeated questions can represent careful oversight. Their number alone cannot tell us whether the delegation was appropriate or what you understood.
-
-![Conversation map comparing the agent's update with a more specific user acceptance check](Docs/images/session-map.png)
-
-*These are offscreen renders of the app’s real SwiftUI components using invented records, with no personal archive or live model. The same invented session. Green points identify user-side directions; purple points identify agent reply stretches. The curve follows reading order.*
-
-## Understand what we build
-
-For Vernier development, we use a local [Floorplan](https://github.com/haydenschmitty/floorplan) map to explain the relevant path before a substantial change and highlight what changed afterward. A short optional check helps the owner explain or verify it; opening the map is not treated as proof of understanding. [Our workflow and map limits](Docs/UNDERSTANDING_VERNIER.md). The generated map and project-local tooling stay out of git.
-
-## How to read it
-
-- **The day:** the denominator is saved human follow-ups with a preceding agent message. The percentage describes brief approval/continuation wording; it is not a task or thinking-time percentage. Filter a count to inspect its evidence. Your optional check-in stays a separate self-report.
-- **The working account:** the local loop describes a concrete human contribution and its surrounding exchange. Read the exact sources, compare the alternative and missing fact, and add your perspective if it misses something. [Method and limits](Docs/REASONING.md).
-- **The record:** the map shows saved messages from one session. Select a point, compare neighboring exchanges, and open the exact source. Its window is capped at the latest 500 saved messages; coverage stays visible.
-- **The history:** a later message or correction can change the account. Earlier readings remain inspectable. A valid reference or agreement between model passes still does not establish truth.
-- **The unresolved check:** a named missing result can help you re-enter the work. A request for a test is distinct from a passing result, and an agent’s success claim is distinct from independent verification.
-
-The diagram's height identifies the speaker. It does not encode attention, elapsed time or cognitive strain. A provider session can contain several features; it is not automatically one human task.
-
-[Walk through a session](Docs/READING_A_SESSION.md) · [Map semantics and design rationale](Docs/VISUAL_REVIEW.md)
-
-## What works today
-
-- **Revisable local readings:** contextual goal/check extraction, host-composed presentation, a model challenge and source checks. Literal evidence, alternatives, unknowns, history and your corrections stay separate. Optional local inference uses already-consented saved content.
-- **Visual review:** interactive speaker lanes, before-and-after comparisons and source navigation. Counts are folded into coverage; old interpretation panels no longer compete with the main account.
-- **Quiet Mac presence:** native SwiftUI/AppKit, menu-bar quick view, optional draggable circle/pill and short, reduced-motion-aware transitions. Pause works in place; Open dashboard opens Studio. The circle controls background memory; collection continues while it is hidden.
-- **Codex in Conductor:** read-only local history access. Vernier never starts, resumes or controls an agent.
-- **Local memory:** available prompts, visible replies, allowlisted agent activity metadata, your notes, archive search and export. Coverage and missing history stay visible.
-- **Separate choices:** metadata, conversation capture and local AI interpretation are distinct opt-ins, off on a fresh install.
-- **User-owned storage:** SQLite, incremental backfill, retention, conversation erasure and full local deletion. Optional login registration and adaptive sync support resident use; Quit is respected.
-
-## Try the synthetic showcase
-
-Requires a Mac, Swift 6+, and Apple Command Line Tools or Xcode. macOS 14 is the deployment target; cross-version compatibility is still being tested.
+Start with invented data:
 
 ```sh
 git clone https://github.com/romrom-20/Vernier.git
@@ -100,53 +84,47 @@ cd Vernier
 ./Scripts/showcase.sh
 ```
 
-The showcase uses invented, in-memory records and separate preferences. It opens no personal archive, starts no connector or model, and cannot register a login item. Open a reading, compare its sources, explore map points, and try the pill's hover, drag and pause controls. Quit from the menu bar when finished.
+The showcase uses separate preferences and in-memory fixtures. It opens no personal archive and starts no connector, model inference or login item. Its readings illustrate presentation, not measured model performance.
 
-## Install on your Mac
+For a local installation, quit an existing copy first:
 
 ```sh
-# Quit any running copy before updating.
 ./Scripts/install-local.sh
 open "$HOME/Applications/Vernier.app"
 ```
 
-This installs a local development app at `~/Applications/Vernier.app` and preserves the previous same-ID bundle. Enable sources in Connections, conversation capture in Memory, and optional login/pill behavior in Privacy. Closing Studio leaves the menu-bar app running.
+Enable Codex in **Connections**, conversation capture in **Memory**, and optional local review in **Local model and review settings**. Capture and analysis are off on a fresh installation. A live connection needs Conductor's installed Codex binary and available local history.
 
-**Local reasoning is experimental, optional and off for new installations.** It runs through a separately installed [Ollama](https://ollama.com/) model on your Mac, or the experimental Apple on-device alternative on an eligible macOS 26.4+ installation. Open Overview → local reasoning, choose an installed model and use **Check local engine**. No Vernier backend, extra ChatGPT plan or paid model API is required. Automatic revisiting has its own visible status and a **Follow changed work** action; it is initially off on a fresh installation. Compare its sources: contextual readings remain experimental. Apple’s eligible on-device model needs no separate weights or API subscription. Optional Gemma 4 E2B QAT through Ollama requires a 4.3 GB download. The current pipeline matched 18/24 synthetic development examples; this combines model readings and narrow literal rules, and is not an accuracy estimate. It can miss useful checks and withhold usable context. The reader and map work with inference off. See [model setup, test results and limits](Docs/MODEL_EVALUATION.md).
-
-A live connector requires Conductor's installed Codex binary and available local history. This is a source release with an ad-hoc signature; a notarized download, DMG and automatic updater are not available.
+This is a development app with an ad-hoc signature. A notarized download, DMG and automatic updater are not available yet. [Build, setup and lifecycle details →](Docs/RELEASE.md)
 
 ## Privacy and scope
 
-Personal records stay in a private Application Support directory on your Mac. The SQLite database is not encrypted. Credential redaction is best effort; conversations and exports can still contain sensitive material. No captured conversation is sent to a cloud model by Vernier.
+- **Connected today:** read-only Codex history from Conductor workspaces. Vernier never starts, resumes or controls an agent.
+- **Local records:** prompts, visible replies, allowlisted activity metadata, notes and derived readings stay on your Mac. Retention, export and erasure are available. The SQLite database is not encrypted; redaction is best effort.
+- **Separate choices:** metadata capture, conversation memory, local interpretation, the floating pill and launch at login have distinct controls.
+- **Not connected:** ordinary ChatGPT, Claude Code, Perplexity, browser activity and personal-agent adapters. Vernier does not collect global keystrokes, mouse movements, screens or reading behavior.
+- **Public repository:** source, tests, documentation and reviewed invented examples only. Personal sessions, databases, exports, local settings and workspace attachments are excluded.
 
-Only Codex history under `~/conductor/workspaces/<repository>/<workspace>` is currently connected. Claude Code, Cursor, ordinary ChatGPT chats, Perplexity and other agents are not connected. Vernier does not collect global mouse movements, screens, keystrokes, browser tabs or reading behavior.
+Vernier does not currently measure cognitive strain, independent understanding or lasting changes caused by AI. Those claims need evidence beyond a conversation trace. [Privacy details](Docs/PRIVACY.md) · [Connector coverage](Docs/CONNECTOR_COVERAGE.md) · [Publication safeguards](Docs/PUBLICATION.md)
 
-Default retention is 30 days by session update time. Pause suspends synchronization; resuming can import provider history created while paused. Turning capture or analysis off retains existing records until erased or removed by retention. Memory erasure also clears derived readings, saved perspectives, legacy briefs and the in-memory overview and map.
+## Where it goes next
 
-**This repository contains source, tests, documentation and reviewed synthetic images. Personal conversations, databases, exports, local settings and workspace attachments are excluded.** Publication checks reject private artifact paths and unreviewed or changed image bytes; human review remains necessary.
+1. **Connected decision histories:** relate a person's stated priorities, AI suggestions, deliberate choices, corrections and later outcomes across sessions.
+2. **More explicit source adapters:** extend beyond Codex while keeping provenance, coverage and consent visible.
+3. **Voluntary capability checks:** investigate whether someone can explain, challenge or recover a narrow piece of work independently. Workload self-reports and causal research remain separate.
 
-[Privacy details](Docs/PRIVACY.md) · [Connector coverage](Docs/CONNECTOR_COVERAGE.md) · [Publication boundary and audit](Docs/PUBLICATION.md)
+These are directions, not demonstrated capabilities. The research should be able to produce a negative result. [Research framework](Docs/RESEARCH.md) · [Roadmap](Docs/ROADMAP.md)
 
-## The research direction
+## Build with us
 
-The ambition is an instrument for understanding human agency, with three separate evidence layers: **passive observations today, separately consented capability probes proposed, and longitudinal experiments proposed**. The framework keeps prior independent ability, AI-assisted performance, later unaided ability and Vernier's own effects separate.
-
-The critical test is whether richer interaction history predicts independent understanding or recoverability better than task difficulty, prior skill and simple usage counts. A useful recovery tool would still be valuable if that measurement hypothesis fails. No comprehension, fatigue, attention, intelligence, cognitive-decline, agency or readiness score is claimed today.
-
-[Product thesis](Docs/PRODUCT.md) · [Measurement framework](Docs/RESEARCH.md) · [Roadmap](Docs/ROADMAP.md) · [Architecture](Docs/ARCHITECTURE.md)
-
-## Verify and contribute
+Contributions are welcome around source adapters, interaction design, evaluation and correctness. Use invented reproductions in issues and pull requests; do not attach personal sessions.
 
 ```sh
-./Scripts/verify.sh       # Core checks, bundle build, plists and signature
-./Scripts/verify.sh --ui  # Adds isolated native checks; interactive Mac required
-python3 Scripts/test-public-content.py
-python3 Scripts/check-public-content.py
+./Scripts/verify-background.sh
 ```
 
-GitHub Actions runs the shared core checks, XCTest, bundle build and publication checks on macOS. The isolated `--model-smoke-test` checks application state and source routes without a graphical activation requirement. Native regressions exercise hover, pause, window routing, source navigation and projection lifecycle. These checks do not establish physical mouse, hardware sleep/wake or cognitive-measurement validity.
+This runs isolated checks and offscreen synthetic renders at reduced priority, without model inference or foreground window testing. Full native mouse/focus testing needs an agreed session or a separate Mac/VM. [Validation](Docs/VALIDATION.md) · [Contributing](CONTRIBUTING.md)
 
-[Executed validation and remaining gaps](Docs/VALIDATION.md) · [Interaction checklist](Docs/INTERACTIONS.md) · [Contributing](CONTRIBUTING.md) · [Report a bug](https://github.com/romrom-20/Vernier/issues/new/choose) · [Security reporting](SECURITY.md)
+[Architecture](Docs/ARCHITECTURE.md) · [How we use Floorplan](Docs/UNDERSTANDING_VERNIER.md) · [Security](SECURITY.md)
 
-Built by [romrom-20](https://github.com/romrom-20), with AI coding assistance. [MIT licensed](LICENSE). Vernier is a working project name and an early experiment.
+Licensed under [MIT](LICENSE).

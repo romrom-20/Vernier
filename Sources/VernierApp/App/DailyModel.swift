@@ -27,7 +27,7 @@ extension AppModel {
             let readings = isolatedEnvironment ? decisionRevisions.filter { day.contains($0.createdAt) } : try await store?.decisionRevisionsCreated(in: day) ?? []
             let classified = contributionLabelsEnabled ? (isolatedEnvironment ? decisionRevisions : try await store?.contributionRevisions(in: day) ?? []) : []
             let contributions = isShowcase ? ShowcaseFixtures.contributionReadings(library: snapshot) : classified.flatMap { $0.contributions ?? [] }
-            let contextual = contributionLabelsEnabled || isShowcase
+            let contextual = contributionLabelsEnabled || (isShowcase && !CommandLine.arguments.contains("--wording-preview"))
             let report = await Task.detached(priority: .utility) {
                 DailyParticipation.make(day: day, input: input, sessions: snapshot.sessions, coverage: snapshot.memoryCoverage, interpretations: contributions, contextual: contextual)
             }.value
