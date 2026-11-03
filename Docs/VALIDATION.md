@@ -1,5 +1,12 @@
 # Validation and evidence
 
+## Production popover and departure routes — 0.12.4
+
+The background run passed **32 core groups and 61 isolated app-state checks**. New hidden checks assert ink appearance on the actual NSPopover and its production hosting view. The real prepared host is rendered inside a deliberately light offscreen window, and its effective appearance remains dark. This catches the appearance inheritance gap that standalone component renders missed.
+
+Isolated lifecycle checks verify that losing activity clears a compact request, own-app activation preserves it, another app’s activation dismisses it, a cold launch waits for its anchor without showing an unanchored window, and departure cancels that wait. No foreground pointer/key or window-switch automation runs on the owner’s active desktop. These checks validate routing and appearance setup; physical macOS input delivery remains a separate hands-on check.
+
+
 ## Compact source evidence and direct access — 0.12.3
 
 The final background run passed **32 core groups and 55 isolated model-state checks**. Checks cover same-conversation/day response pairing, source IDs behind continuation patterns, three check requests paired with an explicitly unrun agent report, missing-response handling and opening the compact card on the displayed previous day. Pill-state checks verify that its text matches the same recap and that Pause takes priority over cached summaries. Invented default-ink, alternate light-source, unanswered-request and native expanded-pill layouts are rendered offscreen with no visible/key windows or app activation. The shortcut is not registered by these isolated processes.

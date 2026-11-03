@@ -1,3 +1,9 @@
+# Contain the recap — 0.12.4
+
+Vernier uses macOS application-activation notifications only to dismiss its own compact panel when you return to another app. It compares process identifiers, does not retain app names or an app-usage history, and does not turn these window events into participation signals. Pending presentation requests are canceled on departure so they cannot show saved text later over other work. No capture source, database table, model request or permission prompt is added.
+
+---
+
 # Quick access and source pairing — 0.12.3
 
 The compact panel pairs saved request/reply excerpts from the existing bounded day projection. This does not add a capture source, inference request or database table. Agent text is visibly attributed and is not a verified outcome.

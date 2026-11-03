@@ -5,8 +5,8 @@
       "provenance": "Visually reviewed offscreen render of actual native SwiftUI components in 0.12.3, using the default ink appearance. Invented ShowcaseFixtures records only; counts and source pairing computed from those records. Example agent replies are hand-authored, not model validation. No personal archive, connector, desktop capture, hot-key registration or inference. Rendering prohibited activation and verified no visible/key test windows."
     },
     "Docs/images/quick-view.png": {
-      "sha256": "90fe0720835bb648bad0906ed21f69a2cd0ff84c55c6dad859c6bd129569c0a8",
-      "provenance": "Visually reviewed offscreen render of actual native SwiftUI components in 0.12.3, using the default ink appearance. Invented ShowcaseFixtures records only; counts and source pairing computed from those records. Example agent replies are hand-authored, not model validation. No personal archive, connector, desktop capture, hot-key registration or inference. Rendering prohibited activation and verified no visible/key test windows."
+      "sha256": "db4ad3b75ee2e4288617d78ef2a127ab6c44a60c3ca0f01e4278d4ec0d8f288d",
+      "provenance": "Visually reviewed offscreen render of the actual production NSPopover hosting view in 0.12.4, inside a deliberately light test window. Explicit ink appearance remains dark. Invented ShowcaseFixtures request/reply records only; no personal archive, connector, desktop capture, global shortcut registration or model inference. Test renderer verified no visible/key windows or activation."
     },
     "Docs/images/session-map.png": {
       "sha256": "3d2627976cc9d1e582ce141ffa14a690420d0d83016fd968de1e68aa34eda211",

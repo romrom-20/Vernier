@@ -200,6 +200,28 @@ extension AppCoordinator {
     }
     /// Functional view-model routes and isolated storage; no window activation is required.
     func runModelSmokeChecks() async throws {
+        prepareQuickPanel()
+        try check(popover.appearance?.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua && popover.contentViewController?.view.appearance?.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua,
+                  "The production popover and hosting view explicitly use ink appearance instead of inheriting a light menu bar")
+        beginQuickViewPresentation()
+        applicationDidResignActive(Notification(name: NSApplication.didResignActiveNotification))
+        try check(surface == .ambient && !popover.isShown && studio?.isVisible != true,
+                  "Leaving Vernier clears the compact presentation without opening a dashboard")
+        beginQuickViewPresentation()
+        activeApplicationChanged(processIdentifier: ProcessInfo.processInfo.processIdentifier)
+        try check(surface == .quickView, "Vernier's own activation cannot dismiss the requested recap")
+        activeApplicationChanged(processIdentifier: ProcessInfo.processInfo.processIdentifier + 1)
+        try check(surface == .ambient && !popover.isShown,
+                  "Activation of another application dismisses the requested compact recap")
+        if statusItem == nil {
+            openQuickViewAction()
+            try check(surface == .quickView && !popover.isShown && studio == nil,
+                      "A desktop launch waits for its menu-bar anchor without presenting an unanchored window")
+            applicationDidResignActive(Notification(name: NSApplication.didResignActiveNotification))
+            try await Task.sleep(for: .milliseconds(40))
+            try check(surface == .ambient && !popover.isShown && studio == nil,
+                      "Returning to work cancels a pending desktop recap instead of opening it late")
+        }
         let modelSuite = "local.vernier.model-smoke-\(UUID().uuidString)"
         let modelDefaults = UserDefaults(suiteName: modelSuite)!
         defer { modelDefaults.removePersistentDomain(forName: modelSuite) }

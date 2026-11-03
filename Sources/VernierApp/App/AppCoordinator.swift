@@ -22,6 +22,7 @@ import VernierCore
     private(set) var pillPresentation: PillPresentation = .hidden
     private var lastPillTarget: NSRect?
     private var quickShortcut: GlobalShortcut?
+    private var quickPresentationTask: Task<Void, Never>?
 
     init(smokeTest: Bool = false, showcase: Bool = false) {
         self.smokeTest = smokeTest
@@ -95,6 +96,7 @@ import VernierCore
             button.setAccessibilityLabel(Brand.name)
         }
         popover.behavior = .transient
+        popover.appearance = NSAppearance(named: .darkAqua)
         popover.animates = false // Also respects reduced motion; no continuous animations anywhere.
         popover.delegate = self
         prepareQuickPanel()
@@ -121,6 +123,7 @@ import VernierCore
             if CommandLine.arguments.contains("--show-pill") { model.pillEnabled = true }
             syncTask = Task { await model.startSessionSync() }
             let workspace = NSWorkspace.shared.notificationCenter
+            workspace.addObserver(self, selector: #selector(activeApplicationChanged(_:)), name: NSWorkspace.didActivateApplicationNotification, object: nil)
             for name in [NSWorkspace.willSleepNotification, NSWorkspace.sessionDidResignActiveNotification] {
                 workspace.addObserver(self, selector: #selector(workspaceWillRest(_:)), name: name, object: nil)
             }
@@ -138,15 +141,18 @@ import VernierCore
             }
         } else if !model.preferences.onboardingComplete { openWelcome() }
         else if model.isShowcase && CommandLine.arguments.contains("--quick-preview") { openQuickPreview() }
-        else if !launchedAtLogin && !CommandLine.arguments.contains("--background") { openStudio(.overview) }
+        else if !launchedAtLogin && !CommandLine.arguments.contains("--background") {
+            if model.isShowcase { openStudio(.overview) } else { openQuickViewAction() }
+        }
     }
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-        // Activating a menu-bar surface must not also summon a dashboard behind it.
-        guard surface != .quickView && !popover.isShown else { return false }
-        openStudio(model.page); return true
+        if !model.preferences.onboardingComplete { openWelcome() }
+        else { openQuickViewAction() }
+        return true
     }
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
     func applicationWillTerminate(_ notification: Notification) {
+        quickPresentationTask?.cancel()
         quickShortcut?.stop(); quickShortcut = nil
         syncTask?.cancel()
         model.cancelWorkBrief(); model.cancelDecisionReview()
@@ -171,7 +177,23 @@ import VernierCore
         if !smokeTest { model.requestInteractiveCheck() }
         refreshPresence()
     }
-    func applicationDidResignActive(_ notification: Notification) { refreshPresence() }
+    func applicationDidResignActive(_ notification: Notification) {
+        dismissQuickViewOnDeparture()
+        refreshPresence()
+    }
+    @objc private func activeApplicationChanged(_ notification: Notification) {
+        guard let active = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
+              NSWorkspace.shared.frontmostApplication?.processIdentifier == active.processIdentifier else { return }
+        activeApplicationChanged(processIdentifier: active.processIdentifier)
+    }
+    func activeApplicationChanged(processIdentifier: pid_t) {
+        guard processIdentifier != ProcessInfo.processInfo.processIdentifier else { return }
+        dismissQuickViewOnDeparture()
+    }
+    private func dismissQuickViewOnDeparture() {
+        guard surface == .quickView || popover.isShown else { return }
+        closeQuickView()
+    }
     func windowWillClose(_ notification: Notification) {
         if notification.object as? NSWindow === studio {
             model.studioVisible = false
@@ -208,6 +230,8 @@ import VernierCore
     }
     func popoverDidShow(_ notification: Notification) {
         guard surface == .quickView else { popover.performClose(nil); return }
+        popover.contentViewController?.view.window?.appearance = NSAppearance(named: .darkAqua)
+        popover.contentViewController?.view.window?.hidesOnDeactivate = true
         constrainQuickPanel()
     }
     private func constrainQuickPanel() {
@@ -221,14 +245,18 @@ import VernierCore
         refreshPresence()
     }
     func closeQuickView() {
+        quickPresentationTask?.cancel(); quickPresentationTask = nil
         quickPreview?.orderOut(nil)
         if surface == .quickView { surface = .ambient }
         popover.performClose(nil)
         refreshPresence()
     }
-    private func prepareQuickPanel() {
+    func prepareQuickPanel() {
         let size = QuickPanelLayout.size(screenHeight: statusItem?.button?.window?.screen?.visibleFrame.height ?? NSScreen.main?.visibleFrame.height ?? 800)
-        let host = NSHostingController(rootView: MenuBarView(model: model, height: size.height))
+        let host = NSHostingController(rootView: MenuBarView(model: model, height: size.height).environment(\.colorScheme, .dark))
+        // Status-item popovers can inherit the menu bar's system appearance instead of NSApp's.
+        popover.appearance = NSAppearance(named: .darkAqua)
+        host.view.appearance = NSAppearance(named: .darkAqua)
         host.sizingOptions = []
         host.preferredContentSize = size
         host.view.setFrameSize(size)
@@ -282,6 +310,26 @@ import VernierCore
     }
     /// Idempotent so a global key event and an active app menu equivalent cannot close each other.
     @objc func openQuickViewAction() {
+        guard statusItem?.button?.window?.screen != nil else {
+            // A cold desktop launch can precede the status item's native attachment.
+            // Keep this request cancelable so returning to work cannot open it later.
+            beginQuickViewPresentation()
+            quickPresentationTask?.cancel()
+            quickPresentationTask = Task { @MainActor [weak self] in
+                for _ in 0..<50 {
+                    do { try await Task.sleep(for: .milliseconds(20)) } catch { return }
+                    guard let self, self.surface == .quickView, !Task.isCancelled else { return }
+                    if self.statusItem?.button?.window?.screen != nil {
+                        self.quickPresentationTask = nil
+                        self.openQuickViewAction()
+                        return
+                    }
+                }
+                self?.closeQuickView()
+            }
+            return
+        }
+        quickPresentationTask?.cancel(); quickPresentationTask = nil
         if surface != .quickView || !popover.isShown { togglePopover() }
         // A global shortcut arrives while another app is active. Make only the
         // already-requested compact panel ready for keyboard input, never Studio.
@@ -291,15 +339,11 @@ import VernierCore
     @objc func togglePopover() {
         guard let button = statusItem?.button else { return }
         if surface == .quickView && popover.isShown { closeQuickView() } else {
-            surface = .quickView
-            studio?.orderOut(nil)
-            welcome?.orderOut(nil)
-            model.studioVisible = false
-            model.pillHovered = false
-            model.pillPinned = false
-            refreshPresence()
+            beginQuickViewPresentation()
             prepareQuickPanel()
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+            NSApp.activate(ignoringOtherApps: true)
+            popover.contentViewController?.view.window?.makeKey()
             constrainQuickPanel()
             Task { @MainActor [weak self] in
                 await Task.yield()
@@ -307,7 +351,18 @@ import VernierCore
             }
         }
     }
+    /// Request state is separate from showing a window, so lifecycle routes can be checked offscreen.
+    func beginQuickViewPresentation() {
+        surface = .quickView
+        studio?.orderOut(nil)
+        welcome?.orderOut(nil)
+        model.studioVisible = false
+        model.pillHovered = false
+        model.pillPinned = false
+        refreshPresence()
+    }
     func openStudio(_ page: StudioPage) {
+        quickPresentationTask?.cancel(); quickPresentationTask = nil
         quickPreview?.orderOut(nil)
         surface = .studio
         model.page = page

@@ -1,3 +1,15 @@
+# A contained ink recap — 0.12.4
+
+The native status-item popover now sets ink appearance on the popover, its real hosting view, its shown window and the SwiftUI color-scheme input. A status-item popover can inherit the system menu bar’s light appearance even when the app/dashboard has an explicit ink appearance. Rendering only a standalone MenuBarView masked that discrepancy.
+
+The compact request is cleared when Vernier resigns activity or another app becomes active. The shown popover also hides on deactivation; outside-click/Escape/close controls remain. Own-app activation is ignored, and queued workspace notices are checked against the current frontmost app. These routes do not open the dashboard.
+
+After onboarding, a normal desktop/Dock launch or reopen now requests the same compact entry as the keyboard shortcut. The full dashboard remains an explicit recap/source action. Cold launches wait briefly for the menu-bar anchor, and that pending request is canceled on departure, close, dashboard navigation or Quit. Background/login launches remain quiet. Showcase still opens the invented full dashboard.
+
+The production host is rendered offscreen inside a deliberately light window as an appearance regression check. Isolated lifecycle checks exercise departure, own/other app activation and canceled anchor waits without showing a window. Physical click-away/app-switch behavior remains an owner/separate-desktop check, not a claim from a standalone render.
+
+---
+
 # Compact recap after midnight — 0.12.1
 
 The compact panel labels the day, states one observed pattern and its count in plain language, and asks one reflection question. It shows yesterday when today has no replies and prefers a fuller yesterday until three replies are saved today. Today’s small count remains separate. A single footer action opens the displayed day. “Saved chats” names the source reader; capture remains an in-place pause button. Missing data, disabled review and failed reads have explicit states. The full daily breakdown retains its separate figures and controls.

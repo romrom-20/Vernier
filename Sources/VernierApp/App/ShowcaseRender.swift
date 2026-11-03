@@ -16,6 +16,12 @@ extension AppCoordinator {
         let original = model.library
         model.library = ShowcaseFixtures.quickReviewLibrary(); model.clearDailyParticipation()
         await model.loadDailyParticipation()
+        // Exercise the production host on a light window: a separate SwiftUI render hid this inheritance bug.
+        prepareQuickPanel()
+        if let actualHost = popover.contentViewController?.view {
+            try await snapshot(view: actualHost, size: NSSize(width: QuickPanelLayout.width, height: 414), file: directory.appendingPathComponent("quick-production-host.png"), dark: false)
+            guard actualHost.effectiveAppearance.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua else { throw DecisionGenerationError.invalidResponse }
+        } else { throw DecisionGenerationError.invalidResponse }
         try await snapshot(AnyView(MenuBarView(model: model)), size: NSSize(width: 382, height: 414), file: directory.appendingPathComponent("quick-checks.png"))
         try await snapshot(AnyView(MenuBarView(model: model)), size: NSSize(width: 382, height: 414), file: directory.appendingPathComponent("quick-checks-dark.png"), dark: true)
         let pillPreview = PillHostingView(rootView: PillView(model: model))
