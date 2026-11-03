@@ -3,6 +3,8 @@ import VernierCore
 
 public enum MemoryChecks {
     public static let cases: [(String, @Sendable () async throws -> Void)] = [
+        ("Contextual contribution labels preserve roles, exact spans and mixed signals", ContributionChecks.validation),
+        ("Model categories distinguish pending, withheld and stale source interpretations", ContributionChecks.projection),
         ("Daily participation has honest denominators, dates and source attribution", DailyChecks.projection),
         ("Daily archive queries, v5 migration, check-in export, retention and erasure", DailyChecks.storage),
         ("Conversation normalization, best-effort redaction and honest wording flags", boundary),

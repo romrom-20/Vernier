@@ -1,0 +1,158 @@
+[
+  {
+    "id": "adopt-proposal",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me with this decision."
+      },
+      {
+        "role": "assistant",
+        "text": "Hotel B meets your stated budget. I can book it."
+      },
+      {
+        "role": "user",
+        "text": "Yes, book B."
+      }
+    ],
+    "primary": "continued",
+    "additional": []
+  },
+  {
+    "id": "budget-tradeoff",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me with this decision."
+      },
+      {
+        "role": "assistant",
+        "text": "The premium option costs more."
+      },
+      {
+        "role": "user",
+        "text": "Stay within 300 pounds and tell me what we give up."
+      }
+    ],
+    "primary": "directed",
+    "additional": [
+      "checked"
+    ]
+  },
+  {
+    "id": "privacy-rejection",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me with this decision."
+      },
+      {
+        "role": "assistant",
+        "text": "I suggest uploading the journal to a server."
+      },
+      {
+        "role": "user",
+        "text": "No cloud. Keep these entries on this device."
+      }
+    ],
+    "primary": "directed",
+    "additional": []
+  },
+  {
+    "id": "clarification-number",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me with this decision."
+      },
+      {
+        "role": "assistant",
+        "text": "How many days should the plan cover?"
+      },
+      {
+        "role": "user",
+        "text": "Three."
+      }
+    ],
+    "primary": "other",
+    "additional": []
+  },
+  {
+    "id": "copied-claim",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me with this decision."
+      },
+      {
+        "role": "assistant",
+        "text": "I tested the duplicate import and it created exactly one contact in the saved database."
+      },
+      {
+        "role": "user",
+        "text": "I tested the duplicate import and it created exactly one contact in the saved database."
+      }
+    ],
+    "primary": "other",
+    "additional": []
+  },
+  {
+    "id": "future-plan",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me with this decision."
+      },
+      {
+        "role": "assistant",
+        "text": "The change is ready for your review."
+      },
+      {
+        "role": "user",
+        "text": "I will try it tomorrow."
+      }
+    ],
+    "primary": "other",
+    "additional": []
+  },
+  {
+    "id": "personal-outcome",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me with this decision."
+      },
+      {
+        "role": "assistant",
+        "text": "This route should get you there before departure."
+      },
+      {
+        "role": "user",
+        "text": "I used that route today and missed my train."
+      }
+    ],
+    "primary": "reported",
+    "additional": []
+  },
+  {
+    "id": "result-and-question",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me with this decision."
+      },
+      {
+        "role": "assistant",
+        "text": "The save guard is ready."
+      },
+      {
+        "role": "user",
+        "text": "I ran it again and the error remains. Why was this case not covered?"
+      }
+    ],
+    "primary": "reported",
+    "additional": [
+      "checked"
+    ]
+  }
+]

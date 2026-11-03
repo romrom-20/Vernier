@@ -3,6 +3,11 @@ import CSQLite
 import CryptoKit
 
 extension SessionStore {
+    /// Classification follows the message's source day, even when its review happened later.
+    public func contributionRevisions(in day: WorkDay) throws -> [DecisionRevision] {
+        try decisionRows("SELECT d.payload FROM decision_revisions d WHERE EXISTS (SELECT 1 FROM decision_sources x JOIN messages m ON m.id=x.message_id WHERE x.revision_id=d.id AND m.source_at>=? AND m.source_at<?) ORDER BY d.created_at DESC,d.id DESC LIMIT 200", values: [day.start.timeIntervalSince1970, day.end.timeIntervalSince1970]) { string($0, 0) }
+            .compactMap { try? JSONDecoder().decode(DecisionRevision.self, from: Data($0.utf8)) }
+    }
     /// Bounded readings created on this calendar day, without borrowing later interpretations.
     public func decisionRevisionsCreated(in day: WorkDay, limit: Int = 200) throws -> [DecisionRevision] {
         try decisionRows("SELECT payload FROM decision_revisions WHERE created_at>=? AND created_at<? ORDER BY created_at DESC,id DESC LIMIT ?", values: [day.start.timeIntervalSince1970, day.end.timeIntervalSince1970, min(500, max(1, limit))]) { string($0, 0) }

@@ -65,6 +65,13 @@ enum StudioPage: String, CaseIterable, Identifiable {
             if automaticDecisionReviews { scheduleDecisionReview() }
         }
     }
+    @Published var contributionLabelsEnabled: Bool {
+        didSet {
+            preferences.contributionLabelsEnabled = contributionLabelsEnabled
+            clearDailyParticipation(); cancelDecisionReview()
+            if localInsightsEnabled { scheduleDecisionReview() }
+        }
+    }
     var decisionTask: Task<Void, Never>?
     var decisionGeneration = 0
     var lastAutomaticDecision = Date.distantPast
@@ -266,6 +273,7 @@ enum StudioPage: String, CaseIterable, Identifiable {
         selectedDecisionSessionID = preferences.selectedDecisionSessionID
         reasoningModel = preferences.reasoningModel
         automaticDecisionReviews = preferences.automaticDecisionReviews
+        contributionLabelsEnabled = preferences.contributionLabelsEnabled
         localInsightsEnabled = preferences.localInsightsEnabled
         demoEnabled = preferences.demoEnabled
         paused = preferences.paused

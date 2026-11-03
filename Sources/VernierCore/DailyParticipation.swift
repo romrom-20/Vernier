@@ -15,7 +15,7 @@ public struct WorkDay: Equatable, Sendable {
     }
     public func contains(_ date: Date) -> Bool { date >= start && date < end }
 }
-public enum DailyAction: String, CaseIterable, Sendable {
+public enum DailyAction: String, Codable, CaseIterable, Sendable {
     case continued, directed, checked, reported, other
     public var label: String {
         switch self {
@@ -32,7 +32,7 @@ public enum DailyAction: String, CaseIterable, Sendable {
         case .directed: "Wording adds a requirement, constraint, correction or choice."
         case .checked: "Wording asks for a test, explanation, comparison or evidence. A request does not prove a check was completed."
         case .reported: "Wording reports a first-person attempt or observed result; the result is self-reported."
-        case .other: "Other wording, a brief repair request, known copied text or a meaning these rules cannot resolve."
+        case .other: "An unread or unsupported interpretation, known copied text, or a contribution whose main role is unclear."
         }
     }
 }
@@ -50,6 +50,10 @@ public struct DailyMoment: Identifiable, Sendable {
     public let reason: String
     /// A reply from the immediately following agent stretch in this loaded day, not a verified outcome.
     public let response: DailyResponse?
+    public let interpretation: ContributionReading?
+    public let wordingAction: DailyAction
+    public let wordingReason: String
+    public let eligibleForInterpretation: Bool
 }
 public struct DailyResponse: Sendable {
     public let messageID: String
@@ -95,6 +99,11 @@ public struct DailyParticipation: Sendable {
     public let partialHistory: Bool
     public let clippedMessages: Int
     public let activeSessionIDs: [String]
+    public let contextual: Bool
+    public var reviewedFollowUps: Int { moments.filter { $0.interpretation != nil }.count }
+    public var acceptedFollowUps: Int { moments.filter { $0.interpretation?.accepted == true }.count }
+    public var pendingFollowUps: Int { moments.filter { $0.interpretation == nil && $0.eligibleForInterpretation }.count }
+    public var unavailableFollowUps: Int { followUps - reviewedFollowUps - pendingFollowUps }
     public var followUps: Int { moments.count }
     public var limited: Bool { loadedMessages < datedTotal || partialHistory || clippedMessages > 0 }
     public func count(_ action: DailyAction) -> Int { moments.filter { $0.action == action }.count }
@@ -127,8 +136,9 @@ public struct DailyParticipation: Sendable {
         if count(.reported) > 0 { return "\(count(.reported)) replies reported a result from a personal check." }
         return followUps == 1 ? "One saved reply is too little to describe a daily pattern." : "These replies don’t fit the simple wording categories yet."
     }
-    public static func make(day: WorkDay, input: DailyInput, sessions: [SessionMetadata], coverage: [MemoryCoverage] = []) -> Self {
+    public static func make(day: WorkDay, input: DailyInput, sessions: [SessionMetadata], coverage: [MemoryCoverage] = [], interpretations: [ContributionReading] = [], contextual: Bool = false) -> Self {
         let relevant = input.messages.filter { $0.sourceAt.map(day.contains) == true && ["user", "assistant"].contains($0.speaker) }
+        let byMessage = Dictionary(grouping: interpretations, by: \.messageID)
         var moments: [DailyMoment] = []
         var agentOnly: [DailyThread] = []
         let workspace = Dictionary(uniqueKeysWithValues: sessions.map { ($0.id, $0.workspaceID) })
@@ -164,9 +174,15 @@ public struct DailyParticipation: Sendable {
                    !PromptSignals.isContinuationCue(text), !matches(#"\b(?:go ahead|proceed|continue|do it|finish|keep going)\b"#, text) {
                     action = .other; reason = "A short answer after an agent question could be a clarification, so it is not counted as asking AI to continue."
                 }
+                let wordingAction = action, wordingReason = reason
+                let interpretation = contextual && !message.textTruncated && !copied ? ContributionReading.latest(byMessage[message.id] ?? [], for: message) : nil
+                if contextual {
+                    action = interpretation?.primary ?? .other
+                    reason = copied ? "Known copied agent text is not an independent human contribution." : message.textTruncated ? "This saved reply is clipped, so its complete contribution cannot be interpreted." : interpretation?.explanation ?? "This reply has not received a current contextual interpretation yet. It is not silently classified by a wording rule."
+                }
                 moments.append(.init(id: message.id, sessionID: sessionID, workspaceID: workspace[sessionID] ?? sessionID, at: time,
                     action: action, excerpt: String(humanText(message.text).prefix(220)), agentID: agent.id,
-                    repairOnly: !copied && !message.textTruncated && isBriefRepair(text), knownCopiedText: copied, reason: reason, response: responses[message.id]))
+                    repairOnly: !copied && !message.textTruncated && isBriefRepair(text), knownCopiedText: copied, reason: reason, response: responses[message.id], interpretation: interpretation, wordingAction: wordingAction, wordingReason: wordingReason, eligibleForInterpretation: !copied && !message.textTruncated))
             }
         }
         moments.sort { $0.at == $1.at ? $0.id < $1.id : $0.at < $1.at }
@@ -186,7 +202,7 @@ public struct DailyParticipation: Sendable {
         let used = Set(relevant.map(\.sessionID))
         let partial = used.contains { id in coverage.first { $0.sessionID == id }?.complete != true }
         return Self(day: day, moments: moments, hours: hours, agentOnlyThreads: agentOnly.sorted { $0.id < $1.id }, projects: projects, loadedMessages: relevant.count, datedTotal: input.datedTotal,
-                    undatedTotal: input.undatedTotal, partialHistory: partial, clippedMessages: relevant.filter(\.textTruncated).count, activeSessionIDs: used.sorted())
+                    undatedTotal: input.undatedTotal, partialHistory: partial, clippedMessages: relevant.filter(\.textTruncated).count, activeSessionIDs: used.sorted(), contextual: contextual)
     }
     /// Display/input cleanup only. Original records remain unchanged and open through the source link.
     public static func humanText(_ raw: String) -> String {

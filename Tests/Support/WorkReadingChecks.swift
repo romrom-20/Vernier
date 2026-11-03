@@ -70,7 +70,9 @@ public enum WorkReadingChecks {
         let refs = [WorkReference(sourceID: agent.id, quote: String(agent.quote.prefix(160)), use: .change), .init(sourceID: anchor.id, quote: String(anchor.quote.prefix(160)), use: .response)]
         let proposed = WorkProposal(focus: .check, goal: "Prevent duplicate contacts", headline: "The blank-email case still needs a result.", account: "The agent reports zero new contacts on a repeated import; blank emails remain unchecked in that report.", nextStep: "Import the blank-email file twice and compare the contact counts.", references: refs)
         let challenge = WorkChallenge(goalSupported: true, accountSupported: true, nextStepRelevant: true, directionMismatchSupported: false, sourceIDs: refs.map(\.sourceID))
-        let revision = DecisionRevision.contextual(context: context, proposal: proposed, challenge: challenge, engine: "synthetic · work-2")
+        var revision = DecisionRevision.contextual(context: context, proposal: proposed, challenge: challenge, engine: "synthetic · work-2")
+        revision.contributions = ContributionReading.validate([.init(sourceID: anchor.id, primary: .checked, claims: [.init(action: .checked, quote: anchor.quote)])], supportedIDs: [anchor.id], context: context, engine: "invented")
+        revision.contributionsComplete = false
         let saved = try await store.saveDecisionRevision(revision, context: context, token: token)
         let loaded = try await store.loadDecisionRevisions(sessionID: sessionID)
         let sameDay = try await store.decisionRevisionsCreated(in: WorkDay(containing: revision.createdAt))
@@ -78,8 +80,26 @@ public enum WorkReadingChecks {
         let futureReadings = try await store.decisionRevisionsCreated(in: nextDay)
         try check(sameDay.contains { $0.id == revision.id } && futureReadings.isEmpty, "The day reader mixed interpretations across calendar days")
         try check(saved && loaded.first?.reading?.goal == proposed.goal && loaded.first?.evidence.count == 2, "The contextual reading was not persisted with canonical evidence")
+        let labels = try await store.contributionRevisions(in: WorkDay(containing: library.messages.first { $0.id == anchor.messageID }!.sourceAt!))
+        try check(labels.first?.contributions?.contains { $0.messageID == anchor.messageID } == true, "Day classification lookup must include source-linked contribution payloads")
+        var later = DecisionRevision.contextual(context: context, proposal: proposed, challenge: challenge, engine: "invented", previousID: revision.id, now: nextDay.start.addingTimeInterval(60))
+        later.contributions = revision.contributions; later.contributionsComplete = true
+        let laterSaved = try await store.saveDecisionRevision(later, context: context, token: token)
+        let sourceDay = WorkDay(containing: library.messages.first { $0.id == anchor.messageID }!.sourceAt!)
+        let backfilled = try await store.contributionRevisions(in: sourceDay)
+        try check(laterSaved && backfilled.contains { $0.id == later.id }, "A next-day interpretation must remain discoverable by the original message's day")
+        var legacy = try JSONSerialization.jsonObject(with: JSONEncoder().encode(revision)) as! [String: Any]
+        legacy.removeValue(forKey: "contributions"); legacy.removeValue(forKey: "contributionsComplete")
+        let old = try JSONDecoder().decode(DecisionRevision.self, from: JSONSerialization.data(withJSONObject: legacy))
+        try check(old.contributions == nil && old.contributionsComplete == nil && old.reading != nil, "Older saved revisions must decode without inventing contribution labels")
         let exported = String(decoding: try await store.exportJSON(), as: UTF8.self)
-        try check(exported.contains("blank-email") && exported.contains("nextStep"), "Export omitted the contextual memory")
+        try check(exported.contains("blank-email") && exported.contains("nextStep") && exported.contains("contributions"), "Export omitted contextual or contribution memory")
+        let editedMessages = library.messages.map { m in
+            m.id == anchor.messageID ? ConversationMessage(id: m.id, sessionID: m.sessionID, turnID: m.turnID, speaker: m.speaker, phase: m.phase, text: "A changed source requirement.", sourceAt: m.sourceAt, observedAt: Date(), redactions: 0, textTruncated: false, attachmentsOmitted: false) : m
+        }
+        _ = try await store.apply(.init(sessions: library.sessions, turns: library.turns, truncated: false, observedAt: Date(), messages: editedMessages), token: token)
+        let invalidated = try await store.contributionRevisions(in: sourceDay)
+        try check(invalidated.isEmpty, "An edited dependency must remove its cached contribution payloads")
         try await store.eraseConversationMemory()
         let remaining = try await store.loadDecisionRevisions()
         try check(remaining.isEmpty, "Memory erasure retained contextual interpretations")

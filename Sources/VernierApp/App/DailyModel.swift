@@ -7,7 +7,7 @@ extension AppModel {
         WorkDay(containing: Calendar.current.date(byAdding: .day, value: dailyDayOffset, to: Date()) ?? Date())
     }
     var dailyLoadKey: String {
-        [selectedWorkDay.key, String(library.totalMessageCount), String(memoryEraseRevision), String(localInsightsEnabled), String(library.sessions.map { $0.updatedAt.timeIntervalSince1970 }.max() ?? 0), String(decisionRevisions.map { $0.createdAt.timeIntervalSince1970 }.max() ?? 0), String(Int(Date().timeIntervalSince1970 / 300))].joined(separator: ":")
+        [selectedWorkDay.key, String(library.totalMessageCount), String(memoryEraseRevision), String(localInsightsEnabled), String(contributionLabelsEnabled), ContributionReading.version, String(library.sessions.map { $0.updatedAt.timeIntervalSince1970 }.max() ?? 0), String(decisionRevisions.map { $0.createdAt.timeIntervalSince1970 }.max() ?? 0), String(Int(Date().timeIntervalSince1970 / 300))].joined(separator: ":")
     }
     func clearDailyParticipation() {
         dailyGeneration += 1; dailyReport = nil; dailyPreviousReport = nil; dailyLoadedKey = nil; dailyLoading = false; dailyError = nil
@@ -25,8 +25,11 @@ extension AppModel {
             let input = try await dayInput(day: day, snapshot: snapshot)
             let reflections = isolatedEnvironment ? [] : try await store?.dailyReflections() ?? []
             let readings = isolatedEnvironment ? decisionRevisions.filter { day.contains($0.createdAt) } : try await store?.decisionRevisionsCreated(in: day) ?? []
+            let classified = contributionLabelsEnabled ? (isolatedEnvironment ? decisionRevisions : try await store?.contributionRevisions(in: day) ?? []) : []
+            let contributions = isShowcase ? ShowcaseFixtures.contributionReadings(library: snapshot) : classified.flatMap { $0.contributions ?? [] }
+            let contextual = contributionLabelsEnabled || isShowcase
             let report = await Task.detached(priority: .utility) {
-                DailyParticipation.make(day: day, input: input, sessions: snapshot.sessions, coverage: snapshot.memoryCoverage)
+                DailyParticipation.make(day: day, input: input, sessions: snapshot.sessions, coverage: snapshot.memoryCoverage, interpretations: contributions, contextual: contextual)
             }.value
             var previous: DailyParticipation?
             var previousReadings: [DecisionRevision] = []
@@ -34,8 +37,10 @@ extension AppModel {
                 let yesterday = WorkDay(containing: Calendar.current.date(byAdding: .day, value: -1, to: day.start)!)
                 let earlier = try await dayInput(day: yesterday, snapshot: snapshot)
                 previousReadings = isolatedEnvironment ? decisionRevisions.filter { yesterday.contains($0.createdAt) } : try await store?.decisionRevisionsCreated(in: yesterday) ?? []
+                let previousClassified = contributionLabelsEnabled ? (isolatedEnvironment ? decisionRevisions : try await store?.contributionRevisions(in: yesterday) ?? []) : []
+                let previousContributions = isShowcase ? ShowcaseFixtures.contributionReadings(library: snapshot) : previousClassified.flatMap { $0.contributions ?? [] }
                 previous = await Task.detached(priority: .utility) {
-                    DailyParticipation.make(day: yesterday, input: earlier, sessions: snapshot.sessions, coverage: snapshot.memoryCoverage)
+                    DailyParticipation.make(day: yesterday, input: earlier, sessions: snapshot.sessions, coverage: snapshot.memoryCoverage, interpretations: previousContributions, contextual: contextual)
                 }.value
             }
             guard !Task.isCancelled, generation == dailyGeneration, erased == memoryEraseRevision, key == dailyLoadKey else { return }

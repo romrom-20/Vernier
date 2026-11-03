@@ -200,6 +200,12 @@ extension AppCoordinator {
     }
     /// Functional view-model routes and isolated storage; no window activation is required.
     func runModelSmokeChecks() async throws {
+        try check(!model.contributionLabelsEnabled, "Unvalidated model categories remain off for a fresh installation")
+        let wordingKey = model.dailyLoadKey
+        model.contributionLabelsEnabled = true
+        try check(model.dailyLoadKey != wordingKey && model.dailyReport == nil, "Changing category mode invalidates the previous projection immediately")
+        model.contributionLabelsEnabled = false
+        try check(!model.preferences.contributionLabelsEnabled, "The category experiment can be turned off without changing capture consent")
         prepareQuickPanel()
         try check(popover.appearance?.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua && popover.contentViewController?.view.appearance?.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua,
                   "The production popover and hosting view explicitly use ink appearance instead of inheriting a light menu bar")

@@ -1,0 +1,234 @@
+[
+  {
+    "id": "typo-direction",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this task."
+      },
+      {
+        "role": "assistant",
+        "text": "I will use a hosted service."
+      },
+      {
+        "role": "user",
+        "text": "noo kep it on my mac nothing shoud leave it"
+      }
+    ],
+    "primary": "directed",
+    "additional": []
+  },
+  {
+    "id": "mixed-direction-check",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this task."
+      },
+      {
+        "role": "assistant",
+        "text": "A cloud service would be faster."
+      },
+      {
+        "role": "user",
+        "text": "Keep it offline and explain the tradeoff."
+      }
+    ],
+    "primary": "directed",
+    "additional": [
+      "checked"
+    ]
+  },
+  {
+    "id": "clarification-answer",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this task."
+      },
+      {
+        "role": "assistant",
+        "text": "Should the button be blue?"
+      },
+      {
+        "role": "user",
+        "text": "Yes."
+      }
+    ],
+    "primary": "other",
+    "additional": []
+  },
+  {
+    "id": "deliberate-delegation",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this task."
+      },
+      {
+        "role": "assistant",
+        "text": "I can apply the approved plan."
+      },
+      {
+        "role": "user",
+        "text": "Proceed with that plan. I will inspect the result after lunch."
+      }
+    ],
+    "primary": "continued",
+    "additional": []
+  },
+  {
+    "id": "human-attempt",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this task."
+      },
+      {
+        "role": "assistant",
+        "text": "Try importing twice."
+      },
+      {
+        "role": "user",
+        "text": "I imported the same file twice and saw one contact."
+      }
+    ],
+    "primary": "reported",
+    "additional": []
+  },
+  {
+    "id": "hypothetical-attempt",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this task."
+      },
+      {
+        "role": "assistant",
+        "text": "The import should be deduplicated."
+      },
+      {
+        "role": "user",
+        "text": "If I imported twice, would it create duplicates?"
+      }
+    ],
+    "primary": "checked",
+    "additional": []
+  },
+  {
+    "id": "negated-check",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this task."
+      },
+      {
+        "role": "assistant",
+        "text": "I can run the tests."
+      },
+      {
+        "role": "user",
+        "text": "Skip the tests for now; only change the label."
+      }
+    ],
+    "primary": "directed",
+    "additional": []
+  },
+  {
+    "id": "short-correction",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this task."
+      },
+      {
+        "role": "assistant",
+        "text": "I will replace the existing database."
+      },
+      {
+        "role": "user",
+        "text": "No. Preserve the existing records."
+      }
+    ],
+    "primary": "directed",
+    "additional": []
+  },
+  {
+    "id": "implied-check",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this task."
+      },
+      {
+        "role": "assistant",
+        "text": "I changed the shortcut handler."
+      },
+      {
+        "role": "user",
+        "text": "Show me that a single press opens only one window."
+      }
+    ],
+    "primary": "checked",
+    "additional": []
+  },
+  {
+    "id": "new-question",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this task."
+      },
+      {
+        "role": "assistant",
+        "text": "The export works."
+      },
+      {
+        "role": "user",
+        "text": "Separate question: how are deleted invoices handled?"
+      }
+    ],
+    "primary": "checked",
+    "additional": []
+  },
+  {
+    "id": "brief-repair",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this task."
+      },
+      {
+        "role": "assistant",
+        "text": "The fix is ready."
+      },
+      {
+        "role": "user",
+        "text": "still broken fix it"
+      }
+    ],
+    "primary": "other",
+    "additional": []
+  },
+  {
+    "id": "mixed-result-direction",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this task."
+      },
+      {
+        "role": "assistant",
+        "text": "Please try the updated shortcut."
+      },
+      {
+        "role": "user",
+        "text": "I tried it and got two windows. Keep the shortcut but remove the duplicate registration."
+      }
+    ],
+    "primary": "reported",
+    "additional": [
+      "directed"
+    ]
+  }
+]

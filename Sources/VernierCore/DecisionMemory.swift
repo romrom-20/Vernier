@@ -290,6 +290,8 @@ public struct DecisionEvidence: Codable, Identifiable, Sendable {
     public var id: String { messageID }
 }
 public struct DecisionRevision: Codable, Identifiable, Sendable {
+    public var contributions: [ContributionReading]? = nil
+    public var contributionsComplete: Bool? = nil
     public let id: String
     public let sessionID: String
     public let anchorMessageID: String

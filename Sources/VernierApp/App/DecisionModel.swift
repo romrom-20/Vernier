@@ -110,7 +110,8 @@ extension AppModel {
             let relatedChanged = latest?.relatedMessageCounts.contains { id, count in
                 library.sessions.first(where: { $0.id == id }).flatMap { library.digest(for: $0)?.messageCount } != count
             } ?? false
-            return decisionDirtyAt[session.id] != nil || relatedChanged || latest == nil || !(latest.map { $0.engine.hasSuffix(" · " + DecisionGenerator.promptVersion) && ($0.reading?.boundaryRule != nil || $0.engine == reasoningModel + " · " + DecisionGenerator.promptVersion) } ?? false) || latest?.storedMessages != library.digest(for: session)?.messageCount || freshPerspective
+            let oldLabels = latest?.contributions?.contains { !$0.engine.hasSuffix(" · " + ContributionReading.version) } ?? false
+            return decisionDirtyAt[session.id] != nil || relatedChanged || latest == nil || (contributionLabelsEnabled && (latest?.contributionsComplete != true || oldLabels)) || !(latest.map { $0.engine.hasSuffix(" · " + DecisionGenerator.promptVersion) && ($0.reading?.boundaryRule != nil || $0.engine == reasoningModel + " · " + DecisionGenerator.promptVersion) } ?? false) || latest?.storedMessages != library.digest(for: session)?.messageCount || freshPerspective
         }.filter { Date().timeIntervalSince(lastDecisionAttempt[$0.id] ?? .distantPast) >= 120 }
         guard let next = dirty.sorted(by: { left, right in
             let a = decisionRevisions.first { $0.sessionID == left.id }?.createdAt ?? .distantPast
@@ -135,16 +136,31 @@ extension AppModel {
             do {
                 guard let context = try await store.decisionContext(sessionID: sessionID) else { self.decisionNotice = "No saved request is available in this conversation yet. History may still be filling."; return }
                 let previous = try await store.loadDecisionRevisions(sessionID: sessionID, limit: 1).first
-                if (!retryUnknown || previous?.reading != nil), previous?.inputDigest == context.inputDigest, (previous?.engine == model + " · " + DecisionGenerator.promptVersion || (previous?.reading?.boundaryRule != nil && previous?.engine.hasSuffix(" · " + DecisionGenerator.promptVersion) == true)) {
+                let labelsCurrent = !self.contributionLabelsEnabled || (previous?.contributionsComplete == true && previous?.contributions?.allSatisfy { $0.engine == model + " · " + ContributionReading.version } == true)
+                if (!retryUnknown || previous?.reading != nil), labelsCurrent, previous?.inputDigest == context.inputDigest, (previous?.engine == model + " · " + DecisionGenerator.promptVersion || (previous?.reading?.boundaryRule != nil && previous?.engine.hasSuffix(" · " + DecisionGenerator.promptVersion) == true)) {
                     self.clearDecisionDirty(sessionID, through: startedAt)
                     if self.decisionSession?.id == sessionID { self.selectedDecisionRevisionID = nil }
                     self.decisionNotice = "The saved evidence is unchanged. The existing reading is still available."
                     return
                 }
                 let result = try await DecisionGenerator.shared.review(context: context, model: model, previousID: previous?.id)
+                var revision = result.revision
+                let cached = (previous?.contributions ?? []).filter { reading in
+                    reading.engine == model + " · " + ContributionReading.version && context.sources.contains { $0.messageID == reading.messageID && $0.fingerprint == reading.fingerprint }
+                }
+                if self.contributionLabelsEnabled { do {
+                    let additions = try await DecisionGenerator.shared.interpretContributions(context: context, model: model, excluding: Set(cached.map(\.messageID)))
+                    revision.contributions = cached + additions
+                    let covered = Set((revision.contributions ?? []).map(\.messageID))
+                    revision.contributionsComplete = ContributionReading.targets(in: context).allSatisfy { covered.contains($0.messageID) }
+                } catch {
+                    try Task.checkCancellation()
+                    revision.contributions = cached; revision.contributionsComplete = false
+                    self.decisionError = "The goal reading finished, but reply interpretation could not finish. Unread replies remain unclassified."
+                } }
                 try Task.checkCancellation()
                 guard self.decisionGeneration == generation, self.captureGate.token() == token else { return }
-                guard try await store.saveDecisionRevision(result.revision, context: context, token: token) else {
+                guard try await store.saveDecisionRevision(revision, context: context, token: token) else {
                     self.decisionNotice = "New evidence arrived during the review. The next review will use it."
                     return
                 }

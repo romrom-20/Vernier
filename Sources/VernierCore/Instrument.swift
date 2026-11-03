@@ -165,6 +165,10 @@ public struct Preferences {
         get { defaults.bool(forKey: "automaticDecisionReviews") }
         nonmutating set { defaults.set(newValue, forKey: "automaticDecisionReviews") }
     }
+    public var contributionLabelsEnabled: Bool {
+        get { defaults.bool(forKey: "contributionLabelsEnabled") }
+        nonmutating set { defaults.set(newValue, forKey: "contributionLabelsEnabled") }
+    }
     public var selectedDecisionSessionID: String? {
         get { defaults.string(forKey: "selectedDecisionSessionID") }
         nonmutating set { defaults.set(newValue, forKey: "selectedDecisionSessionID") }
@@ -172,7 +176,7 @@ public struct Preferences {
     public var reasoningModel: String {
         get {
             let saved = defaults.string(forKey: "reasoningModel") ?? "apple"
-            return ["apple", "gemma4:e2b-it-qat", "qwen2.5:7b"].contains(saved) ? saved : "apple"
+            return ["apple", "gemma4:e2b-it-qat", "qwen3.5:2b-q4_K_M", "qwen2.5:7b"].contains(saved) ? saved : "apple"
         }
         nonmutating set { defaults.set(newValue, forKey: "reasoningModel") }
     }

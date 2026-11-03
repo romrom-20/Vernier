@@ -1,73 +1,37 @@
-# A useful way back into your work
+# Read the daily picture
 
-The dashboard opens with the visual overview: category cards, the hourly chart and a reflection panel, all visible without expanding a section. Selecting a category or hour opens its matching evidence. A contextual reading follows beneath that overview; the compact panel and expanded pill retain their focused reading when one is available: **what you were trying to achieve, what kind of result is in the record, and one useful next step**. For example, an AI saying the project builds does not establish that a double import avoids duplicates. The next step can connect that build to the original interaction, rather than asking for more prompts generally.
+The dashboard opens with category cards, the hourly chart and a reflection panel. Selecting a category or hour opens its matching saved replies. The contextual goal/outcome reading remains below this visual overview. The compact panel focuses on a current goal, reported evidence and one useful checkpoint, with exact sources available.
 
-The compact card opens its exact reading and sources; its footer opens the full recap. Other active conversations are available in the dashboard. Today's changed sources withhold old readings until reconsidered. A missing model reading falls back to saved exchanges and an explicit unavailable state, rather than inventing a takeaway. The visible breakdown describes the recorded words; the contextual reading adds a likely goal and checkpoint. Neither is a judgment of thought or capability.
+## Two category modes
 
-A day uses up to 200 saved readings created that day, latest per active conversation. It is not all tasks or all work done. An old day shows interpretations saved then, not a retrospective model reconstruction. With no current reading and few new replies, the compact panel can retain yesterday's fuller recap; it names that date and opens that date. A fresh reading of delegated work can take priority even without a human follow-up. [Source and model boundaries](REASONING.md).
+**Default: wording categories.** These use local English rules, not the model. The first matching rule wins: personal attempt → question/check → condition/choice → continuation → unclear. Copied agent text, clipped messages, negated checks and clarification answers have separate guards. Mixed requests and implied intent can be missed. “Why this was counted” exposes the actual rule.
 
-## What the numbers mean
+**Experimental model categories: off initially.** In Local model and review settings, this switch lets the selected local model interpret human replies using surrounding messages. It asks independently whether a reply requests execution, adds a requirement, requests evidence/explanation, or reports an actual attempt. Several acts can be retained. The app organizes the main role as report, direction, check, continuation; additional signals stay visible with the reply. The model chooses from exact human-source spans, a second pass challenges the acts, and the host checks source/actor validity. This is not independent semantic verification. The tested configurations did not meet the quality gate, so model categories do not replace the stable default automatically.
 
-The denominator is **recorded human follow-ups after an agent reply**, within the chosen local calendar day. Each saved human message counts separately, including several human contributions within one provider turn. It is not the number of tasks, the percentage completed by AI, time spent thinking, a cognitive score or a grade of prompt quality.
+In experimental mode, unread or unsupported replies stay **Unclear / unread**. The screen shows interpretation coverage rather than silently filling gaps with rules. Each source explanation includes the model, review time, exact evidence and a wording-only comparison. Short approvals may be deliberate delegation; requests for an explanation do not establish understanding. [Evaluation and failures](MODEL_EVALUATION.md) · [Improvement design](MODEL_IMPROVEMENT.md).
 
-Five mutually exclusive wording categories form the breakdown:
+## What the counts mean
 
-- **Asked AI to continue:** recognizable brief assent or continuation with no added requirement. A bare answer to an agent's clarification question is guarded. This is a narrow proxy, not all delegation.
-- **Added direction:** recognizable constraints, choices or corrections.
-- **Asked to check:** requests for tests, explanations, comparisons or evidence. Negated instructions such as “do not test” do not count as check requests. Asking is distinct from performing the check.
-- **Reported a result:** a recognizable first-person attempt or outcome report. The app does not verify the report.
-- **Other / unclear:** other wording, brief repair requests, known copied agent text, clipped human messages or language the rules do not resolve.
+Each item is one dated human follow-up after an agent reply in the same conversation. Multiple contributions in one provider turn count separately. Initial requests are outside this denominator. The main categories are mutually exclusive even when the model retains secondary signals. These are not task percentages, time spent thinking, learning scores or grades of human agency.
 
-The rules run locally and match a limited set of English expressions. They hide recognizable app-added context and check known reuse of earlier agent wording within the loaded conversation. They can miss typos, languages, implicit direction and context. These counts are not model judgments about mental effort. A short approval can follow careful thought; a long question can be unnecessary or valuable.
+Asked AI to continue describes an execution/continuation request; Added direction describes a requirement, choice or correction; Asked to check describes evidence, explanation or verification requests; Reported a result describes a self-reported attempt/observation. The app does not verify the report. Unclear sources include unknown meaning, known copied text, clipped records and—in experimental mode—unread or withheld interpretations.
 
-A conversation with an initial request and agent replies but no saved follow-up appears separately, outside that percentage. It may be fully delegated, still in progress or reviewed elsewhere. A provider conversation and a workspace can each contain several human tasks.
+The hour chart counts replies, not time on task or fatigue. Category/hour selections open exact matching sources; repeated selections navigate again. Selecting an hour clears the category filter. Changing day or erasing clears the filters. Gaps between active hours are omitted. A continuation stretch does not prove a shared task or missing thought; brief repair wording does not prove the same bug returned.
 
-## The useful part
+## Review coverage and history
 
-An active-hour chart shows counts, not time on task or fatigue. Every shown hour is a button that opens that hour’s source replies. A visible legend, symbols and accessible count labels accompany color. Selecting an hour clears the category filter; choosing a category shows that category across the selected day. Re-selecting the same category still returns to its evidence. Changing the day or erasing memory clears both filters. Gaps between shown active hours are omitted. A continuation stretch is counted within one conversation; it does not assert a shared task or missing thought. Brief repair requests are a wording pattern, not proof that the same bug returned. The recap offers a concrete exchange to revisit: what caused the change, why was that approach chosen, and what observable behavior would show it worked?
+Automatic review waits for 15 seconds of quiet and starts at most once per two minutes, one conversation at a time. It rests during Pause, sleep/session suspension and Low Power Mode. When experimental categories are enabled, each cycle attempts up to four unread replies in its bounded conversation packet, then catches up within that packet. It does not promise to classify the entire archive. Turning the experiment off stops its extra inference while preserving capture consent and normal goal readings.
 
-Selecting any of the five named counts opens matching replies in **What happened when**, with source times, a conversation label and **Why this was counted**. The explanation names the actual matched wording or the copied-text, clipping or clarification guard. It is a rule explanation, not a contextual judgment about intent. Replies appear latest first, with a small initial preview and a Show more control that can reach all loaded matches. Each reply opens its exact original record or its surrounding exchange. Selecting a pattern opens its own source anchor and surrounding map; it does not expand an unavailable model reading. Workspace groups show a representative conversation goal, rather than pretending the group is a single feature. The existing optional local model can help interpret a particular exchange; the daily percentages do not depend on its classifications.
+Daily source loading is bounded to 4,000 messages and 4,096 characters each; source dates, not observation dates, determine the day. Undated messages stay unassigned. Model labels use at most 200 related saved revisions and bounded per-conversation history. Editing a dependency invalidates its saved interpretations. A later classification can appear on its message's original day, with the later review time visible.
 
-An optional **check-in** records the person's own clarity, energy and short note for that date. These are self-reports, not inferred health or understanding measurements. They are kept separately from generated readings.
+The contextual goal card uses a separate rule: up to 200 readings created on the selected day, latest per active conversation. Historical goal cards describe what was saved then; they are not backdated reconstructions. That is different from classifying the wording of an old reply later. Neither view is an exhaustive task ledger.
 
-## During the day and the next morning
+The compact panel can retain yesterday's fuller recap while today begins, names the date and opens that date. A fresh contextual reading of delegated activity can take priority with zero follow-up replies. Its source button opens the exact reading; its footer opens the full recap. Agent replies are attributed reports, not verified results.
 
-Today updates from the existing saved-history sync. In 0.12.1, the compact panel uses yesterday when today has no recorded replies, and keeps a fuller yesterday (at least three replies) visible until today has three replies. Both the shown day and today’s small count are labeled; counts from the days are never combined. The main button selects the same day in Studio. This is a presentation rule, not a threshold for adequate thought or prompt quality. A loading, disabled, disconnected or failed read has its own explicit message rather than introductory copy. Previous-day controls provide a recap for the morning and dates within retention. No additional daemon, timer, external provider or inference schedule is added. Vernier and capture rest during system sleep; after wake, history that the provider saved can fill in. This does not observe sleep or establish what happened while away from the machine.
+## Your check-in and direct access
 
-The projection uses up to 4,000 dated messages from the day, clipped to 4,096 characters each, from the SQLite archive rather than its 300-message resident preview. A bounded preceding message preserves the link when the first reply crosses midnight. Unknown source times stay unassigned; observation time never moves an old message into today. Caps, clipping and incomplete history are disclosed. A busy day beyond the cap is a partial recent window.
+Optional clarity/energy check-ins are human reports, separate from observation and model interpretation. They are not a validated workload or cognitive-health score. All derived records remain subject to local retention, export and erasure. SQLite stays schema v6; the experiment adds optional payload fields rather than another capture source.
 
-Calendar days use the current local time zone and respect daylight-saving changes. A check-in's date key includes its time zone. Changing zones can therefore expose a separate check-in for the same printed date.
+Control–Option–Command–V opens the compact recap while Vernier runs. The app icon also opens that compact entry; its footer opens the dashboard. The shortcut registers only that combination and does not monitor general typing. The app rests when the Mac sleeps; it does not measure sleep.
 
-Schema v6 adds a source-time index and a separate daily-reflection table, preserving existing sessions, messages, notes and readings. Counts are recomputed in memory. Check-ins are included in local export, age out with retention, and are removed by conversation-memory erasure and full deletion. In-flight results are invalidated on erasure; a generation guard prevents an old check-in save from resurrecting after erasure.
-
-This is a first descriptive daily recap. Validated prompt-quality scores, task/subfield percentages, learning gains, independently demonstrated understanding, all-day cognitive-health measurements and cross-tool coverage are not implemented.
-
-
-## Two layers, explained in the screen — 0.12.2
-
-**How Vernier reads your work** explains that daily counts use wording rules while contextual conversation review is separate. It reports the current review mode and the latest available saved review time, explicitly warning that the review may belong to another day or conversation. The existing local reader, prompt, schedule and schema are unchanged. There is no new cognitive or prompt-quality score.
-
-The sidebar names the capture state, says whether saved chats or metadata are being collected, and opens connection settings. Running in the background means Vernier stays open while the Mac is awake; it rests during sleep. Open at login means macOS starts it at sign-in, not that it runs while the machine is off.
-
-
-## A useful compact view — 0.12.3
-
-The menu-bar panel now pairs a pattern with its source: **what you asked, when, and what AI replied**. The generic reflection box has been replaced by short, clearly attributed excerpts and **Open this exchange**. A build claim or success report stays visibly an AI reply; the panel does not certify an outcome. If no following reply exists in the loaded day, it says that rather than borrowing an earlier reply or guessing. The selected request comes from the stated continuation stretch, repair pattern or most frequent meaningful wording category (ties prefer check requests). Counts themselves are unchanged.
-
-Responses come only from the immediately following agent stretch in the same loaded conversation/day. A final-answer message is preferred; otherwise the first visible reply is used. Consecutive human messages before that stretch can share its response. The excerpt may not answer the request and source timing/order can be approximate. Replies after midnight, outside the day cap or not yet synced may be absent. The UI says **some history is missing** in plain words when coverage is limited.
-
-The source card selects the displayed day (including yesterday’s morning fallback), then focuses its own saved request in the conversation map. It rejects a source card no longer present in the current compact report. The footer still opens the named day’s full recap. No inference call, capture source, database table or consent change is added.
-
-
-## Reach it without the dashboard
-
-**Control–Option–Command–V (⌃⌥⌘V)** opens the compact menu-bar recap from another app while Vernier is running. It presents the recap instead of toggling it closed if already visible. The existing footer opens the named day’s full recap; its source card opens its own exchange. Capture Pause is independent. The expanded floating pill now names the day and the same brief pattern (for example, “3 check requests”). Pause, rest, missing consent and connection errors take priority over cached recap text. The idle circle stays small.
-
-The shortcut uses the macOS Carbon hot-key API to register one combination, with exclusive registration to catch collisions with another app. It does not monitor general typing or request Accessibility permission. It unregisters at Quit. Isolated state checks, model probes and showcase rendering do not register it. If registration fails, the app shows a message in its residency/connection settings. The shortcut hint is visible in the compact footer and the native app menu.
-
-
-## How a reply enters one box
-
-These boxes do not use the local language model. After source-date, speaker and attribution guards, the first matching wording rule wins: personal attempt → question/explanation/check → condition/choice → brief continuation → unclear. For example, “I tested the import” is a self-reported attempt; “why does this happen?” is a check/explanation request; “keep it offline” is direction; “go ahead” can be continuation. A mixed request such as “keep it offline and explain the tradeoff” can land in Asked to check because that rule runs earlier. The single category does not capture everything in the message. Negated checks, brief generic repair requests, copied text, clipped records and clarification answers have separate guards. Open **Why this was counted** for the actual rule and source wording.
-
-In 0.13.2 disclosure headers are full-width buttons with a 44-point minimum height and visible Show/Hide text. The dashboard accepts the first mouse click on returning to its window. Across your work retains its expansion during daily projection refreshes and resets on day selection or erasure. Hidden/state checks do not establish physical mouse delivery on every Mac.
+Disclosure headers are full-width Show/Hide buttons. Across your work stays expanded through projection refreshes and resets on day selection or erasure. Physical focus and mouse delivery require an owner or separate-desktop check; offscreen previews alone do not establish them.

@@ -64,7 +64,7 @@ struct DailyOverviewView: View {
                 DisclosureGroup("What these numbers can tell you") {
                     VStack(alignment: .leading, spacing: 9) {
                         Text("Each item is one saved human message with an earlier agent reply in the same conversation. Multiple human messages in one provider turn count separately. Initial requests aren’t in the denominator. This is wording in the record, not a percentage of tasks or minutes spent thinking.")
-                        Text("The rules match recognizable English wording, hide app-added instructions and guard known copied agent text. Short replies can be deliberate delegation; an explanation request can be useful oversight. Typing style, language, missing history and context can change the reading.")
+                        Text(day.contextual ? "The local model interprets replies in a bounded excerpt. A second pass challenges its labels, and the app checks exact sources and attribution. Unread or unsupported replies stay unclear. Additional signals stay with each reply. Interpretations can be wrong." : "The default categories use recognizable English wording and can miss intent, typos or mixed requests. The experimental model-category mode is separate and off by default because it has not passed its quality gate.")
                         Text("\(day.loadedMessages) of \(day.datedTotal) dated messages loaded for this day. \(day.undatedTotal) undated messages in the archive cannot be assigned to a day. \(day.clippedMessages) loaded messages are clipped. \(day.partialHistory ? "Some conversation history is incomplete." : "Available conversation history is marked complete.")")
                         Text("Days use \(day.day.timeZoneID). While your Mac sleeps, Vernier rests too; saved provider history can fill in after wake. Yesterday remains available as a morning recap. The app does not observe sleep or infer how rested you feel.")
                     }.font(.caption).foregroundStyle(Palette.secondary).lineSpacing(4).padding(.top, 10)
@@ -117,8 +117,12 @@ private struct DailySummaryCard: View {
                 }.foregroundStyle(.white).padding(12).background(.black.opacity(0.18), in: RoundedRectangle(cornerRadius: 12))
             }.padding(22).background { VernierField() }
             VStack(alignment: .leading, spacing: 18) {
-                Text("Choose a category to see what you said, when, and why it counted.")
+                Text(report.contextual ? "Experimental model categories · inspect each interpretation’s sources." : "Wording categories · choose a category to see the reply and the rule used.")
                     .font(.callout).foregroundStyle(Palette.secondary)
+                if report.contextual {
+                    Text("\(report.acceptedFollowUps) of \(report.followUps) replies have supported interpretations · \(report.pendingFollowUps) awaiting review. Cards count the main role; additional signals remain visible in each reply.")
+                        .font(.caption).foregroundStyle(Palette.secondary)
+                }
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 10)], spacing: 10) {
                 ForEach(DailyAction.allCases, id: \.self) { action in
                     Button { model.selectDailyEvidence(action: action) } label: {
@@ -128,8 +132,8 @@ private struct DailySummaryCard: View {
                                 Spacer()
                                 Text("\(report.count(action))").font(.system(size: 30, weight: .medium, design: .rounded)).monospacedDigit()
                             }
-                            Text(action.label).font(.callout.weight(.medium)).frame(height: 36, alignment: .top)
-                            Text(action.shortExplanation).font(.caption2).foregroundStyle(Palette.secondary).frame(height: 30, alignment: .top)
+                            Text(action == .other && report.contextual ? "Unclear / unread" : action.label).font(.callout.weight(.medium)).frame(height: 36, alignment: .top)
+                            Text(action == .other && !report.contextual ? "Wording the rules cannot settle" : action.shortExplanation).font(.caption2).foregroundStyle(Palette.secondary).frame(height: 30, alignment: .top)
                         }.padding(14).frame(maxWidth: .infinity, alignment: .leading)
                             .background(dayColor(action).opacity(0.055), in: RoundedRectangle(cornerRadius: 13))
                             .overlay(RoundedRectangle(cornerRadius: 13).strokeBorder(model.dailyFilter == action ? dayColor(action) : Palette.line.opacity(0.5), lineWidth: model.dailyFilter == action ? 1.5 : 0.5))
@@ -138,7 +142,7 @@ private struct DailySummaryCard: View {
                 }
             }
             DailyShareBar(report: report, height: 7)
-            Text("From saved words, not a grade. A brief approval can be deliberate; asking for a check does not mean it happened.")
+            Text("An interpretation of saved words, not a grade. A brief approval can be deliberate; asking for a check does not mean it happened.")
                 .font(.caption).foregroundStyle(Palette.secondary).lineSpacing(3)
             }.padding(22)
         }.background(Palette.surface.opacity(0.78)).clipShape(RoundedRectangle(cornerRadius: 22))
@@ -160,7 +164,7 @@ private extension DailyAction {
         case .directed: "Conditions, choices or corrections"
         case .checked: "Tests, questions or explanations"
         case .reported: "Your own attempt or observation"
-        case .other: "Wording the rules cannot settle"
+        case .other: "Awaiting review or meaning unclear"
         }
     }
 }
@@ -307,8 +311,21 @@ private struct DailyEvidenceView: View {
                         Text("“" + (moment.excerpt.isEmpty ? "No visible reply text" : moment.excerpt) + "”").font(.callout).textSelection(.enabled).fixedSize(horizontal: false, vertical: true)
                         Text(model.dailyMomentTitle(moment)).font(.caption2).foregroundStyle(Palette.secondary).lineLimit(1)
                         DisclosureGroup("Why this was counted") {
-                            Text(moment.reason).font(.caption).foregroundStyle(Palette.secondary).frame(maxWidth: .infinity, alignment: .leading).padding(.top, 6)
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text(moment.reason)
+                                if let reading = moment.interpretation {
+                                    ForEach(reading.claims, id: \.action) { claim in
+                                        Text(claim.action.label + ": “" + claim.quote + "”")
+                                    }
+                                    Text("Read by " + reading.engine + " · " + reading.reviewedAt.formatted(date: .abbreviated, time: .shortened))
+                                }
+                                Text("Wording-only comparison: " + moment.wordingAction.label + ". " + moment.wordingReason)
+                            }.font(.caption).foregroundStyle(Palette.secondary).frame(maxWidth: .infinity, alignment: .leading).padding(.top, 6)
                         }.font(.caption)
+                        if let reading = moment.interpretation, reading.claims.count > 1 {
+                            Text("Also: " + reading.claims.filter { $0.action != reading.primary }.map { $0.action.label }.joined(separator: " · "))
+                                .font(.caption).foregroundStyle(Palette.mint)
+                        }
                         HStack(spacing: 18) {
                             Button("Read this exchange →") { model.openDailyMoment(moment) }
                             Button("Original reply ↗") { model.showMemorySource(sessionID: moment.sessionID, messageID: moment.id) }
@@ -335,17 +352,20 @@ private struct DailyReadingExplanation: View {
     var body: some View {
         DisclosureGroup("How Vernier reads your work") {
             VStack(alignment: .leading, spacing: 12) {
-                Label("Daily counts · wording rules", systemImage: "list.bullet")
+                Label(model.contributionLabelsEnabled || model.isShowcase ? "Daily counts · experimental contextual interpretations" : "Daily counts · wording rules", systemImage: "list.bullet")
                     .font(.callout.weight(.medium))
-                Text("These categories look for recognizable phrases in saved replies. They do not use a model and can miss intent, typos or mixed requests. Open ‘Why this was counted’ to see the rule used.")
+                Text(model.contributionLabelsEnabled || model.isShowcase ? "The local model proposes observable acts and a second pass challenges them. The app checks exact sources and attribution, organizes one main role and retains additional signals. Unread replies stay unclear. Open ‘Why this was counted’ for quotes, engine, time and the wording-only comparison." : "The boxes currently use wording rules, not the model. The contextual goal reading below them is separate. Experimental model categories can be tried in local review settings, but have not passed their quality gate; the default remains unchanged.")
                 Label(model.reviewingDecision ? "Conversation review · reading locally now" : !model.localInsightsEnabled ? "Conversation review · off" : model.paused || model.systemSuspended ? "Conversation review · paused" : !model.codexEnabled || !model.conversationMemoryEnabled ? "Conversation review · needs saved chats" : model.automaticDecisionReviews ? "Conversation review · automatic" : "Conversation review · manual", systemImage: "sparkle.magnifyingglass")
                     .font(.callout.weight(.medium))
-                Text("Separately, the local reader uses surrounding messages to suggest a goal and useful next check, then challenges that reading against the sources. Named boundary rules can ask about a changed requirement without a model call. A reading can be wrong; it does not certify that you understood or were steered.")
+                Text("The same review cycle also suggests a goal and useful next check. Named boundary rules can ask about a changed requirement without a model call. Neither a category nor model agreement certifies that you understood or were steered.")
                 if let latest = model.decisionRevisions.max(by: { $0.createdAt < $1.createdAt }) {
                     Text("Latest saved conversation review: " + latest.createdAt.formatted(date: .abbreviated, time: .shortened) + ". This may concern a different day or conversation.")
                 } else { Text("No saved conversation review is available yet.") }
                 if let error = model.decisionError { Text(error).foregroundStyle(Palette.amber) }
                 Text("Automatic reviews wait for 15 seconds of quiet and start at most once every 2 minutes, one conversation at a time. They rest in Low Power Mode; a busy backlog takes longer.")
+                if model.contributionLabelsEnabled || model.isShowcase {
+                    Text("Each cycle attempts up to four unread replies in the bounded packet, not the entire archive. Daily labels use up to 200 related revisions; older replies may remain unclassified. There is no background weight training.")
+                }
                 Text("Floorplan explains the app’s code and recent changes. It does not supply these metrics or read your personal sessions.")
             }.font(.caption).foregroundStyle(Palette.secondary).lineSpacing(3).padding(.top, 12)
         }.font(.callout).padding(20).background(Palette.surface, in: RoundedRectangle(cornerRadius: 18))

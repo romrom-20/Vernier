@@ -56,6 +56,14 @@ import VernierCore
             }
             return
         }
+        if CommandLine.arguments.contains("--contribution-model-probe") {
+            NSApp.setActivationPolicy(.prohibited)
+            Task { @MainActor in
+                do { try await runContributionProbe(); NSApp.terminate(nil) }
+                catch { fputs("CONTRIBUTION PROBE FAILED: \(error)\n", stderr); exit(1) }
+            }
+            return
+        }
         if CommandLine.arguments.contains("--work-model-probe") {
             NSApp.setActivationPolicy(.prohibited)
             Task { @MainActor in

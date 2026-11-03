@@ -12,6 +12,10 @@ public struct ConversationMessage: Codable, Identifiable, Equatable, Sendable {
     public let redactions: Int
     public let textTruncated: Bool
     public let attachmentsOmitted: Bool
+    public init(id: String, sessionID: String, turnID: String, speaker: String, phase: String, text: String, sourceAt: Date?, observedAt: Date, redactions: Int, textTruncated: Bool, attachmentsOmitted: Bool) {
+        self.id = id; self.sessionID = sessionID; self.turnID = turnID; self.speaker = speaker; self.phase = phase; self.text = text
+        self.sourceAt = sourceAt; self.observedAt = observedAt; self.redactions = redactions; self.textTruncated = textTruncated; self.attachmentsOmitted = attachmentsOmitted
+    }
     public var isContinuationCue: Bool { speaker == "user" && PromptSignals.isContinuationCue(text) }
 }
 

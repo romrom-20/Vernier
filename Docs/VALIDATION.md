@@ -1,3 +1,11 @@
+# Optional category experiment — 0.14
+
+Background verification passed **36 shared core groups and 70 isolated app-state checks**, with invented offscreen wide/narrow dashboard, expanded/collapsed disclosure, compact and pill renders. The new checks cover actor/span validation, duplicate targets, retained mixed acts, stale source fingerprints, pending versus withheld categories, source-day lookup after a next-day review, legacy decoding, export, dependency invalidation and erasure. Mode changes invalidate projections, and the unvalidated category experiment remains off initially without changing capture consent. Local XCTest is skipped under Command Line Tools; CI uses Xcode.
+
+Separately, the frozen local-model classifier failed its quality gate. Both tested models matched 9/20 full invented outcomes; main-role and latency results are reported separately in [model evaluation](MODEL_EVALUATION.md). These are not human-agency validation results. No physical mouse/focus test was run on the owner's active desktop. The installed default will retain wording counts and the unchanged goal-reader protocol rather than promote this experiment.
+
+---
+
 # Expandable headers — 0.13.2
 
 Background verification passed **34 shared core groups and 67 isolated app-state checks**, with invented offscreen renders of both collapsed and expanded Across your work. New checks assert returning-click acceptance on the production dashboard host and retained expansion after a daily projection refresh. Headers now use full-width buttons with a 44-point minimum height, visible Show/Hide text and keyboard/accessibility button behavior. No foreground mouse, physical hit testing or focus transition was automated; those require a separate desktop or an agreed owner check. No model prompt, capture path or schema changed.

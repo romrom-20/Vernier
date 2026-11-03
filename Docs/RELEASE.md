@@ -1,4 +1,4 @@
-# Source release — 0.13.2
+# Source release — 0.14.0
 
 Vernier is an experimental native Mac app and working project name. This repository publishes source, synthetic showcase data, tests and documentation under MIT. There is no production, notarized binary release yet.
 
@@ -62,3 +62,6 @@ While using the Mac for other work, run `./Scripts/verify-background.sh` for iso
 
 
 - **0.13.2:** full-width disclosure-header buttons and dashboard first-click acceptance; Across your work expansion survives projection refreshes. Product documentation clarifies the broader human-judgment purpose and the distinction between wording boxes, contextual interpretation and proposed longitudinal decision histories. No new capture, model protocol or schema change.
+
+
+- **0.14.0:** adds an off-by-default contextual-category experiment with mixed acts, exact-source spans, a model challenge, incremental cached batches and explicit unread/withheld states. Default wording counts and the work-12 goal reader remain. An isolated probe compares model and wording labels; a smaller local Qwen model was tested but not automatically selected. New interpretation-quality gates failed, so the experiment is not promoted to the default. Optional payloads retain schema v6 and existing erasure/export controls. No private-session training or weight editing is enabled.

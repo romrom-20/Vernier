@@ -1,3 +1,9 @@
+# An experimental category reader — 0.14
+
+The work-12 goal reader remains unchanged. A separate, off-by-default category experiment uses the selected local model to propose independent acts in human replies, retains mixed signals and caches source-linked interpretations in existing revisions. It has not passed its interpretation-quality gate. Default counts remain wording-based; turning the experiment on never silently substitutes those rules for unread or withheld model labels. [Mechanics and coverage](DAILY_RECAP.md) · [Evaluation](MODEL_EVALUATION.md) · [Improvement and weight-space boundaries](MODEL_IMPROVEMENT.md).
+
+---
+
 # Keep the visual overview — 0.13.1
 
 The dashboard again shows the category cards, hourly chart and reflection panel immediately. The contextual reading follows those visual sections, adding the goal, reported evidence and checkpoint. They are complementary ways into the same saved work; the compact recap keeps its focused reading. This restores information access without changing the model prompt, evidence classification, selection, capture or database schema described below.

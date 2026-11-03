@@ -27,9 +27,9 @@ The everyday feedback should say **what changed, why it may matter to this perso
 
 ## What the existing boxes actually do
 
-The five daily categories are local English wording rules, not model judgments about steering. Each dated human follow-up after an agent reply receives one category. The first matching rule wins: a recognizable personal attempt; a question/explanation/check; an explicit condition or choice; brief continuation; otherwise unclear. Specific guards handle copied agent text, clipped messages, negated checks and short replies to clarification questions. A mixed reply can contain more than its one displayed category; its source and matched rule remain inspectable.
+The default five categories remain English wording rules. An explicit experimental switch now provides contextual model categories, retaining additional acts and marking unread/unsupported replies as unclear. The experiment is off initially because the tested configurations failed their quality gate; it is not a reliable judge of steering. Model agreement and exact citations do not prove semantic accuracy. [Category mechanics](DAILY_RECAP.md).
 
-The separate contextual reader reconstructs a likely goal and checkpoint, challenges the account and checks quoted evidence. Narrow boundary rules can flag an explicit requirement conflicting with a later agent proposal and brief assent. This is a source-backed question about a possible change, not a validated answer to whether the person is being steered overall. There is no all-life AI-impact score or longitudinal human-judgment model today.
+The separate contextual goal reader remains available with its existing review controls. Narrow boundary rules can flag an explicit requirement conflicting with a later agent proposal and brief assent. This is a source-backed question, not a validated answer to whether the person is being steered overall. There is no all-life AI-impact score or longitudinal human-judgment model today.
 
 ## Three measurement layers
 
@@ -82,7 +82,7 @@ The measurement system should be able to produce an informative negative result.
 
 ## What exists today
 
-Version 0.13.2 provides a quiet circle/pill, compact recap, dashboard, read-only Codex history from Conductor, separately enabled conversation memory and local storage controls. Daily cards describe saved follow-up wording, an hourly chart opens exact replies, optional check-ins record clarity and energy, and local contextual readings suggest goals and concrete checkpoints with inspectable sources. The visual overview and contextual explanation complement each other. Model regressions still miss useful readings; the public previews use invented records and hand-authored readings.
+Version 0.14.0 provides a quiet circle/pill, compact recap, dashboard, read-only Codex history from Conductor, separately enabled conversation memory and local storage controls. Daily cards describe saved follow-up wording, an hourly chart opens exact replies, optional check-ins record clarity and energy, and local contextual readings suggest goals and concrete checkpoints with inspectable sources. The visual overview and contextual explanation complement each other. Model regressions still miss useful readings; the public previews use invented records and hand-authored readings.
 
 Connected personal-agent histories, a decision ledger across domains, personal baselines and validated adaptive guidance are not implemented. The app does not predict independent capability, establish lasting change caused by AI, diagnose cognitive dysfunction or calculate an agency/strain/readiness score.
 

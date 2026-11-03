@@ -86,3 +86,8 @@ The conversation map reads at most 500 already saved messages for one session in
 ## Outcome readings in 0.13
 
 The new evidence label is derived from already-consented saved text, copied-text attribution and optional perspectives; it adds no screen, mouse, browser, keyboard, sleep or health capture. New fields are optional in existing saved reading payloads and covered by the existing derived-data retention, export and erase paths. No personal conversations were used in model development probes: the new outcome examples and public previews are invented. The local model still consumes the bounded source packet described in [reasoning](REASONING.md), not an uninterrupted live feed or an edited set of model weights.
+
+
+## Experimental category readings in 0.14
+
+The additional local calls run only when Experimental model categories is enabled and existing content/analysis capture gates permit review. It is off initially. Cached classifications live in optional decision-revision fields and use the same source dependencies, retention, export and erase paths. The model receives bounded already-consented text; this adds no screen, click, keyboard or personal-agent source. Evaluation packets are invented. Downloading an optional model does not upload conversations. No private history or model-generated labels are used for training.

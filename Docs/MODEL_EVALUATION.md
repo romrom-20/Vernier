@@ -1,3 +1,37 @@
+# Contextual-category experiment — 0.14
+
+**The experiment did not meet its quality gate and remains off by default.** Existing wording counts and the work-12 goal reader are preserved. The new reader is a separate task from the earlier contextual-goal benchmarks; their scores are not interchangeable.
+
+The frozen `contribution-1` reader was tested on 12 invented development examples and eight additional self-authored examples not consulted during the final prompt edits. All are now development/regression material, not an independently adjudicated blind validation set. A full match requires the expected main role and every expected additional act; a required unknown/copied-text outcome may be withheld. The old pipeline supplies one wording-based main role only, so compare its primary metric rather than pretending it predicts secondary acts.
+
+With **Gemma 4 E2B QAT**, the final run matched **6/12 + 3/8 = 9/20** full outcomes, also 9/20 main roles. The wording pipeline matched **11/20** main roles. With the downloaded **Qwen 3.5 2B Q4_K_M**, full outcomes were also **9/20**; main roles matched **13/20**, with missing or extra secondary acts accounting for some failures. Neither configuration met the gate. Qwen was not automatically selected for the installed app.
+
+Gemma frequently returned an unclear role for understandable corrections, questions, delegation and personal outcomes. Qwen sometimes supplied a plausible main role but added unsupported acts. A same-model critic often approved weak labels. Exact-source guards caught attribution/structural failures but cannot validate the meaning of a quote. Correctly withholding copied agent text is recorded as an unclear outcome, not proof of comprehension or independence.
+
+Early prototypes used generated quotes or ambiguous batched arrays and performed poorly; source-selected witnesses and fixed target keys removed some structural failure paths. Focused-task and instruction-layout variants still failed semantic checks. An intermediate Gemma configuration matched 7/12 development full outcomes, but this was not the frozen result and is not promoted as a general improvement. These development iterations are not untouched comparisons.
+
+For single-target invented packets, median measured read-plus-challenge duration was approximately **1.4 seconds for Gemma and 1.7 seconds for Qwen**. A separate invented four-target packet took **7.8 seconds** with Gemma and failed its final-target expectation. These are local mixed cold/warm observations, not all-day CPU, GPU, memory or battery validation. Normal capture/review can also use the Mac concurrently.
+
+The existing 4.3 GB Gemma installation was retained. The optional [Qwen tag](https://ollama.com/library/qwen3.5:2b-q4_K_M) downloaded about 1.9 GB through Ollama, which verified its blobs. No paid API, private-session training, weight editing or remote conversation inference was used. The paper's loop-removal result was not replicated or claimed as a fix to our semantic classifier.
+
+Reproduce on a Mac with the chosen local engine installed:
+
+```sh
+./Scripts/build-app.sh
+build/Vernier.app/Contents/MacOS/Vernier --contribution-model-probe \
+  --model gemma4:e2b-it-qat \
+  --cases Tests/Fixtures/contribution-cases.json \
+  --report /tmp/vernier-contributions-main.json
+```
+
+Run `contribution-additional.json` separately; select `qwen3.5:2b-q4_K_M` for the comparison. Reports contain proposed acts, challenged IDs, final labels, baseline comparisons and elapsed times, using invented in-memory messages only. Do not rebuild an executable while it is mapped by a probe; use a copied binary or wait for completion. Known probes initialize isolated settings and prohibit activation; unknown model-probe flags refuse normal app launch.
+
+A failed build was mistakenly followed by an older workspace executable once during development. That process was immediately stopped. Subsequent probes were built under fail-fast commands, copied before execution, guarded for isolated state and checked before inference. The normal installed app was not replaced by that stale executable.
+
+[Improvement mechanism and weight-space limits](MODEL_IMPROVEMENT.md). Unseen natural conversations, independently labeled outcomes, broader languages, sustained usefulness and any relationship to human judgment remain unvalidated.
+
+---
+
 # Outcome reasoning regression — 0.13
 
 The current protocol is `work-12`, with the existing local **Gemma 4 E2B QAT** model and additional host evidence/provenance checks. No weights were changed or downloaded. All inference used invented in-memory packets, serially, with application activation prohibited. No personal archive or connector was opened by the probes. These explicit model experiments are separate from the inference-free background verification script.
