@@ -37,6 +37,9 @@ import VernierCore
     }
     func applicationDidFinishLaunching(_ notification: Notification) {
         if CommandLine.arguments.contains("--render-showcase") {
+            // A render is an offscreen test, never an interactive app launch.
+            // Prohibit activation even while AppKit lays out the synthetic views.
+            NSApp.setActivationPolicy(.prohibited)
             Task { @MainActor in
                 do { try await renderShowcase(); print("SYNTHETIC VIEW RENDERS SAVED"); NSApp.terminate(nil) }
                 catch { fputs("SHOWCASE RENDER FAILED: \(error)\n", stderr); exit(1) }
@@ -44,6 +47,7 @@ import VernierCore
             return
         }
         if CommandLine.arguments.contains("--model-smoke-test") {
+            NSApp.setActivationPolicy(.prohibited)
             Task { @MainActor in
                 do { try await runModelSmokeChecks(); print("MODEL STATE CHECKS PASSED"); NSApp.terminate(nil) }
                 catch { fputs("MODEL STATE CHECKS FAILED: \(error)\n", stderr); exit(1) }
@@ -126,7 +130,7 @@ import VernierCore
             }
         } else if !model.preferences.onboardingComplete { openWelcome() }
         else if model.isShowcase && CommandLine.arguments.contains("--quick-preview") { openQuickPreview() }
-        else if !launchedAtLogin { openStudio(.overview) }
+        else if !launchedAtLogin && !CommandLine.arguments.contains("--background") { openStudio(.overview) }
     }
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         // Activating a menu-bar surface must not also summon a dashboard behind it.

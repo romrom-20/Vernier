@@ -12,3 +12,9 @@ Use Floorplan for substantial Vernier changes so the owner can understand and st
 - Keep `floorplan/` local and out of git. Exclude `.context/`, saved conversations, personal databases, credentials, exports and local configuration from maps, examples and uploads.
 - Use only source code and invented fixtures for public explanations. Do not send personal sessions to Floorplan's Ask bar or another service.
 - Maps are an explanation aid; source review and appropriate tests still determine whether a change works.
+
+# Keep testing out of the owner's desktop
+
+- Use `Scripts/verify-background.sh` while the owner is working. It runs isolated state checks and offscreen synthetic renders at reduced CPU priority, without personal records or model inference.
+- Do not launch an interactive showcase, drive the owner's pointer, or run `verify.sh --ui` during normal work unless the owner explicitly requests foreground testing. A second window on the same Mac is not a separate test desktop.
+- Full native mouse, focus and window behavior requires a separate Mac/VM or an agreed foreground test session. Offscreen renders do not establish those behaviors. Background builds still use some CPU and memory.

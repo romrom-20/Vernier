@@ -1,3 +1,11 @@
+# Recheck while improving the recap — 0.12.2
+
+With the unchanged `work-11` pipeline and installed Gemma 4 E2B QAT, a fresh local run of the same 18 + 6 invented regression examples matched **15/18 and 4/6, 19/24 overall**. The five expected literal boundary cues appeared; no unexpected direction cue appeared in the other nineteen examples. The model still accepted a handoff framing for a build-only case, withheld a returning-fault case, a new symptom and a brief rejection, and accepted a new billing question with the wrong focus/goal outcome. Model calls used invented packets only, with no personal archive or connector.
+
+No prompt, retrieval, scheduler or model was upgraded in this UI change. Variation from the earlier 18/24 run is not a measured quality improvement. All these examples have been used in development; none is a blind test or evidence that Vernier can determine whether a person understood or was steered. This manual inference check is outside the new background-check script.
+
+---
+
 # Current contextual reader — 0.11
 
 The current production path is `DecisionGenerator.review`, using `WorkPrompt.json` (`work-11`). It is different from the historical action-label experiment below. Do not compare its results directly to the older 40-case labels.

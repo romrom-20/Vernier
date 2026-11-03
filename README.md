@@ -15,7 +15,7 @@ Today, the experimental Mac app gathers consented **Codex history from Conductor
 
 The broader question is **human agency in AI-mediated work**: when does delegation expand what you can do, and what remains within your ability to understand, redirect and recover?
 
-**Current version: 0.12.1.** The main and compact views now start with **your day**, rather than the agent's latest instruction. A percentage names recorded follow-ups with brief approvals or continuations; it does not claim a percentage of tasks delegated, brain use or time spent thinking. The dashboard adds active-hour patterns, original-message drill-downs, previous-day recaps and optional personal check-ins. Specific conversation readings and quiet direction questions remain one layer deeper. [How to read the daily recap](Docs/DAILY_RECAP.md) · [How the local reasoning loop works](Docs/REASONING.md).
+**Current version: 0.12.2.** The daily recap shows five named reply counts. Select a category or an hour to see dated examples, the wording rule used, and the original exchange. Color is accompanied by text and symbols. These counts describe recorded follow-ups; they do not measure tasks delegated, time spent thinking or understanding. A separate optional local conversation reader suggests goals, checks and direction questions. [How to read the daily recap](Docs/DAILY_RECAP.md) · [How the local reasoning loop works](Docs/REASONING.md).
 
 ![An invented daily recap with a follow-up breakdown and a pattern to revisit](Docs/images/overview.png)
 

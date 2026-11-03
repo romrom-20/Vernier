@@ -5,7 +5,7 @@ private func dayColor(_ action: DailyAction) -> Color {
     switch action {
     case .continued: Palette.lavender
     case .directed: Palette.mint
-    case .checked: Color(red: 0.22, green: 0.47, blue: 0.64)
+    case .checked: Palette.adaptive(0x86BADB, 0x3877A3)
     case .reported: Palette.amber
     case .other: Palette.secondary.opacity(0.38)
     }
@@ -31,11 +31,11 @@ struct DailyOverviewView: View {
                 if day.followUps > 0 {
                     DailySummaryCard(model: model, report: day)
                     HStack(alignment: .top, spacing: 18) {
-                        DailyRhythmView(report: day).frame(maxWidth: .infinity)
+                        DailyRhythmView(model: model, report: day).frame(maxWidth: .infinity)
                         DailyPatternCard(model: model, report: day).frame(maxWidth: .infinity)
                     }
-                    DailyProjectsView(model: model, report: day)
                     DailyEvidenceView(model: model, report: day).id("daily-breakdown")
+                    DailyProjectsView(model: model, report: day)
                 } else {
                     InstrumentCard {
                         Text("No dated follow-ups to describe yet.").font(.title2)
@@ -56,6 +56,7 @@ struct DailyOverviewView: View {
                         }.padding(.top, 12)
                     }.font(.callout).padding(20).background(Palette.surface, in: RoundedRectangle(cornerRadius: 18))
                 }
+                DailyReadingExplanation(model: model)
                 DailyCheckInView(model: model).id(day.day.key)
                 DisclosureGroup("What these numbers can tell you") {
                     VStack(alignment: .leading, spacing: 9) {
@@ -100,29 +101,56 @@ private struct DailySummaryCard: View {
     @ObservedObject var model: AppModel
     let report: DailyParticipation
     var body: some View {
-        VStack(alignment: .leading, spacing: 22) {
-            HStack(alignment: .top, spacing: 28) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("\(report.percent(.continued) ?? 0)%").font(.system(size: 64, weight: .light, design: .rounded)).tracking(-2).foregroundStyle(Palette.lavender)
-                    Text("handed the next step back").font(.headline)
-                    Text("\(report.count(.continued)) of \(report.followUps) recorded follow-ups").font(.caption).foregroundStyle(Palette.secondary)
-                }.frame(maxWidth: .infinity, alignment: .leading)
-                VStack(alignment: .leading, spacing: 18) {
-                    metric(.directed, subtitle: "constraints, choices or corrections")
-                    metric(.checked, subtitle: "tests, explanations or evidence")
-                }.frame(maxWidth: .infinity, alignment: .leading)
+        VStack(alignment: .leading, spacing: 18) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("Your replies, at a glance.").font(.title2.weight(.medium))
+                Spacer()
+                Text("\(report.followUps) saved follow-ups").font(.callout).foregroundStyle(Palette.secondary)
             }
-            DailyShareBar(report: report, height: 9)
-            Text("A short approval can be a good choice. The useful question is whether you could return to the work and explain the changes that matter.").font(.callout).foregroundStyle(Palette.secondary).lineSpacing(4)
-        }.padding(26).background(Palette.surface, in: RoundedRectangle(cornerRadius: 22))
+            Text("Choose a category to see what you said, when, and why it was counted.")
+                .font(.callout).foregroundStyle(Palette.secondary)
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 10)], spacing: 10) {
+                ForEach(DailyAction.allCases, id: \.self) { action in
+                    Button { model.selectDailyEvidence(action: action) } label: {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack {
+                                Image(systemName: action.symbol).font(.callout).foregroundStyle(dayColor(action))
+                                Spacer()
+                                Text("\(report.count(action))").font(.system(size: 30, weight: .medium, design: .rounded)).monospacedDigit()
+                            }
+                            Text(action.label).font(.callout.weight(.medium)).frame(height: 36, alignment: .top)
+                            Text(action.shortExplanation).font(.caption2).foregroundStyle(Palette.secondary).frame(height: 30, alignment: .top)
+                        }.padding(14).frame(maxWidth: .infinity, alignment: .leading)
+                            .background(dayColor(action).opacity(0.055), in: RoundedRectangle(cornerRadius: 13))
+                            .overlay(RoundedRectangle(cornerRadius: 13).strokeBorder(model.dailyFilter == action ? dayColor(action) : Palette.line.opacity(0.5), lineWidth: model.dailyFilter == action ? 1.5 : 0.5))
+                    }.buttonStyle(.plain).help(action.definition)
+                        .accessibilityLabel("\(action.label), \(report.count(action)). Show matching replies and their times")
+                }
+            }
+            DailyShareBar(report: report, height: 7)
+            Text("From saved words, not a grade. A brief approval can be deliberate; asking for a check does not mean it happened.")
+                .font(.caption).foregroundStyle(Palette.secondary).lineSpacing(3)
+        }.padding(24).background(Palette.surface, in: RoundedRectangle(cornerRadius: 22))
     }
-    private func metric(_ action: DailyAction, subtitle: String) -> some View {
-        Button { model.dailyFilter = action } label: {
-            HStack(alignment: .top, spacing: 12) {
-                Text("\(report.count(action))").font(.system(size: 27, weight: .medium, design: .rounded)).foregroundStyle(dayColor(action)).frame(width: 34, alignment: .leading)
-                VStack(alignment: .leading, spacing: 3) { Text(action.label).font(.callout.weight(.medium)); Text(subtitle).font(.caption).foregroundStyle(Palette.secondary) }
-            }
-        }.buttonStyle(.plain).accessibilityLabel("\(action.label), \(report.count(action)). Show matching follow-ups")
+}
+private extension DailyAction {
+    var symbol: String {
+        switch self {
+        case .continued: "arrow.right"
+        case .directed: "arrow.triangle.branch"
+        case .checked: "magnifyingglass"
+        case .reported: "text.bubble"
+        case .other: "ellipsis"
+        }
+    }
+    var shortExplanation: String {
+        switch self {
+        case .continued: "Brief approval or continuation"
+        case .directed: "Conditions, choices or corrections"
+        case .checked: "Tests, questions or explanations"
+        case .reported: "Your own attempt or observation"
+        case .other: "Wording the rules cannot settle"
+        }
     }
 }
 struct DailyShareBar: View {
@@ -142,26 +170,59 @@ struct DailyShareBar: View {
     }
 }
 private struct DailyRhythmView: View {
+    @ObservedObject var model: AppModel
     let report: DailyParticipation
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
-            Eyebrow(text: "Your rhythm")
-            Text("Where you stepped in.").font(.title3.weight(.medium))
-            HStack(alignment: .bottom, spacing: 5) {
-                ForEach(report.hours) { hour in
-                    VStack(spacing: 5) {
-                        VStack(spacing: 2) {
-                            ForEach(DailyAction.allCases.reversed(), id: \.self) { action in
-                                let n = hour.moments.filter { $0.action == action }.count
-                                if n > 0 { RoundedRectangle(cornerRadius: 2).fill(dayColor(action)).frame(height: CGFloat(n) / CGFloat(max(1, report.hours.map { $0.moments.count }.max() ?? 1)) * 60) }
-                            }
-                        }.frame(height: 70, alignment: .bottom)
-                        Text(hour.at.formatted(.dateTime.hour(.defaultDigits(amPM: .abbreviated)))).font(.system(size: 9)).foregroundStyle(Palette.secondary).lineLimit(1).minimumScaleFactor(0.7)
-                    }.frame(maxWidth: .infinity).help("\(hour.at.formatted(date: .omitted, time: .shortened)): \(hour.moments.count) saved follow-ups")
+            Eyebrow(text: "When you replied")
+            Text("Pick an hour. See the moments.").font(.title3.weight(.medium))
+            ScrollView(.horizontal) {
+                HStack(alignment: .bottom, spacing: 8) {
+                    ForEach(report.hours) { hour in hourButton(hour) }
                 }
-            }.frame(height: 92)
-            Text("Counts by active hour · gaps between shown hours are omitted. Colors match the breakdown below.").font(.caption2).foregroundStyle(Palette.secondary)
+            }
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 12) { legend }
+                VStack(alignment: .leading, spacing: 6) { legend }
+            }
+            Text("Reply counts, not time spent. Only hours with saved replies are shown.").font(.caption2).foregroundStyle(Palette.secondary)
         }.padding(20).frame(maxWidth: .infinity, alignment: .leading).background(Palette.surface, in: RoundedRectangle(cornerRadius: 18))
+    }
+    private var largestHour: Int { max(1, report.hours.map { $0.moments.count }.max() ?? 1) }
+    private func hourButton(_ hour: DailyHour) -> some View {
+        Button { model.selectDailyEvidence(hour: hour.at) } label: {
+            VStack(spacing: 5) {
+                Text("\(hour.moments.count)").font(.caption2.monospacedDigit()).foregroundStyle(Palette.text)
+                VStack(spacing: 2) {
+                    ForEach(Array(DailyAction.allCases.reversed()), id: \.self) { action in
+                        hourSegment(hour, action: action)
+                    }
+                }.frame(height: 68, alignment: .bottom)
+                Text(hour.at.formatted(.dateTime.hour(.defaultDigits(amPM: .abbreviated)))).font(.system(size: 10)).foregroundStyle(Palette.secondary).lineLimit(1)
+            }.padding(5).frame(width: 54)
+                .background(model.dailyHour == hour.at ? Palette.inset : .clear, in: RoundedRectangle(cornerRadius: 7))
+        }.buttonStyle(.plain).accessibilityLabel(hourLabel(hour))
+    }
+    @ViewBuilder private func hourSegment(_ hour: DailyHour, action: DailyAction) -> some View {
+        let count = hour.moments.filter { $0.action == action }.count
+        if count > 0 {
+            RoundedRectangle(cornerRadius: 2).fill(dayColor(action)).frame(height: CGFloat(count) / CGFloat(largestHour) * 58)
+        }
+    }
+    private func hourLabel(_ hour: DailyHour) -> String {
+        let counts = DailyAction.allCases.compactMap { action -> String? in
+            let count = hour.moments.filter { $0.action == action }.count
+            return count > 0 ? "\(action.label): \(count)" : nil
+        }.joined(separator: ", ")
+        return hour.at.formatted(date: .omitted, time: .shortened) + ": " + counts + ". Show these replies"
+    }
+    @ViewBuilder private var legend: some View {
+        ForEach(DailyAction.allCases.filter { report.count($0) > 0 }, id: \.self) { action in
+            HStack(spacing: 4) {
+                Image(systemName: action.symbol).foregroundStyle(dayColor(action))
+                Text(action.label).foregroundStyle(Palette.secondary)
+            }.font(.caption2).fixedSize()
+        }
     }
 }
 private struct DailyPatternCard: View {
@@ -203,41 +264,80 @@ private struct DailyProjectsView: View {
 private struct DailyEvidenceView: View {
     @ObservedObject var model: AppModel
     let report: DailyParticipation
-    @State private var expanded = false
+    @State private var visibleCount = 3
+    private var values: [DailyMoment] { Array(model.dailyMatchingMoments.reversed()) }
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack {
-                Eyebrow(text: "The breakdown")
+        VStack(alignment: .leading, spacing: 18) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Eyebrow(text: "What happened when")
+                    Text(model.dailyFilter?.label ?? "Your saved replies").font(.title3.weight(.medium))
+                    Text(selectionCaption).font(.caption).foregroundStyle(Palette.secondary)
+                }
                 Spacer()
-                if model.dailyFilter != nil { Button("Show all") { model.dailyFilter = nil }.font(.caption).buttonStyle(.plain).foregroundStyle(Palette.mint) }
-            }
-            HStack(spacing: 14) {
-                ForEach(DailyAction.allCases, id: \.self) { action in
-                    Button { model.dailyFilter = model.dailyFilter == action ? nil : action; expanded = true } label: {
-                        HStack(spacing: 5) { Circle().fill(dayColor(action)).frame(width: 6, height: 6); Text("\(action.label) \(report.count(action))").font(.caption2).foregroundStyle(model.dailyFilter == action ? Palette.text : Palette.secondary) }
-                    }.buttonStyle(.plain)
+                if model.dailyFilter != nil || model.dailyHour != nil {
+                    Button("All replies") { model.selectDailyEvidence() }.font(.caption).buttonStyle(QuietButtonStyle())
                 }
             }
-            DisclosureGroup(model.dailyFilter?.label ?? "See the follow-ups behind these numbers", isExpanded: $expanded) {
-                VStack(alignment: .leading, spacing: 12) {
-                    if let action = model.dailyFilter { Text(action.definition).font(.caption).foregroundStyle(Palette.secondary) }
-                    let values = report.moments.filter { model.dailyFilter == nil || $0.action == model.dailyFilter }.reversed()
-                    ForEach(Array(values.prefix(12))) { moment in
-                        HStack(alignment: .top, spacing: 12) {
-                            Circle().fill(dayColor(moment.action)).frame(width: 7, height: 7).padding(.top, 5)
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text(moment.excerpt).font(.callout).lineLimit(3)
-                                Text(moment.at.formatted(date: .omitted, time: .shortened) + " · " + moment.action.label + (moment.knownCopiedText ? " · known copied agent text" : "")).font(.caption2).foregroundStyle(Palette.secondary)
-                                Button("Read original ↗") { model.showMemorySource(sessionID: moment.sessionID, messageID: moment.id) }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.mint)
-                            }
-                            Spacer()
-                        }
+            if let action = model.dailyFilter {
+                Label(action.definition, systemImage: action.symbol).font(.caption).foregroundStyle(Palette.secondary).fixedSize(horizontal: false, vertical: true)
+            }
+            if values.isEmpty {
+                Text("No saved follow-ups matched this selection. That does not establish that the activity never happened.").font(.callout).foregroundStyle(Palette.secondary)
+            }
+            ForEach(values.prefix(visibleCount)) { moment in
+                HStack(alignment: .top, spacing: 16) {
+                    VStack(spacing: 8) {
+                        Text(moment.at.formatted(date: .omitted, time: .shortened)).font(.caption.monospacedDigit()).foregroundStyle(Palette.secondary)
+                        Image(systemName: moment.action.symbol).foregroundStyle(dayColor(moment.action))
+                    }.frame(width: 66)
+                    VStack(alignment: .leading, spacing: 9) {
+                        Text(moment.action.label).font(.caption.weight(.medium)).foregroundStyle(dayColor(moment.action))
+                        Text("“" + (moment.excerpt.isEmpty ? "No visible reply text" : moment.excerpt) + "”").font(.callout).textSelection(.enabled).fixedSize(horizontal: false, vertical: true)
+                        Text(model.dailyMomentTitle(moment)).font(.caption2).foregroundStyle(Palette.secondary).lineLimit(1)
+                        DisclosureGroup("Why this was counted") {
+                            Text(moment.reason).font(.caption).foregroundStyle(Palette.secondary).frame(maxWidth: .infinity, alignment: .leading).padding(.top, 6)
+                        }.font(.caption)
+                        HStack(spacing: 18) {
+                            Button("Read this exchange →") { model.openDailyMoment(moment) }
+                            Button("Original reply ↗") { model.showMemorySource(sessionID: moment.sessionID, messageID: moment.id) }
+                        }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.mint)
                     }
-                    if values.count > 12 { Text("Showing the latest twelve matching follow-ups. All loaded matches count in the breakdown.").font(.caption2).foregroundStyle(Palette.secondary) }
-                }.padding(.top, 12)
-            }.font(.caption)
-        }.padding(20).background(Palette.surface, in: RoundedRectangle(cornerRadius: 18))
-        .onChange(of: model.dailyFilter) { expanded = model.dailyFilter != nil }
+                    Spacer(minLength: 0)
+                }.padding(.vertical, 5)
+                if moment.id != values.prefix(visibleCount).last?.id { Divider() }
+            }
+            if values.count > visibleCount {
+                Button("Show more replies · \(values.count - visibleCount) remaining") { visibleCount += 12 }
+                    .buttonStyle(QuietButtonStyle()).font(.caption)
+            }
+        }.padding(22).background(Palette.surface, in: RoundedRectangle(cornerRadius: 18))
+            .onChange(of: model.dailyEvidenceRevision) { visibleCount = 12 }
+    }
+    private var selectionCaption: String {
+        let hour = model.dailyHour.map { " · hour starting " + $0.formatted(date: .omitted, time: .shortened) } ?? ""
+        return "\(values.count) of \(report.followUps) saved follow-ups" + hour + " · latest first"
+    }
+}
+private struct DailyReadingExplanation: View {
+    @ObservedObject var model: AppModel
+    var body: some View {
+        DisclosureGroup("How Vernier reads your work") {
+            VStack(alignment: .leading, spacing: 12) {
+                Label("Daily counts · wording rules", systemImage: "list.bullet")
+                    .font(.callout.weight(.medium))
+                Text("These categories look for recognizable phrases in saved replies. They do not use a model and can miss intent, typos or mixed requests. Open ‘Why this was counted’ to see the rule used.")
+                Label(model.reviewingDecision ? "Conversation review · reading locally now" : !model.localInsightsEnabled ? "Conversation review · off" : model.paused || model.systemSuspended ? "Conversation review · paused" : !model.codexEnabled || !model.conversationMemoryEnabled ? "Conversation review · needs saved chats" : model.automaticDecisionReviews ? "Conversation review · automatic" : "Conversation review · manual", systemImage: "sparkle.magnifyingglass")
+                    .font(.callout.weight(.medium))
+                Text("Separately, the local reader uses surrounding messages to suggest a goal and useful next check, then challenges that reading against the sources. Named boundary rules can ask about a changed requirement without a model call. A reading can be wrong; it does not certify that you understood or were steered.")
+                if let latest = model.decisionRevisions.max(by: { $0.createdAt < $1.createdAt }) {
+                    Text("Latest saved conversation review: " + latest.createdAt.formatted(date: .abbreviated, time: .shortened) + ". This may concern a different day or conversation.")
+                } else { Text("No saved conversation review is available yet.") }
+                if let error = model.decisionError { Text(error).foregroundStyle(Palette.amber) }
+                Text("Automatic reviews wait for 15 seconds of quiet and start at most once every 2 minutes, one conversation at a time. They rest in Low Power Mode; a busy backlog takes longer.")
+                Text("Floorplan explains the app’s code and recent changes. It does not supply these metrics or read your personal sessions.")
+            }.font(.caption).foregroundStyle(Palette.secondary).lineSpacing(3).padding(.top, 12)
+        }.font(.callout).padding(20).background(Palette.surface, in: RoundedRectangle(cornerRadius: 18))
     }
 }
 private struct DailyCheckInView: View {

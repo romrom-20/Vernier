@@ -35,6 +35,8 @@ enum StudioPage: String, CaseIterable, Identifiable {
     @Published var dailyPreviousReport: DailyParticipation?
     @Published var dailyDayOffset = 0
     @Published var dailyFilter: DailyAction?
+    @Published var dailyHour: Date?
+    @Published var dailyEvidenceRevision = 0
     @Published var dailyConversationExpanded = false
     @Published var dailyLoading = false
     @Published var dailyError: String?

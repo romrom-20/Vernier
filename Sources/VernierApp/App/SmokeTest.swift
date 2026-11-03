@@ -128,6 +128,12 @@ extension AppCoordinator {
         studio?.orderOut(nil)
         hoverHost.handleHoverEntry()
         refreshPresence()
+        // Reappearing from the hidden compact host schedules an AppKit layout pass.
+        // Inspect the hit target after that pass, not its previous compact frame.
+        try await waitUntil("Dashboard controls finish layout after Studio hides") {
+            hoverHost.layoutSubtreeIfNeeded()
+            return self.pill?.isVisible == true && !hoverHost.dashboardButton.isHidden && hoverHost.bounds.width >= 110
+        }
         let dashboardButton = hoverHost.dashboardButton
         let dashboardPoint = hoverHost.convert(NSPoint(x: dashboardButton.frame.midX, y: dashboardButton.frame.midY), to: hoverHost.superview)
         try check(!dashboardButton.isHidden && hoverHost.hitTest(dashboardPoint) === dashboardButton && dashboardButton !== captureButton,
@@ -185,6 +191,7 @@ extension AppCoordinator {
         model.library = ShowcaseFixtures.workLibrary(now: yesterday.addingTimeInterval(12 * 3600))
         model.dailyDayOffset = 0; model.clearDailyParticipation()
         await model.loadDailyParticipation()
+        try await waitUntil("The previous-day fixture is ready for the menu shortcut") { model.quickRecapIsPreviousDay }
         togglePopover()
         openStudioAction()
         try await waitUntil("The menu shortcut opens the same previous-day recap as the compact button") {
@@ -266,6 +273,19 @@ extension AppCoordinator {
         let dailyGeneration = showcase.dailyGeneration
         await showcase.loadDailyParticipation()
         try check(showcase.dailyGeneration == dailyGeneration, "Compact and full daily views reuse an unchanged projection")
+        showcase.selectDailyEvidence(action: .directed)
+        let selectionRevision = showcase.dailyEvidenceRevision
+        try check(showcase.dailyMatchingMoments.allSatisfy { $0.action == .directed } && showcase.dailyMatchingMoments.count == showcase.dailyReport?.count(.directed), "A recap metric opens exactly its matching saved replies")
+        showcase.selectDailyEvidence(action: .directed)
+        try check(showcase.dailyEvidenceRevision > selectionRevision, "Selecting the same recap metric again still navigates to its evidence")
+        if let hour = showcase.dailyReport?.hours.first {
+            showcase.selectDailyEvidence(hour: hour.at)
+            try check(showcase.dailyFilter == nil && Set(showcase.dailyMatchingMoments.map(\.id)) == Set(hour.moments.map(\.id)), "An hour opens its own replies and clears an earlier category filter")
+        }
+        showcase.chooseDay(-1)
+        try check(showcase.dailyFilter == nil && showcase.dailyHour == nil, "Changing the day clears evidence filters from the previous day")
+        showcase.chooseDay(0)
+        await showcase.loadDailyParticipation()
         if let moment = showcase.dailyReport?.moments.first {
             showcase.openDailyMoment(moment)
             try check(!showcase.dailyConversationExpanded && showcase.workDetailExpanded && showcase.briefSessionID == moment.sessionID && showcase.storyFocusID == moment.id,
@@ -273,7 +293,7 @@ extension AppCoordinator {
             showcase.dailyConversationExpanded = false; showcase.workDetailExpanded = false; showcase.selectDecisionSession(showcase.library.sessions.first!.id)
         }
         showcase.clearDailyParticipation()
-        try check(showcase.dailyReport == nil && showcase.dailyReflections.isEmpty && showcase.dailyLoadedKey == nil, "Daily erasure clears the recap and private check-ins")
+        try check(showcase.dailyReport == nil && showcase.dailyReflections.isEmpty && showcase.dailyLoadedKey == nil && showcase.dailyHour == nil && showcase.dailyFilter == nil, "Daily erasure clears the recap, evidence filters and private check-ins")
         try check(showcase.workOverview?.workspaces == 3 && showcase.workOverview?.count(.goAhead) == 1 && showcase.workOverview?.failureCount == 1,
                   "Work overview spans workspaces with source-linked wording cues and failure status")
         try check(showcase.participationMoments.contains { $0.kind == .requestedEvidence } && showcase.participationMoments.contains { $0.kind == .setBoundary },

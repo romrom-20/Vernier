@@ -1,5 +1,16 @@
 # Validation and evidence
 
+## Dated recap evidence and background testing — 0.12.2
+
+The final foreground run, completed before switching to the noninterrupting workflow, passed **32 shared core groups, 52 isolated model-state checks and 100 native-window checks**. New assertions connect category counts and source hours to exact reply IDs, retain actual rule/guard explanations, clear old-day filters and make repeated category clicks navigate again. A first native run inspected a reappearing control before AppKit completed layout; a bounded layout wait fixed that test timing. A later run opened the menu before its asynchronously loaded previous-day fixture was ready; an explicit readiness wait made that requirement testable. These failed runs are not counted as passes.
+
+Using invented in-memory records, native accessibility actions selected Added direction and displayed its two replies, expanded the actual matched “Keep” explanation, selected an hour containing one continuation, and opened that exact original message in Memory. This is a limited interaction check, not a comprehensive pointer or multi-display test.
+
+While the owner uses the Mac, **Scripts/verify-background.sh** is now the default. It runs core/state/build checks at reduced CPU priority and renders invented SwiftUI screens offscreen with application activation prohibited. The renderer checks that the app is inactive and has no visible or key windows. No personal archive, live connector or inference request is used. This workflow still uses local CPU/memory and does not prove physical hover/focus behavior. Full foreground UI tests remain opt-in or need a separate Mac/VM.
+
+The installed Gemma engine was also rerun on the same 24 invented regression examples with unchanged prompt `work-11`: **19/24 expected outcomes**, five expected literal boundary cues and no unexpected cue among the other nineteen. Five cases still failed expected interpretation checks. These previously used fixtures are not a blind evaluation, and this rerun is not evidence of a model improvement or validated comprehension detection. See [model evaluation](MODEL_EVALUATION.md).
+
+
 This document separates executed checks from remaining acceptance work. It contains no personal conversation records or workstation-specific session statistics.
 
 ## Executed locally

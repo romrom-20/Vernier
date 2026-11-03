@@ -25,3 +25,8 @@ Useful questions to ask the map include: “Why does the compact view show yeste
 Floorplan's automatic Swift analysis is limited. The first Vernier scan found files but no file-to-file import links. Important connections are therefore added from source inspection; they are not claimed to be mechanically proven or complete. Its automatic health checks also do not replace a native-app security review.
 
 Only repository source and invented fixtures belong in this map. Private `.context` files, conversation archives, personal notes, credentials and exports are excluded. The map and its server run locally. If you use its Ask bar, the chosen coding assistant can read project source and send it through your existing assistant account; that is distinct from local map rendering. Do not put personal sessions into questions, enable a new provider without consent, or publish the map without reviewing it.
+
+
+## Verify without interrupting normal work
+
+`./Scripts/verify-background.sh` runs the build, core and isolated model-state checks at reduced CPU priority, then saves wide, narrow and dark synthetic SwiftUI renders under ignored `.context/`. Render processes cannot activate and check that no test window is visible or key. They use invented records, separate preferences and no connector or model inference. This is the default while the owner uses the Mac. It still consumes local resources; physical mouse and native focus tests need an agreed foreground session or a separate Mac/VM. Floorplan can explain the paths without operating the desktop.

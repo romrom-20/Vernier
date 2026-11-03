@@ -11,7 +11,7 @@ extension AppModel {
     }
     func clearDailyParticipation() {
         dailyGeneration += 1; dailyReport = nil; dailyPreviousReport = nil; dailyLoadedKey = nil; dailyLoading = false; dailyError = nil
-        dailyReflections = []; dailyFilter = nil; dailyConversationExpanded = false
+        dailyReflections = []; dailyFilter = nil; dailyHour = nil; dailyEvidenceRevision += 1; dailyConversationExpanded = false
     }
     func loadDailyParticipation() async {
         let key = dailyLoadKey
@@ -43,8 +43,17 @@ extension AppModel {
         }
     }
     func chooseDay(_ offset: Int) {
-        dailyDayOffset = min(0, max(dailyOldestOffset, offset)); dailyReport = nil; dailyFilter = nil
+        dailyDayOffset = min(0, max(dailyOldestOffset, offset)); dailyReport = nil; dailyFilter = nil; dailyHour = nil
         Task { await loadDailyParticipation() }
+    }
+    /// Every selection is a navigation event, including selecting the same category again.
+    func selectDailyEvidence(action: DailyAction? = nil, hour: Date? = nil) {
+        dailyFilter = action; dailyHour = hour; dailyEvidenceRevision += 1
+    }
+    var dailyMatchingMoments: [DailyMoment] { dailyReport?.matchingMoments(action: dailyFilter, hour: dailyHour) ?? [] }
+    func dailyMomentTitle(_ moment: DailyMoment) -> String {
+        guard let session = library.sessions.first(where: { $0.id == moment.sessionID }) else { return "Saved conversation" }
+        return "Conversation · " + decisionTitle(session)
     }
     var dailyReflection: DailyReflection? { dailyReflections.first { $0.dayKey == selectedWorkDay.key } }
     func saveDailyCheckIn(day: WorkDay, clarity: DailyReflection.Clarity?, energy: DailyReflection.Energy?, note: String) async -> Bool {

@@ -1,3 +1,11 @@
+# Source evidence behind the recap — 0.12.2
+
+`DailyParticipation` now retains a short explanation of the wording or guard actually used for each counted reply. Category and source-hour selection use the same bounded day projection, without an additional capture source or database migration. `DailyModel` owns both filters and a navigation revision, so repeated selection of the same metric still opens its evidence. Day changes and erasure clear filters. `DailyView` shows dated excerpts, rule explanations and routes to exact records or the surrounding exchange.
+
+The backend remains an in-process Swift actor over local SQLite, schema v6. There is no Postgres client, hosted API, account sync or Supabase project configured. SQLite remains appropriate for a private single-device archive ([official use guidance](https://www.sqlite.org/whentouse.html)). If the product later needs optional account/device sync, [Supabase’s Postgres service](https://supabase.com/docs/guides/database/overview) is a possible design choice. That would require a defined sync contract, separate opt-in for transmitted records, access controls and deletion/retention propagation. It is proposed work, not a current connection.
+
+---
+
 # Daily participation layer — 0.12
 
 `DailyStore` queries a bounded source-time day slice from the full SQLite archive, with one prior message where needed to preserve midnight context. `DailyParticipation` orders messages, annotates known text reuse, assigns mutually exclusive wording categories and projects active-hour counts, workspace groups and candidate reflection patterns. `DailyModel` computes off the main actor, keys projections to day/source changes and rejects stale results. Compact and full views share that projection; conversation interpretation remains a separate layer.

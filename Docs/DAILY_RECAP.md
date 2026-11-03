@@ -8,7 +8,7 @@ The denominator is **recorded human follow-ups after an agent reply**, within th
 
 Five mutually exclusive wording categories form the breakdown:
 
-- **Handed back:** recognizable brief assent or continuation with no added requirement. A bare answer to an agent's clarification question is guarded. This is a narrow proxy, not all delegation.
+- **Asked AI to continue:** recognizable brief assent or continuation with no added requirement. A bare answer to an agent's clarification question is guarded. This is a narrow proxy, not all delegation.
 - **Added direction:** recognizable constraints, choices or corrections.
 - **Asked to check:** requests for tests, explanations, comparisons or evidence. Negated instructions such as “do not test” do not count as check requests. Asking is distinct from performing the check.
 - **Reported a result:** a recognizable first-person attempt or outcome report. The app does not verify the report.
@@ -20,9 +20,9 @@ A conversation with an initial request and agent replies but no saved follow-up 
 
 ## The useful part
 
-An active-hour chart shows counts, not time on task or fatigue. Gaps between shown active hours are omitted. A continuation stretch is counted within one conversation; it does not assert a shared task or missing thought. Brief repair requests are a wording pattern, not proof that the same bug returned. The recap offers a concrete exchange to revisit: what caused the change, why was that approach chosen, and what observable behavior would show it worked?
+An active-hour chart shows counts, not time on task or fatigue. Every shown hour is a button that opens that hour’s source replies. A visible legend, symbols and accessible count labels accompany color. Selecting an hour clears the category filter; choosing a category shows that category across the selected day. Re-selecting the same category still returns to its evidence. Changing the day or erasing memory clears both filters. Gaps between shown active hours are omitted. A continuation stretch is counted within one conversation; it does not assert a shared task or missing thought. Brief repair requests are a wording pattern, not proof that the same bug returned. The recap offers a concrete exchange to revisit: what caused the change, why was that approach chosen, and what observable behavior would show it worked?
 
-Selecting a number filters its original follow-ups. Each follow-up opens its exact original record. Selecting a pattern opens its own source anchor and surrounding map; it does not expand an unavailable model reading. Workspace groups show a representative conversation goal, rather than pretending the group is a single feature. The existing optional local model can help interpret a particular exchange; the daily percentages do not depend on its classifications.
+Selecting any of the five named counts opens matching replies in **What happened when**, with source times, a conversation label and **Why this was counted**. The explanation names the actual matched wording or the copied-text, clipping or clarification guard. It is a rule explanation, not a contextual judgment about intent. Replies appear latest first, with a small initial preview and a Show more control that can reach all loaded matches. Each reply opens its exact original record or its surrounding exchange. Selecting a pattern opens its own source anchor and surrounding map; it does not expand an unavailable model reading. Workspace groups show a representative conversation goal, rather than pretending the group is a single feature. The existing optional local model can help interpret a particular exchange; the daily percentages do not depend on its classifications.
 
 An optional **check-in** records the person's own clarity, energy and short note for that date. These are self-reports, not inferred health or understanding measurements. They are kept separately from generated readings.
 
@@ -37,3 +37,10 @@ Calendar days use the current local time zone and respect daylight-saving change
 Schema v6 adds a source-time index and a separate daily-reflection table, preserving existing sessions, messages, notes and readings. Counts are recomputed in memory. Check-ins are included in local export, age out with retention, and are removed by conversation-memory erasure and full deletion. In-flight results are invalidated on erasure; a generation guard prevents an old check-in save from resurrecting after erasure.
 
 This is a first descriptive daily recap. Validated prompt-quality scores, task/subfield percentages, learning gains, independently demonstrated understanding, all-day cognitive-health measurements and cross-tool coverage are not implemented.
+
+
+## Two layers, explained in the screen — 0.12.2
+
+**How Vernier reads your work** explains that daily counts use wording rules while contextual conversation review is separate. It reports the current review mode and the latest available saved review time, explicitly warning that the review may belong to another day or conversation. The existing local reader, prompt, schedule and schema are unchanged. There is no new cognitive or prompt-quality score.
+
+The sidebar names the capture state, says whether saved chats or metadata are being collected, and opens connection settings. Running in the background means Vernier stays open while the Mac is awake; it rests during sleep. Open at login means macOS starts it at sign-in, not that it runs while the machine is off.

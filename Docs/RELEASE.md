@@ -1,4 +1,4 @@
-# Source release — 0.12.1
+# Source release — 0.12.2
 
 Vernier is an experimental native Mac app and working project name. This repository publishes source, synthetic showcase data, tests and documentation under MIT. There is no production, notarized binary release yet.
 
@@ -6,7 +6,7 @@ Vernier is an experimental native Mac app and working project name. This reposit
 
 `./Scripts/build-app.sh` creates `build/Vernier.app` with a generated caliper icon and ad-hoc local signature. `./Scripts/showcase.sh` opens it with separate preferences and in-memory synthetic records. Showcase never opens the personal archive, starts a connector or registers a login item.
 
-For a normal local installation, Quit an existing instance and run `./Scripts/install-local.sh`. It installs at `~/Applications/Vernier.app`, backs up the previous same-ID bundle under the ignored `.context/` directory, and does not replace unrelated applications. Open from Finder or `open "$HOME/Applications/Vernier.app"`. Source builds require macOS and Swift 6+; macOS 14 is the deployment target rather than a completed compatibility-test claim.
+For a normal local installation, Quit an existing instance and run `./Scripts/install-local.sh`. It installs at `~/Applications/Vernier.app`, backs up the previous same-ID bundle under the ignored `.context/` directory, and does not replace unrelated applications. Open from Finder or `open "$HOME/Applications/Vernier.app"`. With onboarding already completed, `open -g "$HOME/Applications/Vernier.app" --args --background` starts the normal saved capture settings without opening Studio. It does not change consent or launch-at-login preferences. Source builds require macOS and Swift 6+; macOS 14 is the deployment target rather than a completed compatibility-test claim.
 
 ## Permissions and lifecycle
 
@@ -41,3 +41,9 @@ The additional development flag `--enable-local-insights` enables this local ana
 - **0.12.0:** Daily recap becomes the first layer in Studio and quick view: a named follow-up denominator, wording breakdown, active-hour pattern, exact-source drill-down, previous days and optional clarity/energy check-ins. Initial requests with agent replies but no follow-up are kept separate. Schema v5→v6 preserves canonical records. These are descriptive source patterns, not prompt-quality, task-completion or cognitive-health scores.
 
 - **0.12.1:** The compact panel retains yesterday’s fuller recap after midnight while today gets started. Short sentences explain the observations, one reflection question replaces the percentage/bar display, and one main button opens the displayed day. Loading, unavailable and disabled states name the cause. No schema, capture permission or inference-provider change.
+
+
+- **0.12.2:** named reply counts replace a dominant continuation percentage. Category and hour selections open dated source evidence, actual rule explanations and exact-message/exchange navigation. The chart has a visible legend and accessible counts. The sidebar explains capture and local residence; a disclosure distinguishes wording counts from contextual AI review. The reasoning protocol and SQLite schema v6 remain unchanged.
+
+
+While using the Mac for other work, run `./Scripts/verify-background.sh` for isolated state checks and offscreen synthetic previews. Interactive showcase launches and `verify.sh --ui` can move focus and are reserved for a separate desktop or an agreed foreground test session. A second app window is not desktop isolation.

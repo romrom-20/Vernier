@@ -19,7 +19,7 @@ public enum DailyAction: String, CaseIterable, Sendable {
     case continued, directed, checked, reported, other
     public var label: String {
         switch self {
-        case .continued: "Handed back"
+        case .continued: "Asked AI to continue"
         case .directed: "Added direction"
         case .checked: "Asked to check"
         case .reported: "Reported a result"
@@ -46,6 +46,8 @@ public struct DailyMoment: Identifiable, Sendable {
     public let agentID: String?
     public let repairOnly: Bool
     public let knownCopiedText: Bool
+    /// Explains the actual wording/guard used, separately from any contextual model reading.
+    public let reason: String
 }
 public struct DailyProject: Identifiable, Sendable {
     public let id: String
@@ -91,6 +93,10 @@ public struct DailyParticipation: Sendable {
     public func percent(_ action: DailyAction) -> Int? {
         followUps == 0 ? nil : Int((100.0 * Double(count(action)) / Double(followUps)).rounded())
     }
+    public func matchingMoments(action: DailyAction? = nil, hour: Date? = nil) -> [DailyMoment] {
+        let candidates = hour.map { selected in hours.first { $0.at == selected }?.moments ?? [] } ?? moments
+        return candidates.filter { action == nil || $0.action == action }
+    }
     public var longestContinuation: [DailyMoment] {
         var best: [DailyMoment] = []
         for group in Dictionary(grouping: moments, by: \.sessionID).values {
@@ -133,12 +139,16 @@ public struct DailyParticipation: Sendable {
                 guard message.speaker == "user", let agent = previousAgent, let time = message.sourceAt, day.contains(time), let source = annotated[message.id] else { continue }
                 let text = humanText(source.novelText)
                 let copied = source.origin == .reusedAgent
-                var action = copied || message.textTruncated ? DailyAction.other : classify(text)
+                var (action, reason) = classification(text)
+                if copied { action = .other; reason = "Matches known earlier agent text, so it is not counted as your independent direction." }
+                else if message.textTruncated { action = .other; reason = "The saved reply is clipped, so its complete wording cannot be classified." }
                 if action == .continued, SessionDisplay.visibleText(agent.text).trimmingCharacters(in: .whitespacesAndNewlines).hasSuffix("?"),
-                   !PromptSignals.isContinuationCue(text), !matches(#"\b(?:go ahead|proceed|continue|do it|finish|keep going)\b"#, text) { action = .other }
+                   !PromptSignals.isContinuationCue(text), !matches(#"\b(?:go ahead|proceed|continue|do it|finish|keep going)\b"#, text) {
+                    action = .other; reason = "A short answer after an agent question could be a clarification, so it is not counted as asking AI to continue."
+                }
                 moments.append(.init(id: message.id, sessionID: sessionID, workspaceID: workspace[sessionID] ?? sessionID, at: time,
                     action: action, excerpt: String(humanText(message.text).prefix(220)), agentID: agent.id,
-                    repairOnly: !copied && !message.textTruncated && isBriefRepair(text), knownCopiedText: copied))
+                    repairOnly: !copied && !message.textTruncated && isBriefRepair(text), knownCopiedText: copied, reason: reason))
             }
         }
         moments.sort { $0.at == $1.at ? $0.id < $1.id : $0.at < $1.at }
@@ -169,15 +179,21 @@ public struct DailyParticipation: Sendable {
         matches(#"^\s*(?:(?:please|again|it['’]s|that['’]s)\s+)*(?:fix (?:it|this|that)|still (?:broken|not working)|same (?:bug|error|problem)|try again)[.!\s]*$"#, text)
     }
     public static func classify(_ text: String) -> DailyAction {
-        guard !text.isEmpty, !isBriefRepair(text) else { return .other }
+        classification(text).0
+    }
+    private static func classification(_ text: String) -> (DailyAction, String) {
+        guard !text.isEmpty else { return (.other, "No visible wording remains after app-added context is removed.") }
+        guard !isBriefRepair(text) else { return (.other, "A brief repair request names no specific expected behavior. It is kept separate from added direction.") }
         // Negated assertions and questions are not a report of a completed check.
-        if matches(#"\bI (?:tried|tested|replayed|reproduced|checked|ran)\b"#, text), !matches(#"\b(?:haven['’]t|have not|didn['’]t|did not|couldn['’]t|could not|if I|when I|should I|can I|before I)\b"#, text) { return .reported }
+        if let hit = text.range(of: #"\bI (?:tried|tested|replayed|reproduced|checked|ran)\b"#, options: [.regularExpression, .caseInsensitive]), !matches(#"\b(?:haven['’]t|have not|didn['’]t|did not|couldn['’]t|could not|if I|when I|should I|can I|before I)\b"#, text) { return (.reported, "Matched “\(text[hit])”, wording that reports a personal attempt. The result is self-reported.") }
         let noCheck = matches(#"\b(?:do not|don't|no need to|skip|avoid)\s+(?:test|verify|explain|check|compare|reproduce)\b"#, text)
-        if matches(#"\b(?:why|how|understand)\b"#, text) || text.contains("?") || (!noCheck && matches(#"\b(?:test|verify|explain|compare|reproduce|prove|check)\b"#, text)) { return .checked }
-        if noCheck { return .directed }
-        if matches(#"\b(?:must|only|instead|keep|don['’]t|do not|without|rather than|I (?:want|choose|prefer)|use .+ because|expected|should)\b"#, text) { return .directed }
-        if WorkReading.isBriefAssent(text) || PromptSignals.isContinuationCue(text) || matches(#"^\s*(?:please\s+)?(?:continue|proceed|keep going|carry on|finish (?:it|this|that|what you were doing))[.!\s]*$"#, text) { return .continued }
-        return .other
+        if let hit = text.range(of: #"\b(?:why|how|understand)\b"#, options: [.regularExpression, .caseInsensitive]) { return (.checked, "Matched “\(text[hit])”, wording that can ask for an explanation. This does not show that you understood the answer.") }
+        if text.contains("?") { return (.checked, "Contains a question mark. This broad wording rule can include questions that are not requests to verify the work.") }
+        if !noCheck, let hit = text.range(of: #"\b(?:test|verify|explain|compare|reproduce|prove|check)\b"#, options: [.regularExpression, .caseInsensitive]) { return (.checked, "Matched “\(text[hit])”, wording that requests a check or explanation. It does not establish that the check happened.") }
+        if noCheck { return (.directed, "Contains an instruction to skip or avoid a check. It is counted as direction, not a check request.") }
+        if let hit = text.range(of: #"\b(?:must|only|instead|keep|don['’]t|do not|without|rather than|I (?:want|choose|prefer)|use .+ because|expected|should)\b"#, options: [.regularExpression, .caseInsensitive]) { return (.directed, "Matched “\(String(text[hit].prefix(80)))”, wording that can set a condition, choice or correction.") }
+        if WorkReading.isBriefAssent(text) || PromptSignals.isContinuationCue(text) || matches(#"^\s*(?:please\s+)?(?:continue|proceed|keep going|carry on|finish (?:it|this|that|what you were doing))[.!\s]*$"#, text) { return (.continued, "Matched brief approval or continuation wording with no added requirement recognized by these rules. Deliberate delegation can look the same.") }
+        return (.other, "No wording rule matched. This may still contain useful direction or a check the rules missed.")
     }
 }
 

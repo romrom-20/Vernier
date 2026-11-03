@@ -10,6 +10,8 @@ extension AppCoordinator {
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         await model.loadDailyParticipation()
         try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 1180, height: 820), file: directory.appendingPathComponent("overview.png"))
+        try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 860, height: 760), file: directory.appendingPathComponent("overview-narrow.png"))
+        try await snapshot(AnyView(StudioView(model: model)), size: NSSize(width: 1180, height: 820), file: directory.appendingPathComponent("overview-dark.png"), dark: true)
         try await snapshot(AnyView(MenuBarView(model: model)), size: NSSize(width: 382, height: 414), file: directory.appendingPathComponent("quick-view.png"))
         model.briefSessionID = model.library.sessions.first?.id
         model.storyFocusID = model.currentDecision?.anchorMessageID
@@ -18,11 +20,13 @@ extension AppCoordinator {
         for name in ["overview.png", "quick-view.png", "session-map.png"] {
             guard FileManager.default.fileExists(atPath: directory.appendingPathComponent(name).path) else { throw DecisionGenerationError.invalidResponse }
         }
+        guard NSApp.activationPolicy() == .prohibited, !NSApp.isActive, NSApp.windows.allSatisfy({ !$0.isVisible && !$0.isKeyWindow }) else { throw DecisionGenerationError.invalidResponse }
+        print("OFFSCREEN ISOLATION PASSED: no app activation or visible/key windows; invented records only")
     }
-    private func snapshot(_ root: AnyView, size: NSSize, file: URL) async throws {
-        let view = NSHostingView(rootView: root.environment(\.colorScheme, .light).transaction { $0.disablesAnimations = true })
+    private func snapshot(_ root: AnyView, size: NSSize, file: URL, dark: Bool = false) async throws {
+        let view = NSHostingView(rootView: root.environment(\.colorScheme, dark ? .dark : .light).transaction { $0.disablesAnimations = true })
         let window = NSWindow(contentRect: NSRect(origin: .zero, size: size), styleMask: .borderless, backing: .buffered, defer: false)
-        window.appearance = NSAppearance(named: .aqua)
+        window.appearance = NSAppearance(named: dark ? .darkAqua : .aqua)
         window.contentView = view
         view.frame = NSRect(origin: .zero, size: size)
         view.layoutSubtreeIfNeeded()

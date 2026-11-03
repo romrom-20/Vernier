@@ -20,8 +20,13 @@ struct StudioView: View {
                 }
                 Spacer()
                 VStack(alignment: .leading, spacing: 12) {
-                    StatusLine(model: model)
-                    Text("Resident on your Mac.\nYour records stay here.").font(.caption).foregroundStyle(Palette.secondary).lineSpacing(4)
+                    Button { model.openStudio(.connections) } label: {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Label(model.capturePresenceLabel, systemImage: model.capturePhase.symbol).font(.caption.weight(.medium))
+                            Text(model.isShowcase ? "Invented records only" : model.paused ? "New reads are stopped" : !model.codexEnabled ? "Open connection settings" : model.conversationMemoryEnabled ? "Saved chats → this Mac" : "Activity metadata only").font(.caption2)
+                        }.foregroundStyle(Palette.secondary)
+                    }.buttonStyle(.plain).help(model.captureDescription)
+                    Text("Runs while your Mac is awake.\nRecords stored on this Mac.").font(.caption).foregroundStyle(Palette.secondary).lineSpacing(4)
                     Text(model.loginStatus.label).font(.caption2).foregroundStyle(Palette.secondary)
                     Button("Welcome guide") { model.showWelcome() }.buttonStyle(.plain).font(.caption).foregroundStyle(Palette.secondary)
                 }
@@ -50,9 +55,8 @@ struct StudioView: View {
                         }
                     }.padding(30).frame(maxWidth: 1080, alignment: .leading).frame(maxWidth: .infinity)
             }.id(model.page).background(Palette.canvas)
-                .onChange(of: model.dailyFilter) { _, value in
-                    guard value != nil else { return }
-                    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { proxy.scrollTo("daily-breakdown", anchor: .center) }
+                .onChange(of: model.dailyEvidenceRevision) { _, _ in
+                    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { proxy.scrollTo("daily-breakdown", anchor: .top) }
                 }
                 .onChange(of: model.selectedDecisionSessionID) { _, _ in
                     withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { proxy.scrollTo("participation-focus", anchor: .top) }

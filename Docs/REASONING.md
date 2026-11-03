@@ -1,3 +1,11 @@
+# Explain the two readers — 0.12.2
+
+The recap now exposes dated source replies and their specific wording rules. Its **How Vernier reads your work** disclosure separates those deterministic counts from the optional contextual reader, reports review mode and the latest available saved review time, and states that a model reading can be wrong. A saved review time can concern another day or conversation; enabled automatic review does not itself establish a current useful takeaway.
+
+This update changes explanation and navigation. It does not change the inference prompt, models, scheduling, retrieval limits or source validators described below. Floorplan maps source code and recent changes locally; it is not a provider of personal-session metrics or a second personal reasoning service.
+
+---
+
 # Where reasoning fits in the daily view — 0.12
 
 The first layer is now a descriptive [daily recap](DAILY_RECAP.md) of saved human follow-ups and optional self-reports. Its percentages use transparent wording rules and no model call; they do not measure task delegation, thought, prompt quality or understanding. The contextual reasoning loop below remains the deeper conversation reader and source-backed direction question. A daily pattern can open that specific exchange and its map.
