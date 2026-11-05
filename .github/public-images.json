@@ -5,8 +5,8 @@
       "provenance": "Current 0.14.0 native dashboard at 1180x910 with default wording categories, generated through --showcase --wording-preview --render-showcase. Category/hour values are computed by production rules over invented records. Visually reviewed. No personal archive, connector, desktop capture, hot-key registration or inference. Renderer verified activation prohibited and no visible/key windows. Presentation example only."
     },
     "Docs/images/compact-recap.png": {
-      "sha256": "81ece1907111e3ec96da3ceeb45fc17178b35a14766ffe7909bd7c32a7ce0769",
-      "provenance": "Current 0.14.0 production NSPopover host at its fixed compact size, rendered inside a deliberately light offscreen window while the host remains ink. Invented source data and a hand-authored source-checked goal reading. Visually reviewed. No personal archive, connector, desktop capture, hot-key registration or inference. Renderer verified activation prohibited and no visible/key windows. Presentation example only."
+      "sha256": "b3334b8631c3870cefe6e5d468bad8b7cf05f5c66fdee386f6cc483aa44927ab",
+      "provenance": "Current source MenuBarView at 356x414, rendered offscreen with --showcase --wording-preview --render-showcase. Five invented follow-ups across three conversations; default production wording counts, not model-category labels. Visually reviewed; PNG text/EXIF metadata removed with pixel-data chunks preserved. No personal archive, connector, inference, desktop capture or foreground input. Renderer verified activation prohibited and no visible/key windows. Presentation example only."
     },
     "Docs/images/decision-review.png": {
       "sha256": "50ec683a0a66e9134d83bfaf8822f4fb3ed922b238dd7bb3454e3bb6305dff09",
@@ -15,6 +15,10 @@
     "Docs/images/conversation-map.png": {
       "sha256": "b3151d107960928dff27d4546a1fd8c61ae8b69d712946a39d23f03ab914f03c",
       "provenance": "Current 0.14.0 SessionStoryView at 1000x760. Invented user and agent messages with graph structure and source comparison computed from those records. Visually reviewed. No personal archive, connector, desktop capture, hot-key registration or inference. Renderer verified activation prohibited and no visible/key windows. Presentation example only."
+    },
+    "Docs/images/conversation-memory.png": {
+      "sha256": "44504fef5041099c088d09f88ca2ed6619e30b29efb4a0f63e599d2b5195ba40",
+      "provenance": "Current source RelatedConversationMemoryView at 900x820, rendered offscreen from ShowcaseFixtures.relatedMemoryExample. Invented SQLite statement, AI proposal and later saved Postgres perspective; hand-authored casebook example, not a model-accuracy result. Visually reviewed; PNG text/EXIF metadata removed with pixel-data chunks preserved. No personal archive, connector, inference, desktop capture or foreground input. Renderer verified activation prohibited and no visible/key windows. Presentation example only."
     }
   }
 }

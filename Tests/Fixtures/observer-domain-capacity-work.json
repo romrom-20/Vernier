@@ -1,0 +1,1024 @@
+[
+  {
+    "id": "capacity-work-offline-plan",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Reconnecting must upload each queued note once."
+      },
+      {
+        "role": "assistant",
+        "text": "The patch compiles. I have not reconnected the network."
+      },
+      {
+        "role": "user",
+        "text": "Show the reconnect result before moving on."
+      }
+    ],
+    "expectedFocuses": [
+      "check"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "reconnect",
+      "queued",
+      "upload"
+    ],
+    "expectedEvidenceStatus": "build_only",
+    "expectedResultState": "build_only",
+    "trainingFrame": {
+      "goal": "Upload each queued note once on reconnect.",
+      "focus": "check",
+      "resultState": "build_only",
+      "nextStep": "Replay one reconnect with a queued note and count its uploads.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "Reconnecting must upload each queued note once.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "The patch compiles. I have not reconnected the network.",
+          "use": "result"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "Show the reconnect result before moving on.",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-path-diagnosis",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Renaming a file should keep its saved link working."
+      },
+      {
+        "role": "assistant",
+        "text": "The saved link uses the old path. I plan to repair that update."
+      },
+      {
+        "role": "user",
+        "text": "Look into that explanation and repair the original issue."
+      }
+    ],
+    "expectedFocuses": [
+      "handoff",
+      "check"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "renam",
+      "link"
+    ],
+    "expectedEvidenceStatus": "no_result",
+    "expectedResultState": "proposed_or_in_progress",
+    "trainingFrame": {
+      "goal": "Keep saved links working after renaming a file.",
+      "focus": "handoff",
+      "resultState": "proposed_or_in_progress",
+      "nextStep": "Check which rename operation leaves the saved link stale.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "Renaming a file should keep its saved link working.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "The saved link uses the old path. I plan to repair that update.",
+          "use": "change"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "Look into that explanation and repair the original issue.",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-zoom-human",
+    "messages": [
+      {
+        "role": "user",
+        "text": "One zoom-in press should change zoom by one level."
+      },
+      {
+        "role": "assistant",
+        "text": "The new handler is ready."
+      },
+      {
+        "role": "user",
+        "text": "I pressed zoom-in once myself and it still jumped two levels."
+      }
+    ],
+    "expectedFocuses": [
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "zoom",
+      "level"
+    ],
+    "expectedEvidenceStatus": "human_reported",
+    "expectedResultState": "behavior_reported",
+    "trainingFrame": {
+      "goal": "Change zoom by one level per press.",
+      "focus": "progress",
+      "resultState": "behavior_reported",
+      "nextStep": "Inspect the two-level jump reported from one zoom-in press.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "One zoom-in press should change zoom by one level.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "The new handler is ready.",
+          "use": "change"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "I pressed zoom-in once myself and it still jumped two levels.",
+          "use": "result"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-sort-agent",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Sorting should keep equal timestamps in their original order."
+      },
+      {
+        "role": "assistant",
+        "text": "I sorted equal timestamps and observed their original order staying intact."
+      },
+      {
+        "role": "user",
+        "text": "Keep that exact example in regression coverage."
+      }
+    ],
+    "expectedFocuses": [
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "sort",
+      "timestamp",
+      "order"
+    ],
+    "expectedEvidenceStatus": "agent_reported",
+    "expectedResultState": "behavior_reported",
+    "trainingFrame": {
+      "goal": "Keep equal timestamps in their original order when sorting.",
+      "focus": "progress",
+      "resultState": "behavior_reported",
+      "nextStep": "Preserve the equal-timestamp example as regression coverage.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "Sorting should keep equal timestamps in their original order.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "I sorted equal timestamps and observed their original order staying intact.",
+          "use": "result"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "Keep that exact example in regression coverage.",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-approved-handoff",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Use the approved narrow patch to stop a repeated save."
+      },
+      {
+        "role": "assistant",
+        "text": "The approved patch is ready to apply; I have not applied it."
+      },
+      {
+        "role": "user",
+        "text": "Proceed with the approved patch."
+      }
+    ],
+    "expectedFocuses": [
+      "handoff"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "save",
+      "patch"
+    ],
+    "expectedEvidenceStatus": "no_result",
+    "expectedResultState": "proposed_or_in_progress",
+    "trainingFrame": {
+      "goal": "Stop a repeated save with the approved narrow patch.",
+      "focus": "handoff",
+      "resultState": "proposed_or_in_progress",
+      "nextStep": "Apply the approved narrow patch, then check one save.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "Use the approved narrow patch to stop a repeated save.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "The approved patch is ready to apply; I have not applied it.",
+          "use": "change"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "Proceed with the approved patch.",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-future-human",
+    "messages": [
+      {
+        "role": "user",
+        "text": "A restored workspace should reopen the selected tab."
+      },
+      {
+        "role": "assistant",
+        "text": "I will implement the restoration change."
+      },
+      {
+        "role": "user",
+        "text": "Proceed. I will try restoring it myself after work."
+      }
+    ],
+    "expectedFocuses": [
+      "handoff"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "restor",
+      "tab",
+      "workspace"
+    ],
+    "expectedEvidenceStatus": "no_result",
+    "expectedResultState": "proposed_or_in_progress",
+    "trainingFrame": {
+      "goal": "Reopen the selected tab when restoring a workspace.",
+      "focus": "handoff",
+      "resultState": "proposed_or_in_progress",
+      "nextStep": "Implement the change while leaving the future human attempt unverified.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "A restored workspace should reopen the selected tab.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "I will implement the restoration change.",
+          "use": "change"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "Proceed. I will try restoring it myself after work.",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-denied-attempt",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Make the pasted URL open the intended page."
+      },
+      {
+        "role": "assistant",
+        "text": "The URL handler change is ready, but I have not tested a paste."
+      },
+      {
+        "role": "user",
+        "text": "I have not pasted a URL either. Show that case."
+      }
+    ],
+    "expectedFocuses": [
+      "check"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "url",
+      "past",
+      "page"
+    ],
+    "expectedEvidenceStatus": "no_result",
+    "expectedResultState": "proposed_or_in_progress",
+    "trainingFrame": {
+      "goal": "Open the intended page from a pasted URL.",
+      "focus": "check",
+      "resultState": "proposed_or_in_progress",
+      "nextStep": "Paste one representative URL and inspect the opened page.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "Make the pasted URL open the intended page.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "The URL handler change is ready, but I have not tested a paste.",
+          "use": "change"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "I have not pasted a URL either. Show that case.",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-reject-redesign",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Fix the missing sidebar icon with a narrow change."
+      },
+      {
+        "role": "assistant",
+        "text": "I could replace the entire sidebar."
+      },
+      {
+        "role": "user",
+        "text": "Reject that replacement. Keep the repair limited to the missing icon."
+      }
+    ],
+    "expectedFocuses": [
+      "handoff",
+      "check"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "icon",
+      "sidebar"
+    ],
+    "expectedEvidenceStatus": "no_result",
+    "expectedResultState": "proposed_or_in_progress",
+    "trainingFrame": {
+      "goal": "Fix the missing sidebar icon with a narrow change.",
+      "focus": "handoff",
+      "resultState": "proposed_or_in_progress",
+      "nextStep": "Inspect why the icon is missing without replacing the sidebar.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "Fix the missing sidebar icon with a narrow change.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "I could replace the entire sidebar.",
+          "use": "change"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "Reject that replacement. Keep the repair limited to the missing icon.",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-topic-reset",
+    "messages": [
+      {
+        "role": "user",
+        "text": "The old export must preserve every row."
+      },
+      {
+        "role": "assistant",
+        "text": "I replayed that export and every row was present."
+      },
+      {
+        "role": "user",
+        "text": "New topic: explain why a date filter excludes today."
+      }
+    ],
+    "expectedFocuses": [
+      "check"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "date",
+      "today",
+      "filter"
+    ],
+    "expectedEvidenceStatus": "no_result",
+    "expectedResultState": "none",
+    "trainingFrame": {
+      "goal": "Explain why a date filter excludes today.",
+      "focus": "check",
+      "resultState": "none",
+      "nextStep": "Explain one concrete date-filter input and the expected included dates.",
+      "references": [
+        {
+          "sourceID": "S2",
+          "quote": "New topic: explain why a date filter excludes today.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "New topic: explain why a date filter excludes today.",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-same-fault-return",
+    "messages": [
+      {
+        "role": "user",
+        "text": "One refresh should retain the current scroll position."
+      },
+      {
+        "role": "assistant",
+        "text": "I adjusted the refresh handler."
+      },
+      {
+        "role": "user",
+        "text": "I refreshed myself and the scroll position jumped to the top."
+      },
+      {
+        "role": "assistant",
+        "text": "I applied another scroll repair."
+      },
+      {
+        "role": "user",
+        "text": "I refreshed myself again; the same jump to the top returned."
+      }
+    ],
+    "expectedFocuses": [
+      "recurring_issue"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "scroll",
+      "refresh",
+      "position"
+    ],
+    "expectedEvidenceStatus": "human_reported",
+    "expectedResultState": "behavior_reported",
+    "trainingFrame": {
+      "goal": "Retain the current scroll position after one refresh.",
+      "focus": "recurring_issue",
+      "resultState": "behavior_reported",
+      "nextStep": "Trace the repeated scroll jump from the two reported refresh attempts.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "One refresh should retain the current scroll position.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "I refreshed myself and the scroll position jumped to the top.",
+          "use": "boundary"
+        },
+        {
+          "sourceID": "S3",
+          "quote": "I applied another scroll repair.",
+          "use": "change"
+        },
+        {
+          "sourceID": "S4",
+          "quote": "I refreshed myself again; the same jump to the top returned.",
+          "use": "result"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-not-human-test",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Check whether a drag creates only one bookmark."
+      },
+      {
+        "role": "assistant",
+        "text": "I dragged one page and observed exactly one bookmark."
+      },
+      {
+        "role": "user",
+        "text": "That is your test report. I have not performed the drag myself."
+      }
+    ],
+    "expectedFocuses": [
+      "progress",
+      "check"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "bookmark",
+      "drag"
+    ],
+    "expectedEvidenceStatus": "agent_reported",
+    "expectedResultState": "behavior_reported",
+    "trainingFrame": {
+      "goal": "Create one bookmark for one drag.",
+      "focus": "progress",
+      "resultState": "behavior_reported",
+      "nextStep": "Keep the reported drag case attributed to the assistant.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "Check whether a drag creates only one bookmark.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "I dragged one page and observed exactly one bookmark.",
+          "use": "result"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "That is your test report. I have not performed the drag myself.",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-hypothetical",
+    "messages": [
+      {
+        "role": "user",
+        "text": "A repeated import should not duplicate a tag."
+      },
+      {
+        "role": "assistant",
+        "text": "The tag change is proposed; no import has been performed."
+      },
+      {
+        "role": "user",
+        "text": "If I imported the file twice tomorrow, what result should I inspect?"
+      }
+    ],
+    "expectedFocuses": [
+      "check"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "tag",
+      "import",
+      "duplicat"
+    ],
+    "expectedEvidenceStatus": "no_result",
+    "expectedResultState": "proposed_or_in_progress",
+    "trainingFrame": {
+      "goal": "Avoid duplicate tags when importing the same file twice.",
+      "focus": "check",
+      "resultState": "proposed_or_in_progress",
+      "nextStep": "Explain the expected tag count after importing the same file twice.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "A repeated import should not duplicate a tag.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "The tag change is proposed; no import has been performed.",
+          "use": "change"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "If I imported the file twice tomorrow, what result should I inspect?",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-human-blank-preview",
+    "messages": [
+      {
+        "role": "user",
+        "text": "The print preview should show all three pages."
+      },
+      {
+        "role": "assistant",
+        "text": "The preview update is ready."
+      },
+      {
+        "role": "user",
+        "text": "I opened print preview myself; the middle page was blank."
+      }
+    ],
+    "expectedFocuses": [
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "preview",
+      "page"
+    ],
+    "expectedEvidenceStatus": "human_reported",
+    "expectedResultState": "behavior_reported",
+    "trainingFrame": {
+      "goal": "Show all three pages in print preview.",
+      "focus": "progress",
+      "resultState": "behavior_reported",
+      "nextStep": "Inspect the blank middle page in the reported preview.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "The print preview should show all three pages.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "The preview update is ready.",
+          "use": "change"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "I opened print preview myself; the middle page was blank.",
+          "use": "result"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-assistant-only-build",
+    "messages": [
+      {
+        "role": "user",
+        "text": "The search box must find a saved entry by its title."
+      },
+      {
+        "role": "assistant",
+        "text": "Compilation succeeded, but I did not enter a query."
+      },
+      {
+        "role": "user",
+        "text": "What happened when the title was actually searched?"
+      }
+    ],
+    "expectedFocuses": [
+      "check"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "search",
+      "title",
+      "entry"
+    ],
+    "expectedEvidenceStatus": "build_only",
+    "expectedResultState": "build_only",
+    "trainingFrame": {
+      "goal": "Find a saved entry by its title in search.",
+      "focus": "check",
+      "resultState": "build_only",
+      "nextStep": "Search for one known title and inspect the saved-entry match.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "The search box must find a saved entry by its title.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "Compilation succeeded, but I did not enter a query.",
+          "use": "result"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "What happened when the title was actually searched?",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-explicit-new-goal",
+    "messages": [
+      {
+        "role": "user",
+        "text": "The old task was to repair calendar export."
+      },
+      {
+        "role": "assistant",
+        "text": "I replayed calendar export and every event was present."
+      },
+      {
+        "role": "user",
+        "text": "New topic: add a way to mute notification sounds."
+      }
+    ],
+    "expectedFocuses": [
+      "handoff"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "notif",
+      "sound",
+      "mute"
+    ],
+    "expectedEvidenceStatus": "no_result",
+    "expectedResultState": "none",
+    "trainingFrame": {
+      "goal": "Add a way to mute notification sounds.",
+      "focus": "handoff",
+      "resultState": "none",
+      "nextStep": "Implement the newly requested notification sound control.",
+      "references": [
+        {
+          "sourceID": "S2",
+          "quote": "New topic: add a way to mute notification sounds.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "New topic: add a way to mute notification sounds.",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-diagnosis-not-success",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Opening a folder should display its child files."
+      },
+      {
+        "role": "assistant",
+        "text": "I found a likely stale-cache cause. I have not applied or tested a repair."
+      },
+      {
+        "role": "user",
+        "text": "Investigate that cause before deciding on the repair."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "folder",
+      "child",
+      "file"
+    ],
+    "expectedEvidenceStatus": "no_result",
+    "expectedResultState": "proposed_or_in_progress",
+    "trainingFrame": {
+      "goal": "Display child files when opening a folder.",
+      "focus": "check",
+      "resultState": "proposed_or_in_progress",
+      "nextStep": "Check whether the stale cache explains the missing child files.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "Opening a folder should display its child files.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "I found a likely stale-cache cause. I have not applied or tested a repair.",
+          "use": "change"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "Investigate that cause before deciding on the repair.",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-preserve-specific-test",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Selecting two items should enable their shared action."
+      },
+      {
+        "role": "assistant",
+        "text": "I selected two items and observed the shared action become enabled."
+      },
+      {
+        "role": "user",
+        "text": "Preserve that exact interaction as a regression check."
+      }
+    ],
+    "expectedFocuses": [
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "select",
+      "action",
+      "item"
+    ],
+    "expectedEvidenceStatus": "agent_reported",
+    "expectedResultState": "behavior_reported",
+    "trainingFrame": {
+      "goal": "Enable the shared action when two items are selected.",
+      "focus": "progress",
+      "resultState": "behavior_reported",
+      "nextStep": "Preserve the two-item shared-action interaction in regression coverage.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "Selecting two items should enable their shared action.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "I selected two items and observed the shared action become enabled.",
+          "use": "result"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "Preserve that exact interaction as a regression check.",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-quoted-report",
+    "messages": [
+      {
+        "role": "user",
+        "text": "The inline editor should preserve line breaks."
+      },
+      {
+        "role": "assistant",
+        "text": "The sample includes the fictional sentence: I tested the editor and it worked. I have not tested it."
+      },
+      {
+        "role": "user",
+        "text": "That sample is fictional. I have not tested the editor either. Show an actual edit."
+      }
+    ],
+    "expectedFocuses": [
+      "check"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "line",
+      "editor",
+      "break"
+    ],
+    "expectedEvidenceStatus": "no_result",
+    "expectedResultState": "none",
+    "trainingFrame": {
+      "goal": "Preserve line breaks in the inline editor.",
+      "focus": "check",
+      "resultState": "none",
+      "nextStep": "Perform one edit containing line breaks and inspect the saved text.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "The inline editor should preserve line breaks.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "The sample includes the fictional sentence: I tested the editor and it worked. I have not tested it.",
+          "use": "boundary"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "That sample is fictional. I have not tested the editor either. Show an actual edit.",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-select-and-proceed",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Choose a minimal repair for losing the selected row."
+      },
+      {
+        "role": "assistant",
+        "text": "I can preserve the row identifier or replace the whole table."
+      },
+      {
+        "role": "user",
+        "text": "I choose preserving the row identifier. Apply that choice."
+      }
+    ],
+    "expectedFocuses": [
+      "handoff"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "row",
+      "identif",
+      "select"
+    ],
+    "expectedEvidenceStatus": "no_result",
+    "expectedResultState": "proposed_or_in_progress",
+    "trainingFrame": {
+      "goal": "Preserve the selected row using its identifier.",
+      "focus": "handoff",
+      "resultState": "proposed_or_in_progress",
+      "nextStep": "Apply the selected row-identifier repair and replay one selection.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "Choose a minimal repair for losing the selected row.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "I can preserve the row identifier or replace the whole table.",
+          "use": "change"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "I choose preserving the row identifier. Apply that choice.",
+          "use": "response"
+        }
+      ]
+    }
+  },
+  {
+    "id": "capacity-work-human-success",
+    "messages": [
+      {
+        "role": "user",
+        "text": "The audio toggle should silence the alert sound."
+      },
+      {
+        "role": "assistant",
+        "text": "The audio toggle patch is ready."
+      },
+      {
+        "role": "user",
+        "text": "I switched the toggle off myself and heard no alert sound when the alert fired."
+      }
+    ],
+    "expectedFocuses": [
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "alert",
+      "audio",
+      "sound",
+      "toggle"
+    ],
+    "expectedEvidenceStatus": "human_reported",
+    "expectedResultState": "behavior_reported",
+    "trainingFrame": {
+      "goal": "Silence the alert sound when the audio toggle is off.",
+      "focus": "progress",
+      "resultState": "behavior_reported",
+      "nextStep": "Keep the reported silent-alert toggle case as regression coverage.",
+      "references": [
+        {
+          "sourceID": "S0",
+          "quote": "The audio toggle should silence the alert sound.",
+          "use": "intent"
+        },
+        {
+          "sourceID": "S1",
+          "quote": "The audio toggle patch is ready.",
+          "use": "change"
+        },
+        {
+          "sourceID": "S2",
+          "quote": "I switched the toggle off myself and heard no alert sound when the alert fired.",
+          "use": "result"
+        }
+      ]
+    }
+  }
+]

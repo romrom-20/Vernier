@@ -1,0 +1,113 @@
+[
+  {
+    "id": "goal-transfer-subscriber",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Importing the same subscriber twice should avoid duplicate subscribers."
+      },
+      {
+        "role": "assistant",
+        "text": "I changed the subscriber key."
+      },
+      {
+        "role": "user",
+        "text": "I imported the same subscriber twice myself and it created one subscriber."
+      }
+    ],
+    "expectedFocuses": [
+      "progress",
+      "check"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "duplicate",
+      "avoid",
+      "one subscriber"
+    ],
+    "expectedEvidenceStatus": "human_reported"
+  },
+  {
+    "id": "goal-transfer-save",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Saving an entry twice should avoid duplicate entries."
+      },
+      {
+        "role": "assistant",
+        "text": "I changed the save guard."
+      },
+      {
+        "role": "user",
+        "text": "I saved the entry twice myself and it created one entry."
+      }
+    ],
+    "expectedFocuses": [
+      "progress",
+      "check"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "duplicate",
+      "one entry"
+    ],
+    "expectedEvidenceStatus": "human_reported"
+  },
+  {
+    "id": "goal-transfer-drawer",
+    "messages": [
+      {
+        "role": "user",
+        "text": "One shortcut press should open exactly one drawer."
+      },
+      {
+        "role": "assistant",
+        "text": "The shortcut handler is ready."
+      },
+      {
+        "role": "user",
+        "text": "I pressed the shortcut myself and two drawers opened."
+      }
+    ],
+    "expectedFocuses": [
+      "progress",
+      "check"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "one drawer",
+      "shortcut",
+      "drawer"
+    ],
+    "expectedEvidenceStatus": "human_reported"
+  },
+  {
+    "id": "goal-transfer-preview",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Opening preview should show the entire document."
+      },
+      {
+        "role": "assistant",
+        "text": "The document layout change is ready."
+      },
+      {
+        "role": "user",
+        "text": "I opened the preview myself and the middle page was blank."
+      }
+    ],
+    "expectedFocuses": [
+      "progress",
+      "check"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "preview",
+      "document",
+      "page"
+    ],
+    "expectedEvidenceStatus": "human_reported"
+  }
+]

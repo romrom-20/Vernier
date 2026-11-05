@@ -1,0 +1,60 @@
+{
+  "protocol": "reasoning-native-2.1",
+  "modelRevision": "238767527555cb75a05732a84dff5d6ba0dd6809",
+  "modelSHA256": "038e39a37a7667373d2c3991375446b10c96ae1d717a68674870343db376b76e",
+  "variants": [
+    {
+      "id": "direct",
+      "thinking": false,
+      "checklist": false,
+      "maxTokens": 512
+    },
+    {
+      "id": "direct-checklist",
+      "thinking": false,
+      "checklist": true,
+      "maxTokens": 512
+    },
+    {
+      "id": "thinking",
+      "thinking": true,
+      "checklist": false,
+      "maxTokens": 1024
+    },
+    {
+      "id": "thinking-checklist",
+      "thinking": true,
+      "checklist": true,
+      "maxTokens": 1024
+    }
+  ],
+  "checklist": "Use a concise evidence check. Identify the actor, whether an action already happened or is future/hypothetical/denied, and whether the human delegates a substantive choice or only execution of an existing choice. Reported past actions are not new choices. An explicit absence is different from ambiguous evidence. Match each final field to the source; do not add a human act merely because the human asked AI to implement something. Keep any thought channel short, aiming for at most 160 tokens. The final response must contain only the required JSON object.",
+  "selection": "Development only: first require zero parse/schema failures, no added unsupported claims and no complete-outcome regression in either task. Within eligible non-baselines minimize unsupported claims, maximize complete outcomes, minimize missing claims and uncertainty errors, then total tokens and variant id. If no candidate qualifies, complete the fixed best non-baseline comparison as failed-development research only.",
+  "developmentGate": ">=2 additional complete replies among 16, no additional unsupported claims in either task, no task-level complete-outcome regression, all responses completed and parsed.",
+  "freshPolicy": "Run direct and frozen chosen non-baseline once each on 32 new semantic and 32 new production-shaped contribution examples. Every inspected set becomes regression material. No test-dependent re-selection.",
+  "gate": {
+    "minimumSemantic": 28,
+    "minimumCategory": 27,
+    "minimumAdditionalTotal": 6,
+    "noAddedUnsupportedClaimsPerTask": true,
+    "noControlRegression": true
+  },
+  "limits": {
+    "wallSeconds": 1800,
+    "generationPackets": 240,
+    "totalGeneratedTokens": 190000,
+    "mlxMemoryGuidelineBytes": 10737418240
+  },
+  "privacy": "Offline invented sources, unchanged checkpoint, reduced-priority background inference. No personal archive, foreground app testing, deployed weights/preferences or remote inference.",
+  "boundaries": "Inference study, not training or direct weight editing; separate MLX checkpoint, not production Ollama QAT. No broad reasoning or human-agency validity claim.",
+  "sources": [
+    "https://ai.google.dev/gemma/docs/capabilities/thinking",
+    "https://arxiv.org/abs/2305.02301",
+    "https://arxiv.org/abs/2502.12143",
+    "https://arxiv.org/abs/2310.01798",
+    "https://arxiv.org/abs/2603.06923"
+  ],
+  "protocolAudit": "After code audit, protocol 2 protects completion and per-task preservation before ranking. Original draft was interrupted after baseline reserved generation started; those outcomes were not used for selection and the entire old reserved set was retired and replaced.",
+  "unrelatedControlScope": "Use identical general control instructions with thinking on/off. Do not append the observer-specific checklist or its JSON-output requirement to unrelated controls.",
+  "controlAudit": "The completed protocol-2 study accidentally applied observer JSON instructions to unrelated controls. Preserve its raw controls and primary outcomes. A separate matched-prompt control audit corrects only that scope; the observer prompts/results are unchanged. Public runner 2.1 fixes the scope."
+}

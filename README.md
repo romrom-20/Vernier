@@ -11,7 +11,7 @@ AI can help you build, research, plan and decide. It is harder to see **how thos
 
 Vernier is an open-source Mac app exploring that human side of AI. It keeps a local record and gives you a quiet way to revisit the interaction, with the original evidence close by. **Codex in Conductor is the first connected source.** Personal agents and everyday decisions are part of the wider direction.
 
-[Try the showcase](#try-it) · [Product direction](Docs/PRODUCT.md) · [How the reasoning works](Docs/REASONING.md) · [Evaluation results](Docs/MODEL_EVALUATION.md)
+[Try the showcase](#try-it) · [Product direction](Docs/PRODUCT.md) · [Model and memory status](Docs/MODEL_STATUS.md) · [Evaluation results](Docs/MODEL_EVALUATION.md)
 
 ![Current Vernier dashboard with category cards, a reply timeline and a reflection panel](Docs/images/dashboard.png)
 
@@ -31,13 +31,24 @@ Vernier does not yet answer that question reliably across your life. The current
 
 **A visual picture of the day.** Category cards and an hourly chart show recorded follow-ups, with exact-message drill-down and an explanation of how each was counted. Optional clarity and energy check-ins record how the work felt to you.
 
-**One useful way back in.** Local conversation readings connect a likely goal, the available outcome evidence and a concrete checkpoint. A proposed fix, a passing build, an AI-reported test and a result you reported remain distinct.
+**A recap across conversations.** The compact panel summarizes saved follow-ups across the day, with conversation checkpoints available underneath. Local readings connect a likely goal, the available outcome evidence and a next check. A proposed fix, a passing build, an AI-reported test and a result you reported remain distinct.
 
 **A quiet Mac presence.** A menu-bar recap and optional circle/pill keep access nearby. Press **⌃⌥⌘V** for the compact recap; open the full dashboard from its footer. Pause works independently, and closing the dashboard leaves the menu-bar app running.
 
-<img src="Docs/images/compact-recap.png" width="356" alt="Current compact Vernier recap suggesting a specific check after a build-only report" />
+<img src="Docs/images/compact-recap.png" width="356" alt="Compact Vernier recap summarizing follow-ups across three invented conversations" />
 
-*The current production popover, using invented sources. A reported passing build leads to a check of the original interaction; it does not certify that the feature works.*
+*Current compact view, rendered offscreen from invented records with default wording rules. Counts describe saved replies; they do not grade effort, understanding or decision quality.*
+
+**Earlier context with receipts.** The reader can retrieve older statements from a long conversation. A separate same-workspace casebook shows possible links to other conversations, their original sources and your latest saved correction. Earlier choices remain historical; related tasks and permissions are kept separate. [How memory works →](Docs/CONVERSATION_MEMORY.md)
+
+<details>
+<summary><strong>See an invented cross-conversation memory example</strong></summary>
+
+![Possible related conversation with an older SQLite choice and a newer saved Postgres correction](Docs/images/conversation-memory.png)
+
+*An offscreen synthetic example. The old source and newer perspective stay visible together. The wording-based link is tentative and runs no additional model.*
+
+</details>
 
 **A decision you can revisit.** Some explicit conflicts between an earlier requirement and a later agent proposal can surface as a question. You can inspect both and record that the change was intentional.
 
@@ -69,6 +80,8 @@ flowchart LR
 The app uses **SwiftUI and AppKit**, with local SQLite storage. Optional inference runs through **Ollama on loopback** or Apple's on-device framework on an eligible Mac. Vernier does not send captured conversations to a cloud model, and it does not need a paid model API or an extra ChatGPT subscription.
 
 The model proposes an interpretation, another pass challenges it, and the app checks source references. Agreement between passes is not independent proof. The default category boxes use transparent wording rules; they are separate from the contextual goal reader.
+
+The latest measured local build uses the original **`gemma4:e2b-it-qat`** with reader **`work-15`**. Longer-memory checks improve **3/8 to 6/8** on a small reserved invented set while retaining all 51 previously passing examples in a sixty-case regression. Some explanations remain generic. This improvement comes from retrieval and source handling; experimental weight edits, trained adapters and larger models remain outside live selection. [Current settings, failures and update policy →](Docs/MODEL_STATUS.md)
 
 **An experimental model-category mode is available but off by default.** It retains mixed signals and cached interpretations, but the tested configurations did not pass their quality gate. We publish the failures and keep the stable default. No production weight editing or private-session training is enabled. [Mechanism](Docs/MODEL_IMPROVEMENT.md) · [Results and reproduction](Docs/MODEL_EVALUATION.md)
 

@@ -45,8 +45,9 @@ public enum PillPresentation: String, Sendable {
 
 public enum QuickPanelLayout {
     public static let width: CGFloat = 356
+    public static let preferredHeight: CGFloat = 414
     public static func size(screenHeight: CGFloat) -> CGSize {
-        CGSize(width: width, height: min(414, max(200, screenHeight - 100)))
+        CGSize(width: width, height: min(preferredHeight, max(200, screenHeight - 100)))
     }
     public static func constrain(_ frame: CGRect, to visible: CGRect) -> CGRect {
         var result = frame

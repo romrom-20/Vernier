@@ -1,0 +1,36 @@
+{
+  "hypothesis": "Answer-only QLoRA on explicitly constructed examples can reduce empty act proposals and unsupported acts while retaining source attribution.",
+  "model": "mlx-community/gemma-4-e2b-it-4bit",
+  "revision": "238767527555cb75a05732a84dff5d6ba0dd6809",
+  "runtime": "mlx-lm==0.32.2",
+  "training": {
+    "iterations": 120,
+    "batchSize": 1,
+    "maxSequence": 1536,
+    "layers": 8,
+    "rank": 8,
+    "scale": 16,
+    "learningRate": 0.0001,
+    "seed": 42,
+    "maskPrompt": true,
+    "gradientCheckpointing": true,
+    "keys": [
+      "self_attn.q_proj",
+      "self_attn.o_proj"
+    ]
+  },
+  "limits": {
+    "trainingWallSeconds": 1800,
+    "gpuMemoryBytes": 10737418240,
+    "cacheBytes": 268435456,
+    "downloadedCheckpoints": 1
+  },
+  "evaluation": {
+    "untouchedComparison": "Identical downloaded MLX quantization and runtime with/without adapter, same task/schema/prompt and greedy decoding",
+    "selection": "Use final 120-step adapter only; no choosing by locked test performance. Validation loss is diagnostic.",
+    "testAccess": "Create and hash corpus before training; run final test once per untouched/adapter variant.",
+    "researchGate": "At least 20/24 locked-test full act sets correct, >=4 additional matches vs untouched, no copied/injection false report, and no loss on the small unrelated control set. A failed gate stays isolated.",
+    "promotion": "No automatic deployment: agent-authored labels and tiny controls are not independent validation; Ollama equivalence and work-12 remain unproven."
+  },
+  "privacy": "Invented recipes only, never private archives, no online telemetry or model uploads. Base model read-only by convention; adapters saved separately."
+}

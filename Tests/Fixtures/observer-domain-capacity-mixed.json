@@ -1,0 +1,138 @@
+[
+  {
+    "id": "capacity-coding-mixed-0",
+    "group": "coding-transfer",
+    "profile": "coding",
+    "earlierHuman": "Choose a log format and a cache, then check a replay.",
+    "assistant": "I replayed one reconnect and observed one upload per note.",
+    "human": "I choose JSON logs. You choose the cache and implement your choice now.",
+    "expected": {
+      "choiceMade": true,
+      "choiceDelegated": true,
+      "executionAuthorized": true,
+      "humanOutcomeReported": false,
+      "assistantOutcomeReported": true,
+      "proposalConflictsWithBoundary": false,
+      "uncertain": false
+    }
+  },
+  {
+    "id": "capacity-coding-mixed-1",
+    "group": "coding-transfer",
+    "profile": "coding",
+    "earlierHuman": "Inspect the scrolling fault and select a repair.",
+    "assistant": "The repair is still undecided.",
+    "human": "I refreshed the view myself and it jumped to the top. Choose a repair and apply it now.",
+    "expected": {
+      "choiceMade": false,
+      "choiceDelegated": true,
+      "executionAuthorized": true,
+      "humanOutcomeReported": true,
+      "assistantOutcomeReported": false,
+      "proposalConflictsWithBoundary": false,
+      "uncertain": false
+    }
+  },
+  {
+    "id": "capacity-coding-mixed-2",
+    "group": "coding-transfer",
+    "profile": "coding",
+    "earlierHuman": "Establish what the new shortcut did.",
+    "assistant": "I pressed it and observed one panel.",
+    "human": "Someone apparently checked it too, but I cannot identify who.",
+    "expected": {
+      "choiceMade": false,
+      "choiceDelegated": false,
+      "executionAuthorized": false,
+      "humanOutcomeReported": false,
+      "assistantOutcomeReported": true,
+      "proposalConflictsWithBoundary": false,
+      "uncertain": true
+    }
+  },
+  {
+    "id": "capacity-coding-mixed-3",
+    "group": "coding-transfer",
+    "profile": "coding",
+    "earlierHuman": "Keep every existing record; never delete them for a repair.",
+    "assistant": "I propose deleting all existing records and starting again.",
+    "human": "No. I choose the repair that keeps every record. I ran the current version myself and one record was missing.",
+    "expected": {
+      "choiceMade": true,
+      "choiceDelegated": false,
+      "executionAuthorized": false,
+      "humanOutcomeReported": true,
+      "assistantOutcomeReported": false,
+      "proposalConflictsWithBoundary": true,
+      "uncertain": false
+    }
+  },
+  {
+    "id": "capacity-personal-mixed-4",
+    "group": "personal-transfer",
+    "profile": "personal",
+    "earlierHuman": "Choose a class, an arrival time and a recipient for the update.",
+    "assistant": "These choices are still open.",
+    "human": "I choose the pottery class. You choose its arrival time. Send the already approved update to Noor.",
+    "expected": {
+      "choiceMade": true,
+      "choiceDelegated": true,
+      "executionAuthorized": true,
+      "humanOutcomeReported": false,
+      "assistantOutcomeReported": false,
+      "proposalConflictsWithBoundary": false,
+      "uncertain": false
+    }
+  },
+  {
+    "id": "capacity-personal-mixed-5",
+    "group": "personal-transfer",
+    "profile": "personal",
+    "earlierHuman": "Choose a gate to use and check the access code.",
+    "assistant": "I entered the code and the gate opened.",
+    "human": "I choose the south gate. I entered its code myself and the gate stayed locked.",
+    "expected": {
+      "choiceMade": true,
+      "choiceDelegated": false,
+      "executionAuthorized": false,
+      "humanOutcomeReported": true,
+      "assistantOutcomeReported": true,
+      "proposalConflictsWithBoundary": false,
+      "uncertain": false
+    }
+  },
+  {
+    "id": "capacity-personal-mixed-6",
+    "group": "personal-transfer",
+    "profile": "personal",
+    "earlierHuman": "Establish whether the hall reservation was completed.",
+    "assistant": "I reserved the hall and received confirmation.",
+    "human": "Someone apparently confirmed it too, but I cannot tell who that was.",
+    "expected": {
+      "choiceMade": false,
+      "choiceDelegated": false,
+      "executionAuthorized": false,
+      "humanOutcomeReported": false,
+      "assistantOutcomeReported": true,
+      "proposalConflictsWithBoundary": false,
+      "uncertain": true
+    }
+  },
+  {
+    "id": "capacity-personal-mixed-7",
+    "group": "personal-transfer",
+    "profile": "personal",
+    "earlierHuman": "Do not contact the organizer until I authorize it explicitly.",
+    "assistant": "I propose sending the organizer a message now.",
+    "human": "Could I ask you to contact them later? I have not authorized contact now.",
+    "expected": {
+      "choiceMade": false,
+      "choiceDelegated": false,
+      "executionAuthorized": false,
+      "humanOutcomeReported": false,
+      "assistantOutcomeReported": false,
+      "proposalConflictsWithBoundary": true,
+      "uncertain": false
+    }
+  }
+]

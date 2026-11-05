@@ -1,3 +1,82 @@
+# Longer memory with original evidence — current work-15, 2026-11-05
+
+The installed reader selects a few earlier original statements, possible updates
+and same-exchange replies from a bounded local history. Speaker, exact wording,
+source identity and coverage remain inspectable. An explicitly requested earlier
+choice can be quoted as history; old permissions and test reports do not become
+current authority or a new outcome. The same local model still proposes and
+challenges tentative readings; saving a memory does not train its weights.
+
+A separate same-workspace casebook shows possible links to other conversations,
+including the owner's latest perspective. It rebuilds from retained sources
+without another model or summary feedback loop. Related conversations with saved
+perspectives are excluded from the older model-facing excerpt retrieval, which
+cannot yet represent their corrections. The casebook still displays both.
+
+Reserved invented long-history outcomes improve 3/8 to 6/8; all 51 previously
+passing examples remain passing. Two long cases fail and some next checks remain
+generic. This is bounded retrieval progress, not validated broad understanding.
+[Plain-language walkthrough and limits](CONVERSATION_MEMORY.md).
+
+Earlier sections describe their original versions and settings.
+
+---
+
+# Separate speakers and preserve the request — 2026-11-05
+
+The installed `work-14` reader keeps human and AI reports separate, including
+when they describe different outcomes. Quotation scope is checked in the
+surrounding source before an action is recognized. A first failure after a
+requirement is not automatically called a recurring fault. When a model goal
+only describes the conversation, an eligible already-cited human request can
+supply the goal verbatim. Known copied text cannot supply that replacement.
+
+The critic receives proposal JSON in fixed key order. This removes an uncontrolled
+input variation; it does not guarantee deterministic or correct model judgments.
+The original model, category switch, capture consent and database schema remain.
+The recap exposes each report and its uncertainty; it does not decide who was
+right or what the person understood. Background checks and invented renders pass.
+[Matched results, failures and remaining limits](DOMAIN_READER.md).
+
+Earlier sections describe their original versions and settings.
+
+---
+
+# Source-reading corrections — 2026-11-05
+
+The installed `work-13` reader keeps the original Gemma model. It recognizes more
+explicit past-action/result reports while preserving denials, future actions and
+fictional-quotation provenance; a build cited as a boundary stays build-only.
+An invalid direction guess now falls through to normal goal reading instead of
+skipping it. Third-person assessments of private human understanding are withheld;
+ordinary requested explanations remain valid. The model instructions and schemas
+are unchanged; the version refreshes cached older readings.
+
+A new trained adapter and a larger 9B comparison failed fresh, separately scored
+coding/personal release gates. Their weights are not selected. Personal profiles
+remain synthetic diagnostics, default categories remain wording-based, and the
+compact day overview is retained. [Actual results, corrected scoring and limits](DOMAIN_READER.md).
+
+Earlier sections below record their original versions and settings.
+
+---
+
+# A compact view across the day — 2026-11-04
+
+The compact panel now starts with a small overview across the displayed day's saved conversations: follow-up count, conversation count, direction cues, check requests, continuation requests and reported results. Each nonzero category opens its matching replies in the recap. These are descriptive main roles in saved wording or optional model interpretations, not a performance grade or a measurement of effort. Unclear replies and partial history remain visible.
+
+Individual conversation checkpoints sit under a disclosure in the compact panel. The full recap lists all available latest readings rather than hiding the remainder behind one featured thread. Each source action checks its exact revision and freshness; changed source evidence removes only its own checkpoint. This still keeps one latest reading per conversation, not multiple goal episodes within a long chat. That deeper representation remains future work.
+
+The overview change was installed locally and restarted with `--background`, retaining the original selected model and category switch. Background state checks and invented offscreen renders passed; physical mouse, focus and live-window behavior were not tested. The learned-weight follow-up improved a new semantic diagnostic to 18/20 but failed deployment gates. [Training results and remaining uncertainty](MODEL_SOURCE_SUPERVISION.md).
+
+---
+
+# A learned-weight trial — 2026-11-04
+
+A separate local Gemma adapter was fine-tuned on invented conversation packets. It improved one synthetic proposal task but failed its declared quality gate, so it is not active in the app. The current goal reader and default category behavior remain. [Training evidence and limits](MODEL_TRAINING.md).
+
+---
+
 # An experimental category reader — 0.14
 
 The work-12 goal reader remains unchanged. A separate, off-by-default category experiment uses the selected local model to propose independent acts in human replies, retains mixed signals and caches source-linked interpretations in existing revisions. It has not passed its interpretation-quality gate. Default counts remain wording-based; turning the experiment on never silently substitutes those rules for unread or withheld model labels. [Mechanics and coverage](DAILY_RECAP.md) · [Evaluation](MODEL_EVALUATION.md) · [Improvement and weight-space boundaries](MODEL_IMPROVEMENT.md).

@@ -112,6 +112,11 @@ struct DecisionOverviewView: View {
                     }
                 }
             }
+            if let memory = model.visibleRelatedMemory, !memory.candidates.isEmpty {
+                DisclosureGroup("Possible connections to other conversations") {
+                    RelatedConversationMemoryView(model: model, memory: memory).padding(.top, 12)
+                }.font(.caption)
+            }
             if let error = model.decisionError { Label(error, systemImage: "exclamationmark.circle").font(.caption).foregroundStyle(Palette.amber) }
             if let notice = model.decisionNotice { Text(notice).font(.caption).foregroundStyle(Palette.secondary) }
             DecisionEngineSettings(model: model)
@@ -141,15 +146,15 @@ struct DecisionAccountView: View {
                 HStack(spacing: 10) {
                     Image(systemName: "scope").foregroundStyle(Palette.mint)
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(reading.focus == .directionChange ? "Earlier requirement" : "Likely goal").font(.caption2).foregroundStyle(Palette.secondary)
+                        Text(reading.goalLabel).font(.caption2).foregroundStyle(Palette.secondary)
                         Text(reading.goal).font(.callout.weight(.medium))
                     }
                 }.padding(14).frame(maxWidth: .infinity, alignment: .leading).background(Palette.inset.opacity(0.55), in: RoundedRectangle(cornerRadius: 12))
-                Text(reading.account).font(.callout).lineSpacing(5).textSelection(.enabled)
+                Text(reading.account).font(.callout).lineSpacing(5).fixedSize(horizontal: false, vertical: true).textSelection(.enabled)
                 if let evidence = reading.evidenceStatus, evidence != .unknown {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text(evidence.label).font(.caption.weight(.medium))
-                        Text(evidence.explanation).font(.caption).foregroundStyle(Palette.secondary)
+                        Text(reading.evidenceLabel).font(.caption.weight(.medium))
+                        Text(reading.evidenceExplanation).font(.caption).foregroundStyle(Palette.secondary).fixedSize(horizontal: false, vertical: true)
                     }.padding(14).frame(maxWidth: .infinity, alignment: .leading).background(Palette.inset.opacity(0.45), in: RoundedRectangle(cornerRadius: 12))
                 }
                 if reading.focus != .directionChange {
@@ -172,6 +177,11 @@ struct DecisionAccountView: View {
             }
             if revision.id != model.decisionHistory.first?.id { Text("You’re viewing an earlier reading.").font(.caption).foregroundStyle(Palette.secondary) }
             else if !model.isDecisionCurrent { Text("More work has arrived since this reading. A newer result may change this check.").font(.caption).foregroundStyle(Palette.amber) }
+            if let memory = revision.memoryRecall {
+                DisclosureGroup("Earlier context considered · \(memory.entries.count) excerpts") {
+                    ConversationRecallView(model: model, memory: memory).padding(.top, 12)
+                }.font(.caption)
+            }
             DisclosureGroup("Why this appeared · see the supporting messages") {
                 VStack(alignment: .leading, spacing: 12) {
                     ForEach(revision.evidence) { source in

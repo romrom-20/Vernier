@@ -1,0 +1,3340 @@
+[
+  {
+    "id": "recall-test-screenreader",
+    "usesArchive": true,
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me work through the questions for this project."
+      },
+      {
+        "role": "assistant",
+        "text": "Tell me which requirement to inspect."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 0 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 1 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 2 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 3 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 4 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "The filter control must announce its selected state to the screen reader."
+      },
+      {
+        "role": "assistant",
+        "text": "I will use that requirement when preparing the implementation."
+      },
+      {
+        "role": "user",
+        "text": "Continue organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 0: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 1: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 2: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 3: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 4: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 5: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 6: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 7: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 8: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 9: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 10: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 11: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 12: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 13: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 14: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 15: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 16: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 17: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 18: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 19: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 20: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 21: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 22: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 23: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 24: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 25: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 26: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 27: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 28: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 29: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 30: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 31: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 32: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 33: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 34: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 35: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 36: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 37: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 38: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 39: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 40: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 41: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 42: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 43: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 44: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 45: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 46: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 47: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 48: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 49: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 50: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 51: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 52: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 53: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 54: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 55: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 56: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 57: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 58: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 59: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 60: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 61: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 62: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 63: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 64: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 65: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 66: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 67: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 68: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 69: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 70: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 71: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 72: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 73: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 74: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 75: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 76: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 77: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 78: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 79: organizing the example files."
+      },
+      {
+        "role": "user",
+        "text": "Keep the status brief."
+      },
+      {
+        "role": "assistant",
+        "text": "The status is brief."
+      },
+      {
+        "role": "user",
+        "text": "Leave the formatting example as it is."
+      },
+      {
+        "role": "assistant",
+        "text": "The filter-control code is ready, with no behavior check yet."
+      },
+      {
+        "role": "user",
+        "text": "Check the filter control against my earlier accessibility requirement."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "screen reader",
+      "announce",
+      "selected state"
+    ],
+    "expectedEvidenceStatus": "no_result"
+  },
+  {
+    "id": "recall-test-format",
+    "usesArchive": true,
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me work through the questions for this project."
+      },
+      {
+        "role": "assistant",
+        "text": "Tell me which requirement to inspect."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 0 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 1 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 2 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 3 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 4 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "I choose NDJSON for the audit export format. Compare approaches for buffering, without changing that format choice."
+      },
+      {
+        "role": "assistant",
+        "text": "I will use that requirement when preparing the implementation."
+      },
+      {
+        "role": "user",
+        "text": "Continue organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 0: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 1: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 2: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 3: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 4: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 5: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 6: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 7: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 8: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 9: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 10: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 11: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 12: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 13: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 14: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 15: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 16: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 17: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 18: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 19: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 20: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 21: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 22: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 23: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 24: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 25: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 26: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 27: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 28: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 29: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 30: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 31: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 32: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 33: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 34: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 35: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 36: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 37: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 38: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 39: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 40: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 41: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 42: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 43: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 44: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 45: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 46: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 47: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 48: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 49: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 50: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 51: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 52: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 53: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 54: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 55: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 56: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 57: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 58: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 59: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 60: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 61: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 62: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 63: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 64: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 65: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 66: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 67: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 68: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 69: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 70: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 71: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 72: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 73: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 74: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 75: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 76: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 77: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 78: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 79: organizing the example files."
+      },
+      {
+        "role": "user",
+        "text": "Keep the status brief."
+      },
+      {
+        "role": "assistant",
+        "text": "The status is brief."
+      },
+      {
+        "role": "user",
+        "text": "Leave the formatting example as it is."
+      },
+      {
+        "role": "assistant",
+        "text": "The audit export implementation is ready for inspection."
+      },
+      {
+        "role": "user",
+        "text": "Explain which audit export format I chose and give a concrete next check."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "ndjson"
+    ],
+    "expectedEvidenceStatus": "no_result"
+  },
+  {
+    "id": "recall-test-order",
+    "usesArchive": true,
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me work through the questions for this project."
+      },
+      {
+        "role": "assistant",
+        "text": "Tell me which requirement to inspect."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 0 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 1 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 2 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 3 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 4 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "The queue repair must retain the original order of offline edits."
+      },
+      {
+        "role": "assistant",
+        "text": "I will use that requirement when preparing the implementation."
+      },
+      {
+        "role": "user",
+        "text": "Continue organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 0: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 1: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 2: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 3: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 4: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 5: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 6: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 7: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 8: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 9: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 10: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 11: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 12: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 13: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 14: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 15: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 16: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 17: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 18: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 19: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 20: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 21: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 22: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 23: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 24: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 25: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 26: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 27: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 28: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 29: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 30: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 31: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 32: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 33: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 34: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 35: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 36: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 37: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 38: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 39: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 40: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 41: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 42: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 43: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 44: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 45: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 46: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 47: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 48: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 49: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 50: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 51: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 52: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 53: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 54: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 55: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 56: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 57: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 58: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 59: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 60: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 61: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 62: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 63: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 64: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 65: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 66: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 67: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 68: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 69: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 70: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 71: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 72: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 73: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 74: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 75: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 76: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 77: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 78: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 79: organizing the example files."
+      },
+      {
+        "role": "user",
+        "text": "Keep the status brief."
+      },
+      {
+        "role": "assistant",
+        "text": "The status is brief."
+      },
+      {
+        "role": "user",
+        "text": "Leave the formatting example as it is."
+      },
+      {
+        "role": "assistant",
+        "text": "The queue repair patch is ready; no replay is available."
+      },
+      {
+        "role": "user",
+        "text": "Check the queue repair against the original order requirement."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "order",
+      "offline"
+    ],
+    "expectedEvidenceStatus": "no_result"
+  },
+  {
+    "id": "recall-test-revised",
+    "usesArchive": true,
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me work through the questions for this project."
+      },
+      {
+        "role": "assistant",
+        "text": "Tell me which requirement to inspect."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 0 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 1 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 2 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 3 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 4 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "All speech recognition must remain on this device. Do not use hosted transcription."
+      },
+      {
+        "role": "assistant",
+        "text": "I will use that requirement when preparing the implementation."
+      },
+      {
+        "role": "user",
+        "text": "I explicitly withdraw that restriction. Hosted processing is allowed now."
+      },
+      {
+        "role": "assistant",
+        "text": "That stated revision is recorded."
+      },
+      {
+        "role": "user",
+        "text": "Continue organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 0: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 1: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 2: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 3: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 4: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 5: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 6: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 7: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 8: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 9: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 10: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 11: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 12: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 13: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 14: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 15: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 16: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 17: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 18: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 19: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 20: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 21: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 22: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 23: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 24: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 25: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 26: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 27: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 28: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 29: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 30: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 31: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 32: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 33: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 34: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 35: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 36: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 37: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 38: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 39: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 40: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 41: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 42: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 43: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 44: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 45: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 46: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 47: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 48: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 49: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 50: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 51: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 52: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 53: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 54: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 55: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 56: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 57: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 58: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 59: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 60: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 61: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 62: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 63: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 64: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 65: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 66: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 67: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 68: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 69: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 70: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 71: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 72: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 73: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 74: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 75: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 76: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 77: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 78: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 79: organizing the example files."
+      },
+      {
+        "role": "user",
+        "text": "Keep the status brief."
+      },
+      {
+        "role": "assistant",
+        "text": "The status is brief."
+      },
+      {
+        "role": "user",
+        "text": "Leave the formatting example as it is."
+      },
+      {
+        "role": "assistant",
+        "text": "I propose hosted speech transcription."
+      },
+      {
+        "role": "user",
+        "text": "Okay, proceed."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "speech",
+      "transcription",
+      "hosted"
+    ],
+    "expectedEvidenceStatus": "no_result"
+  },
+  {
+    "id": "recall-test-past-ai",
+    "usesArchive": true,
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me work through the questions for this project."
+      },
+      {
+        "role": "assistant",
+        "text": "Tell me which requirement to inspect."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 0 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 1 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 2 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 3 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 4 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "One click should create exactly one bookmark."
+      },
+      {
+        "role": "assistant",
+        "text": "I clicked once and it created one bookmark."
+      },
+      {
+        "role": "user",
+        "text": "Continue organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 0: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 1: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 2: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 3: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 4: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 5: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 6: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 7: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 8: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 9: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 10: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 11: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 12: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 13: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 14: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 15: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 16: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 17: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 18: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 19: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 20: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 21: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 22: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 23: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 24: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 25: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 26: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 27: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 28: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 29: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 30: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 31: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 32: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 33: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 34: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 35: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 36: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 37: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 38: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 39: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 40: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 41: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 42: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 43: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 44: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 45: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 46: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 47: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 48: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 49: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 50: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 51: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 52: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 53: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 54: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 55: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 56: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 57: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 58: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 59: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 60: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 61: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 62: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 63: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 64: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 65: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 66: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 67: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 68: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 69: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 70: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 71: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 72: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 73: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 74: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 75: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 76: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 77: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 78: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 79: organizing the example files."
+      },
+      {
+        "role": "user",
+        "text": "Keep the status brief."
+      },
+      {
+        "role": "assistant",
+        "text": "The status is brief."
+      },
+      {
+        "role": "user",
+        "text": "Leave the formatting example as it is."
+      },
+      {
+        "role": "assistant",
+        "text": "I changed the bookmark handler again; the new version has not been replayed."
+      },
+      {
+        "role": "user",
+        "text": "I have not clicked this version myself. Which bookmark case remains untested?"
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff",
+      "none"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "bookmark"
+    ],
+    "expectedEvidenceStatus": "no_result"
+  },
+  {
+    "id": "recall-test-preview",
+    "usesArchive": true,
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me work through the questions for this project."
+      },
+      {
+        "role": "assistant",
+        "text": "Tell me which requirement to inspect."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 0 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 1 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 2 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 3 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 4 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Print preview must preserve accented names on the final page."
+      },
+      {
+        "role": "assistant",
+        "text": "I will use that requirement when preparing the implementation."
+      },
+      {
+        "role": "user",
+        "text": "Continue organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 0: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 1: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 2: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 3: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 4: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 5: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 6: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 7: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 8: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 9: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 10: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 11: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 12: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 13: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 14: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 15: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 16: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 17: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 18: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 19: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 20: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 21: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 22: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 23: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 24: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 25: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 26: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 27: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 28: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 29: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 30: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 31: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 32: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 33: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 34: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 35: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 36: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 37: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 38: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 39: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 40: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 41: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 42: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 43: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 44: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 45: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 46: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 47: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 48: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 49: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 50: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 51: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 52: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 53: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 54: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 55: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 56: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 57: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 58: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 59: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 60: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 61: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 62: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 63: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 64: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 65: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 66: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 67: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 68: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 69: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 70: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 71: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 72: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 73: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 74: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 75: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 76: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 77: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 78: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 79: organizing the example files."
+      },
+      {
+        "role": "user",
+        "text": "Keep the status brief."
+      },
+      {
+        "role": "assistant",
+        "text": "The status is brief."
+      },
+      {
+        "role": "user",
+        "text": "Leave the formatting example as it is."
+      },
+      {
+        "role": "assistant",
+        "text": "The print preview renderer is ready; the named case has not been checked."
+      },
+      {
+        "role": "user",
+        "text": "Check print preview against my earlier requirement about names."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "accent",
+      "final page"
+    ],
+    "expectedEvidenceStatus": "no_result"
+  },
+  {
+    "id": "recall-test-remind",
+    "usesArchive": true,
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me work through the questions for this project."
+      },
+      {
+        "role": "assistant",
+        "text": "Tell me which requirement to inspect."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 0 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 1 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 2 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 3 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 4 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "I choose a plain text backup format. You decide the button placement; leave the backup format as chosen."
+      },
+      {
+        "role": "assistant",
+        "text": "I will use that requirement when preparing the implementation."
+      },
+      {
+        "role": "user",
+        "text": "Continue organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 0: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 1: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 2: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 3: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 4: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 5: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 6: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 7: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 8: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 9: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 10: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 11: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 12: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 13: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 14: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 15: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 16: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 17: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 18: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 19: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 20: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 21: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 22: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 23: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 24: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 25: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 26: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 27: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 28: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 29: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 30: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 31: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 32: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 33: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 34: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 35: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 36: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 37: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 38: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 39: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 40: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 41: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 42: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 43: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 44: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 45: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 46: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 47: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 48: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 49: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 50: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 51: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 52: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 53: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 54: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 55: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 56: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 57: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 58: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 59: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 60: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 61: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 62: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 63: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 64: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 65: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 66: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 67: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 68: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 69: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 70: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 71: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 72: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 73: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 74: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 75: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 76: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 77: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 78: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 79: organizing the example files."
+      },
+      {
+        "role": "user",
+        "text": "Keep the status brief."
+      },
+      {
+        "role": "assistant",
+        "text": "The status is brief."
+      },
+      {
+        "role": "user",
+        "text": "Leave the formatting example as it is."
+      },
+      {
+        "role": "assistant",
+        "text": "The layout proposal is ready. No backup behavior has been tested."
+      },
+      {
+        "role": "user",
+        "text": "Remind me of my earlier backup format choice and a concrete check."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "plain text",
+      "backup"
+    ],
+    "expectedEvidenceStatus": "no_result"
+  },
+  {
+    "id": "recall-test-reset",
+    "usesArchive": true,
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help me work through the questions for this project."
+      },
+      {
+        "role": "assistant",
+        "text": "Tell me which requirement to inspect."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 0 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 1 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 2 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 3 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Keep the unrelated formatting example 4 readable."
+      },
+      {
+        "role": "assistant",
+        "text": "That formatting example is ready."
+      },
+      {
+        "role": "user",
+        "text": "Search should work offline without uploading the query text."
+      },
+      {
+        "role": "assistant",
+        "text": "I searched for a saved title and got one result."
+      },
+      {
+        "role": "user",
+        "text": "Continue organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 0: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 1: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 2: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 3: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 4: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 5: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 6: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 7: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 8: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 9: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 10: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 11: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 12: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 13: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 14: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 15: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 16: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 17: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 18: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 19: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 20: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 21: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 22: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 23: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 24: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 25: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 26: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 27: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 28: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 29: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 30: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 31: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 32: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 33: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 34: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 35: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 36: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 37: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 38: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 39: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 40: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 41: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 42: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 43: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 44: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 45: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 46: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 47: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 48: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 49: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 50: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 51: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 52: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 53: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 54: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 55: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 56: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 57: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 58: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 59: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 60: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 61: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 62: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 63: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 64: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 65: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 66: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 67: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 68: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 69: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 70: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 71: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 72: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 73: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 74: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 75: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 76: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 77: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 78: organizing the example files."
+      },
+      {
+        "role": "assistant",
+        "text": "Invented progress update 79: organizing the example files."
+      },
+      {
+        "role": "user",
+        "text": "Keep the status brief."
+      },
+      {
+        "role": "assistant",
+        "text": "The status is brief."
+      },
+      {
+        "role": "user",
+        "text": "Leave the formatting example as it is."
+      },
+      {
+        "role": "assistant",
+        "text": "The calendar keyboard-navigation change is only proposed."
+      },
+      {
+        "role": "user",
+        "text": "Separate issue: make the calendar reachable with keyboard navigation."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff",
+      "none"
+    ],
+    "expectedCue": false,
+    "goalTerms": [
+      "calendar",
+      "keyboard"
+    ],
+    "expectedEvidenceStatus": "no_result"
+  }
+]

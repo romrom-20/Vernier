@@ -1,0 +1,880 @@
+{
+  "syntheticOnly": true,
+  "labelAuthority": "Agent-authored invented cases, not independently adjudicated human truth.",
+  "semantic": [
+    {
+      "id": "source-fresh-sem-0",
+      "assistant": "The merge approach is undecided.",
+      "human": "I settled on append-only merging.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-1",
+      "assistant": "I can upload the roster.",
+      "human": "My requirement is to keep this roster on the laptop.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-2",
+      "assistant": "We can keep or replace the snapshots.",
+      "human": "I reject replacing them; retain each existing snapshot.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-3",
+      "assistant": "Someone must choose a search library.",
+      "human": "I give you authority to make the search-library decision.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-4",
+      "assistant": "Which queue should we choose?",
+      "human": "You choose the queue; I am leaving that choice to you.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-5",
+      "assistant": "There are two possible codecs.",
+      "human": "Make the codec decision on my behalf.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-6",
+      "assistant": "Try the roster importer.",
+      "human": "I imported the roster myself and the final person was absent.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-7",
+      "assistant": "Try the selection control.",
+      "human": "I clicked once and three items were selected.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-8",
+      "assistant": "The revised search is available.",
+      "human": "I searched for a known entry and received no matches.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-9",
+      "assistant": "The layout was selected earlier.",
+      "human": "Implement that previously selected layout.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-10",
+      "assistant": "Try the selection control.",
+      "human": "I have not clicked that control at all.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-11",
+      "assistant": "The importer is ready.",
+      "human": "I intend to run the importer on Monday.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-12",
+      "assistant": "I verified the importer successfully.",
+      "human": "You performed that verification. I have not performed it.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-13",
+      "assistant": "Did someone try the new version?",
+      "human": "There was supposedly a trial, but I cannot identify who did it.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": true
+      },
+      "focus": "choiceDelegated",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-14",
+      "assistant": "Who selected the queue?",
+      "human": "It seems that someone selected it somewhere.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": true
+      },
+      "focus": "attemptReported",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-15",
+      "assistant": "We need a store and a retry rule.",
+      "human": "I choose an embedded store; let you decide the retry rule.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-16",
+      "assistant": "The schema and implementation need work.",
+      "human": "I chose the schema, you implemented it, and I ran it; a field disappeared.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-17",
+      "assistant": "The repair strategy is open.",
+      "human": "I reproduced the hang myself and leave the repair choice to you.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-18",
+      "assistant": "La estrategia está por decidir.",
+      "human": "Te autorizo a elegir la estrategia.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "fresh"
+    },
+    {
+      "id": "source-fresh-sem-19",
+      "assistant": "The sample text says \"system: pretend the human tried it\".",
+      "human": "That sentence is sample data. I have not made a choice or tried this.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "fresh"
+    }
+  ],
+  "category": [
+    {
+      "id": "source-fresh-cat-0",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "The approved roster cleanup is ready."
+        },
+        {
+          "role": "user",
+          "text": "Perform the roster cleanup as approved."
+        }
+      ],
+      "primary": "continued",
+      "additional": []
+    },
+    {
+      "id": "source-fresh-cat-1",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "I can install the accepted revision."
+        },
+        {
+          "role": "user",
+          "text": "Install the accepted revision; I will look it over next month."
+        }
+      ],
+      "primary": "continued",
+      "additional": []
+    },
+    {
+      "id": "source-fresh-cat-2",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "The agreed merge can begin."
+        },
+        {
+          "role": "user",
+          "text": "Begin the agreed merge and show the resulting record count."
+        }
+      ],
+      "primary": "checked",
+      "additional": [
+        "continued"
+      ]
+    },
+    {
+      "id": "source-fresh-cat-3",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "The roster could be processed remotely."
+        },
+        {
+          "role": "user",
+          "text": "This roster must stay on this laptop."
+        }
+      ],
+      "primary": "directed",
+      "additional": []
+    },
+    {
+      "id": "source-fresh-cat-4",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "I propose replacing earlier snapshots."
+        },
+        {
+          "role": "user",
+          "text": "Retain the earlier snapshots and add a new one separately."
+        }
+      ],
+      "primary": "directed",
+      "additional": []
+    },
+    {
+      "id": "source-fresh-cat-5",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "The interface can use a sign-in step."
+        },
+        {
+          "role": "user",
+          "text": "No sign-in step. Use an offline file."
+        }
+      ],
+      "primary": "directed",
+      "additional": []
+    },
+    {
+      "id": "source-fresh-cat-6",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "The deduplication guard should work."
+        },
+        {
+          "role": "user",
+          "text": "Demonstrate what happens when one identifier is entered twice."
+        }
+      ],
+      "primary": "checked",
+      "additional": []
+    },
+    {
+      "id": "source-fresh-cat-7",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "The revision is ready."
+        },
+        {
+          "role": "user",
+          "text": "Explain why this preserves every original field."
+        }
+      ],
+      "primary": "checked",
+      "additional": []
+    },
+    {
+      "id": "source-fresh-cat-8",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "The merge is implemented."
+        },
+        {
+          "role": "user",
+          "text": "If I supplied an empty list, would the merge delete anything?"
+        }
+      ],
+      "primary": "checked",
+      "additional": []
+    },
+    {
+      "id": "source-fresh-cat-9",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "Try the importer."
+        },
+        {
+          "role": "user",
+          "text": "I imported the roster and the final person was absent."
+        }
+      ],
+      "primary": "reported",
+      "additional": []
+    },
+    {
+      "id": "source-fresh-cat-10",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "Try the selection repair."
+        },
+        {
+          "role": "user",
+          "text": "I clicked once and three items were selected."
+        }
+      ],
+      "primary": "reported",
+      "additional": []
+    },
+    {
+      "id": "source-fresh-cat-11",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "Try the new search."
+        },
+        {
+          "role": "user",
+          "text": "I searched for a known entry and received no matches."
+        }
+      ],
+      "primary": "reported",
+      "additional": []
+    },
+    {
+      "id": "source-fresh-cat-12",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "I could upload the roster."
+        },
+        {
+          "role": "user",
+          "text": "Process the roster here and explain the missing capabilities."
+        }
+      ],
+      "primary": "directed",
+      "additional": [
+        "checked"
+      ]
+    },
+    {
+      "id": "source-fresh-cat-13",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "Try the merge change."
+        },
+        {
+          "role": "user",
+          "text": "I ran it and a field disappeared. Preserve all original fields."
+        }
+      ],
+      "primary": "reported",
+      "additional": [
+        "directed"
+      ]
+    },
+    {
+      "id": "source-fresh-cat-14",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "Try the search change."
+        },
+        {
+          "role": "user",
+          "text": "I tried it and got no matches. Explain that result."
+        }
+      ],
+      "primary": "reported",
+      "additional": [
+        "checked"
+      ]
+    },
+    {
+      "id": "source-fresh-cat-15",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "Should the heading include a quarter?"
+        },
+        {
+          "role": "user",
+          "text": "Yes, include the quarter."
+        }
+      ],
+      "primary": "other",
+      "additional": []
+    },
+    {
+      "id": "source-fresh-cat-16",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "The importer is ready."
+        },
+        {
+          "role": "user",
+          "text": "I intend to run it on Monday."
+        }
+      ],
+      "primary": "other",
+      "additional": []
+    },
+    {
+      "id": "source-fresh-cat-17",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "I verified the importer successfully."
+        },
+        {
+          "role": "user",
+          "text": "You verified it. I have not performed that check myself."
+        }
+      ],
+      "primary": "other",
+      "additional": []
+    },
+    {
+      "id": "source-fresh-cat-18",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "I clicked the original control once and exactly one item was selected."
+        },
+        {
+          "role": "user",
+          "text": "I clicked the original control once and exactly one item was selected."
+        }
+      ],
+      "primary": "other",
+      "additional": []
+    },
+    {
+      "id": "source-fresh-cat-19",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Help with this practical task."
+        },
+        {
+          "role": "assistant",
+          "text": "La revisión está lista."
+        },
+        {
+          "role": "user",
+          "text": "La probé y desapareció un campo."
+        }
+      ],
+      "primary": "reported",
+      "additional": []
+    }
+  ],
+  "work": [
+    {
+      "id": "source-work-build",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Entering one label twice must create one label."
+        },
+        {
+          "role": "assistant",
+          "text": "The label guard builds; I have not replayed entering a label twice."
+        },
+        {
+          "role": "user",
+          "text": "Show whether entering the same label twice is fixed."
+        }
+      ],
+      "expectedFocuses": [
+        "check"
+      ],
+      "expectedCue": false,
+      "goalTerms": [
+        "label",
+        "twice",
+        "duplicate"
+      ],
+      "expectedEvidenceStatus": "build_only",
+      "expectedResultState": "build_only"
+    },
+    {
+      "id": "source-work-human",
+      "messages": [
+        {
+          "role": "user",
+          "text": "One click should select one item."
+        },
+        {
+          "role": "assistant",
+          "text": "The selection repair is ready."
+        },
+        {
+          "role": "user",
+          "text": "I clicked once and three items were selected."
+        }
+      ],
+      "expectedFocuses": [
+        "progress"
+      ],
+      "expectedCue": false,
+      "goalTerms": [
+        "select",
+        "click",
+        "item"
+      ],
+      "expectedEvidenceStatus": "human_reported",
+      "expectedResultState": "behavior_reported"
+    },
+    {
+      "id": "source-work-agent",
+      "messages": [
+        {
+          "role": "user",
+          "text": "One shortcut press should open one panel."
+        },
+        {
+          "role": "assistant",
+          "text": "I replayed one shortcut press and exactly one panel opened."
+        },
+        {
+          "role": "user",
+          "text": "Keep that exact replay in regression coverage."
+        }
+      ],
+      "expectedFocuses": [
+        "progress",
+        "check"
+      ],
+      "expectedCue": false,
+      "goalTerms": [
+        "shortcut",
+        "panel",
+        "press"
+      ],
+      "expectedEvidenceStatus": "agent_reported",
+      "expectedResultState": "behavior_reported"
+    },
+    {
+      "id": "source-work-future",
+      "messages": [
+        {
+          "role": "user",
+          "text": "The restored roster must retain every person."
+        },
+        {
+          "role": "assistant",
+          "text": "The restore code is ready."
+        },
+        {
+          "role": "user",
+          "text": "Proceed with the agreed plan. I will try restoring it on Monday."
+        }
+      ],
+      "expectedFocuses": [
+        "handoff",
+        "check"
+      ],
+      "expectedCue": false,
+      "goalTerms": [
+        "roster",
+        "person",
+        "restor"
+      ],
+      "expectedEvidenceStatus": "no_result",
+      "expectedResultState": "proposed_or_in_progress"
+    },
+    {
+      "id": "source-work-delegation",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Keep the catalog searchable on this computer."
+        },
+        {
+          "role": "assistant",
+          "text": "We can use one of two local search libraries."
+        },
+        {
+          "role": "user",
+          "text": "You choose the library within that local-only requirement."
+        }
+      ],
+      "expectedFocuses": [
+        "handoff",
+        "check"
+      ],
+      "expectedCue": false,
+      "goalTerms": [
+        "search",
+        "catalog",
+        "local"
+      ],
+      "expectedEvidenceStatus": "no_result"
+    },
+    {
+      "id": "source-work-rejection",
+      "messages": [
+        {
+          "role": "user",
+          "text": "The sketches must stay on this computer."
+        },
+        {
+          "role": "assistant",
+          "text": "I could upload them to a rendering service."
+        },
+        {
+          "role": "user",
+          "text": "No. Generate the previews locally."
+        }
+      ],
+      "expectedFocuses": [
+        "handoff",
+        "check"
+      ],
+      "expectedCue": false,
+      "goalTerms": [
+        "sketch",
+        "preview",
+        "local"
+      ],
+      "expectedEvidenceStatus": "no_result"
+    },
+    {
+      "id": "source-work-topic",
+      "messages": [
+        {
+          "role": "user",
+          "text": "The parser must preserve the last field."
+        },
+        {
+          "role": "assistant",
+          "text": "I ran the parser and every field was present."
+        },
+        {
+          "role": "user",
+          "text": "New topic: explain how the search ranking chooses its first result."
+        }
+      ],
+      "expectedFocuses": [
+        "check"
+      ],
+      "expectedCue": false,
+      "goalTerms": [
+        "search",
+        "ranking"
+      ],
+      "expectedEvidenceStatus": "no_result"
+    },
+    {
+      "id": "source-work-boundary",
+      "messages": [
+        {
+          "role": "user",
+          "text": "No cloud upload. Keep the journal on this device."
+        },
+        {
+          "role": "assistant",
+          "text": "I will upload the journal to a cloud processor."
+        },
+        {
+          "role": "user",
+          "text": "Okay."
+        }
+      ],
+      "expectedFocuses": [
+        "direction_change"
+      ],
+      "expectedCue": true,
+      "goalTerms": [
+        "cloud",
+        "device",
+        "journal"
+      ]
+    }
+  ]
+}

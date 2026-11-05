@@ -1,0 +1,71 @@
+[
+  {
+    "id": "four-target-mixed",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this task."
+      },
+      {
+        "role": "assistant",
+        "text": "I can apply the approved local patch."
+      },
+      {
+        "role": "user",
+        "text": "Proceed with the approved plan. I will inspect it later."
+      },
+      {
+        "role": "assistant",
+        "text": "Please try the updated shortcut."
+      },
+      {
+        "role": "user",
+        "text": "I tried it and got two windows. Keep the shortcut but remove the duplicate registration."
+      },
+      {
+        "role": "assistant",
+        "text": "A hosted service would be faster."
+      },
+      {
+        "role": "user",
+        "text": "Keep it offline and explain the tradeoff."
+      },
+      {
+        "role": "assistant",
+        "text": "Should the button be blue?"
+      },
+      {
+        "role": "user",
+        "text": "Yes."
+      }
+    ],
+    "primary": "other",
+    "additional": [],
+    "targets": [
+      {
+        "messageIndex": 2,
+        "primary": "continued",
+        "additional": []
+      },
+      {
+        "messageIndex": 4,
+        "primary": "reported",
+        "additional": [
+          "directed"
+        ]
+      },
+      {
+        "messageIndex": 6,
+        "primary": "directed",
+        "additional": [
+          "checked"
+        ]
+      },
+      {
+        "messageIndex": 8,
+        "primary": "other",
+        "additional": []
+      }
+    ]
+  }
+]

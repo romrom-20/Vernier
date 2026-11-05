@@ -66,12 +66,28 @@ extension AppModel {
         let reports = try await store.loadDecisionPerspectives()
         guard decisionGeneration == generation, selectedDecisionSessionID == selected else { return }
         decisionRevisions = records; decisionPerspectives = reports
+        await loadRelatedMemory()
+    }
+    var visibleRelatedMemory: RelatedConversationMemory? {
+        guard conversationMemoryEnabled, codexEnabled, localInsightsEnabled, !paused, !systemSuspended, relatedMemory?.sessionID == decisionSession?.id else { return nil }
+        return relatedMemory
+    }
+    func loadRelatedMemory() async {
+        relatedMemoryGeneration += 1
+        let generation = relatedMemoryGeneration, analysis = decisionGeneration, selected = decisionSession?.id, token = captureGate.token()
+        relatedMemory = nil
+        guard !isolatedEnvironment, conversationMemoryEnabled, codexEnabled, localInsightsEnabled, !paused, !systemSuspended, let selected, let store else { return }
+        let book = try? await store.relatedConversationMemory(sessionID: selected)
+        guard relatedMemoryGeneration == generation, decisionGeneration == analysis, decisionSession?.id == selected, captureGate.token() == token,
+              conversationMemoryEnabled, codexEnabled, localInsightsEnabled, !paused, !systemSuspended else { return }
+        relatedMemory = book
     }
     private func clearDecisionDirty(_ session: String, through time: Date) {
         if let dirty = decisionDirtyAt[session], dirty <= time { decisionDirtyAt.removeValue(forKey: session) }
     }
     func selectDecisionSession(_ id: String) {
         selectedDecisionSessionID = id; selectedDecisionRevisionID = nil; decisionError = nil; decisionNotice = nil
+        relatedMemoryGeneration += 1; relatedMemory = nil
         guard let store, !isolatedEnvironment else { return }
         let generation = decisionGeneration
         Task { @MainActor [weak self] in
@@ -79,6 +95,7 @@ extension AppModel {
             self.decisionRevisions.removeAll { $0.sessionID == id }
             self.decisionRevisions += values
             self.decisionRevisions.sort { $0.createdAt > $1.createdAt }
+            await self.loadRelatedMemory()
         }
     }
     func checkDecisionEngine() {
@@ -98,6 +115,7 @@ extension AppModel {
     }
     func clearDecisionMemory() {
         cancelDecisionReview(); decisionRevisions = []; decisionPerspectives = []
+        relatedMemoryGeneration += 1; relatedMemory = nil
         selectedDecisionSessionID = nil; selectedDecisionRevisionID = nil; decisionError = nil; decisionNotice = nil; decisionDirtyAt = [:]
     }
     func scheduleDecisionReview() {

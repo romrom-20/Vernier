@@ -1,3 +1,142 @@
+# Longer-conversation recall — current work-15, 2026-11-05
+
+The fixed source-linked recall method matches **6/8** reserved invented long
+histories versus **3/8** without recall. All three baseline successes survive.
+Existing regression is **51/60**, preserving the same 51 successes. Selected
+long cases add no unsupported direction cues or historical-result promotion;
+all reviews complete without generation errors. Two cases still miss the format
+or revised plan; some scored successes still offer generic checks.
+
+Development is 4/8 baseline, 4/8 first draft, 4/8 second draft with one unsafe
+cue, and 7/8 selected third draft. Rejected drafts stay disabled. Source-quoted
+goals and literal reminders are deterministic retrieval, not learned reasoning.
+All inputs/labels are agent-authored and structurally related; the score checks
+focus, result status and shallow goal terms. Inspected cases are now regressions.
+
+A separate casebook shows up to two possible links among sixty same-workspace
+reviewed conversations, with original excerpts and the latest owner perspective.
+It runs no inference and has source/scope/correction/erasure checks, not a claimed
+semantic-accuracy score. Final background checks pass forty core groups, isolated
+state and offscreen render checks; XCTest is skipped without full Xcode. Final
+app request exports match the selected candidate on 76/76 examples; original
+inference/validation code remains identical. Original Gemma remains selected.
+[Mechanism, failures and scope](CONVERSATION_MEMORY.md).
+
+---
+
+# Source-linked reader evaluation — 2026-11-05
+
+The installed `work-14` host retains the original Gemma weights. With proposal
+keys fixed in both hosts, existing coding cases improve 32/36 to 33/36 with no
+lost baseline successes. The final run preserves all 48 previously passing
+examples, matches 8/12 and 7/8 inspected speaker cases and 3/4 new goal cases,
+and completes all sixty without generation errors. Annotated speaker checks add
+no unsupported report; eight expected report flags are missing/withheld. Valid
+quoted source identities remain intact. These are shallow composite checks on
+agent-authored invented material; manual goal review found an inversion that the
+score itself missed. [Protocol, corrections and limits](DOMAIN_READER.md).
+
+The first 56 cases are regression/development after inspection and host changes.
+Only the last four are new under the final fixed source-goal method. No failed
+model/decomposition draft is enabled, no new weights are selected and the personal
+profile remains separate. Interrupted native-thinking/queued runs are retained
+as incomplete diagnostics, not included as completed accuracy comparisons.
+The final qualification uses an immutable signed app copy and frozen source,
+fixture and model-manifest hashes. Normal background verification makes no
+inference calls and no foreground windows.
+
+---
+
+# Assistant-context training and capacity — 2026-11-05
+
+A real 660-update adapter improved narrow matched-base outcomes but failed transfer
+and unsupported-claim gates. Its actual coding regression score was 26/36 versus
+the then-live model's historical 29/36. A later scorer correction uniformly counts
+successful withholding when both none/no-result are explicitly allowed, raising
+the original baseline to 30/36; original raw reports are retained.
+
+A fixed 9B model plus host corrections matched 35/36 reused development cases,
+preserving all thirty revised baseline successes. Fresh outcomes failed: coding
+profiles **24/32 vs 25/32 baseline**, personal **22/32 vs 23/32**, coding goals
+**9/20 vs 8/20**, with more unsupported profile flags. Mixed transfer also failed.
+The larger model preserves 12/12 general exact-response controls versus 7/12;
+that does not establish observer reliability. No post-test model/prompt selection
+was made. Every label is agent-authored, all inputs invented and inspected sets
+are now regression material.
+
+Only independently checked host/source corrections are installed as `work-13`.
+The original Gemma selection and off-by-default category mode remain. There is no
+personal-assistant source integration. [Methods, full outcomes and reproduction](DOMAIN_READER.md).
+Earlier sections below retain historical protocols and settings.
+
+# Supervised source facts and follow-up — 2026-11-04
+
+Three completed local weight adapters remain disabled. A 384-update label-only versus source-facts comparison failed its development preservation gate; the source-facts variant added more unsupported acts. A separate 768-update label-only follow-up improved new semantic outcomes **14/20 → 18/20** and category outcomes **6/20 → 12/20**, but added an unsupported category act and missed the 17/20 category minimum. Fresh controls were 11/12 base and 12/12 adapted. These are invented, agent-labeled MLX proposals, without live Ollama/critic/work-12 validation. Production weights and selection are unchanged. [Actual training, failure audit, preparation corrections and limits](MODEL_SOURCE_SUPERVISION.md).
+
+# Research-guided thinking/checklist comparison — 2026-11-04
+
+A frozen combination of Gemma's native thinking mode and a short source checklist improved new invented category outcomes from 10/32 to 19/32, but worsened separate semantic outcomes from 22/32 to 20/32. Unsupported claims increased in both tasks, one category completion truncated, and median replies were about eight times slower. The candidate failed its quality gates and remains isolated, with unchanged weights and live settings.
+
+Matched unrelated controls were 7/8 direct and 8/8 thinking after correcting an observer-only JSON instruction accidentally applied to the original controls. All observer prompt hashes replay unchanged; original reports and the correction are preserved. A draft selection flaw was also corrected, with its original reserved corpus retired and replaced. [Sources, complete result, protocol history and limits](OBSERVER_REASONING_RESEARCH.md). This inference experiment does not demonstrate a successful weight change or general human-agency reasoning.
+
+# Semantic source-state weight investigation — 2026-11-04
+
+A fixed, source-derived direct weight edit produced no gain on a new 48-case invented semantic task: original, conversion-only, edited, random, generic-true and reversed variants all matched 40/48, with identical Boolean predictions. The previous Boolean projection instead matched 33/48 and increased unsupported act claims from five to ten. Its older two-case gain therefore does not establish useful semantic transfer. Both edits remain disabled.
+
+The study distinguishes human choices, deliberate delegation, personal attempts and uncertainty separately from the existing category schema. Its labels remain agent-authored; the owner declined separate human adjudication. Source-state patching found an effective earlier path, but amplification did not fix its actual errors. See [method, controls, numerical audit and limits](SEMANTIC_WEIGHT_STUDY.md). Scores from the different tasks are not interchangeable.
+
+# Selective weight-space projection — 2026-11-04
+
+A direct, gradient-free MLP weight edit improved a new reserved invented proposal test from **11/32 to 13/32**. It recovered four missed acts across three replies, with two newly complete outcomes, no regressions and no new unsupported acts on that set. Quantization-only controls and the equal-norm random edit stayed at 11/32 with identical act sets. The selected edit still failed the declared 27/32 gate and is not active in Vernier.
+
+The approach combines actual native-prefix replay, causal MLP localization, inspection of numerical weight-column geometry and a sign-selective directional projection. It corrected tokenization and column-sign errors found in earlier diagnostic drafts. A narrower 64-column edit had shown a development gain but no fresh-test effect; the broader budget was motivated by measured contrast-score coverage, not selected using the new test. All data was agent-authored, with no independent adjudication; these are now regression sets. [Method, mathematical edit, controls, exact scope and limits](WEIGHT_SPACE_APPROACH.md).
+
+These are proposal-only MLX comparisons, not production Swift/critic tests or a comparison with the earlier QAT/LoRA test sets. The default wording pipeline matched the same 13/32 main roles on this new set; secondary acts are a separate model metric.
+
+---
+
+# Direct component edit — 2026-11-04
+
+A separate gradient-free experiment inspected Gemma attention-head activations and output matrices, then directly zeroed the selected head's effective output-weight columns. It used no LoRA, optimizer or backward pass. The selected edit matched **7/24** fresh invented proposal outcomes versus **6/24** for its untouched base, below the 20/24 gate and the required four additional matches. Development and control results did not support the targeted-head diagnosis. The failed patch remains isolated and is not active in the app. [Actual tensor edit, causal controls, limits and reproduction](DIRECT_WEIGHT_EDIT.md).
+
+This was a related component-inspection/intervention experiment, not reproduction of the paper's Qwen looping fix. Its fresh test differs from the earlier adapter test; the two reported scores are not a direct comparison between methods.
+
+---
+
+# First learned-weight adapter — 2026-11-04
+
+A separate Gemma 4 E2B **QLoRA adapter was actually trained**, changing 32 low-rank tensors. On a reserved, agent-authored 24-example test, proposal-only full outcomes improved from **7/24 to 15/24** against the identical untouched MLX base. The 20/24 quality gate failed. Unsupported added acts rose from zero to two, and both base and adapter failed the complete four-target stress packet. Four basic unrelated controls still matched in both variants.
+
+Training completed 120 steps in 119 seconds, with 5.66 GB peak MLX allocation. The downloaded base hash and relevant production preferences were unchanged. The adapter is retained separately and is **not active in Vernier**; the live Ollama QAT model, work-12 reader and disabled category experiment remain as before.
+
+These are small, self-authored synthetic checks with a different quantization/runtime and no production critic or Swift validation pass. They cannot be compared directly to the older Ollama results or establish dependable interpretation of human agency. [Exact model identity, data, failures, resource limits and reproduction](MODEL_TRAINING.md).
+
+---
+
+# Evidence-selection trial and batch audit — 2026-11-03
+
+**No interpretation improvement was promoted.** The fresh `contribution-1` baseline reproduced 9/20 complete outcomes on the existing invented fixtures. Most misses were empty proposals for clear requests, corrections or reported attempts; the same-model critic approved those empty readings. They were not all critic withholdings. Source checks cannot recover an act the model never proposed.
+
+One controlled `contribution-2` trial replaced the shared witness plus four booleans with four independent witness-or-`none` selections. Model, packet construction, critic, act precedence and generation settings stayed fixed. The trial used Gemma `gemma4:e2b-it-qat`, digest `07ea59a474013479c8b6b802bef095c40e964a1d776ba02f264c0e30e1aede0c`, through Ollama 0.40.9; temperature 0, seed 42, context 8,192 and output limit 1,000 tokens. No weights or production preferences changed.
+
+- Existing regression examples: baseline **9/20**, trial **9/20** complete and main-role matches. The actual wording pipeline matched **11/20** main roles. Both model variants accepted eleven incorrect empty interpretations, rather than withholding those readings.
+- Four new development examples: **2/4 → 3/4** complete matches.
+- Twelve validation examples authored and frozen before the edit: **5/12 → 8/12** complete matches; **5/12 → 9/12** main roles. Labels were self-authored, not independently adjudicated. These examples are now regression material.
+- The trial still missed short delegation and a negated-attempt explanation request, omitted the Spanish request's secondary check, and called execution-plus-comparison “direction.” That last error added an unsupported act. The critic approved all four incorrect readings. Copied text was withheld; the invented instruction-like payload case matched its expected check request.
+- On the twenty regression packets, nearest-rank p50/p95 read-plus-challenge latency was **1.41/1.44 seconds** for baseline and **1.21/1.31 seconds** for the trial. These local cold/warm observations do not measure total model memory, energy or all-day use.
+
+The retention gate required improvement on the twenty regression examples, at least 10/12 validation matches, no accepted attribution error on the copied/injection cases and p95 below ten seconds. Quality failed, so the inference change was **rolled back to `contribution-1`**. The optional classifier remains off by default. The work-12 goal reader, default wording cards and hourly layout are unchanged. This iteration did not establish better interpretation of agency or AI influence.
+
+The retained improvement is to evaluation: report version 2 saves the actual structured proposal/challenge JSON and invented witness packet, declares expected and actual acts per target, and requires every target of a multi-target packet to be labeled in its fixture. A packet passes only if **all targets** match. Missing context, duplicate fixture IDs and incomplete batch expectations fail rather than disappearing from the denominator. The report summarizer also rejects partial runs or scores inconsistent with saved labels.
+
+The new four-target stress packet matched **3/4 targets**, all four main roles, in **6.73 seconds**. It missed the secondary check in “Keep it offline and explain the tradeoff.” Its final clarification answer matched, so the earlier anchor-only probe would have hidden this failure. The new packet score correctly fails. This stress example was authored after the trial and is not validation evidence.
+
+`./Scripts/verify-background.sh` passed: 36 core check groups, isolated model-state checks, app build/signature checks and hidden invented renders. XCTest was skipped because full Xcode was not selected. Full native focus/mouse behavior, independent semantic validation, unseen natural sessions and sustained usefulness remain untested. No private conversation archive or foreground window test was used.
+
+For safe reproduction and per-act precision/recall, coverage, accepted errors and latency, see [the probe workflow](MODEL_IMPROVEMENT.md#repeatable-contribution-probes). Exact local reports, binary/source hashes, frozen fixture hashes and the failed patch are preserved in the ignored evaluation directory; they are not published with the repository.
+
+---
+
 # Contextual-category experiment — 0.14
 
 **The experiment did not meet its quality gate and remains off by default.** Existing wording counts and the work-12 goal reader are preserved. The new reader is a separate task from the earlier contextual-goal benchmarks; their scores are not interchangeable.

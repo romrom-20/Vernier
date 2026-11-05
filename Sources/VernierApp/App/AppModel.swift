@@ -50,6 +50,8 @@ enum StudioPage: String, CaseIterable, Identifiable {
     var dailyLoadedKey: String?
     @Published var decisionRevisions: [DecisionRevision] = []
     @Published var decisionPerspectives: [DecisionPerspective] = []
+    @Published var relatedMemory: RelatedConversationMemory?
+    var relatedMemoryGeneration = 0
     @Published var selectedDecisionSessionID: String? { didSet { preferences.selectedDecisionSessionID = selectedDecisionSessionID } }
     @Published var selectedDecisionRevisionID: String?
     @Published var reviewingDecision = false

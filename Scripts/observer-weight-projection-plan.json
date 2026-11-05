@@ -1,0 +1,30 @@
+{
+  "method": "Gradient-free causal MLP localization, weight-column geometry and selective readout-component projection; no optimizer, LoRA or backward pass.",
+  "modelRevision": "238767527555cb75a05732a84dff5d6ba0dd6809",
+  "modelSHA256": "038e39a37a7667373d2c3991375446b10c96ae1d717a68674870343db376b76e",
+  "columns": 512,
+  "doses": [
+    0.5,
+    1.0,
+    1.5
+  ],
+  "candidateLayers": 1,
+  "localization": "Bypass each MLP output in turn on all sixteen paired diagnostic decisions. Rank by balanced binary log-loss, with a penalty for new wrong negative decisions. This is a diagnostic activation intervention, not the retained weight edit.",
+  "projection": "Choose only columns whose mean actual present-act contribution points toward false. Rank by that contribution minus mean absolute influence on absent-act examples. Remove the native false-readout component from 64 eligible columns.",
+  "selection": "Select layer/dose using the 16 original and 32 retired development proposals only, prioritizing unsupported acts, full matches, missing acts and diagnostic loss. The new 32-case test is reserved.",
+  "controls": "Matched dequantized-only sham, same-column norm-matched random direction, reversed projection and identity. No output embedding or final norm edits.",
+  "limits": {
+    "teacherForcedForwards": 1400,
+    "generationPackets": 600,
+    "wallSeconds": 1800,
+    "mlxMemoryGuidelineBytes": 10737418240
+  },
+  "gate": ">=27/32 fresh complete outcomes, >=6 extra matches versus matched sham, no additional unsupported acts, no copied/injection false report, no unrelated-control regression. Agent-authored data never suffices for automatic live promotion.",
+  "privacy": "Invented sources only, offline local inference, background task policy, no production model writes or private records.",
+  "testPolicy": "Fresh test fixed before inspection. Choose from development only; run each fixed variant once on fresh test. All inspected sets become regression data.",
+  "protocol": "projection-coverage-4",
+  "diagnostics": "Use each untouched model-generated JSON prefix; likelihood aggregates bare and leading-space true/false tokens. Require exact replay of every native greedy Boolean. Readout geometry uses the dominant native token variant.",
+  "previousRunStatus": "The 64-column edit had a development directional effect but no change in any fresh act set: all four variants 14/32. That test is now additional development material.",
+  "selectionExtraPackets": "corpus/extra-selection-packets.json",
+  "coverageReason": "64 columns cover 34.47% and 512 cover 81.32% of eligible positive contrast-score sum. This is a proxy, not semantic error coverage."
+}

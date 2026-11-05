@@ -1,0 +1,295 @@
+[
+  {
+    "id": "source-human-panel",
+    "messages": [
+      {
+        "role": "user",
+        "text": "One tap should open one settings panel."
+      },
+      {
+        "role": "assistant",
+        "text": "The handler is ready."
+      },
+      {
+        "role": "user",
+        "text": "I tapped it myself and two panels appeared. Explain the extra panel."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "human_reported"
+  },
+  {
+    "id": "source-human-import",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Importing the address file twice must leave one address."
+      },
+      {
+        "role": "assistant",
+        "text": "I changed the merge key."
+      },
+      {
+        "role": "user",
+        "text": "I imported the address file twice myself; it still created two addresses."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "human_reported"
+  },
+  {
+    "id": "source-both-export",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Export should preserve the accented names."
+      },
+      {
+        "role": "assistant",
+        "text": "I exported the same accented names twice and compared the files. Both were correct."
+      },
+      {
+        "role": "user",
+        "text": "I exported those names myself and compared the saved file. One name was still wrong."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "human_reported"
+  },
+  {
+    "id": "source-both-click",
+    "messages": [
+      {
+        "role": "user",
+        "text": "A double click should create exactly one bookmark."
+      },
+      {
+        "role": "assistant",
+        "text": "I clicked twice and it created one bookmark."
+      },
+      {
+        "role": "user",
+        "text": "I clicked twice myself and it created two bookmarks. Compare the two cases."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "human_reported"
+  },
+  {
+    "id": "source-agent-denial",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Import should never duplicate the contact."
+      },
+      {
+        "role": "assistant",
+        "text": "I imported the file twice and it created one contact."
+      },
+      {
+        "role": "user",
+        "text": "I have not imported it myself; that is your result."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "agent_reported"
+  },
+  {
+    "id": "source-agent-future",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Opening a saved file should preserve its tags."
+      },
+      {
+        "role": "assistant",
+        "text": "I opened the saved file and saw all tags intact."
+      },
+      {
+        "role": "user",
+        "text": "I will open it after lunch."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "progress",
+      "handoff"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "agent_reported"
+  },
+  {
+    "id": "source-quoted-human",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Opening a saved file should preserve its tags."
+      },
+      {
+        "role": "assistant",
+        "text": "I have not run that check."
+      },
+      {
+        "role": "user",
+        "text": "The assistant wrote “I opened it and saw one tag.” Please establish what actually happened."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff",
+      "none"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "no_result"
+  },
+  {
+    "id": "source-quoted-agent",
+    "messages": [
+      {
+        "role": "user",
+        "text": "The preview must contain all pages."
+      },
+      {
+        "role": "assistant",
+        "text": "The log contains \"I opened print preview and it worked.\" No one has replayed it."
+      },
+      {
+        "role": "user",
+        "text": "Please check the actual preview."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff",
+      "none"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "no_result"
+  },
+  {
+    "id": "source-quoted-build",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Search must find a saved entry by title."
+      },
+      {
+        "role": "assistant",
+        "text": "The release template says \"The patch compiles.\" I have not compiled this version."
+      },
+      {
+        "role": "user",
+        "text": "What is actually established?"
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff",
+      "none"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "no_result"
+  },
+  {
+    "id": "source-input-name",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Import the contacts file without duplicated rows."
+      },
+      {
+        "role": "assistant",
+        "text": "The importer change is ready."
+      },
+      {
+        "role": "user",
+        "text": "I imported the file named \"contacts\" twice and it created one contact."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "human_reported"
+  },
+  {
+    "id": "source-unrun-both",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Disconnecting and reconnecting must upload each note once."
+      },
+      {
+        "role": "assistant",
+        "text": "The patch compiles. I have not replayed reconnect."
+      },
+      {
+        "role": "user",
+        "text": "I have not run reconnect myself either. Show the real behavior before moving on."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "build_only"
+  },
+  {
+    "id": "source-human-question",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Opening the sidebar should preserve the selected item."
+      },
+      {
+        "role": "assistant",
+        "text": "The patch is ready."
+      },
+      {
+        "role": "user",
+        "text": "If I opened the sidebar tomorrow, what result would show the selected item was preserved?"
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff",
+      "none"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "no_result"
+  }
+]

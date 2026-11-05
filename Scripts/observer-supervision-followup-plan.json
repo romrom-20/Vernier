@@ -1,0 +1,55 @@
+{
+  "protocol": "source-supervision-followup-1",
+  "method": "Development-guided label-only QLoRA follow-up with broader invented lexical contrasts and twice the updates. Data and duration both change; not a causal ablation.",
+  "model": "mlx-community/gemma-4-e2b-it-4bit",
+  "revision": "238767527555cb75a05732a84dff5d6ba0dd6809",
+  "modelSHA256": "038e39a37a7667373d2c3991375446b10c96ae1d717a68674870343db376b76e",
+  "training": {
+    "iterations": 768,
+    "batchSize": 1,
+    "maxSequence": 2048,
+    "layers": 12,
+    "rank": 8,
+    "scale": 16,
+    "learningRate": 0.0001,
+    "seed": 42,
+    "maskPrompt": true,
+    "gradientCheckpointing": true,
+    "keys": [
+      "self_attn.q_proj",
+      "self_attn.o_proj",
+      "mlp.down_proj"
+    ]
+  },
+  "limits": {
+    "trainingWallSeconds": 1800,
+    "gpuMemoryBytes": 10737418240,
+    "cacheBytes": 268435456,
+    "evaluationWallSeconds": 900,
+    "evaluationPackets": 180
+  },
+  "selection": "Select using old development only: complete valid replies, no new unsupported claims and no per-task outcome regression relative to base. Rank by false claims, full outcomes, misses. Freeze final-step label-only or source-facts adapter before new test. A failed candidate is not a live upgrade.",
+  "gates": {
+    "semanticMinimum": 18,
+    "categoryMinimum": 17,
+    "minimumCombinedGain": 6,
+    "noNewUnsupportedClaims": true,
+    "unrelatedControlPreservation": true,
+    "workReaderPreservation": true,
+    "actualOllamaHostValidationRequired": true
+  },
+  "live": {
+    "tag": "vernier-observer:e2b-source-v1",
+    "original": "gemma4:e2b-it-qat",
+    "mode": "Owner-authorized reversible local trial only after paired quality, actual runtime and host checks. Preserve base/tag/preferences for rollback. Independent labels and broad agency validity remain unproven."
+  },
+  "privacy": "Invented fixtures only, no personal conversation training, no remote inference/upload, no foreground UI testing. Use reduced-priority background jobs serially.",
+  "sources": [
+    "https://arxiv.org/abs/2305.02301",
+    "https://github.com/google-research/distilling-step-by-step",
+    "https://arxiv.org/abs/2603.06923"
+  ],
+  "comparisonVariants": [
+    "label-only"
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "hypothesis": "Some attention heads may write excess false-token support on explicit human acts. Inspect their activations and output matrices, then test targeted output-column ablation without gradients.",
+  "modelRevision": "238767527555cb75a05732a84dff5d6ba0dd6809",
+  "modelSHA256": "038e39a37a7667373d2c3991375446b10c96ae1d717a68674870343db376b76e",
+  "method": "Approximate head-output logit attribution to nominate two candidates; exact causal head-output column edits; no optimizer, LoRA or backward passes.",
+  "diagnostics": [
+    {
+      "case": "weights-valid-0",
+      "field": "asksToProceed"
+    },
+    {
+      "case": "weights-valid-1",
+      "field": "asksToProceed"
+    },
+    {
+      "case": "weights-valid-2",
+      "field": "addsDirection"
+    },
+    {
+      "case": "weights-valid-3",
+      "field": "addsDirection"
+    },
+    {
+      "case": "weights-valid-4",
+      "field": "asksForCheck"
+    },
+    {
+      "case": "weights-valid-5",
+      "field": "asksForCheck"
+    },
+    {
+      "case": "weights-valid-6",
+      "field": "reportsAttempt"
+    },
+    {
+      "case": "weights-valid-7",
+      "field": "reportsAttempt"
+    },
+    {
+      "case": "weights-valid-12",
+      "field": "asksToProceed"
+    },
+    {
+      "case": "weights-valid-13",
+      "field": "reportsAttempt"
+    },
+    {
+      "case": "weights-valid-14",
+      "field": "reportsAttempt"
+    },
+    {
+      "case": "weights-valid-15",
+      "field": "reportsAttempt"
+    },
+    {
+      "case": "weights-valid-6",
+      "field": "asksForCheck"
+    },
+    {
+      "case": "weights-valid-4",
+      "field": "addsDirection"
+    },
+    {
+      "case": "weights-valid-7",
+      "field": "asksToProceed"
+    },
+    {
+      "case": "weights-valid-3",
+      "field": "reportsAttempt"
+    }
+  ],
+  "selection": "Choose one of the two distinct top-attribution heads by diagnostic balanced binary log-loss after full ablation; select before validation/test generation. Never select or retune on the new test.",
+  "candidates": 2,
+  "control": "Next head modulo eight in the same layer as the selected head; equal column count, not claimed norm-matched.",
+  "doses": [
+    0,
+    0.5,
+    1,
+    1.5
+  ],
+  "limits": {
+    "teacherForcedForwards": 128,
+    "generationPackets": 160,
+    "wallSeconds": 1800,
+    "mlxMemoryGuidelineBytes": 10737418240
+  },
+  "gate": "Research retention requires >=20/24 fresh complete proposal outcomes, >=4 gains over matched base, no fresh copied/injection false report, and no control-prompt regression. No live promotion on agent-authored labels.",
+  "privacy": "Invented packets only; no private records, model upload, production blob writes or foreground app tests.",
+  "notReplication": "Adapted component-inspection/causal-intervention experiment on Gemma classification, not reproduction of the Qwen looping result."
+}

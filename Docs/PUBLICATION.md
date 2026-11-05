@@ -43,3 +43,27 @@ The 0.10 update was checked as an exact staged source export with Gitleaks, publ
 The main README now uses current native UI previews with distinct asset paths: dashboard, compact recap, decision review and conversation map. The old version-mixed image files were replaced, their references updated, and all four new images visually reviewed. The default dashboard was rendered with `--showcase --wording-preview --render-showcase`, so it shows production wording counts rather than the optional model-category experiment. Conversation readings remain explicitly hand-authored synthetic fixtures, not evidence of model accuracy.
 
 The screenshot process prohibits activation and checks that no test window is visible or key. It uses no personal archive, connector, inference or desktop capture. Image hashes and provenance are recorded in the publication manifest. Repository metadata describes the broader human-judgment purpose while the README identifies Codex in Conductor as the only current adapter and the model-category mode as an experiment that failed its quality gate.
+
+## Model and memory source update — 5 November 2026
+
+This update publishes source-linked conversation recall, the related-conversation
+casebook, compact cross-conversation recap changes, invented evaluation fixtures
+and the previously local model-experiment source/reports. The
+[current model status](MODEL_STATUS.md) distinguishes the active reader from
+failed weight edits, trained adapters, thinking settings and larger-model trials.
+The publication contains no model weights, numerical patches, trained adapters,
+private sessions, raw local runs, installed bundles, local Floorplan or handoff.
+
+The replacement compact image uses default wording rules across three invented
+conversations. The added memory image shows an invented original choice and later
+owner correction. Both are offscreen renders of native views, visually reviewed;
+PNG text/EXIF metadata is removed while image-data chunks remain unchanged. Exact
+hashes and provenance are recorded in the image manifest. Neither image is a
+model-quality result or a desktop capture.
+
+Publication-policy tests, tracked-content/image checks, Python syntax/parser
+checks, local documentation links and a redacted Gitleaks scan apply to the exact
+staged source snapshot. These checks complement the completed background app
+verification; they do not establish independent semantic validity or re-audit
+every unrelated repository ref. A pull request and its CI remain separate from
+a tagged application or model release.

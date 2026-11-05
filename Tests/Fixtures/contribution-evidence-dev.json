@@ -1,0 +1,78 @@
+[
+  {
+    "id": "execute-with-later-review",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help plan the next step."
+      },
+      {
+        "role": "assistant",
+        "text": "The approved migration can run locally."
+      },
+      {
+        "role": "user",
+        "text": "Go ahead with the approved migration. I will review it tonight."
+      }
+    ],
+    "primary": "continued",
+    "additional": []
+  },
+  {
+    "id": "decline-review",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help plan the next step."
+      },
+      {
+        "role": "assistant",
+        "text": "Would you like me to compare the approaches?"
+      },
+      {
+        "role": "user",
+        "text": "No comparison today. Keep the current approach."
+      }
+    ],
+    "primary": "directed",
+    "additional": []
+  },
+  {
+    "id": "observed-regression",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help plan the next step."
+      },
+      {
+        "role": "assistant",
+        "text": "The reminder is ready to try."
+      },
+      {
+        "role": "user",
+        "text": "I opened it this morning and the reminder appeared twice."
+      }
+    ],
+    "primary": "reported",
+    "additional": []
+  },
+  {
+    "id": "hypothetical-result",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help plan the next step."
+      },
+      {
+        "role": "assistant",
+        "text": "The reminder should appear once."
+      },
+      {
+        "role": "user",
+        "text": "If I open it twice tomorrow, should I expect two reminders?"
+      }
+    ],
+    "primary": "checked",
+    "additional": []
+  }
+]

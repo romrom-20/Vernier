@@ -302,6 +302,12 @@ extension AppCoordinator {
         try check(showcase.currentStory?.followUps == 4 && showcase.currentStory?.runs.count == 9,
                   "Visual showcase loads real fixture exchanges rather than decorative data")
         await showcase.loadWorkOverview()
+        // These daily assertions require same-day sources. Keep their invented timeline away from midnight;
+        // restore the real-clock fixture before checking the recent-work path below.
+        let realClockLibrary = showcase.library, realClockReadings = showcase.decisionRevisions
+        let fixtureNoon = Calendar.current.startOfDay(for: Date()).addingTimeInterval(12 * 3600)
+        showcase.library = ShowcaseFixtures.workLibrary(now: fixtureNoon)
+        showcase.decisionRevisions = ShowcaseFixtures.decisionHistory(library: showcase.library)
         await showcase.loadDailyParticipation()
         try check(showcase.dailyReport?.day == showcase.selectedWorkDay && showcase.dailyReport?.datedTotal == showcase.library.messages.filter { $0.sourceAt.map(showcase.selectedWorkDay.contains) == true }.count,
                   "The daily overview counts the selected source day from synthetic records")
@@ -336,6 +342,30 @@ extension AppCoordinator {
             showcase.dailyReport = fullReport
         }
         let staleInsight = showcase.quickInsight
+        let multiple = AppModel(preferences: Preferences(defaults: showcaseDefaults), showcase: true)
+        multiple.library = ShowcaseFixtures.checkpointLibrary(now: fixtureNoon)
+        multiple.decisionRevisions = ShowcaseFixtures.checkpointHistory(library: multiple.library, now: fixtureNoon)
+        multiple.clearDailyParticipation()
+        await multiple.loadDailyParticipation()
+        try check(multiple.quickInsights.count == 3 && Set(multiple.quickInsights.map { $0.revision.sessionID }).count == 3,
+                  "The compact recap retains distinct conversation checkpoints")
+        try check(multiple.quickInsights.contains { $0.reading.hasBothReporters && $0.reading.evidenceReports?.count == 2 },
+                  "A conversation checkpoint retains both speakers' separate result reports")
+        if let other = multiple.quickInsights.last {
+            multiple.openDayInsight(other)
+            try check(multiple.selectedDecisionRevisionID == other.id && multiple.selectedDecisionSessionID == other.revision.sessionID,
+                      "A secondary checkpoint opens its own exact reading")
+            multiple.decisionDirtyAt[other.revision.sessionID] = Date()
+            let focus = multiple.dailyReadingFocusRevision
+            multiple.openDayInsight(other)
+            try check(multiple.quickInsights.count == 2 && !multiple.quickInsights.contains { $0.id == other.id } && multiple.dailyReadingFocusRevision == focus,
+                      "Changed source evidence removes only its checkpoint and refuses stale navigation")
+        }
+        multiple.openQuickEvidence(.checked)
+        try check(multiple.dailyFilter == .checked && multiple.dailyMatchingMoments.count == multiple.dailyReport?.count(.checked) && !multiple.dailyMatchingMoments.isEmpty,
+                  "The compact overview opens the matching replies across the displayed day")
+        multiple.clearDailyParticipation()
+        try check(multiple.quickInsights.isEmpty, "Clearing the recap removes every cached compact checkpoint")
         showcase.paused = true
         try check(showcase.pillRecap == nil && showcase.pillSummary == showcase.capturePresenceLabel,
                   "Pause takes priority over a cached daily pattern in the floating pill")
@@ -367,6 +397,7 @@ extension AppCoordinator {
             try check(showcase.dailyReadingFocusRevision == focus && showcase.dailyReadings.isEmpty,
                       "A captured contextual-card action cannot reopen erased daily evidence")
         }
+        showcase.library = realClockLibrary; showcase.decisionRevisions = realClockReadings
         try check(showcase.workOverview?.workspaces == 3 && showcase.workOverview?.count(.goAhead) == 1 && showcase.workOverview?.failureCount == 1,
                   "Work overview spans workspaces with source-linked wording cues and failure status")
         try check(showcase.participationMoments.contains { $0.kind == .requestedEvidence } && showcase.participationMoments.contains { $0.kind == .setBoundary },
@@ -441,8 +472,17 @@ extension AppCoordinator {
         let draftTargetSaved = await model.saveDecisionPerspective("This draft was about the previous request, not the newly selected conversation.", about: storedDecision)
         try check(draftTargetSaved && model.decisionPerspectives.count == 2 && model.decisionPerspectives.allSatisfy { $0.revisionID == storedDecision.id && $0.anchorMessageID == storedDecision.anchorMessageID },
                   "A perspective draft keeps its original request after selection or background history changes")
+        let exampleBook = ShowcaseFixtures.relatedMemoryExample().memory
+        model.relatedMemory = exampleBook
+        let beforeRelatedSelection = model.relatedMemoryGeneration
+        model.selectDecisionSession(fixture.sessions[0].id)
+        try check(model.relatedMemory == nil && model.relatedMemoryGeneration > beforeRelatedSelection,
+                  "Changing conversations clears the previous casebook and invalidates its pending lookup")
+        model.relatedMemory = exampleBook
+        let beforeRelatedErasure = model.relatedMemoryGeneration
         model.store = nil; model.clearDecisionMemory()
-        try check(model.decisionRevisions.isEmpty && model.decisionPerspectives.isEmpty, "Erasure clears the displayed reasoning and personal perspectives")
+        try check(model.decisionRevisions.isEmpty && model.decisionPerspectives.isEmpty && model.relatedMemory == nil && model.relatedMemoryGeneration > beforeRelatedErasure,
+                  "Erasure clears the displayed reasoning, perspectives and casebook, including pending lookups")
         showcase.showMemorySource(sessionID: latestDecision.sessionID, messageID: latestDecision.anchorMessageID)
         let firstRoute = showcase.memoryRouteRevision
         showcase.showMemorySource(sessionID: latestDecision.sessionID, messageID: latestDecision.anchorMessageID)

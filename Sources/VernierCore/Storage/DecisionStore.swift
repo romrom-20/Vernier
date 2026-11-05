@@ -39,12 +39,12 @@ extension SessionStore {
               perspective.revisionID == nil || perspective.revisionID == revisionID, perspective.anchorMessageID == nil || perspective.anchorMessageID == anchor else { throw StoreFailure.unavailable }
         try write("INSERT INTO decision_perspectives VALUES(?,?,?,?,?)", values: [perspective.id, perspective.sessionID, revisionID, perspective.text, perspective.createdAt.timeIntervalSince1970])
     }
-    public func decisionContext(sessionID: String) throws -> DecisionContext? {
+    public func decisionContext(sessionID: String, includeEarlierRecall: Bool = true) throws -> DecisionContext? {
         let recent = try memoryMessages(sessionID: sessionID, limit: 60)
         let previous = try loadDecisionRevisions(sessionID: sessionID, limit: 1).first
         let perspectives = Array(try loadDecisionPerspectives(sessionID: sessionID).suffix(3))
         var messages = recent
-        let latestUsers = Array(try memoryMessages(sessionID: sessionID, limit: 20, speaker: "user").filter { !SessionDisplay.visibleText($0.text).isEmpty }.prefix(3))
+        let latestUsers = Array(try memoryMessages(sessionID: sessionID, limit: includeEarlierRecall ? ConversationRecall.candidateLimit : 20, speaker: "user").filter { !SessionDisplay.visibleText($0.text).isEmpty }.prefix(3))
         for message in latestUsers where !messages.contains(where: { $0.id == message.id }) { messages.append(message) }
         if let anchor = latestUsers.first {
             let time = (anchor.sourceAt ?? anchor.observedAt).timeIntervalSince1970
@@ -71,14 +71,31 @@ extension SessionStore {
         let opening = try memoryMessages(sessionID: sessionID, limit: 3, newestFirst: false, speaker: "user")
         for message in opening where !messages.contains(where: { $0.id == message.id }) { messages.append(message) }
         let preliminary = DecisionContext.make(sessionID: sessionID, messages: messages, perspectives: [], previous: previous, storedMessages: recent.count)
+        var recall: ConversationRecall?
+        if includeEarlierRecall, let preliminary {
+            let candidates = try memoryMessages(sessionID: sessionID, limit: ConversationRecall.candidateLimit, speaker: "user")
+            let humanCount: Int = try decisionRows("SELECT COUNT(*) FROM messages WHERE session_id=? AND speaker='user'", values: [sessionID]) { Int(sqlite3_column_int64($0, 0)) }.first ?? candidates.count
+            recall = ConversationRecall.select(candidates: candidates, context: preliminary, totalHumanMessages: humanCount, previousGoal: previous?.reading?.goal)
+            if let selected = recall, let anchor = candidates.first(where: { $0.id == preliminary.anchor?.messageID }) {
+                let existing = Set(preliminary.sources.map(\.messageID))
+                for entry in selected.entries {
+                    guard let parent = candidates.first(where: { $0.id == entry.messageID }) else { continue }
+                    let replies: [String] = try decisionRows("SELECT id FROM messages WHERE session_id=? AND turn_id=? AND speaker='assistant' AND COALESCE(source_at,observed_at)>=? AND COALESCE(source_at,observed_at)<? ORDER BY COALESCE(source_at,observed_at) DESC,id DESC LIMIT 1", values: [sessionID, parent.turnID, (parent.sourceAt ?? parent.observedAt).timeIntervalSince1970, (anchor.sourceAt ?? anchor.observedAt).timeIntervalSince1970]) { string($0, 0) }
+                    if let id = replies.first, !existing.contains(id), let reply = try decisionMessage(id) { recall = recall?.addingReply(reply, to: entry) }
+                }
+                for entry in recall?.entries ?? [] where !messages.contains(where: { $0.id == entry.messageID }) {
+                    if let message = try decisionMessage(entry.messageID) { messages.append(message) }
+                }
+            }
+        }
         let wording = preliminary?.anchor?.novelText ?? ""
         let query = wording.count < 80 ? wording + " " + (previous?.reading?.goal ?? "") : wording
         let related = try relatedDecisionMessages(sessionID: sessionID, query: query, previous: previous)
         let count: Int = try decisionRows("SELECT COUNT(*) FROM messages WHERE session_id=?", values: [sessionID]) { Int(sqlite3_column_int64($0, 0)) }.first ?? recent.count
-        return DecisionContext.make(sessionID: sessionID, messages: messages, perspectives: perspectives, previous: previous, storedMessages: count, retrieved: related.0, relatedMessageCounts: related.1)
+        return DecisionContext.make(sessionID: sessionID, messages: messages, perspectives: perspectives, previous: previous, storedMessages: count, retrieved: related.0, relatedMessageCounts: related.1, memoryRecall: recall)
     }
     @discardableResult public func saveDecisionRevision(_ revision: DecisionRevision, context: DecisionContext, token: Int) throws -> Bool {
-        guard revision.inputDigest == context.inputDigest, revision.sessionID == context.sessionID else { return false }
+        guard revision.inputDigest == context.inputDigest, revision.sessionID == context.sessionID, revision.memoryRecall == context.memoryRecall else { return false }
         var saved = false
         _ = try gate.captureBrief(token) {
             try execute("BEGIN IMMEDIATE")
@@ -101,6 +118,19 @@ extension SessionStore {
                 }
                 let currentReports = try loadDecisionPerspectives(sessionID: context.sessionID)
                 guard Array(currentReports.suffix(3)).map(\.id) == context.perspectives.map(\.id) else { try execute("ROLLBACK"); return }
+                if let memory = context.memoryRecall {
+                    let candidates = try memoryMessages(sessionID: context.sessionID, limit: ConversationRecall.candidateLimit, speaker: "user")
+                    let count: Int = try decisionRows("SELECT COUNT(*) FROM messages WHERE session_id=? AND speaker='user'", values: [context.sessionID]) { Int(sqlite3_column_int64($0, 0)) }.first ?? 0
+                    guard memory.policyVersion == ConversationRecall.version, memory.textLimitUsed == ConversationRecall.textLimit,
+                          memory.entries.count <= ConversationRecall.entryLimit,
+                          memory.scanDigest == ConversationRecall.signature(candidates), memory.scannedMessageIDs == candidates.reversed().map(\.id), memory.totalHumanMessages == count else { try execute("ROLLBACK"); return }
+                    for entry in memory.entries {
+                        guard entry.quote.count <= 360, context.sources.contains(where: { $0.messageID == entry.messageID }),
+                              let original = try decisionMessage(entry.messageID), original.sessionID == context.sessionID,
+                              entry.sessionID == original.sessionID, entry.speaker == original.speaker,
+                              entry.fingerprint == DecisionSource.fingerprint(original), original.text.contains(entry.quote) else { try execute("ROLLBACK"); return }
+                    }
+                }
                 let data = try JSONEncoder().encode(revision)
                 guard data.count < 96_000 else { throw StoreFailure.unavailable }
                 try write("INSERT INTO decision_revisions VALUES(?,?,?,?,?,?)", values: [revision.id, revision.sessionID, revision.anchorMessageID, revision.createdAt.timeIntervalSince1970, revision.inputDigest, String(decoding: data, as: UTF8.self)])
@@ -110,6 +140,12 @@ extension SessionStore {
                 }
                 if let frontier = context.frontier, !context.sources.contains(where: { $0.messageID == frontier.messageID }) {
                     try write("INSERT INTO decision_sources VALUES(?,?,NULL)", values: [revision.id, frontier.messageID])
+                }
+                // An omitted indexed correction is a dependency too. Editing or
+                // erasing it invalidates the stored recall through existing triggers.
+                let knownMessages = Set(context.sources.map(\.messageID)).union(context.frontier.map { [$0.messageID] } ?? [])
+                for id in context.memoryRecall?.scannedMessageIDs ?? [] where !knownMessages.contains(id) {
+                    try write("INSERT INTO decision_sources VALUES(?,?,NULL)", values: [revision.id, id])
                 }
                 // Keep a bounded history, retaining revisions with an attached human perspective.
                 try write("""
@@ -134,7 +170,11 @@ extension SessionStore {
         let candidates = payloads.compactMap { try? JSONDecoder().decode(DecisionRevision.self, from: Data($0.utf8)) }.filter { seen.insert($0.sessionID).inserted }
         let ranked = candidates.map { ($0, wanted.intersection(terms($0.goal)).count) }.filter { $0.1 >= 2 || previouslyUsed.contains($0.0.sessionID) }.sorted { $0.1 > $1.1 }
         var result: [ConversationMessage] = []; var counts: [String: Int] = [:]
-        for (account, _) in ranked.prefix(2) {
+        for (account, _) in ranked {
+            if counts.count >= 2 { break }
+            // Cross-conversation owner perspectives are shown in the casebook.
+            // Do not feed older raw excerpts to inference without their correction.
+            guard try loadDecisionPerspectives(sessionID: account.sessionID).isEmpty else { continue }
             var values = try memoryMessages(sessionID: account.sessionID, limit: 2)
             for evidence in account.evidence.prefix(2) where !evidence.messageID.hasPrefix("feedback:") {
                 if let message = try decisionMessage(evidence.messageID), message.sessionID == account.sessionID, !values.contains(where: { $0.id == message.id }) { values.append(message) }
@@ -146,6 +186,40 @@ extension SessionStore {
     }
     private static func textDigest(_ text: String) -> String { SHA256.hash(data: Data(text.utf8)).map { String(format: "%02x", $0) }.joined() }
     public func memoryMessage(id: String) throws -> ConversationMessage? { try decisionMessage(id) }
+    /// Rebuild a small casebook from retained sources, without inference or an
+    /// additional stored summary. A newly saved owner correction stays visible.
+    public func relatedConversationMemory(sessionID: String) throws -> RelatedConversationMemory? {
+        guard let workspace: String = try decisionRows("SELECT workspace_id FROM sessions WHERE id=?", values: [sessionID], transform: { string($0, 0) }).first,
+              let anchor = try memoryMessages(sessionID: sessionID, limit: ConversationRecall.candidateLimit, speaker: "user").first(where: { !SessionDisplay.visibleText($0.text).isEmpty }) else { return nil }
+        let query = RelatedConversationMemory.keywords(SessionDisplay.visibleText(anchor.text))
+        let payloads: [String] = try decisionRows("SELECT d.payload FROM decision_revisions d JOIN sessions s ON s.id=d.session_id WHERE s.workspace_id=? AND d.session_id<>? AND d.id=(SELECT n.id FROM decision_revisions n WHERE n.session_id=d.session_id ORDER BY n.created_at DESC,n.id DESC LIMIT 1) ORDER BY d.created_at DESC,d.id DESC LIMIT 60", values: [workspace, sessionID]) { string($0, 0) }
+        var ranked: [(RelatedConversationMemory.Candidate, Int)] = []
+        for payload in payloads {
+            guard let revision = try? JSONDecoder().decode(DecisionRevision.self, from: Data(payload.utf8)) else { continue }
+            let notes = Array(try loadDecisionPerspectives(sessionID: revision.sessionID).suffix(1))
+            let intentIDs = Set(revision.reading?.references.filter { [.intent, .boundary].contains($0.use) }.map(\.sourceID) ?? [])
+            let evidence = revision.evidence.filter { $0.sessionID == revision.sessionID && $0.origin != .reusedAgent && !$0.messageID.hasPrefix("feedback:") }.sorted {
+                let a = intentIDs.contains($0.messageID) ? 0 : $0.role == "user" ? 1 : 2
+                let b = intentIDs.contains($1.messageID) ? 0 : $1.role == "user" ? 1 : 2
+                return a == b ? $0.messageID < $1.messageID : a < b
+            }
+            var statements: [RelatedConversationMemory.Statement] = []
+            for proof in evidence {
+                guard statements.count < 2 else { break }
+                guard let message = try decisionMessage(proof.messageID), message.sessionID == revision.sessionID,
+                      DecisionSource.fingerprint(message) == proof.fingerprint, message.text.contains(proof.quote) else { continue }
+                statements.append(.init(id: message.id, messageID: message.id, speaker: message.speaker, quote: String(proof.quote.prefix(240)), date: message.sourceAt, isPerspective: false))
+            }
+            for note in notes {
+                statements.append(.init(id: "feedback:" + note.id, messageID: note.anchorMessageID ?? revision.anchorMessageID, speaker: "user_report", quote: String(note.text.prefix(360)), date: note.createdAt, isPerspective: true))
+            }
+            let shared = query.intersection(RelatedConversationMemory.keywords(revision.goal + " " + statements.map(\.quote).joined(separator: " ")))
+            guard shared.count >= 2, !statements.isEmpty else { continue }
+            ranked.append((.init(sessionID: revision.sessionID, earlierGoal: String(revision.goal.prefix(180)), readingCreatedAt: revision.createdAt, matchedWords: shared.sorted(), statements: statements, hasNewerPerspective: notes.contains { $0.createdAt > revision.createdAt }), shared.count))
+        }
+        ranked.sort { $0.1 == $1.1 ? ($0.0.readingCreatedAt == $1.0.readingCreatedAt ? $0.0.sessionID < $1.0.sessionID : $0.0.readingCreatedAt > $1.0.readingCreatedAt) : $0.1 > $1.1 }
+        return .init(sessionID: sessionID, anchorMessageID: anchor.id, candidates: Array(ranked.prefix(2)).map { $0.0 }, consideredConversations: payloads.count)
+    }
     private func decisionMessage(_ id: String) throws -> ConversationMessage? {
         try decisionRows("SELECT id,session_id,turn_id,speaker,phase,body,source_at,observed_at,redactions,truncated,attachments_omitted FROM messages WHERE id=?", values: [id]) { row in
             ConversationMessage(id: string(row, 0), sessionID: string(row, 1), turnID: string(row, 2), speaker: string(row, 3), phase: string(row, 4), text: string(row, 5), sourceAt: optionalDate(row, 6), observedAt: date(row, 7), redactions: Int(sqlite3_column_int(row, 8)), textTruncated: sqlite3_column_int(row, 9) == 1, attachmentsOmitted: sqlite3_column_int(row, 10) == 1)
