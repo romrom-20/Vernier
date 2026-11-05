@@ -34,6 +34,25 @@ public struct WorkFrame: Codable, Sendable {
     }
     public func proposal(in context: DecisionContext) -> WorkProposal {
         var focus = self.focus
+        var references = self.references
+        var recalledGoal: WorkReference?
+        if focus != .directionChange && WorkReading.asksAboutEarlierStatement(context) {
+            recalledGoal = references.first { ref in
+                [.intent, .boundary].contains(ref.use) && context.sources.contains { $0.id == ref.sourceID && $0.role == "user" && context.recalledMessageIDs.contains($0.messageID) && $0.novelText.contains(ref.quote) }
+            }
+            // A reminder can quote one unambiguous literal earlier declaration.
+            // It is labelled historical, never promoted to current permission.
+            if recalledGoal == nil, references.count < 5, context.anchor?.novelText.range(of: #"(?i)\b(?:remind|remember)\b|what.{0,30}\b(?:chose|choose|decided)\b"#, options: .regularExpression) != nil {
+                let choices = context.sources.filter {
+                    $0.role == "user" && context.recalledMessageIDs.contains($0.messageID) && $0.origin != .reusedAgent &&
+                    $0.novelText.range(of: #"(?i)^\s*I (?:choose|chose|have chosen|selected)\b"#, options: .regularExpression) != nil && !$0.novelText.contains("?")
+                }
+                if choices.count == 1, let source = choices.first, let witness = WorkWitnessPacket(context: context).witnesses.first(where: { $0.sourceID == source.id }) {
+                    let ref = WorkReference(sourceID: source.id, quote: witness.quote, use: .intent)
+                    references.append(ref); recalledGoal = ref
+                }
+            }
+        }
         if focus == .directionChange && !WorkReading.isBriefAssent(context.anchor?.novelText ?? "") { focus = .handoff }
         if focus == .progress && resultState != .behaviorReported { focus = resultState == .buildOnly ? .check : .handoff }
         let lastReported = references.last { $0.use == .result }?.quote ?? ""
@@ -43,8 +62,32 @@ public struct WorkFrame: Codable, Sendable {
         let boundary = human.first { $0.sourceID != context.anchorID }
         let agents = references.filter { ref in context.sources.first { $0.id == ref.sourceID }?.role == "assistant" }
         let agent = agents.last
+        let reports = WorkEvidenceStatus.reports(references: references, context: context)
+        let latestReport = reports.last { [.humanReported, .agentReported].contains($0.status) }
+        let humanReport = reports.last { $0.status == .humanReported }
+        let agentReport = reports.last { $0.status == .agentReported }
+        if focus == .recurringIssue && !WorkReading.hasRecurrenceContext(references, context: context) {
+            // A requirement followed by a first result is not two failure
+            // reports. Keep the source-backed result or question instead.
+            let asks = context.anchor?.novelText.range(of: #"(?i)\?|\b(?:explain|compare|why|how|investigate|show|check)\b"#, options: .regularExpression) != nil
+            focus = resultState == .behaviorReported && humanReport?.sourceID == context.anchorID && !asks ? .progress : .check
+        }
+        let separateReports: String? = humanReport.flatMap { human in
+            agentReport.map { agent in
+                "The agent reports: “" + agent.quote + "”. You report: “" + human.quote + "”. These are separate saved reports; neither has been independently verified here."
+            }
+        }
         let headline: String, account: String, step: String, practicalGoal: String
-        practicalGoal = focus == .directionChange ? (boundary?.quote ?? goal) : goal
+        let describesConversation = goal.range(of: #"(?i)^\s*(?:the\s+)?(?:user|human) is (?:reporting|experiencing)\b"#, options: .regularExpression) != nil
+        let suppliedGoal = describesConversation ? human.first(where: { ref in
+            ref.use == .intent && ref.sourceID != context.anchorID && ref.quote.count <= 160 &&
+                context.sources.prefix(while: { $0.id != context.anchorID }).contains(where: {
+                    $0.id == ref.sourceID && $0.sessionID == context.sessionID && $0.origin != .reusedAgent && $0.novelText.contains(ref.quote) && !context.recalledMessageIDs.contains($0.messageID)
+                })
+        })?.quote : nil
+        // Preserve an already-cited human request rather than a model's
+        // description of the conversation (which can invert success/failure).
+        practicalGoal = focus == .directionChange ? (boundary?.quote ?? goal) : (recalledGoal.map { WorkReading.earlierStatementGoal($0.quote) } ?? suppliedGoal ?? goal)
         switch focus {
         case .directionChange:
             headline = "Does this proposal fit your requirement?"
@@ -52,7 +95,9 @@ public struct WorkFrame: Codable, Sendable {
             step = "Keep the original requirement, or change it deliberately?"
         case .check:
             headline = "A useful checkpoint before moving on."
-            account = agent.map { "The agent reports: “" + $0.quote + "”. The proposed check below connects that report back to the current goal." } ?? "The request leaves a concrete question worth settling."
+            account = separateReports ?? latestReport.map {
+                ($0.status == .humanReported ? "You report: “" : "The agent reports: “") + $0.quote + "”. The checkpoint below relates this report to the current goal."
+            } ?? agent.map { "The agent reports: “" + $0.quote + "”. The proposed check below connects that report back to the current goal." } ?? "The request leaves a concrete question worth settling."
             step = nextStep
         case .handoff:
             headline = "The handoff has a checkpoint you can come back to."
@@ -60,9 +105,9 @@ public struct WorkFrame: Codable, Sendable {
             step = nextStep
         case .progress:
             headline = "There’s a reported result to build on."
-            let result = references.last { $0.use == .result } ?? references.last
-            let speaker = context.sources.first { $0.id == result?.sourceID }?.role == "user" ? "You report" : "The agent reports"
-            account = speaker + ": “" + (result?.quote ?? "a result") + "”. This is a saved report, with its source available below."
+            let result = latestReport.map { WorkReference(sourceID: $0.sourceID, quote: $0.quote, use: .result) } ?? references.last { $0.use == .result } ?? references.last
+            let speaker = ["user", "user_report"].contains(context.sources.first { $0.id == result?.sourceID }?.role ?? "") ? "You report" : "The agent reports"
+            account = separateReports ?? (speaker + ": “" + (result?.quote ?? "a result") + "”. This is a saved report, with its source available below.")
             step = "Keep this exact case as a regression check when the behavior changes again."
         case .recurringIssue:
             headline = "A previously reported problem came back."
@@ -73,7 +118,7 @@ public struct WorkFrame: Codable, Sendable {
             account = "The available context did not establish a concrete next check. The original messages remain available."
             step = nextStep
         }
-        return .init(focus: focus, goal: practicalGoal, headline: headline, account: account, nextStep: step, references: references, resultState: resultState)
+        return .init(focus: focus, goal: practicalGoal, headline: headline, account: account, nextStep: step, references: references, resultState: resultState, recalledGoalSourceID: recalledGoal?.sourceID)
     }
 }
 public struct WorkProposal: Codable, Sendable {
@@ -84,8 +129,10 @@ public struct WorkProposal: Codable, Sendable {
     public let nextStep: String
     public let references: [WorkReference]
     public let resultState: WorkResultState?
-    public init(focus: WorkFocus, goal: String, headline: String, account: String, nextStep: String, references: [WorkReference], resultState: WorkResultState? = nil) {
+    public let recalledGoalSourceID: String?
+    public init(focus: WorkFocus, goal: String, headline: String, account: String, nextStep: String, references: [WorkReference], resultState: WorkResultState? = nil, recalledGoalSourceID: String? = nil) {
         self.focus = focus; self.goal = goal; self.headline = headline; self.account = account; self.nextStep = nextStep; self.references = references; self.resultState = resultState
+        self.recalledGoalSourceID = recalledGoalSourceID
     }
 }
 public struct WorkChallenge: Codable, Sendable {
@@ -110,6 +157,21 @@ public struct WorkReading: Codable, Sendable {
     public let boundaryRule: String?
     /// Optional for decoding pre-v0.13 readings; it is never a health or understanding score.
     public let evidenceStatus: WorkEvidenceStatus?
+    /// Absent in older saved readings. Source IDs use canonical message IDs,
+    /// exactly as references do; no database migration is needed.
+    public let evidenceReports: [WorkEvidenceReport]?
+    public let recalledGoalSourceID: String?
+    public var goalLabel: String { recalledGoalSourceID != nil ? "Earlier statement you asked about" : focus == .directionChange ? "Earlier requirement" : "Likely goal" }
+    public var hasBothReporters: Bool {
+        let statuses = Set((evidenceReports ?? []).map(\.status))
+        return statuses.contains(.humanReported) && statuses.contains(.agentReported)
+    }
+    public var evidenceLabel: String {
+        hasBothReporters ? "You and AI reported checks" : (evidenceStatus ?? .unknown).label
+    }
+    public var evidenceExplanation: String {
+        hasBothReporters ? "These are separate saved reports from you and the agent. They may describe different cases; neither report independently verifies the other." : (evidenceStatus ?? .unknown).explanation
+    }
     /// A cue is limited to brief, recognizable assent; longer explanations are never treated as surrender.
     public static func isBriefAssent(_ text: String) -> Bool {
         let words = text.lowercased().components(separatedBy: CharacterSet.alphanumerics.inverted).filter { !$0.isEmpty }
@@ -120,6 +182,45 @@ public struct WorkReading: Codable, Sendable {
     }
     public static let intentionalResponse = "I intentionally accepted this direction change."
     public static let checkResponse = "I want to check this direction change before continuing."
+    static func asksAboutEarlierStatement(_ context: DecisionContext) -> Bool {
+        guard context.memoryRecall != nil, let anchor = context.anchor else { return false }
+        return anchor.novelText.range(of: #"(?i)\b(?:earlier|original|agreed|previous|remember|remind)\b"#, options: .regularExpression) != nil
+    }
+    static func earlierStatementGoal(_ quote: String) -> String {
+        "Earlier: “" + String(quote.prefix(140)) + (quote.count > 140 ? "…" : "") + "”"
+    }
+    /// Limited topic guard for a model's proposed direction comparison when
+    /// recalled material is present. It is not a semantic equivalence test.
+    public static func sharesDirectionTopic(_ boundary: String, _ proposal: String) -> Bool {
+        let stop = Set("this that with from have make work does again still please should there their when then only same been what your agent keep before after just current change text request code leave example propose using will would could must without requirement earlier original".split(separator: " ").map(String.init))
+        func terms(_ text: String) -> Set<String> {
+            Set(text.lowercased().components(separatedBy: CharacterSet.alphanumerics.inverted).filter { $0.count >= 4 && !stop.contains($0) }.map { $0.hasSuffix("ies") ? String($0.dropLast(3)) + "y" : $0.count > 4 && $0.hasSuffix("s") ? String($0.dropLast()) : $0 })
+        }
+        return !terms(boundary).isDisjoint(with: terms(proposal))
+    }
+
+    /// Admission guard, not proof that two reports concern the same fault.
+    /// In particular, a requested behavior is not a prior observed failure.
+    static func hasRecurrenceContext(_ references: [WorkReference], context: DecisionContext) -> Bool {
+        guard let anchor = context.sources.firstIndex(where: { $0.id == context.anchorID }),
+              references.contains(where: { $0.sourceID == context.anchorID }) else { return false }
+        let reports = WorkEvidenceStatus.reports(references: references, context: context)
+        let notObserved = #"(?i)\?|\b(?:if I|if we|will|would|might|have not|haven't|not yet|I plan|I intend)\b|\b(?:assistant|agent|you) (?:said|wrote|reported)\b"#
+        guard reports.contains(where: { $0.sourceID == context.anchorID && $0.status == .humanReported }) ||
+                context.sources[anchor].novelText.range(of: notObserved, options: .regularExpression) == nil else { return false }
+        let requirement = #"(?i)\b(?:must|should|shall|need to|want to|please|ensure)\b|^\s*(?:keep|make|prevent|add|remove|import|export|open|use|do not|don't)\b"#
+        return references.contains { ref in
+            guard let earlier = context.sources.firstIndex(where: { $0.id == ref.sourceID }), earlier < anchor,
+                  context.sources[earlier].role == "user", context.sources[earlier].sessionID == context.sessionID,
+                  context.sources[earlier].origin != .reusedAgent,
+                  reports.contains(where: { $0.sourceID == ref.sourceID && $0.status == .humanReported }) ||
+                    (!ref.quote.contains("?") && ref.quote.range(of: requirement, options: .regularExpression) == nil) else { return false }
+            return references.contains { agent in
+                guard let index = context.sources.firstIndex(where: { $0.id == agent.sourceID }) else { return false }
+                return earlier < index && index < anchor && context.sources[index].role == "assistant" && context.sources[index].sessionID == context.sessionID
+            }
+        }
+    }
 
     /// This is a literal, source-backed question about a named boundary, not a model verdict about intent.
     private static func literalBoundaryRule(_ proposal: WorkProposal, context: DecisionContext) -> String? {
@@ -129,6 +230,9 @@ public struct WorkReading: Codable, Sendable {
               let a = context.sources.firstIndex(where: { $0.id == boundary.sourceID }),
               let b = context.sources.firstIndex(where: { $0.id == change.sourceID }),
               let c = context.sources.firstIndex(where: { $0.id == context.anchorID }), a < b, b < c,
+              context.memoryRecall == nil || sharesDirectionTopic(boundary.quote, change.quote),
+              !context.recalledMessageIDs.contains(context.sources[a].messageID), !context.recalledMessageIDs.contains(context.sources[b].messageID),
+              !context.hasMissingHumanContext(between: context.sources[a].messageID, and: context.sources[c].messageID),
               !context.sources[(a+1)..<c].contains(where: { $0.role == "user" && !Self.isBriefAssent($0.novelText) }) else { return nil }
         let compiled = WorkFrame(resultState: .proposed, focus: .directionChange, goal: boundary.quote, nextStep: "", references: proposal.references).proposal(in: context)
         guard compiled.goal == proposal.goal, compiled.headline == proposal.headline, compiled.account == proposal.account, compiled.nextStep == proposal.nextStep else { return nil }
@@ -147,9 +251,10 @@ public struct WorkReading: Codable, Sendable {
         guard let anchor = context.anchor, Self.isBriefAssent(anchor.novelText), anchor.origin != .reusedAgent,
               let end = context.sources.firstIndex(where: { $0.id == anchor.id }) else { return nil }
         let before = Array(context.sources.prefix(end))
-        for agent in before.filter({ $0.role == "assistant" && $0.sessionID == context.sessionID }).suffix(3).reversed() {
+        for agent in before.filter({ $0.role == "assistant" && $0.sessionID == context.sessionID && !context.recalledMessageIDs.contains($0.messageID) }).suffix(3).reversed() {
             guard let index = before.firstIndex(where: { $0.id == agent.id }),
-                  let boundary = before.prefix(index).last(where: { $0.role == "user" && $0.sessionID == context.sessionID && $0.origin != .reusedAgent }) else { continue }
+                  let boundary = before.prefix(index).last(where: { $0.role == "user" && $0.sessionID == context.sessionID && $0.origin != .reusedAgent && !context.recalledMessageIDs.contains($0.messageID) }),
+                  !context.hasMissingHumanContext(between: boundary.messageID, and: anchor.messageID) else { continue }
             let refs: [WorkReference] = [.init(sourceID: boundary.id, quote: String(boundary.quote.prefix(100)), use: .boundary), .init(sourceID: agent.id, quote: String(agent.quote.prefix(100)), use: .change), .init(sourceID: anchor.id, quote: String(anchor.quote.prefix(100)), use: .response)]
             let frame = WorkFrame(resultState: .proposed, focus: .directionChange, goal: refs[0].quote, nextStep: "", references: refs)
             if literalBoundaryRule(frame.proposal(in: context), context: context) != nil { return frame }
@@ -177,9 +282,16 @@ public struct WorkReading: Codable, Sendable {
                   (source.originalText ?? source.text).contains(reference.quote) else { return nil }
             if source.origin == .mixed && reference.sourceID == context.anchorID && !source.novelText.contains(reference.quote) { return nil }
         }
+        if let id = proposal.recalledGoalSourceID {
+            guard Self.asksAboutEarlierStatement(context), let ref = proposal.references.first(where: { $0.sourceID == id && [.intent, .boundary].contains($0.use) }),
+                  context.sources.contains(where: { $0.id == id && $0.role == "user" && $0.origin != .reusedAgent && context.recalledMessageIDs.contains($0.messageID) && $0.novelText.contains(ref.quote) }),
+                  proposal.goal == Self.earlierStatementGoal(ref.quote) else { return nil }
+        }
         let generated = [proposal.goal, proposal.headline, proposal.account, proposal.nextStep].joined(separator: " ")
         let personal = #"(?i)\b(cognitive decline|brain atrophy|sanity score|IQ|mental health|cognitive dysfunction score|brain strain score)\b|\byou (?:are|were|seem|became|have become|have) (?:being steered|tired|disengaged|dependent|uncritical)|\byou (?:did not|didn't|never|failed to) (?:read|review|understand|think)|\byou (?:have|show|are showing|suffer from) (?:cognitive dysfunction|cognitive impairment|dementia|burnout)\b|\byou (?:fully|clearly|definitely) understand"#
         guard generated.range(of: personal, options: .regularExpression) == nil else { return nil }
+        let privateUnderstanding = #"(?i)\b(?:verify|determine|assess|measure|test|prove|confirm|check)\b.{0,35}\b(?:you|your|(?:the\s+)?(?:user|human)(?:['’]s)?)\b.{0,30}\b(?:understand\w*|comprehen\w*)\b"#
+        guard generated.range(of: privateUnderstanding, options: .regularExpression) == nil else { return nil }
         let evidenceStatus = WorkEvidenceStatus.classify(proposal, context: context)
         if proposal.resultState != nil && proposal.focus == .progress && ![.humanReported, .agentReported].contains(evidenceStatus) { return nil }
         var key: String?
@@ -194,8 +306,11 @@ public struct WorkReading: Codable, Sendable {
                   let a = context.sources.firstIndex(where: { $0.id == boundary.sourceID }),
                   let b = context.sources.firstIndex(where: { $0.id == change.sourceID }),
                   let c = context.sources.firstIndex(where: { $0.id == context.anchorID }), a < b, b < c,
+                  context.memoryRecall == nil || Self.sharesDirectionTopic(boundary.quote, change.quote),
                   context.sources[a].role == "user", context.sources[a].origin != .reusedAgent,
                   context.sources[b].role == "assistant",
+                  !context.recalledMessageIDs.contains(context.sources[a].messageID), !context.recalledMessageIDs.contains(context.sources[b].messageID),
+                  !context.hasMissingHumanContext(between: context.sources[a].messageID, and: context.sources[c].messageID),
                   !context.sources[(a+1)..<c].contains(where: { $0.role == "user" && !Self.isBriefAssent($0.novelText) }), [a,b,c].allSatisfy({ context.sources[$0].sessionID == context.sessionID }),
                   (literalRule != nil || [boundary.sourceID, change.sourceID, context.anchorID].allSatisfy({ challenge.sourceIDs.contains($0) })) else { return nil }
             let value = [a,b].map { context.sources[$0].messageID + ":" + context.sources[$0].fingerprint }.joined(separator: "|")
@@ -203,13 +318,16 @@ public struct WorkReading: Codable, Sendable {
         }
         if proposal.focus == .recurringIssue {
             let human = context.sources.filter { ids.contains($0.id) && $0.role == "user" && $0.origin != .reusedAgent && $0.sessionID == context.sessionID }
-            guard Set(human.map(\.messageID)).count >= 2,
+            guard Self.hasRecurrenceContext(proposal.references, context: context), Set(human.map(\.messageID)).count >= 2,
                   context.sources.contains(where: { ids.contains($0.id) && $0.role == "assistant" && $0.sessionID == context.sessionID }) else { return nil }
         }
         let canonical = proposal.references.map { reference in
             WorkReference(sourceID: context.sources.first { $0.id == reference.sourceID }!.messageID, quote: reference.quote, use: reference.use)
         }
-        return Self(focus: proposal.focus, goal: proposal.goal, headline: proposal.headline, account: proposal.account, nextStep: proposal.nextStep, references: canonical, signalKey: key, boundaryRule: literalRule, evidenceStatus: evidenceStatus)
+        let reports = evidenceStatus == .unknown ? [] : WorkEvidenceStatus.reports(references: proposal.references, context: context).map { report in
+            WorkEvidenceReport(sourceID: context.sources.first { $0.id == report.sourceID }!.messageID, quote: report.quote, status: report.status)
+        }
+        return Self(focus: proposal.focus, goal: proposal.goal, headline: proposal.headline, account: proposal.account, nextStep: proposal.nextStep, references: canonical, signalKey: key, boundaryRule: literalRule, evidenceStatus: evidenceStatus, evidenceReports: reports, recalledGoalSourceID: proposal.recalledGoalSourceID.flatMap { id in context.sources.first { $0.id == id }?.messageID })
     }
 }
 
@@ -221,7 +339,7 @@ extension DecisionRevision {
             let witness = reading?.references.first { $0.sourceID == source.messageID }?.quote ?? source.quote
             return DecisionEvidence(messageID: source.messageID, sessionID: source.sessionID, role: source.role, origin: source.origin, quote: witness, fingerprint: source.fingerprint)
         }
-        return Self(id: UUID().uuidString, sessionID: context.sessionID, anchorMessageID: context.anchor?.messageID ?? "", inputDigest: context.inputDigest, previousID: previousID, createdAt: now, engine: engine,
+        return Self(memoryRecall: context.memoryRecall, id: UUID().uuidString, sessionID: context.sessionID, anchorMessageID: context.anchor?.messageID ?? "", inputDigest: context.inputDigest, previousID: previousID, createdAt: now, engine: engine,
                     kind: reading?.focus == .recurringIssue ? .recurringIssue : .uncertain, status: reading == nil ? .unknown : .tentative, actions: nil,
                     goal: reading?.goal ?? "", summary: reading?.headline ?? "No specific check is ready yet.",
                     reason: reading?.account ?? "The local reading did not pass its source or meaning checks.",
@@ -252,7 +370,7 @@ extension WorkProposal {
            let index = context.sources.firstIndex(where: { $0.id == context.anchorID }), let earlier = context.sources.prefix(index).last(where: { $0.role == "user" && $0.sessionID == context.sessionID && $0.origin != .reusedAgent }) {
             values.append(.init(sourceID: earlier.id, quote: String(earlier.quote.prefix(100)), use: .intent))
         }
-        return .init(focus: focus, goal: goal, headline: headline, account: account, nextStep: nextStep, references: values, resultState: resultState)
+        return .init(focus: focus, goal: goal, headline: headline, account: account, nextStep: nextStep, references: values, resultState: resultState, recalledGoalSourceID: recalledGoalSourceID)
     }
     public func respectingExplicitTopicChange(_ context: DecisionContext) -> Self {
         guard let anchor = context.anchor, references.allSatisfy({ ref in context.sources.contains { $0.id == ref.sourceID } }),

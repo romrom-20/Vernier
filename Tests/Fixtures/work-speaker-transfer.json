@@ -1,0 +1,195 @@
+[
+  {
+    "id": "speaker-transfer-first-delete",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Deleting one selected draft must remove only that draft."
+      },
+      {
+        "role": "assistant",
+        "text": "I changed the deletion handler."
+      },
+      {
+        "role": "user",
+        "text": "I pressed Delete myself and it removed two drafts."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "human_reported"
+  },
+  {
+    "id": "speaker-transfer-first-shortcut",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Keep one shortcut press from opening two inspectors."
+      },
+      {
+        "role": "assistant",
+        "text": "The shortcut patch is ready."
+      },
+      {
+        "role": "user",
+        "text": "I pressed the shortcut myself and it still opened two inspectors."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "human_reported"
+  },
+  {
+    "id": "speaker-transfer-first-preview",
+    "messages": [
+      {
+        "role": "user",
+        "text": "The preview should show every page of this document."
+      },
+      {
+        "role": "assistant",
+        "text": "I updated the preview layout."
+      },
+      {
+        "role": "user",
+        "text": "I opened the preview myself; the last page was blank."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "human_reported"
+  },
+  {
+    "id": "speaker-transfer-actual-return",
+    "messages": [
+      {
+        "role": "user",
+        "text": "I pressed the shortcut myself and it opened two inspectors."
+      },
+      {
+        "role": "assistant",
+        "text": "I changed the shortcut handler."
+      },
+      {
+        "role": "user",
+        "text": "I pressed it again myself and it still opened two inspectors."
+      }
+    ],
+    "expectedFocuses": [
+      "recurring_issue",
+      "check",
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "human_reported"
+  },
+  {
+    "id": "speaker-transfer-future-return",
+    "messages": [
+      {
+        "role": "user",
+        "text": "I opened the preview myself and the last page was blank."
+      },
+      {
+        "role": "assistant",
+        "text": "I have not replayed the preview after the change."
+      },
+      {
+        "role": "user",
+        "text": "I will open it again tomorrow and report what happens."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff"
+    ],
+    "expectedCue": false,
+    "goalTerms": []
+  },
+  {
+    "id": "speaker-transfer-ai-only",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Importing the same subscriber file twice must keep one subscriber."
+      },
+      {
+        "role": "assistant",
+        "text": "I imported the subscriber file twice and saw one subscriber."
+      },
+      {
+        "role": "user",
+        "text": "That describes your attempt. I have not imported it myself."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "agent_reported"
+  },
+  {
+    "id": "speaker-transfer-quoted-not-attempt",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Opening the viewer should show all pages."
+      },
+      {
+        "role": "assistant",
+        "text": "I have not opened the viewer."
+      },
+      {
+        "role": "user",
+        "text": "The previous assistant wrote: \"I opened it and saw one page.\" That was not my action. Show the actual result."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "handoff",
+      "none"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "no_result"
+  },
+  {
+    "id": "speaker-transfer-both",
+    "messages": [
+      {
+        "role": "user",
+        "text": "One click must create one tag."
+      },
+      {
+        "role": "assistant",
+        "text": "I clicked once and it created one tag."
+      },
+      {
+        "role": "user",
+        "text": "I clicked once myself and it created two tags. Explain the difference."
+      }
+    ],
+    "expectedFocuses": [
+      "check",
+      "progress"
+    ],
+    "expectedCue": false,
+    "goalTerms": [],
+    "expectedEvidenceStatus": "human_reported"
+  }
+]

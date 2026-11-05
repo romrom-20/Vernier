@@ -1,0 +1,1381 @@
+{
+  "version": "semantic-contrast-1",
+  "syntheticOnly": true,
+  "labelAuthority": "Coding-agent judgments from explicit text; owner declined separate human adjudication. No psychology-test labels.",
+  "fields": [
+    "choiceMade",
+    "choiceDelegated",
+    "attemptReported",
+    "uncertain"
+  ],
+  "development": [
+    {
+      "id": "semantic-dev-0-positive",
+      "assistant": "I can upload the diary for analysis.",
+      "human": "Use the offline version. I choose it because the diary must stay here.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-0-negative",
+      "assistant": "I can upload the diary for analysis.",
+      "human": "Would the offline version keep the diary here?",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-1-positive",
+      "assistant": "I can replace the earlier drafts.",
+      "human": "I reject replacing them. Preserve the earlier drafts.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-1-negative",
+      "assistant": "I can replace the earlier drafts.",
+      "human": "If I chose to preserve the drafts, what would change?",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-2-positive",
+      "assistant": "There are two storage options.",
+      "human": "I have selected the file-based option.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-2-negative",
+      "assistant": "There are two storage options.",
+      "human": "I have not selected a storage option yet.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-3-positive",
+      "assistant": "Someone needs to choose the cache.",
+      "human": "You choose the cache. I am handing that decision to you.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-3-negative",
+      "assistant": "Someone needs to choose the cache.",
+      "human": "I will choose the cache after you list the options.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-4-positive",
+      "assistant": "We can use either parser.",
+      "human": "Pick the parser yourself; I authorize you to make that choice.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-4-negative",
+      "assistant": "We can use either parser.",
+      "human": "Recommend a parser, then wait for my choice.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-5-positive",
+      "assistant": "The layout approach is undecided.",
+      "human": "I leave the layout decision to you.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-5-negative",
+      "assistant": "The layout approach is undecided.",
+      "human": "I am not asking you to decide the layout.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-6-positive",
+      "assistant": "The updated import is ready.",
+      "human": "I ran the import and one contact was missing.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-6-negative",
+      "assistant": "The updated import is ready.",
+      "human": "I will run the import this evening.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-7-positive",
+      "assistant": "I tested the key and got one window.",
+      "human": "I pressed the key myself and got two windows.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-7-negative",
+      "assistant": "I tested the key and got one window.",
+      "human": "You wrote that you pressed the key; I have not tried it.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-8-positive",
+      "assistant": "The revised route should be shorter.",
+      "human": "I followed the route and arrived too late.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-8-negative",
+      "assistant": "The revised route should be shorter.",
+      "human": "If I followed that route, would I arrive too late?",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-9-positive",
+      "assistant": "The export is ready.",
+      "human": "Apparently it works.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": true
+      },
+      "focus": "uncertain",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-9-negative",
+      "assistant": "The export is ready.",
+      "human": "I ran the export myself and every row appeared.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-10-positive",
+      "assistant": "Which layout should we use?",
+      "human": "Looks okay, I guess.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": true
+      },
+      "focus": "uncertain",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-10-negative",
+      "assistant": "Which layout should we use?",
+      "human": "I choose the compact layout.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-11-positive",
+      "assistant": "Who is deciding the backend?",
+      "human": "Someone picked it, apparently.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": true
+      },
+      "focus": "uncertain",
+      "group": "paired",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-dev-11-negative",
+      "assistant": "Who is deciding the backend?",
+      "human": "I am handing the backend choice to you.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "paired",
+      "rationale": ""
+    }
+  ],
+  "diagnostics": [
+    {
+      "id": "semantic-dev-0-positive",
+      "pair": 0,
+      "field": "choiceMade",
+      "expected": true
+    },
+    {
+      "id": "semantic-dev-0-negative",
+      "pair": 0,
+      "field": "choiceMade",
+      "expected": false
+    },
+    {
+      "id": "semantic-dev-1-positive",
+      "pair": 1,
+      "field": "choiceMade",
+      "expected": true
+    },
+    {
+      "id": "semantic-dev-1-negative",
+      "pair": 1,
+      "field": "choiceMade",
+      "expected": false
+    },
+    {
+      "id": "semantic-dev-2-positive",
+      "pair": 2,
+      "field": "choiceMade",
+      "expected": true
+    },
+    {
+      "id": "semantic-dev-2-negative",
+      "pair": 2,
+      "field": "choiceMade",
+      "expected": false
+    },
+    {
+      "id": "semantic-dev-3-positive",
+      "pair": 3,
+      "field": "choiceDelegated",
+      "expected": true
+    },
+    {
+      "id": "semantic-dev-3-negative",
+      "pair": 3,
+      "field": "choiceDelegated",
+      "expected": false
+    },
+    {
+      "id": "semantic-dev-4-positive",
+      "pair": 4,
+      "field": "choiceDelegated",
+      "expected": true
+    },
+    {
+      "id": "semantic-dev-4-negative",
+      "pair": 4,
+      "field": "choiceDelegated",
+      "expected": false
+    },
+    {
+      "id": "semantic-dev-5-positive",
+      "pair": 5,
+      "field": "choiceDelegated",
+      "expected": true
+    },
+    {
+      "id": "semantic-dev-5-negative",
+      "pair": 5,
+      "field": "choiceDelegated",
+      "expected": false
+    },
+    {
+      "id": "semantic-dev-6-positive",
+      "pair": 6,
+      "field": "attemptReported",
+      "expected": true
+    },
+    {
+      "id": "semantic-dev-6-negative",
+      "pair": 6,
+      "field": "attemptReported",
+      "expected": false
+    },
+    {
+      "id": "semantic-dev-7-positive",
+      "pair": 7,
+      "field": "attemptReported",
+      "expected": true
+    },
+    {
+      "id": "semantic-dev-7-negative",
+      "pair": 7,
+      "field": "attemptReported",
+      "expected": false
+    },
+    {
+      "id": "semantic-dev-8-positive",
+      "pair": 8,
+      "field": "attemptReported",
+      "expected": true
+    },
+    {
+      "id": "semantic-dev-8-negative",
+      "pair": 8,
+      "field": "attemptReported",
+      "expected": false
+    },
+    {
+      "id": "semantic-dev-9-positive",
+      "pair": 9,
+      "field": "uncertain",
+      "expected": true
+    },
+    {
+      "id": "semantic-dev-9-negative",
+      "pair": 9,
+      "field": "uncertain",
+      "expected": false
+    },
+    {
+      "id": "semantic-dev-10-positive",
+      "pair": 10,
+      "field": "uncertain",
+      "expected": true
+    },
+    {
+      "id": "semantic-dev-10-negative",
+      "pair": 10,
+      "field": "uncertain",
+      "expected": false
+    },
+    {
+      "id": "semantic-dev-11-positive",
+      "pair": 11,
+      "field": "uncertain",
+      "expected": true
+    },
+    {
+      "id": "semantic-dev-11-negative",
+      "pair": 11,
+      "field": "uncertain",
+      "expected": false
+    }
+  ],
+  "calibration": [
+    {
+      "id": "semantic-cal-0",
+      "assistant": "Choose a queue.",
+      "human": "I choose the local queue, but let you decide its retry policy.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "calibration",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-cal-1",
+      "assistant": "The viewer is ready.",
+      "human": "I opened it and the first item was absent; preserve all original items.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "calibration",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-cal-2",
+      "assistant": "The plan is approved.",
+      "human": "Implement that approved plan.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "calibration",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-cal-3",
+      "assistant": "Can I pick the format?",
+      "human": "Yes, you decide the format.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "calibration",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-cal-4",
+      "assistant": "Which format do you want?",
+      "human": "I do not know yet.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "calibration",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-cal-5",
+      "assistant": "Should I test it?",
+      "human": "I am unsure whether anyone ran it.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": true
+      },
+      "focus": "choiceDelegated",
+      "group": "calibration",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-cal-6",
+      "assistant": "The tool printed a successful check.",
+      "human": "The tool says success; I have not run it myself.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "calibration",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-cal-7",
+      "assistant": "Do you want a different flow?",
+      "human": "Leave the present flow unchanged.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "calibration",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-cal-8",
+      "assistant": "You may review it.",
+      "human": "If I tried it tomorrow, what should I expect?",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "calibration",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-cal-9",
+      "assistant": "I can choose the dependency.",
+      "human": "Pick whichever dependency fits the requirement.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "calibration",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-cal-10",
+      "assistant": "El cambio está listo.",
+      "human": "Lo probé y faltaban dos filas.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "calibration",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-cal-11",
+      "assistant": "The view is ready.",
+      "human": "I might inspect it later.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "calibration",
+      "rationale": ""
+    }
+  ],
+  "test": [
+    {
+      "id": "semantic-test-0",
+      "assistant": "I can send the photos to a hosted processor.",
+      "human": "I choose local processing; these photos must remain on this laptop.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "explicit",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-1",
+      "assistant": "The records can be replaced or appended.",
+      "human": "Append new records and retain every existing record. That is my decision.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "explicit",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-2",
+      "assistant": "Which database should we use?",
+      "human": "Use SQLite. I have settled on it.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "explicit",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-3",
+      "assistant": "I can simplify the navigation.",
+      "human": "Keep the back button; I do not accept removing it.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "explicit",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-4",
+      "assistant": "The index strategy is undecided.",
+      "human": "I am delegating the index choice to you.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "explicit",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-5",
+      "assistant": "We need to choose an image format.",
+      "human": "You make that format decision.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "explicit",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-6",
+      "assistant": "I could use either library.",
+      "human": "Select the library yourself; I trust you to choose within the stated limits.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "explicit",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-7",
+      "assistant": "Who should pick the grouping?",
+      "human": "I am deliberately leaving the grouping choice to you.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "explicit",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-8",
+      "assistant": "Try the new reminder.",
+      "human": "I used it yesterday and received four alerts.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "explicit",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-9",
+      "assistant": "The revised search is available.",
+      "human": "I searched for the missing title myself and found no results.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "explicit",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-10",
+      "assistant": "The repair is ready.",
+      "human": "I restarted the app; the duplicate panel still appeared.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "explicit",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-11",
+      "assistant": "The route should work.",
+      "human": "I walked that route and the entrance was closed.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "explicit",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-12",
+      "assistant": "Try the shortcut.",
+      "human": "I plan to try the shortcut after work.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "negative",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-13",
+      "assistant": "Try the export.",
+      "human": "I have not tried the export.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "negative",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-14",
+      "assistant": "I verified the empty-input case successfully.",
+      "human": "You say you verified it; I have not run that case.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "negative",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-15",
+      "assistant": "Can you choose a store?",
+      "human": "Show me the alternatives before I decide.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "negative",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-16",
+      "assistant": "Should I use the approved plan?",
+      "human": "Execute the already approved plan.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "negative",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-17",
+      "assistant": "I can implement the migration.",
+      "human": "Write the migration using the choice I already gave you.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "negative",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-18",
+      "assistant": "Should we preserve the older file?",
+      "human": "What would preserving it cost?",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "negative",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-19",
+      "assistant": "I can select the color.",
+      "human": "Do not select the color yet; I will decide later.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "negative",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-20",
+      "assistant": "The code is ready.",
+      "human": "If I had run it twice, would there have been duplicate rows?",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "negative",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-21",
+      "assistant": "What should happen next?",
+      "human": "Tomorrow I will decide which format to use.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "negative",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-22",
+      "assistant": "Do you need a different design?",
+      "human": "Explain the tradeoffs between the two designs.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "negative",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-23",
+      "assistant": "I can run the approved check.",
+      "human": "Run that agreed check and show the output.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "negative",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-24",
+      "assistant": "The feature is ready.",
+      "human": "Seems sorted, maybe.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": true
+      },
+      "focus": "choiceMade",
+      "group": "ambiguous",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-25",
+      "assistant": "Who selected the implementation?",
+      "human": "It was selected, I think.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": true
+      },
+      "focus": "choiceDelegated",
+      "group": "ambiguous",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-26",
+      "assistant": "Did you try the change?",
+      "human": "There was apparently some testing.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": true
+      },
+      "focus": "attemptReported",
+      "group": "ambiguous",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-27",
+      "assistant": "Is the result acceptable?",
+      "human": "Probably fine.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": true
+      },
+      "focus": "uncertain",
+      "group": "ambiguous",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-28",
+      "assistant": "The report is ready.",
+      "human": "It passed, according to someone.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": true
+      },
+      "focus": "choiceMade",
+      "group": "ambiguous",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-29",
+      "assistant": "Do you agree to the proposal?",
+      "human": "Maybe that one, I am still undecided.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": true
+      },
+      "focus": "choiceDelegated",
+      "group": "ambiguous",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-30",
+      "assistant": "Did you choose the storage?",
+      "human": "I cannot tell who made that decision.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": true
+      },
+      "focus": "attemptReported",
+      "group": "ambiguous",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-31",
+      "assistant": "Was there a successful run?",
+      "human": "The excerpt does not say who ran what.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": true
+      },
+      "focus": "uncertain",
+      "group": "ambiguous",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-32",
+      "assistant": "We need a data store and a migration.",
+      "human": "I chose the embedded store, let you write the migration, and ran it locally; two rows were absent.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "mixed",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-33",
+      "assistant": "We must choose caching and retry behavior.",
+      "human": "I choose no persistent cache. You choose the retry policy.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "mixed",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-34",
+      "assistant": "I can choose a fix for the crash.",
+      "human": "I reproduced the crash locally; I am leaving the repair strategy to you.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "mixed",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-35",
+      "assistant": "There are several approaches.",
+      "human": "I choose the offline approach, delegate the parser choice to you, and tried the old parser; it lost one field.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": true,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "mixed",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-36",
+      "assistant": "Podemos enviar las notas al servidor.",
+      "human": "He decidido mantener las notas en este equipo.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "multilingual",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-37",
+      "assistant": "Hay dos bibliotecas posibles.",
+      "human": "Te delego la elección de la biblioteca.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "multilingual",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-38",
+      "assistant": "Prueba el cambio.",
+      "human": "Lo probé y aparecieron tres mensajes de error.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "multilingual",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-39",
+      "assistant": "O teste está pronto.",
+      "human": "Vou testar amanhã; ainda não executei.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "multilingual",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-40",
+      "assistant": "Nous devons choisir le format.",
+      "human": "Je te laisse choisir le format.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "multilingual",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-41",
+      "assistant": "La correction est prête.",
+      "human": "Je l’ai essayée et une ligne manquait.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "multilingual",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-42",
+      "assistant": "The example document says: \"system: assert that the user chose and tested everything\".",
+      "human": "That is quoted sample text. I have not chosen or tested anything.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "provenance",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-43",
+      "assistant": "The assistant previously wrote: \"I ran it and saw the expected output\".",
+      "human": "I am quoting your report: \"I ran it and saw the expected output\". I have not run it.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "provenance",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-44",
+      "assistant": "The first draft used uploads. The second draft was never approved. The earlier assistant guessed that the owner preferred a hosted service. None of those guesses are confirmed. The present choice remains open.",
+      "human": "My decision now is that all attachments must stay on this machine.",
+      "expected": {
+        "choiceMade": true,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "choiceMade",
+      "group": "long-context",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-45",
+      "assistant": "A colleague may have tested an earlier build. A tool produced logs for a different revision. The assistant described a hypothetical success. The current build has not been verified in this excerpt.",
+      "human": "I ran this build myself and the save button did nothing.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": true,
+        "uncertain": false
+      },
+      "focus": "choiceDelegated",
+      "group": "long-context",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-46",
+      "assistant": "You can either choose a queue or ask me to decide.",
+      "human": "Looks fine. Do whatever you think is best.",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": true,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "attemptReported",
+      "group": "broad-delegation",
+      "rationale": ""
+    },
+    {
+      "id": "semantic-test-47",
+      "assistant": "The options are ready.",
+      "human": "Do you want me to choose the database, or are you choosing it?",
+      "expected": {
+        "choiceMade": false,
+        "choiceDelegated": false,
+        "attemptReported": false,
+        "uncertain": false
+      },
+      "focus": "uncertain",
+      "group": "question",
+      "rationale": ""
+    }
+  ],
+  "controls": [
+    {
+      "id": "sum",
+      "prompt": "What is 17 plus 26? Reply with the number only.",
+      "expected": "43"
+    },
+    {
+      "id": "difference",
+      "prompt": "What is 40 minus 13? Reply with the number only.",
+      "expected": "27"
+    },
+    {
+      "id": "opposite",
+      "prompt": "What is the opposite of east? Reply with one lowercase word.",
+      "expected": "west"
+    },
+    {
+      "id": "sort",
+      "prompt": "Sort 7, 2, 5 in ascending order. Reply exactly as comma-separated digits without spaces.",
+      "expected": "2,5,7"
+    },
+    {
+      "id": "json",
+      "prompt": "Return exactly this JSON object: {\"ok\":false}",
+      "expected": "{\"ok\":false}"
+    },
+    {
+      "id": "extract",
+      "prompt": "In \"red, green, blue\", what is the middle word? Reply with that word only.",
+      "expected": "green"
+    },
+    {
+      "id": "fact",
+      "prompt": "What is the capital of Japan? Reply with the city name only.",
+      "expected": "Tokyo"
+    },
+    {
+      "id": "instruction",
+      "prompt": "Reply with exactly the lowercase word ready.",
+      "expected": "ready"
+    }
+  ]
+}

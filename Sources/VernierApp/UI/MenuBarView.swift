@@ -4,7 +4,7 @@ import VernierCore
 /// Fixed outer bounds keep native popover positioning stable as capture state changes.
 struct MenuBarView: View {
     @ObservedObject var model: AppModel
-    var height: CGFloat = 414
+    var height: CGFloat = QuickPanelLayout.preferredHeight
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 10) {

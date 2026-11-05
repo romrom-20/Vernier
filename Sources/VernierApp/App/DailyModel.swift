@@ -63,11 +63,12 @@ extension AppModel {
         guard localInsightsEnabled, dailyLoadedKey == dailyLoadKey, let report = dailyReport else { return [] }
         return insights(for: report, revisions: dailyReadings)
     }
-    var quickInsight: WorkDayInsight? {
-        guard localInsightsEnabled, dailyLoadedKey == dailyLoadKey, let report = quickDailyReport else { return nil }
+    var quickInsights: [WorkDayInsight] {
+        guard localInsightsEnabled, dailyLoadedKey == dailyLoadKey, let report = quickDailyReport else { return [] }
         let records = report.day == dailyReport?.day ? dailyReadings : dailyPreviousReadings
-        return insights(for: report, revisions: records).first
+        return insights(for: report, revisions: records)
     }
+    var quickInsight: WorkDayInsight? { quickInsights.first }
     private func insights(for report: DailyParticipation, revisions: [DecisionRevision]) -> [WorkDayInsight] {
         let historical = !report.day.contains(Date())
         let current = historical ? nil : Set(revisions.filter(isReadingCurrent).map(\.id))
@@ -77,7 +78,7 @@ extension AppModel {
     func openDayInsight(_ insight: WorkDayInsight) {
         let revision = insight.revision
         guard localInsightsEnabled, library.sessions.contains(where: { $0.id == revision.sessionID }),
-              dayInsights.contains(where: { $0.id == insight.id }) || quickInsight?.id == insight.id,
+              dayInsights.contains(where: { $0.id == insight.id }) || quickInsights.contains(where: { $0.id == insight.id }),
               insight.historical || isReadingCurrent(revision) else { return }
         if quickRecapIsPreviousDay { chooseDay(-1) }
         // Keep the exact historical target even when it is older than the normal 40-row history page.
@@ -190,6 +191,12 @@ extension AppModel {
         if directionToCheck != nil { openDirectionCheck(); return }
         if quickRecapIsPreviousDay { chooseDay(-1) }
         if !localInsightsEnabled { dailyConversationExpanded = true }
+        openStudio(.overview)
+    }
+    func openQuickEvidence(_ action: DailyAction) {
+        guard localInsightsEnabled, let report = quickDailyReport, report.count(action) > 0 else { return }
+        if quickRecapIsPreviousDay { chooseDay(-1) }
+        selectDailyEvidence(action: action)
         openStudio(.overview)
     }
     func openQuickExchange(_ moment: DailyMoment) {

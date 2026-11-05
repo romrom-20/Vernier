@@ -1,0 +1,40 @@
+{
+  "protocol": "semantic-contrast-1",
+  "method": "Native paired semantic-state tracing, source-position MLP contrast amplification, direct numerical matrix edit without gradients or optimizer.",
+  "modelRevision": "238767527555cb75a05732a84dff5d6ba0dd6809",
+  "modelSHA256": "038e39a37a7667373d2c3991375446b10c96ae1d717a68674870343db376b76e",
+  "layers": [
+    4,
+    9,
+    14,
+    19,
+    24,
+    29,
+    34
+  ],
+  "columns": 512,
+  "doses": [
+    0.5,
+    1.0
+  ],
+  "relativeNormAtUnitDose": 0.005,
+  "seed": 72,
+  "selection": "Choose source-position layer by reciprocal present/absent patch effect on development only. Choose dose by full 36-case development outcomes, prioritizing false supported-act claims, then complete matches, then missed supported acts, then uncertainty errors. Always evaluate frozen best candidate once, even if development gate fails, and report that failure.",
+  "controls": "Original quantized, conversion-only sham, fixed selected edit, equal-norm random selected-column edit, equal-norm generic-true readout edit, reversed edit, and previously frozen Boolean projection.",
+  "freshPolicy": "Freeze complete corpus before tracing. No test outcome may select layer, columns, dose, control or prompt. All inspected sets become regression data.",
+  "gate": {
+    "minimumFreshMatches": 41,
+    "minimumAdditionalMatches": 6,
+    "noAdditionalFalseClaims": true,
+    "noControlRegression": true,
+    "independentLabelsRequiredForPromotion": true
+  },
+  "limits": {
+    "teacherForcedForwards": 700,
+    "generationPackets": 1000,
+    "wallSeconds": 1800,
+    "mlxMemoryGuidelineBytes": 10737418240
+  },
+  "privacy": "Offline invented text only. No personal archives, capture, UI tests, production weights/settings or external inference.",
+  "caveat": "New semantic diagnostic schema is not the production contribution task; verify transfer separately. Agent-authored labels are not independent validation."
+}

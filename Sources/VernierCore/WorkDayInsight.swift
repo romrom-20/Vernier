@@ -20,7 +20,7 @@ public struct WorkDayInsight: Identifiable, Sendable {
     public var detail: String {
         if reading.focus == .recurringIssue { return "The reading links two reports of a similar fault. Check whether the same input and requirement are involved." }
         if reading.focus == .handoff { return "Delegating execution can be deliberate. This saved checkpoint gives you a way back into the work." }
-        return evidenceStatus.explanation
+        return reading.evidenceExplanation
     }
     public var priority: Int {
         if reading.focus == .recurringIssue { return 0 }

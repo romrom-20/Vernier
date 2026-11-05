@@ -2,6 +2,18 @@
 
 Vernier is an experimental native Mac app and working project name. This repository publishes source, synthetic showcase data, tests and documentation under MIT. There is no production, notarized binary release yet.
 
+## Unreleased reader and memory update
+
+The current source branch adds a compact recap across conversations, separate
+human/AI report evidence, historical source recall and a same-workspace casebook
+with newer owner perspectives. The latest measured local installation uses
+reader `work-15` with the original Gemma model. No new model weights are released
+or selected by this source update. Schema v6, capture consent and default wording
+categories remain. This is not a new tagged or notarized binary release.
+
+[Current model status and update policy](MODEL_STATUS.md) ·
+[Memory mechanism and limits](CONVERSATION_MEMORY.md)
+
 ## Build and try
 
 `./Scripts/build-app.sh` creates `build/Vernier.app` with a generated caliper icon and ad-hoc local signature. `./Scripts/showcase.sh` opens it with separate preferences and in-memory synthetic records. Showcase never opens the personal archive, starts a connector or registers a login item.

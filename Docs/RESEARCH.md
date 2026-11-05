@@ -2,6 +2,8 @@
 
 **Status: research design, not implemented results.** The current release implements a subset of passive history capture and self-report. It has no capability probe engine, intervention system, experiment enrollment or validated predictor.
 
+Local observer experiments and their negative results are documented separately in [source-fact supervision](MODEL_SOURCE_SUPERVISION.md). Those experiments do not implement or validate the measurement framework below. The compact day overview describes saved contribution patterns and does not turn them into an agency or ability score.
+
 ## The construct
 
 Human agency in AI-mediated work includes setting goals, making context-appropriate delegation decisions, evaluating evidence, redirecting a process and recovering work when circumstances change. No single activity counter is assumed to measure it.
@@ -70,7 +72,7 @@ Check whether the exercise helps a user locate a concrete gap and take an effect
 
 ## Verified sources and what we take from them
 
-[Weight-space programming — Takehi and colleagues](https://rikiyat.github.io/blog/weight-space-programming/) is an experimental blog report about models reading and editing neural-network weights. It reports improvements for some targeted failures, but not meaningful improvement of ordinary arithmetic/reasoning errors in its small Gemma experiment. It does not validate a measure of human strain or promise that our Gemma model can repair itself. We use its hypothesis → targeted change → behavioral evaluation approach. Vernier does not edit weights, train on private sessions or implement that method.
+[Weight-space programming — Takehi and colleagues](https://rikiyat.github.io/blog/weight-space-programming/) is an experimental blog report about models reading and editing neural-network weights. It reports improvements for some targeted failures, but not meaningful improvement of ordinary arithmetic/reasoning errors in its small Gemma experiment. It does not validate a measure of human strain or promise that our Gemma model can repair itself. We use its hypothesis → targeted change → behavioral evaluation approach. The running app does not edit weights or train on private sessions. A separate [supervised adapter trial](MODEL_TRAINING.md) changed learned weights on invented data; it did not reproduce the paper’s direct-edit method.
 
 [NASA Task Load Index](https://www.nasa.gov/human-systems-integration-division/nasa-task-load-index-tlx/) measures **subjective workload** across mental demand, physical demand, time pressure, performance, effort and frustration. A future opt-in workload check-in could follow its actual protocol. The current clarity/energy check-in is not NASA-TLX and must not inherit its validity. Workload and cognitive dysfunction are different constructs.
 
@@ -95,3 +97,13 @@ Check whether the exercise helps a user locate a concrete gap and take an effect
 ## Privacy and participation
 
 Future probes and studies require a separate consent contract, local data/retention design, explicit assistance conditions and a withdrawal path. No research upload, random assignment, grading call or extra observation is enabled by this document. Keep synthetic public examples separate from private participant records. Any future export of study data needs its own clearly scoped authorization.
+
+
+A later [direct-head experiment](DIRECT_WEIGHT_EDIT.md) used actual activation/weight inspection and a gradient-free attention-output edit on the separate Gemma copy. Its controls did not establish the proposed diagnosis and its quality gate failed. It is not a reproduction of the paper's published Qwen intervention and is not active in Vernier.
+
+
+The subsequent [weight-column projection approach](WEIGHT_SPACE_APPROACH.md) inspected actual model features and weights, verified native Boolean-token replay, and tested a small direct projection against conversion-only, random and reversed controls. It observed a limited 11/32 to 13/32 gain on a new invented proposal test, below its declared gate. This does not validate human-agency measurement or reproduce the paper's published benchmark.
+
+The later [semantic weight study](SEMANTIC_WEIGHT_STUDY.md) found no gain from a source-derived feature edit and regressions from the earlier Boolean patch on a new semantic task. This limits the interpretation of the older small gain; none of these studies reproduces the paper’s result or validates human-agency inference.
+
+The [research-guided reasoning comparison](OBSERVER_REASONING_RESEARCH.md) reviews official Gemma thinking support, rationale supervision, small-model limits, self-correction and REdit. Testing native thinking plus a checklist improved category recall but worsened semantic judgments and added unsupported acts. The method remains isolated; the proposed short evidence-supervision training has not been run.

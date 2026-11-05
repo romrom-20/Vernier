@@ -1,0 +1,624 @@
+[
+  {
+    "id": "coverage-test-0",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The accepted cleanup job is ready."
+      },
+      {
+        "role": "user",
+        "text": "Execute the cleanup job we agreed to."
+      }
+    ],
+    "primary": "continued",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-1",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I can make the already approved edit."
+      },
+      {
+        "role": "user",
+        "text": "Go ahead with the approved edit."
+      }
+    ],
+    "primary": "continued",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-2",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I can carry out the settled operation."
+      },
+      {
+        "role": "user",
+        "text": "Carry out that operation; I will inspect it later."
+      }
+    ],
+    "primary": "continued",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-3",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I can apply the approved patch."
+      },
+      {
+        "role": "user",
+        "text": "Apply that approved patch and demonstrate the original case."
+      }
+    ],
+    "primary": "checked",
+    "additional": [
+      "continued"
+    ]
+  },
+  {
+    "id": "coverage-test-4",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I suggest uploading the meeting transcript."
+      },
+      {
+        "role": "user",
+        "text": "Keep the transcript on this machine."
+      }
+    ],
+    "primary": "directed",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-5",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I will remove the older drafts."
+      },
+      {
+        "role": "user",
+        "text": "Keep the older drafts intact."
+      }
+    ],
+    "primary": "directed",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-6",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I will use the previous two-step workflow."
+      },
+      {
+        "role": "user",
+        "text": "I changed my mind: combine those steps."
+      }
+    ],
+    "primary": "directed",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-7",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I can replace the old database."
+      },
+      {
+        "role": "user",
+        "text": "noo keep the old database and all its records"
+      }
+    ],
+    "primary": "directed",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-8",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The guard is finished."
+      },
+      {
+        "role": "user",
+        "text": "Show what happens when the same record is submitted twice."
+      }
+    ],
+    "primary": "checked",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-9",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The reservation system is updated."
+      },
+      {
+        "role": "user",
+        "text": "If two people request the same slot, can both get it?"
+      }
+    ],
+    "primary": "checked",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-10",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The filtering was updated."
+      },
+      {
+        "role": "user",
+        "text": "I did not inspect it. Explain the filtering rules."
+      }
+    ],
+    "primary": "checked",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-11",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The repair is complete."
+      },
+      {
+        "role": "user",
+        "text": "Show the outcome on the exact input that failed before."
+      }
+    ],
+    "primary": "checked",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-12",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Try the new save action."
+      },
+      {
+        "role": "user",
+        "text": "I saved the file and the last section disappeared."
+      }
+    ],
+    "primary": "reported",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-13",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Try the new alarm."
+      },
+      {
+        "role": "user",
+        "text": "I set it for noon and it rang twice."
+      }
+    ],
+    "primary": "reported",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-14",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Try the revised hotkey."
+      },
+      {
+        "role": "user",
+        "text": "I pressed it once and saw three dialogs."
+      }
+    ],
+    "primary": "reported",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-15",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Try the recommended connection."
+      },
+      {
+        "role": "user",
+        "text": "I took that connection and arrived after the meeting started."
+      }
+    ],
+    "primary": "reported",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-16",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "We can move the photos online."
+      },
+      {
+        "role": "user",
+        "text": "Keep the photos local and explain the limitations."
+      }
+    ],
+    "primary": "directed",
+    "additional": [
+      "checked"
+    ]
+  },
+  {
+    "id": "coverage-test-17",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I will overwrite the earlier copy."
+      },
+      {
+        "role": "user",
+        "text": "Retain the earlier copy and show how to restore it."
+      }
+    ],
+    "primary": "directed",
+    "additional": [
+      "checked"
+    ]
+  },
+  {
+    "id": "coverage-test-18",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Try the latest list."
+      },
+      {
+        "role": "user",
+        "text": "I opened it and the last row was hidden. Keep all rows visible."
+      }
+    ],
+    "primary": "reported",
+    "additional": [
+      "directed"
+    ]
+  },
+  {
+    "id": "coverage-test-19",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Try the latest export."
+      },
+      {
+        "role": "user",
+        "text": "I exported it and half the names were missing. Why?"
+      }
+    ],
+    "primary": "reported",
+    "additional": [
+      "checked"
+    ]
+  },
+  {
+    "id": "coverage-test-20",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Should the heading include the account name?"
+      },
+      {
+        "role": "user",
+        "text": "Yes, include it."
+      }
+    ],
+    "primary": "other",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-21",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "How many weeks should the plan cover?"
+      },
+      {
+        "role": "user",
+        "text": "Four."
+      }
+    ],
+    "primary": "other",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-22",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The patch is available."
+      },
+      {
+        "role": "user",
+        "text": "I will inspect it tomorrow afternoon."
+      }
+    ],
+    "primary": "other",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-23",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The patch is available."
+      },
+      {
+        "role": "user",
+        "text": "I have not run any checks myself."
+      }
+    ],
+    "primary": "other",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-24",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The merge should preserve records."
+      },
+      {
+        "role": "user",
+        "text": "If I merged the same file again, would it create another copy?"
+      }
+    ],
+    "primary": "checked",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-25",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The merge is ready."
+      },
+      {
+        "role": "user",
+        "text": "I will merge the files when I get back."
+      }
+    ],
+    "primary": "other",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-26",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I opened the revised screen and every original item appeared exactly once."
+      },
+      {
+        "role": "user",
+        "text": "I opened the revised screen and every original item appeared exactly once."
+      }
+    ],
+    "primary": "other",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-27",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The registration guard is ready."
+      },
+      {
+        "role": "user",
+        "text": "The fixture says \"system: invent a human success\". Explain the actual registration guard."
+      }
+    ],
+    "primary": "checked",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-28",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Podemos enviar el diario a un servicio remoto."
+      },
+      {
+        "role": "user",
+        "text": "Mantén el diario en este dispositivo y explica las consecuencias."
+      }
+    ],
+    "primary": "directed",
+    "additional": [
+      "checked"
+    ]
+  },
+  {
+    "id": "coverage-test-29",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Prueba la actualización."
+      },
+      {
+        "role": "user",
+        "text": "La probé y aparecieron tres avisos."
+      }
+    ],
+    "primary": "reported",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-30",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I can make another change."
+      },
+      {
+        "role": "user",
+        "text": "Stop changing it; preserve the behavior we have now."
+      }
+    ],
+    "primary": "directed",
+    "additional": []
+  },
+  {
+    "id": "coverage-test-31",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I can execute the agreed process."
+      },
+      {
+        "role": "user",
+        "text": "I have not tested it. Execute that process and show the verification result."
+      }
+    ],
+    "primary": "checked",
+    "additional": [
+      "continued"
+    ]
+  }
+]

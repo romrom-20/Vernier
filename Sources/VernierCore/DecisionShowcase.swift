@@ -1,6 +1,33 @@
 import Foundation
 
 extension ShowcaseFixtures {
+    private static let checkpointExamples: [(goal: String, agent: String, human: String, step: String, state: WorkResultState, focus: WorkFocus)] = [
+        ("Import the same contact twice without creating duplicates.", "The project builds. I have not replayed a repeated import.", "Show what happens when the same contact is imported twice.", "Import one contact twice and compare the saved count.", .buildOnly, .check),
+        ("Open one panel for each shortcut press.", "I pressed the shortcut once and one panel opened.", "I pressed the shortcut once and two panels opened.", "Keep the one-press case and investigate the duplicate panel.", .behaviorReported, .progress),
+        ("Preview the export before saving a file.", "I can implement the agreed export preview.", "Proceed with the approved preview plan.", "Compare the preview with the file before releasing the change.", .proposed, .handoff)
+    ]
+    /// Three distinct invented conversations for multi-checkpoint rendering and navigation checks.
+    public static func checkpointLibrary(now: Date = Date()) -> SessionLibrary {
+        let sessions = library(now: now).sessions
+        let messages = checkpointExamples.enumerated().flatMap { i, example in
+            [example.goal, example.agent, example.human].enumerated().map { j, text in
+                ConversationMessage(id: "invented-checkpoint-\(i)-\(j)", sessionID: sessions[i].id, turnID: "invented-checkpoint-\(i)", speaker: j == 1 ? "assistant" : "user", phase: j == 1 ? "final_answer" : "user", text: text, sourceAt: now.addingTimeInterval(Double(j - 3) * 60), observedAt: now, redactions: 0, textTruncated: false, attachmentsOmitted: false)
+            }
+        }
+        return SessionLibrary(sessions: sessions, turns: [], notes: [:], messages: messages, memoryCoverage: sessions.map { .init(sessionID: $0.id, complete: true, issue: false) }, totalMessageCount: messages.count,
+            digests: sessions.enumerated().map { i, session in .init(sessionID: session.id, promptExcerpt: checkpointExamples[i].goal, messageCount: 3, signalCount: 0) })
+    }
+    public static func checkpointHistory(library: SessionLibrary, now: Date = Date()) -> [DecisionRevision] {
+        library.sessions.enumerated().compactMap { i, session in
+            guard checkpointExamples.indices.contains(i), let context = DecisionContext.make(sessionID: session.id, messages: library.messages.filter { $0.sessionID == session.id }, storedMessages: 3) else { return nil }
+            let example = checkpointExamples[i]
+            let refs = context.sources.enumerated().map { j, source in
+                WorkReference(sourceID: source.id, quote: source.quote, use: j == 0 ? .intent : j == 1 ? .change : example.focus == .progress ? .result : .response)
+            }
+            let frame = WorkFrame(resultState: example.state, focus: example.focus, goal: example.goal, nextStep: example.step, references: refs)
+            return DecisionRevision.contextual(context: context, proposal: frame.proposal(in: context), challenge: approved(refs), engine: "Invented example · no model ran", now: now)
+        }
+    }
     /// Invented presentation records, never generated from a personal archive.
     public static func decisionHistory(library: SessionLibrary, now: Date = Date()) -> [DecisionRevision] {
         guard let session = library.sessions.first else { return [] }

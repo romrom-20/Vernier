@@ -9,6 +9,9 @@ extension ShowcaseFixtures {
             "showcase-story-message-9": [.directed],
             "showcase-story-message-11": [.checked],
             "showcase-work-0": [.continued],
+            "invented-checkpoint-0-2": [.checked],
+            "invented-checkpoint-1-2": [.reported],
+            "invented-checkpoint-2-2": [.continued],
             "quick-review-2": [.checked], "quick-review-4": [.checked], "quick-review-6": [.checked]
         ]
         return library.sessions.flatMap { session -> [ContributionReading] in

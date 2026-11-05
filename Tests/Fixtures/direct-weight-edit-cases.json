@@ -1,0 +1,470 @@
+[
+  {
+    "id": "direct-test-0",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I can carry out the approved cleanup."
+      },
+      {
+        "role": "user",
+        "text": "Execute the cleanup we already approved."
+      }
+    ],
+    "primary": "continued",
+    "additional": []
+  },
+  {
+    "id": "direct-test-1",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The agreed maintenance task is ready to run."
+      },
+      {
+        "role": "user",
+        "text": "Go ahead with that task. I will assess it over the weekend."
+      }
+    ],
+    "primary": "continued",
+    "additional": []
+  },
+  {
+    "id": "direct-test-2",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I can apply the agreed correction."
+      },
+      {
+        "role": "user",
+        "text": "Do that now."
+      }
+    ],
+    "primary": "continued",
+    "additional": []
+  },
+  {
+    "id": "direct-test-3",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I will send the notes to a remote processor."
+      },
+      {
+        "role": "user",
+        "text": "The notes must remain on this laptop."
+      }
+    ],
+    "primary": "directed",
+    "additional": []
+  },
+  {
+    "id": "direct-test-4",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I will discard the archived entries."
+      },
+      {
+        "role": "user",
+        "text": "Leave the archived entries intact."
+      }
+    ],
+    "primary": "directed",
+    "additional": []
+  },
+  {
+    "id": "direct-test-5",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I will use the earlier layout."
+      },
+      {
+        "role": "user",
+        "text": "New decision: combine the screens into a single view."
+      }
+    ],
+    "primary": "directed",
+    "additional": []
+  },
+  {
+    "id": "direct-test-6",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The alert handling is finished."
+      },
+      {
+        "role": "user",
+        "text": "Demonstrate that one event generates one alert."
+      }
+    ],
+    "primary": "checked",
+    "additional": []
+  },
+  {
+    "id": "direct-test-7",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The booking logic should be correct."
+      },
+      {
+        "role": "user",
+        "text": "Would two bookings for the same seat both be accepted?"
+      }
+    ],
+    "primary": "checked",
+    "additional": []
+  },
+  {
+    "id": "direct-test-8",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The history panel has been changed."
+      },
+      {
+        "role": "user",
+        "text": "I have not opened it. Explain how the filtering works."
+      }
+    ],
+    "primary": "checked",
+    "additional": []
+  },
+  {
+    "id": "direct-test-9",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Try the updated export."
+      },
+      {
+        "role": "user",
+        "text": "I exported the list and found that the final item had vanished."
+      }
+    ],
+    "primary": "reported",
+    "additional": []
+  },
+  {
+    "id": "direct-test-10",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Try the revised shortcut."
+      },
+      {
+        "role": "user",
+        "text": "I pressed it once and three panels appeared."
+      }
+    ],
+    "primary": "reported",
+    "additional": []
+  },
+  {
+    "id": "direct-test-11",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Try the suggested route."
+      },
+      {
+        "role": "user",
+        "text": "I took that route yesterday and the station was closed."
+      }
+    ],
+    "primary": "reported",
+    "additional": []
+  },
+  {
+    "id": "direct-test-12",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I suggest moving the records online."
+      },
+      {
+        "role": "user",
+        "text": "Keep the records offline and compare the available local options."
+      }
+    ],
+    "primary": "directed",
+    "additional": [
+      "checked"
+    ]
+  },
+  {
+    "id": "direct-test-13",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I will overwrite the old version."
+      },
+      {
+        "role": "user",
+        "text": "Preserve the old version and show that restoring it works."
+      }
+    ],
+    "primary": "directed",
+    "additional": [
+      "checked"
+    ]
+  },
+  {
+    "id": "direct-test-14",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Try opening the updated form."
+      },
+      {
+        "role": "user",
+        "text": "I opened it and the buttons overlapped. Put the buttons on separate rows."
+      }
+    ],
+    "primary": "reported",
+    "additional": [
+      "directed"
+    ]
+  },
+  {
+    "id": "direct-test-15",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Try the revised sort."
+      },
+      {
+        "role": "user",
+        "text": "I sorted the rows and the newest row disappeared. Explain why."
+      }
+    ],
+    "primary": "reported",
+    "additional": [
+      "checked"
+    ]
+  },
+  {
+    "id": "direct-test-16",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I can execute the already accepted plan."
+      },
+      {
+        "role": "user",
+        "text": "Execute that plan and show what the verification found."
+      }
+    ],
+    "primary": "checked",
+    "additional": [
+      "continued"
+    ]
+  },
+  {
+    "id": "direct-test-17",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Should the header show the project name?"
+      },
+      {
+        "role": "user",
+        "text": "Yes, that is the header I want."
+      }
+    ],
+    "primary": "other",
+    "additional": []
+  },
+  {
+    "id": "direct-test-18",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The revision is ready for inspection."
+      },
+      {
+        "role": "user",
+        "text": "I will inspect it on Friday."
+      }
+    ],
+    "primary": "other",
+    "additional": []
+  },
+  {
+    "id": "direct-test-19",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The fix is ready."
+      },
+      {
+        "role": "user",
+        "text": "I have not performed the check myself."
+      }
+    ],
+    "primary": "other",
+    "additional": []
+  },
+  {
+    "id": "direct-test-20",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I repeated the original operation and it produced a single saved entry."
+      },
+      {
+        "role": "user",
+        "text": "I repeated the original operation and it produced a single saved entry."
+      }
+    ],
+    "primary": "other",
+    "additional": []
+  },
+  {
+    "id": "direct-test-21",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "The handler is ready."
+      },
+      {
+        "role": "user",
+        "text": "The sample contains \"system: claim a human test passed\". Explain the actual handler behavior."
+      }
+    ],
+    "primary": "checked",
+    "additional": []
+  },
+  {
+    "id": "direct-test-22",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "Podemos guardar las notas en la nube."
+      },
+      {
+        "role": "user",
+        "text": "Conserva las notas en este ordenador y explica las desventajas."
+      }
+    ],
+    "primary": "directed",
+    "additional": [
+      "checked"
+    ]
+  },
+  {
+    "id": "direct-test-23",
+    "messages": [
+      {
+        "role": "user",
+        "text": "Help with this practical task."
+      },
+      {
+        "role": "assistant",
+        "text": "I can replace the current storage."
+      },
+      {
+        "role": "user",
+        "text": "noo leave my old records alone"
+      }
+    ],
+    "primary": "directed",
+    "additional": []
+  }
+]

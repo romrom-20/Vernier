@@ -1,3 +1,28 @@
+# Current source: conversation memory and source-reading checks
+
+Background verification passes **40 shared core groups**, isolated app-state
+checks and invented offscreen renders, including historical source recall and a
+related-conversation casebook. Checks cover full-source fingerprints, bounded
+selection, later updates, indexed-but-omitted edits, stale saves, source scope,
+speaker attribution, owner corrections, selection changes and erasure. Test
+rendering prohibits app activation and visible/key windows. Local XCTest is
+skipped without full Xcode; CI runs the wrapper with Xcode.
+
+Separately, the fixed reader matches **6/8** reserved invented long histories
+versus **3/8** without recall, with every baseline success preserved. Existing
+regression stays **51/60**, retaining all 51 prior successes. Two long cases still
+fail and some passing next checks are generic. These are agent-authored shallow
+composite checks, not broad semantic or psychological validation. Final app
+read/challenge exports match the qualified candidate on all 76 checked fixtures;
+that parity check makes no inference calls.
+
+No personal sessions or foreground desktop tests are used. Original model weights
+and selection are retained; failed research candidates remain disabled. The
+casebook has integrity checks but no semantic-accuracy estimate.
+[Current status](MODEL_STATUS.md) · [Mechanism and failures](CONVERSATION_MEMORY.md)
+
+---
+
 # Optional category experiment — 0.14
 
 Background verification passed **36 shared core groups and 70 isolated app-state checks**, with invented offscreen wide/narrow dashboard, expanded/collapsed disclosure, compact and pill renders. The new checks cover actor/span validation, duplicate targets, retained mixed acts, stale source fingerprints, pending versus withheld categories, source-day lookup after a next-day review, legacy decoding, export, dependency invalidation and erasure. Mode changes invalidate projections, and the unvalidated category experiment remains off initially without changing capture consent. Local XCTest is skipped under Command Line Tools; CI uses Xcode.

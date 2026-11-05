@@ -8,6 +8,8 @@ struct ContributionGeneration: Sendable {
     let readings: [ContributionReading]
     let drafts: [ContributionDraft]
     let supportedIDs: [String]
+    let proposalJSON: Data
+    let challengeJSON: Data
 }
 extension DecisionGenerator {
     private struct ContributionSelection: Decodable {
@@ -38,7 +40,7 @@ extension DecisionGenerator {
         guard !running else { throw DecisionGenerationError.busy }
         guard Self.allowedModels.contains(model) else { throw DecisionGenerationError.unavailable }
         let targets = ContributionReading.batchTargets(in: context, excluding: excluding)
-        guard !targets.isEmpty else { return .init(readings: [], drafts: [], supportedIDs: []) }
+        guard !targets.isEmpty else { return .init(readings: [], drafts: [], supportedIDs: [], proposalJSON: Data("{}".utf8), challengeJSON: Data("{}".utf8)) }
         running = true; defer { running = false }
         let ids = targets.map(\.id), packet = WorkWitnessPacket(context: context)
         let selected = Set(ids)
@@ -57,7 +59,7 @@ extension DecisionGenerator {
         let challengeData = try await contributionJSON(prompt: prompt + "\nPROPOSED CLASSIFICATIONS:\n" + String(decoding: try JSONEncoder().encode(drafts), as: UTF8.self), ids: ids, witnesses: witnesses, model: model, challenge: true)
         let checked = try JSONDecoder().decode(ContributionCheck.self, from: challengeData)
         try Task.checkCancellation()
-        return .init(readings: ContributionReading.validate(drafts, supportedIDs: Set(checked.supportedIDs), context: context, engine: model, excluding: excluding), drafts: drafts, supportedIDs: checked.supportedIDs)
+        return .init(readings: ContributionReading.validate(drafts, supportedIDs: Set(checked.supportedIDs), context: context, engine: model, excluding: excluding), drafts: drafts, supportedIDs: checked.supportedIDs, proposalJSON: data, challengeJSON: challengeData)
     }
     private func contributionJSON(prompt: String, ids: [String], witnesses: [String: [String]], model: String, challenge: Bool) async throws -> Data {
         let instructions = challenge ? Self.contributionChallenge : Self.contributionInstructions
@@ -76,6 +78,11 @@ extension DecisionGenerator {
             #endif
             throw DecisionGenerationError.unavailable
         }
+        let schema = Self.contributionSchema(ids: ids, witnesses: witnesses, challenge: challenge)
+        return try await ollama(model: model, instructions: instructions, prompt: prompt, schema: schema, maxOutputTokens: 1000).0
+    }
+    /// Shared by live Ollama calls and isolated packet export, so training can use the actual task/schema.
+    static func contributionSchema(ids: [String], witnesses: [String: [String]], challenge: Bool) -> [String: Any] {
         var entries: [String: Any] = [:]
         for id in ids {
             var fields: [String: Any] = ["witnessID": ["type": "string", "enum": witnesses[id] ?? [""]]]
@@ -84,7 +91,7 @@ extension DecisionGenerator {
         }
         let property: [String: Any] = challenge ? ["type": "array", "items": ["type": "string", "enum": ids], "maxItems": ids.count] : ["type": "object", "properties": entries, "required": ids, "additionalProperties": false]
         let key = challenge ? "supportedIDs" : "readings"
-        let schema: [String: Any] = ["type": "object", "properties": [key: property], "required": [key], "additionalProperties": false]
-        return try await ollama(model: model, instructions: instructions, prompt: prompt, schema: schema, maxOutputTokens: 1000).0
+        return ["type": "object", "properties": [key: property], "required": [key], "additionalProperties": false]
     }
+
 }

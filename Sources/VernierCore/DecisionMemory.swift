@@ -160,15 +160,25 @@ public struct DecisionContext: Codable, Sendable {
     public let storedMessages: Int
     public let relatedMessageCounts: [String: Int]
     public let frontier: DecisionFrontier?
+    public let memoryRecall: ConversationRecall?
     public var anchor: DecisionSource? { sources.first { $0.id == anchorID } }
+    public var recalledMessageIDs: Set<String> { Set(memoryRecall?.entries.map(\.messageID) ?? []) }
+    /// An incomplete interval cannot establish that no human revised a boundary.
+    public func hasMissingHumanContext(between earlier: String, and later: String) -> Bool {
+        guard let memory = memoryRecall else { return false }
+        guard let first = memory.orderedHumanMessageIDs.firstIndex(of: earlier), let last = memory.orderedHumanMessageIDs.firstIndex(of: later), first < last else { return true }
+        let present = Set(sources.map(\.messageID))
+        return memory.orderedHumanMessageIDs[(first + 1)..<last].contains { !present.contains($0) }
+    }
     public var inputDigest: String {
         let counts = relatedMessageCounts.sorted { $0.key < $1.key }.map { $0.key + ":" + String($0.value) }.joined(separator: "|")
         let records = sources.map { $0.messageID + ":" + $0.fingerprint + ":" + $0.text }.joined(separator: "|")
         let reports = perspectives.map { $0.id + ":" + ($0.anchorMessageID ?? "unlinked") + ":" + $0.text }.joined(separator: "|")
-        let parts: [String] = ["decision-v1", String(storedMessages), counts, sessionID, anchorID, frontier?.messageID ?? "", frontier?.fingerprint ?? "", records, reports]
+        var parts: [String] = ["decision-v1", String(storedMessages), counts, sessionID, anchorID, frontier?.messageID ?? "", frontier?.fingerprint ?? "", records, reports]
+        if let memoryRecall { parts += [ConversationRecall.version, memoryRecall.scanDigest, memoryRecall.entries.map { $0.messageID + ":" + $0.quote }.joined(separator: "|")] }
         return digest(parts.joined(separator: "|"))
     }
-    public init(sessionID: String, anchorID: String, sources: [DecisionSource], perspectives: [DecisionPerspective] = [], earlierAccount: String? = nil, storedMessages: Int? = nil, attributed: Bool = false, relatedMessageCounts: [String: Int] = [:], frontier: DecisionFrontier? = nil) {
+    public init(sessionID: String, anchorID: String, sources: [DecisionSource], perspectives: [DecisionPerspective] = [], earlierAccount: String? = nil, storedMessages: Int? = nil, attributed: Bool = false, relatedMessageCounts: [String: Int] = [:], frontier: DecisionFrontier? = nil, memoryRecall: ConversationRecall? = nil) {
         self.sessionID = sessionID; self.anchorID = anchorID
         self.frontier = frontier ?? sources.last(where: { $0.sessionID == sessionID && $0.role != "user_report" }).map { .init(messageID: $0.messageID, fingerprint: $0.fingerprint) }
         let reports = perspectives.enumerated().map { index, report in
@@ -176,8 +186,9 @@ public struct DecisionContext: Codable, Sendable {
         }
         self.sources = (attributed ? sources : SourceAttribution.annotate(sources)) + reports
         self.perspectives = perspectives; self.earlierAccount = earlierAccount; self.relatedMessageCounts = relatedMessageCounts; loadedMessages = sources.count; self.storedMessages = storedMessages ?? sources.count
+        self.memoryRecall = memoryRecall
     }
-    public static func make(sessionID: String, messages: [ConversationMessage], perspectives: [DecisionPerspective] = [], previous: DecisionRevision? = nil, storedMessages: Int, retrieved: [ConversationMessage] = [], relatedMessageCounts: [String: Int] = [:]) -> Self? {
+    public static func make(sessionID: String, messages: [ConversationMessage], perspectives: [DecisionPerspective] = [], previous: DecisionRevision? = nil, storedMessages: Int, retrieved: [ConversationMessage] = [], relatedMessageCounts: [String: Int] = [:], memoryRecall: ConversationRecall? = nil) -> Self? {
         let ordered = messages.filter { $0.sessionID == sessionID }.sorted {
             let a = $0.sourceAt ?? $0.observedAt, b = $1.sourceAt ?? $1.observedAt
             return a == b ? $0.id < $1.id : a < b
@@ -193,7 +204,18 @@ public struct DecisionContext: Codable, Sendable {
             guard !text.isEmpty else { return nil }
             return DecisionSource(id: message.id, messageID: message.id, sessionID: message.sessionID, role: message.speaker, text: text, fingerprint: DecisionSource.fingerprint(message), originalText: message.text)
         }
-        let attributed = SourceAttribution.annotate(raw)
+        let annotated = SourceAttribution.annotate(raw)
+        let eligibleRecall = Set((memoryRecall?.entries ?? []).filter { entry in
+            guard let source = annotated.first(where: { $0.messageID == entry.messageID }) else { return false }
+            return source.sessionID == sessionID && source.origin != .reusedAgent && source.text.contains(entry.quote) && (source.role == "assistant" || source.novelText.contains(entry.quote))
+        }.map(\.messageID))
+        let attributed = annotated.compactMap { source -> DecisionSource? in
+            guard let entry = memoryRecall?.entries.first(where: { $0.messageID == source.messageID }) else { return source }
+            guard eligibleRecall.contains(source.messageID), entry.parentMessageID.map({ eligibleRecall.contains($0) }) != false else { return nil }
+            var value = DecisionSource(id: source.id, messageID: source.messageID, sessionID: source.sessionID, role: source.role, text: entry.quote, fingerprint: source.fingerprint, originalText: source.originalText)
+            value.origin = source.origin; value.novelText = source.role == "assistant" ? "" : entry.quote; value.reusedFrom = source.reusedFrom
+            return value
+        }
         let primary = attributed.filter { $0.sessionID == sessionID }
         var selected = Array(primary.suffix(12))
         let retained = Set(selected.map(\.messageID))
@@ -215,6 +237,12 @@ public struct DecisionContext: Codable, Sendable {
             needed.append(proposal); protected.insert(proposal.messageID)
         }
         for source in needed where !selected.contains(where: { $0.messageID == source.messageID }) { selected.append(source) }
+        let recallIDs = Set(memoryRecall?.entries.map(\.messageID) ?? [])
+        let room = min(ConversationRecall.entryLimit, max(0, 18 - protected.count))
+        for source in primary.filter({ recallIDs.contains($0.messageID) }).prefix(room) {
+            if !selected.contains(where: { $0.messageID == source.messageID }) { selected.append(source) }
+            protected.insert(source.messageID)
+        }
         let order = Dictionary(uniqueKeysWithValues: primary.enumerated().map { ($0.element.messageID, $0.offset) })
         selected.sort { order[$0.messageID, default: 0] < order[$1.messageID, default: 0] }
         while selected.count > 18, let index = selected.firstIndex(where: { !protected.contains($0.messageID) }) { selected.remove(at: index) }
@@ -227,7 +255,8 @@ public struct DecisionContext: Codable, Sendable {
             return value
         }
         guard let anchorID = labeled.first(where: { $0.messageID == anchor.id })?.id else { return nil }
-        return Self(sessionID: sessionID, anchorID: anchorID, sources: labeled, perspectives: Array(perspectives.suffix(3)), earlierAccount: previous.map { "Earlier HYPOTHESIS (not fact): Goal: \($0.goal). \($0.summary) \($0.reason) Next check: \($0.reading?.nextStep ?? $0.unknown)" }, storedMessages: storedMessages, attributed: true, relatedMessageCounts: relatedMessageCounts, frontier: ordered.last.map { .init(messageID: $0.id, fingerprint: DecisionSource.fingerprint($0)) })
+        let retainedMemory = memoryRecall?.retainingEntries(Set(labeled.map(\.messageID)))
+        return Self(sessionID: sessionID, anchorID: anchorID, sources: labeled, perspectives: Array(perspectives.suffix(3)), earlierAccount: previous.map { "Earlier HYPOTHESIS (not fact): Goal: \($0.goal). \($0.summary) \($0.reason) Next check: \($0.reading?.nextStep ?? $0.unknown)" }, storedMessages: storedMessages, attributed: true, relatedMessageCounts: relatedMessageCounts, frontier: ordered.last.map { .init(messageID: $0.id, fingerprint: DecisionSource.fingerprint($0)) }, memoryRecall: retainedMemory)
     }
 
     public func contextualSourceIDs(for kind: DecisionKind, selected: [String]) -> [String] {
@@ -242,7 +271,7 @@ public struct DecisionContext: Codable, Sendable {
     public var promptData: String {
         func entry(_ source: DecisionSource) -> String {
             let role = source.role == "user" ? "SAVED HUMAN" : source.role == "assistant" ? "SAVED AGENT" : "HUMAN PERSPECTIVE (self-report)"
-            let scope = source.sessionID == sessionID ? "current_conversation" : "retrieved_context_not_a_confirmed_task_link"
+            let scope = recalledMessageIDs.contains(source.messageID) ? "earlier_statement_current_task_and_validity_unconfirmed" : source.sessionID == sessionID ? "current_conversation" : "retrieved_context_not_a_confirmed_task_link"
             let limit = source.role == "assistant" ? 650 : 1400
             var value = "[\(source.id)] \(role) | \(scope) | origin=\(source.origin.rawValue)\nQuoted text: \(String(source.text.prefix(limit)))"
             if source.role == "user_report" {
@@ -292,6 +321,7 @@ public struct DecisionEvidence: Codable, Identifiable, Sendable {
 public struct DecisionRevision: Codable, Identifiable, Sendable {
     public var contributions: [ContributionReading]? = nil
     public var contributionsComplete: Bool? = nil
+    public var memoryRecall: ConversationRecall? = nil
     public let id: String
     public let sessionID: String
     public let anchorMessageID: String
@@ -333,7 +363,7 @@ public struct DecisionRevision: Codable, Identifiable, Sendable {
         let actualKind: DecisionKind = valid ? draft.kind : .uncertain
         let evidence = sources.map { DecisionEvidence(messageID: $0.messageID, sessionID: $0.sessionID, role: $0.role, origin: $0.origin, quote: $0.quote, fingerprint: $0.fingerprint) }
         let fallbackEvidence = context.anchor.map { [DecisionEvidence(messageID: $0.messageID, sessionID: $0.sessionID, role: $0.role, origin: $0.origin, quote: $0.quote, fingerprint: $0.fingerprint)] } ?? []
-        return Self(id: UUID().uuidString, sessionID: context.sessionID, anchorMessageID: context.anchor?.messageID ?? "", inputDigest: context.inputDigest, previousID: previousID, createdAt: now, engine: engine,
+        return Self(memoryRecall: context.memoryRecall, id: UUID().uuidString, sessionID: context.sessionID, anchorMessageID: context.anchor?.messageID ?? "", inputDigest: context.inputDigest, previousID: previousID, createdAt: now, engine: engine,
             kind: actualKind, status: actualKind == .uncertain ? .unknown : .tentative, actions: valid && actualKind != .uncertain ? actions : nil,
             goal: String(draft.goal.prefix(180)),
             summary: valid ? String(draft.summary.prefix(300)) : "The saved exchange does not yet support a reliable account of your contribution.",
